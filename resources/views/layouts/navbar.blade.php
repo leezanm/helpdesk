@@ -16,7 +16,7 @@
                 </li>
 
                 <li>
-                    <a class="nav-link" href="{{url('mbi')}}" id="topnav-fbi" role="button">
+                    <a class="nav-link" href="{{url('fbi')}}" id="topnav-fbi" role="button">
                         <i class="bx bx-file-blank me-2"></i><span key="t-fbi">FBI</span>
                     </a>
                 </li>
@@ -55,7 +55,7 @@
                     </ul>
                 </li>
 
-                <li>
+                {{-- <li>
                     <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
                         <i class="bx bx-windows me-2"></i><span>Pengurusan Hebahan</span>
                     </a>
@@ -63,7 +63,7 @@
                         <li><a href="{{url('#')}}" key="t-pegawai">Slider</a></li>
                         <li><a href="{{url('/pengumuman')}}" key="t-pengguna">Pengumuman</a></li>
                     </ul>
-                </li>
+                </li> --}}
 
                 <li class="menu-title" key="t-pentadbiran">Tetapan</li>
 
