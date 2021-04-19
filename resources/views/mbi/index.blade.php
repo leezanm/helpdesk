@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col text-end">
                     <div class="button-items">
-                        <a class="btn btn-primary btn waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#create_mbi_modal">
+                        <a class="btn btn-primary btn waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#search">
                             <i class="bx bxs-plus-square font-size-16 align-middle me-2"></i> Tambah
                         </a>
                     </div>
@@ -71,7 +71,6 @@
 @include('mbi.partials.show')
 @include('mbi.partials.edit')
 @include('mbi.partials.create')
-@include('mbi.partials.search')
 
 @endsection
 

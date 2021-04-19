@@ -10,24 +10,21 @@
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bxs-food-menu me-2"></i><span>MBI</span>
+                    <a class="nav-link" href="{{url('mbi')}}" id="topnav-mbi" role="button">
+                        <i class="bx bxs-food-menu me-2"></i><span key="t-mbi">MBI</span>
                     </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{url('mbi')}}" key="t-mbi-senarai">Senarai</a></li>
-                        <li><a href="{{url('mbi-create')}}" key="t-mbi-tambah">Tambah</a></li>
-                    </ul>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bx-file-blank me-2"></i><span>FBI</span>
+                    <a class="nav-link" href="{{url('mbi')}}" id="topnav-fbi" role="button">
+                        <i class="bx bx-file-blank me-2"></i><span key="t-fbi">FBI</span>
                     </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{url('fbi')}}" key="t-fbi-tambah">Senarai</a></li>
-                        <li><a href="{{url('fbi-create')}}" key="t-fbi-tambah">Tambah</a></li>
-                        {{-- <li><a href="{{url('/laporan-latihan')}}" key="t-laporan-latihan">Laporan latihan</a></li> --}}
-                    </ul>
+                </li>
+
+                <li>
+                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#search" id="topnav-search" role="button">
+                        <i class="bx bx-search-alt-2 me-2"></i><span key="t-search">Carian Rekod</span>
+                    </a>
                 </li>
 
                 <li class="menu-title" key="t-pentadbir">Pentadbir</li>
@@ -87,4 +84,6 @@
         </div>
     </div>
 </div>
+@include('mbi.partials.search')
+
 
