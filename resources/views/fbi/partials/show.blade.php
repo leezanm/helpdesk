@@ -23,7 +23,7 @@
                             </tr>
                             <tr>
                                 <th>Status</th>
-                                <td><span id="show-status"></span></td>
+                                <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">Aktif</span></td>
                                 <td></td>
                                 <td></td>
                             </tr>
