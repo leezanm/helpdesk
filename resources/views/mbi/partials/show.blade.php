@@ -22,6 +22,10 @@
                                 <td><span id="show-jenis"></span></td>
                             </tr>
                             <tr>
+                                <th>Division</th>
+                                <td colspan="3"><span id="show-kepada"></span>Department IT</td>
+                            </tr>
+                            <tr>
                                 <th>Status</th>
                                 <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">Aktif</span></td>
                                 <td></td>

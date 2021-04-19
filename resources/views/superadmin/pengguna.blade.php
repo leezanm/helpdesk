@@ -75,12 +75,12 @@
                             </div>
                             <div class="media-body overflow-hidden">
                                 <h5 class="font-size-13 text-truncate">Syamie Syamil</h5>
-                                <p class="mb-0 text-truncate">Kejuruteraan</p>
+                                <p class="mb-0 text-truncate">Pengurusan Fail</p>
                             </div>
                         </div>
                     </a>
                 </td>
-                <th>Penyelenggaraan Mesin</th>
+                <th>Menyimpan rekod dan fail</th>
                 <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">AKTIF</span></td>
                 <td class="text-center">
                     <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
@@ -98,7 +98,7 @@
                         </div>
                         <div class="media-body overflow-hidden">
                             <h5 class="font-size-13 text-truncate">Fatin binti Sakinah</h5>
-                            <p class="mb-0 text-truncate">HR </p>
+                            <p class="mb-0 text-truncate">HR</p>
                         </div>
                     </div>
                 </a>

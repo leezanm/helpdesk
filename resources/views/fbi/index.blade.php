@@ -181,7 +181,7 @@
     $('#btnEdit').on('click',function(){
         clearError();
         var formData = new FormData( $('#fbi-form-edit')[0] );
-        formData.append('answer', tinymce.get('answer').getContent())
+        formData.append('perkara', tinymce.get('perkara').getContent())
         var fbi_id = $('#btnEdit').data('id');
         $.ajax({
             url: window.location.origin + '/fbi/update/'+ fbi_id,

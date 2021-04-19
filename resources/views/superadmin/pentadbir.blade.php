@@ -26,7 +26,7 @@
             <div class="col text-end">
                 <div class="button-items">
                     <a class="btn btn-primary btn waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#create">
-                        <i class="bx bxs-plus-square font-size-16 align-middle me-2"></i> Tambah Pengguna
+                        <i class="bx bxs-plus-square font-size-16 align-middle me-2"></i> Tambah Pentadbir
                     </a>
                 </div>
             </div>

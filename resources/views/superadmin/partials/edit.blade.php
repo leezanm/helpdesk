@@ -17,94 +17,36 @@
                     <table class="table table-striped mb-0">
                         <tbody>
                             <tr>
-                                <th>Tahun</th>
-                                <td>2020</td>
-                                <th>Bil :</th>
-                                <td>A882</td>
+                                <th>Nama Pengguna</th>
+                                <td colspan="2">
+                                    <input type="text" class="form-control" value="Muhammad Hazim bin Md Zulkeflee">
+                                </td>
+                                <th>Jawatan :</th>
+                                <td colspan="2">
+                                    <input type="text" class="form-control" value="Industri">
+                                </td>
                             </tr>
                             <tr>
-                                <th>Sesi</th>
-                                <td>Sesi A</td>
-                                <th>Tempoh</th>
-                                <td>Tempoh B</td>
-                            </tr>
-                            <tr>
-                                <th>Nama</th>
-                                <td><input type="text" class="form-control" value="Muhammad Hazim bin Md Zulkeflee"></td>
+                                <th>No telefon</th>
+                                <td>
+                                    <input type="text" class="form-control" value="011-27658417">
+                                </td>
+                                <th>Tarikh Lahir</th>
+                                <td>
+                                    <input type="date" class="form-control" value="1970-05-15">
+                                </td>
                                 <th>No Kad Pengenalan</th>
-                                <td><input type="text" class="form-control" value="890902-02-5099"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"><h3>Maklumat Majikan</h3></td>
-                            </tr>
-                            <tr>
-                                <th>Tarikh Mula Bertugas</th>
-                                <td>09/01/2010</td>
-                                <th>Nama Majikan</th>
-                                <td><input type="text" class="form-control" value="Shamsudin Ali"></td>
-                            </tr>
-                            <tr>
-                                <th>Alamat Majikan</th>
-                                <td><input type="text" class="form-control" value="Perdana Cyberjaya"></td>
-                                <th>Jawatan</th>
-                                <td><input type="text" class="form-control" value="Pegawai Teknikal"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"><h3>Maklumat Penyelia</h3></td>
-                            </tr>
-                            <tr>
-                                <th>Nama Penyelia</th>
-                                <td><input type="text" class="form-control" value="Md Syamil Zai Zaini"></td>
-                                <th>Bahagian</th>
                                 <td>
-                                    <select name="" id="" class="form-select">
-                                        <option value="">Teknikal</option>
-                                    </select>
+                                    <input type="text" class="form-control" value="900202-02-1322">
                                 </td>
                             </tr>
                             <tr>
-                                <th>Negeri</th>
-                                <td>
-                                    <select name="" id="" class="form-select">
-                                        <option value="">Johor</option>
-                                    </select>
-                                </td>
-                                <th>Projek</th>
-                                <td>
-                                    <select name="" id="" class="form-select">
-                                        <option value="">Projek Satu</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Email Penyelia</th>
-                                <td>
-                                    <input type="text" class="form-control" value="syam@gmail.com">
-                                </td>
-                                <th>Bidang Pengalaman</th>
-                                <td><input type="text" class="form-control" value="Teknikal Mengajar"></td>
-                            </tr>
-                            <tr>
-                                <th>Nama Kursus Seminar</th>
-                                <td>
-                                    <input type="text" class="form-control" value="Seminar A1">
-                                </td>
-                                <th>Tempat Yang Pernah Dihadiri</th>
-                                <td><input type="text" class="form-control" value="Program Mengajar"></td>
-                            </tr>
-                            <tr>
-                                <th>Tempoh Kursus/Seminar</th>
-                                <td>
-                                    <input type="text" class="form-control" value="2 minggu">
-                                </td>
-                                <th>Tempoh Pengalaman</th>
-                                <td><input type="text" class="form-control" value="3 tahun"></td>
-                            </tr>
-                            <tr>
-                                <th>Catatan Pengalaman Yang Ringkas</th>
-                                <td colspan="3">
+                                <th>Alamat</th>
+                                <td colspan="5">
                                     <form method="post">
-                                        <textarea id="elm1" name="area"></textarea>
+                                        <textarea id="elm1" name="area">
+                                            No 18 Jalan Pulai 14 Taman Perdana , Cyberjaya Johor Bahru Johor
+                                        </textarea>
                                     </form>
                                 </td>
                             </tr>

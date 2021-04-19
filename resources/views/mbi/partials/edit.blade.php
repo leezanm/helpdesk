@@ -41,6 +41,14 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th>Division</th>
+                                    <td>
+                                        <input type="text" name="division" class="form-control" value="Department IT">
+                                        <p id="error-division" class="text-danger collapse error"></p>
+                                    </td>
+                                    <th></th><td></td>
+                                </tr>
+                                <tr>
                                     <th>Perkara</th>
                                     <td colspan="3">
                                         <textarea id="perkara" name="perkara" class="form-control"></textarea>

@@ -17,82 +17,23 @@
                     <table class="table table-striped mb-0">
                         <tbody>
                             <tr>
-                                <th>Tahun</th>
-                                <td>2020</td>
-                                <th>Bil :</th>
-                                <td>A882</td>
+                                <th>Nama Pengguna : </th>
+                                <td colspan="2">Muhammad Hazim bin Md Zulkeflee</td>
+                                <th>Jawatan : </th>
+                                <td colspan ="2">Industri</td>
                             </tr>
                             <tr>
-                                <th>Sesi</th>
-                                <td>Sesi A</td>
-                                <th>Tempoh</th>
-                                <td>Tempoh B</td>
+                                <th>No. Telefon : </th>
+                                <td>011-27658417</td>
+                                <th>Tarikh Lahir</th>
+                                <td>15-02-1970</td>
+                                <th>Kad Pengenalan</th>
+                                <td>700215029212</td>
                             </tr>
                             <tr>
-                                <th>Nama</th>
-                                <td>Muhammad Hazim bin Md Zulkeflee</td>
-                                <th>No Kad Pengenalan</th>
-                                <td>890902-02-5099</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"><h3>Maklumat Majikan</h3></td>
-                            </tr>
-                            <tr>
-                                <th>Tarikh Mula Bertugas</th>
-                                <td>09/01/2010</td>
-                                <th>Nama Majikan</th>
-                                <td>Shamsudin Ali</td>
-                            </tr>
-                            <tr>
-                                <th>Alamat Majikan</th>
-                                <td>Perdana Cyberjaya</td>
-                                <th>Jawatan</th>
-                                <td>Pegawai Teknikal</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4"><h3>Maklumat Penyelia</h3></td>
-                            </tr>
-                            <tr>
-                                <th>Nama Penyelia</th>
-                                <td>Md Syamil Zai Zaini</td>
-                                <th>Bahagian</th>
-                                <td>Teknikal A</td>
-                            </tr>
-                            <tr>
-                                <th>Negeri</th>
-                                <td>Johor</td>
-                                <th>Projek</th>
-                                <td>Projek A</td>
-
-                            </tr>
-                            <tr>
-                                <th>Email Penyelia</th>
-                                <td>
-                                    syam@gmail.com
-                                </td>
-                                <th>Bidang Pengalaman</th>
-                                <td>Teknikal Mengajar</td>
-                            </tr>
-                            <tr>
-                                <th>Nama Kursus Seminar</th>
-                                <td>
-                                    Seminar A1
-                                </td>
-                                <th>Tempat Yang Pernah Dihadiri</th>
-                                <td>Program Mengajar</td>
-                            </tr>
-                            <tr>
-                                <th>Tempoh Kursus/Seminar</th>
-                                <td>
-                                    2 minggu
-                                </td>
-                                <th>Tempoh Pengalaman</th>
-                                <td>3 tahun</td>
-                            </tr>
-                            <tr>
-                                <th>Catatan Pengalaman Yang Ringkas</th>
-                                <td colspan="3">
-                                    Mempunyai Pengalaman Mengajar di Johor Bahru
+                                <th>Alamat</th>
+                                <td colspan="5">
+                                    No 18 Jalan Pulai 14 Taman Perdana , Cyberjaya Johor Bahru Johor
                                 </td>
                             </tr>
                         </tbody>

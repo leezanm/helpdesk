@@ -33,28 +33,28 @@
                     <td>1</td>
                     <td>Peranan</td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show_selenggara"> <i class="mdi mdi-eye align-middle"></i></a>
                     </td>
                </tr>
                <tr>
                     <td>2</td>
                     <td>Kategori</td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show_selenggara"> <i class="mdi mdi-eye align-middle"></i></a>
                     </td>
                 </tr>
                 <tr>
                     <td>3</td>
                     <td>Jawatan</td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show_selenggara"> <i class="mdi mdi-eye align-middle"></i></a>
                     </td>
                 </tr>
                 <tr>
                     <td>4</td>
                     <td>Negeri</td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show_selenggara"> <i class="mdi mdi-eye align-middle"></i></a>
                     </td>
                 </tr>
            </tbody>
@@ -62,7 +62,8 @@
     </div>
 </div>
 
-@include('superadmin.partials.show')
+
+@include('superadmin.partials.show_selenggara')
 @include('superadmin.partials.edit')
 @include('superadmin.partials.create')
 
