@@ -51,10 +51,20 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
     Route::prefix('division')->as('division.')->group(function () {
         Route::get('/', [App\Http\Controllers\DivisionController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\DivisionController::class, 'store'])->name('store');
+        Route::get('/show/{division}', [App\Http\Controllers\DivisionController::class, 'show'])->name('show');
+        Route::get('/edit/{division}', [App\Http\Controllers\DivisionController::class, 'edit'])->name('edit');
+        Route::post('/update/{division}', [App\Http\Controllers\DivisionController::class, 'update'])->name('update');
+        Route::post('/destroy/{division}', [App\Http\Controllers\DivisionController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('type')->as('type.')->group(function () {
         Route::get('/', [App\Http\Controllers\TypeController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\TypeController::class, 'store'])->name('store');
+        Route::get('/show/{type}', [App\Http\Controllers\TypeController::class, 'show'])->name('show');
+        Route::get('/edit/{type}', [App\Http\Controllers\TypeController::class, 'edit'])->name('edit');
+        Route::post('/update/{type}', [App\Http\Controllers\TypeController::class, 'update'])->name('update');
+        Route::post('/destroy/{type}', [App\Http\Controllers\TypeController::class, 'destroy'])->name('destroy');
     });
 
     Route::view('/pengguna', 'superadmin.pengguna');

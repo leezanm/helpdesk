@@ -38,6 +38,15 @@ class DivisionController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'desc' => 'required'
+        ]);
+
+        $division = new Division();
+        $division->fill($request->all());
+        $division->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -49,6 +58,12 @@ class DivisionController extends Controller
     public function show(Division $division)
     {
         //
+        $datas = [
+            'success' => true,
+            'data' => $division
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -60,6 +75,12 @@ class DivisionController extends Controller
     public function edit(Division $division)
     {
         //
+        $datas = [
+            'success' => true,
+            'data' => $division
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -72,6 +93,14 @@ class DivisionController extends Controller
     public function update(Request $request, Division $division)
     {
         //
+        $request->validate([
+            'desc' => 'required'
+        ]);
+
+        $division->fill($request->all());
+        $division->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -83,5 +112,8 @@ class DivisionController extends Controller
     public function destroy(Division $division)
     {
         //
+        $division->delete();
+
+        return response()->json(['success' => true]);
     }
 }
