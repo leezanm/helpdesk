@@ -28,7 +28,7 @@
                 <div class="d-flex flex-wrap">
                     <div class="me-3">
                         <p class="text-muted mb-2">Pengguna Baru</p>
-                        <h5 class="mb-0">120</h5>
+                        <h5 class="mb-0">{{ $newUser }}</h5>
                     </div>
 
                     <div class="avatar-sm ms-auto">
@@ -48,7 +48,7 @@
                 <div class="d-flex flex-wrap">
                     <div class="me-3">
                         <p class="text-muted mb-2">Rekod Baru - MBI</p>
-                        <h5 class="mb-0">20</h5>
+                        <h5 class="mb-0">{{ $mbiTotal }}</h5>
                     </div>
 
                     <div class="avatar-sm ms-auto">
@@ -68,7 +68,7 @@
                 <div class="d-flex flex-wrap">
                     <div class="me-3">
                         <p class="text-muted mb-2">Rekod Baru - FBI</p>
-                        <h5 class="mb-0">10</h5>
+                        <h5 class="mb-0">{{ $fbiTotal }}</h5>
                     </div>
 
                     <div class="avatar-sm ms-auto">
@@ -110,21 +110,21 @@
             <div class="col-lg-4">
                 <div class="mt-4">
                     <p class="text-muted mb-1">Hari ini</p>
-                    <h5>10</h5>
+                    <h5>{{ $today }}</h5>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="mt-4">
                     <p class="text-muted mb-1">Bulan ini</p>
-                    <h5>123 <span class="text-success font-size-13">0.2 % <i class="mdi mdi-arrow-up ms-1"></i></span></h5>
+                    <h5>{{ $thisMonth }} <span class="text-success font-size-13">{{ \Carbon\Carbon::now()->englishMonth }}</span></h5>
                 </div>
             </div>
 
             <div class="col-lg-4">
                 <div class="mt-4">
                     <p class="text-muted mb-1">Tahun</p>
-                    <h5>1023<span class="text-success font-size-13">0.1 % <i class="mdi mdi-arrow-up ms-1"></i></span></h5>
+                    <h5>{{ $thisYear }} <span class="text-success font-size-13">{{ \Carbon\Carbon::now()->year }} </span></h5>
                 </div>
             </div>
         </div>
