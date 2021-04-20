@@ -174,11 +174,13 @@
                 _token:'{{csrf_token()}}'
             },
             success:function(response){
+                console.log(response);
                 if(response.success){
                     $('#mbi-form-edit input[name="rujukan"]').val(response.mbi.rujukan);
                     $('#mbi-form-edit input[name="tarikh"]').val(response.mbi.tarikh);
                     $('#mbi-form-edit input[name="kepada"]').val(response.mbi.kepada);
-                    $('#mbi-form-edit select[name="jenis"]').val(response.mbi.jenis);
+                    $('#mbi-form-edit select[name="type_id"]').val(response.mbi.type_id).trigger('change');
+                    $('#mbi-form-edit select[name="division_id"]').val(response.mbi.division_id).trigger('change');
                     tinymce.get('perkara').setContent(response.mbi.perkara);
                     $('#btnEdit').data('id', response.mbi.id);
                     $('#edit_mbi_modal').modal('show');

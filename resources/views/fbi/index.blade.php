@@ -162,12 +162,12 @@
                 _token:'{{csrf_token()}}'
             },
             success:function(response){
-                // console.log(response.fbi.perkara);
                 if(response.success){
                     $('#fbi-form-edit input[name="rujukan"]').val(response.fbi.rujukan);
                     $('#fbi-form-edit input[name="tarikh"]').val(response.fbi.tarikh);
                     $('#fbi-form-edit input[name="kepada"]').val(response.fbi.kepada);
-                    $('#fbi-form-edit select[name="jenis"]').val(response.fbi.jenis);
+                    $('#fbi-form-edit select[name="type_id"]').val(response.fbi.type_id).trigger('change');
+                    $('#fbi-form-edit select[name="division_id"]').val(response.fbi.division_id).trigger('change');
                     tinymce.get('perkara').setContent(response.fbi.perkara);
                     $('#btnEdit').data('id', response.fbi.id);
                     $('#edit_fbi_modal').modal('show');
