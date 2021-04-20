@@ -32,46 +32,16 @@
                 <th>Url</th>
            </thead>
            <tbody class="align-middle">
-               <tr>
-                    <td>1</td>
-                    <td>2020/09/02 10:20AM</td>
-                    <td class="p-0">
-                        <a href="#" class="list-group-item text-muted border-0">
-                            <div class="media align-items-center">
-                                <div class="me-3">
-                                    <img src="{{asset('images/profile/default.png')}}" alt="" class="avatar-sm h-auto d-block rounded">
-                                </div>
-                                <div class="media-body overflow-hidden">
-                                    <h5 class="font-size-13 text-truncate">En. Muhammad Farhan Bin Sedzali</h5>
-                                    <p class="mb-0 text-truncate">Pegawai</p>
-                                </div>
-                            </div>
-                        </a>
-                    </td>
-                    <td>192.0.0.8080</td>
-                    <td>Memadam rekod latihan </td>
-                    <td>plkk.gov.my</td>
-               </tr>
-               <tr>
-                <td>1</td>
-                <td>2020/02/04 09:04AM</td>
-                <td class="p-0">
-                    <a href="#" class="list-group-item text-muted border-0">
-                        <div class="media align-items-center">
-                            <div class="me-3">
-                                <img src="{{asset('images/profile/default.png')}}" alt="" class="avatar-sm h-auto d-block rounded">
-                            </div>
-                            <div class="media-body overflow-hidden">
-                                <h5 class="font-size-13 text-truncate">Puan Suzana binti Ahmad</h5>
-                                <p class="mb-0 text-truncate">Pegawai</p>
-                            </div>
-                        </div>
-                    </a>
-                </td>
-                <td>192.0.0.8080</td>
-                <td>Menabah sijil </td>
-                <td>plkk.gov.my</td>
-           </tr>
+                @foreach ($audit_trails as $audit_trail)
+                    <tr>
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$audit_trail->created_at}}</td>
+                        <td><a href="#" class="viewPelaku" data-id="{{$audit_trail->user_id}}">{{$audit_trail->user->name}}</a></td>
+                        <td>{{$audit_trail->ip}}</td>
+                        <td>{{$audit_trail->method}}</td>
+                        <td class="text-left">{{$audit_trail->url}}</td>
+                    </tr>
+                @endforeach
            </tbody>
        </table>
     </div>

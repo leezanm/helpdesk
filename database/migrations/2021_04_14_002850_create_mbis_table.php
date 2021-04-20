@@ -18,8 +18,9 @@ class CreateMbisTable extends Migration
             $table->string('rujukan');
             $table->string('tarikh');
             $table->string('kepada');
-            $table->string('jenis');
+            $table->foreignId('type_id')->constrained();
             $table->string('perkara');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

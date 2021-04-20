@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('profile_path')->default('images/profile/default.png');
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

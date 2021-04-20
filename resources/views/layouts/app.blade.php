@@ -9,7 +9,7 @@
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="{{asset('images/logo.jpg')}}">
+        <link rel="shortcut icon" href="{{asset('images/logo.png')}}">
 
         @include('layouts.css')
         <!-- Bootstrap Css -->
@@ -32,19 +32,19 @@
                         <div class="navbar-brand-box">
                             <a href="{{url('/')}}" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{{asset('assets/images/logo.jpg')}}" alt="" height="22">
+                                    <img src="{{asset('assets/images/logo.png')}}" alt="" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{asset('assets/images/logo-dark.png')}}" alt="" height="50">
+                                    <img src="{{asset('assets/images/logo-dark.png')}}" alt="" height="35">
                                 </span>
                             </a>
 
                             <a href="{{url('/')}}" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{{asset('images/logo.jpg')}}" alt="" height="22">
+                                    <img src="{{asset('images/logo.png')}}" alt="" height="22">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{asset('images/logo.jpg')}}" alt="" height="50">
+                                    <img src="{{asset('images/logo.png')}}" alt="" height="35">
                                 </span>
                             </a>
                         </div>

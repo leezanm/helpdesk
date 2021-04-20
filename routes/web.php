@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 Route::view('/forgot-password-out', 'auth.forgot_password_out');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/test', 'example');
 
     Route::view('/dashboard', 'dashboard');
@@ -46,10 +46,20 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/delete/{mbi}', [App\Http\Controllers\MbiController::class, 'destroy'])->name('mbi.destroy');
     });
 
-    Route::view('/audit-trail', 'superadmin.audit_trail');
+    Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index']);
+    Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
+
+    Route::prefix('division')->as('division.')->group(function () {
+        Route::get('/', [App\Http\Controllers\DivisionController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('type')->as('type.')->group(function () {
+        Route::get('/', [App\Http\Controllers\TypeController::class, 'index'])->name('index');
+    });
+
     Route::view('/pengguna', 'superadmin.pengguna');
     Route::view('/pegawai', 'superadmin.pentadbir');
-    Route::view('/selenggara', 'superadmin.selenggara');
+
     Route::view('/pengesahan', 'superadmin.selenggara');
     Route::view('/sijil', 'superadmin.selenggara');
     Route::view('/pengumuman', 'pengumuman');
@@ -63,6 +73,4 @@ Route::middleware(['auth'])->group(function () {
         Route::get('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordEdit'])->name('account.password.edit');
         Route::post('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordUpdate'])->name('account.password.update');
     });
-
-
 });
