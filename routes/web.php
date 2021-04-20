@@ -24,6 +24,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/test', 'example');
 
     Route::view('/dashboard', 'dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::view('/fbi', 'fbi.index');
     Route::view('/fbi-create', 'fbi.create');

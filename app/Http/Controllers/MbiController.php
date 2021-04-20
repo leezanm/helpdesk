@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Division;
 use App\Models\mbi;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class MbiController extends Controller
@@ -11,7 +13,9 @@ class MbiController extends Controller
     public function index()
     {
         $mbis = mbi::all();
-        return view('mbi.index', compact('mbis'));
+        $types = Type::orderBy('desc')->get();
+        $divisions = Division::orderBy('desc')->get();
+        return view('mbi.index', compact('mbis', 'types', 'divisions'));
     }
 
     public function store(Request $request)
@@ -21,7 +25,8 @@ class MbiController extends Controller
             'tarikh' => 'required',
             'kepada' => 'required',
             'perkara' => 'required',
-            'jenis' => 'required'
+            'type_id' => 'required',
+            'division_id' => 'required'
         ]);
 
         $mbi = new mbi();
@@ -29,13 +34,15 @@ class MbiController extends Controller
         $mbi->tarikh = $request->tarikh;
         $mbi->kepada = $request->kepada;
         $mbi->perkara = $request->perkara;
-        $mbi->jenis = $request->jenis;
+        $mbi->type_id = $request->type_id;
+        $mbi->division_id = $request->division_id;
         $mbi->save();
         return response()->json(['success' => true]);
     }
 
     public function show(mbi $mbi)
     {
+        $mbi->load('type', 'division');
         $datas = [
             'success' => true,
             'data' => $mbi
@@ -61,7 +68,8 @@ class MbiController extends Controller
             'tarikh' => 'required',
             'kepada' => 'required',
             'perkara' => 'required',
-            'jenis' => 'required'
+            'type_id' => 'required',
+            'division_id' => 'required'
         ]);
 
 
@@ -69,7 +77,8 @@ class MbiController extends Controller
         $mbi->tarikh = $request->tarikh;
         $mbi->kepada = $request->kepada;
         $mbi->perkara = $request->perkara;
-        $mbi->jenis = $request->jenis;
+        $mbi->type_id = $request->type_id;
+        $mbi->division_id = $request->division_id;
         $mbi->save();
         return response()->json(['success' => true]);
     }

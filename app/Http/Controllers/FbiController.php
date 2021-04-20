@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Division;
 use App\Models\fbi;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class FbiController extends Controller
@@ -10,7 +12,9 @@ class FbiController extends Controller
     public function index()
     {
         $fbis = fbi::all();
-        return view('fbi.index', compact('fbis'));
+        $types = Type::orderBy('desc')->get();
+        $divisions = Division::orderBy('desc')->get();
+        return view('fbi.index', compact('fbis', 'types', 'divisions'));
     }
 
     public function create()
@@ -25,7 +29,8 @@ class FbiController extends Controller
             'tarikh' => 'required',
             'kepada' => 'required',
             'perkara' => 'required',
-            'jenis' => 'required'
+            'type_id' => 'required',
+            'division_id' => 'required'
         ]);
 
         $fbi = new fbi();
@@ -33,7 +38,8 @@ class FbiController extends Controller
         $fbi->tarikh = $request->tarikh;
         $fbi->kepada = $request->kepada;
         $fbi->perkara = $request->perkara;
-        $fbi->jenis = $request->jenis;
+        $fbi->type_id = $request->type_id;
+        $fbi->division_id = $request->division_id;
         $fbi->save();
         return response()->json(['success' => true]);
     }
@@ -65,7 +71,8 @@ class FbiController extends Controller
             'tarikh' => 'required',
             'kepada' => 'required',
             'perkara' => 'required',
-            'jenis' => 'required'
+            'type_id' => 'required',
+            'division_id' => 'required'
         ]);
 
 
@@ -73,7 +80,8 @@ class FbiController extends Controller
         $fbi->tarikh = $request->tarikh;
         $fbi->kepada = $request->kepada;
         $fbi->perkara = $request->perkara;
-        $fbi->jenis = $request->jenis;
+        $fbi->type_id = $request->type_id;
+        $fbi->division_id = $request->division_id;
         $fbi->save();
         return response()->json(['success' => true]);
     }
