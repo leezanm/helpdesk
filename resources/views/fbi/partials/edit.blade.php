@@ -14,40 +14,48 @@
                                 <tr>
                                     <th>Rujukan</th>
                                     <td>
-                                        <input type="text" class="form-control" name="rujukan">
+                                        <input type="text" name="rujukan" class="form-control" >
+                                        <p class="text-danger collapse error error-rujukan"></p>
                                     </td>
                                     <th>Tarikh :</th>
                                     <td>
-                                        <input type="date" class="form-control" name="tarikh">
+                                        <input type="date" name="tarikh" class="form-control" >
+                                        <p class="text-danger collapse error error-tarikh"></p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Kepada</th>
                                     <td>
-                                        <input type="text" class="form-control" name="kepada">
+                                        <input type="text" name="kepada" class="form-control">
+                                        <p class="text-danger collapse error error-kepada"></p>
                                     </td>
                                     <th>Jenis</th>
                                     <td>
-                                        <select class="form-select" name="jenis">
-                                            <option>-Sila Pilih-</option>
-                                            <option value="sekolah">Sekolah</option>
-                                            <option value="perubatan">Perubatan</option>
-                                            <option value="kat">Kat</option>
+                                        <select class="form-select" name="type_id">
+                                            @foreach ($types as $type)
+                                                <option value="{{$type->id}}">{{$type->desc}}</option>
+                                            @endforeach
                                         </select>
+                                        <p class="text-danger collapse error error-type_id"></p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>Division</th>
                                     <td>
-                                        <input type="text" name="division" class="form-control" value="Department IT">
-                                        <p id="error-division" class="text-danger collapse error"></p>
+                                        <select class="form-select" name="division_id">
+                                            @foreach ($divisions as $division)
+                                                <option value="{{$division->id}}">{{$division->desc}}</option>
+                                            @endforeach
+                                        </select>
+                                        <p class="text-danger collapse error error-division_id"></p>
                                     </td>
                                     <th></th><td></td>
                                 </tr>
                                 <tr>
                                     <th>Perkara</th>
                                     <td colspan="3">
-                                        <textarea id="perkara" name="perkara" class="form-control"></textarea>
+                                        <textarea id="perkara" name="perkara"></textarea>
+                                        <p class="text-danger collapse error error-perkara"></p>
                                     </td>
                                 </tr>
 

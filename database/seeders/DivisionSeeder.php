@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Division;
 use Illuminate\Database\Seeder;
 
 class DivisionSeeder extends Seeder
@@ -14,5 +15,8 @@ class DivisionSeeder extends Seeder
     public function run()
     {
         //
+        $division = new Division();
+        $division->desc = 'Division 1';
+        $division->save();
     }
 }

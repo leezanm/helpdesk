@@ -19,6 +19,7 @@ class CreateFbisTable extends Migration
             $table->string('tarikh');
             $table->string('kepada');
             $table->foreignId('type_id')->constrained();
+            $table->foreignId('division_id')->constrained();
             $table->string('perkara');
             $table->softDeletes();
             $table->timestamps();

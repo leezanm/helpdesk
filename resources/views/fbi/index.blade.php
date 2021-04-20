@@ -53,7 +53,7 @@
                             {{$fbi->tarikh}}
                         </td>
                         <th>{{$fbi->kepada}}</th>
-                        <th>{{$fbi->jenis}}</th>
+                        <th>{{$fbi->type->desc}}</th>
                         <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">Aktif</span></td>
                         <td>
                             <a href="#" class="btn btn-sm btn-outline-primary rounded-circle font-size-13 editFbi" data-id="{{$fbi->id}}"><i class="bx bx-pen align-middle"></i></a>
@@ -114,8 +114,9 @@
                     $.each(errors, function (key, error){
                         $('input[name="'+key+'"]').addClass('is-invalid');
                         $('textarea[name="'+key+'"]').addClass('is-invalid');
-                        $('#error-'+key).html(error[0]);
-                        $('#error-'+key).removeClass('collapse');
+                        $('select[name="'+key+'"]').addClass('is-invalid');
+                        $('.error-'+key).html(error[0]);
+                        $('.error-'+key).removeClass('collapse');
                     })
                 }
             }

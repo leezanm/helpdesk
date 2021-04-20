@@ -54,7 +54,7 @@
                             {{$mbi->tarikh}}
                         </td>
                         <th>{{$mbi->kepada}}</th>
-                        <th>{{$mbi->jenis}}</th>
+                        <th>{{$mbi->type->desc}}</th>
                         <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">Aktif</span></td>
                         <td>
                             <a href="#" class="btn btn-sm btn-outline-primary rounded-circle font-size-13 editmbi" data-id="{{$mbi->id}}"><i class="bx bx-pen align-middle"></i></a>
@@ -116,8 +116,9 @@
                     $.each(errors, function (key, error){
                         $('input[name="'+key+'"]').addClass('is-invalid');
                         $('textarea[name="'+key+'"]').addClass('is-invalid');
-                        $('#error-'+key).html(error[0]);
-                        $('#error-'+key).removeClass('collapse');
+                        $('select[name="'+key+'"]').addClass('is-invalid');
+                        $('.error-'+key).html(error[0]);
+                        $('.error-'+key).removeClass('collapse');
                     })
                 }
             }
@@ -132,9 +133,19 @@
             url : currentRow.attr('data-show'),
             method : 'get',
             success : function(response){
+                console.log(response);
                 if(response.success){
                     for(var property in response.data){
-                        $('#show-'+property).html(response.data[property]);
+                        console.log(property);
+                        if(property == 'type_id'){
+                            $('#show-jenis').html(response.data.type.desc);
+                        }else if(property == 'division_id'){
+                            $('#show-bahagian').html(response.data.division.desc);
+                        }else {
+                            $('#show-'+property).html(response.data[property]);
+                        }
+
+
                     }
                     if(response.data['is_active']){
                         clearStatus();

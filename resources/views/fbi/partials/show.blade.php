@@ -23,7 +23,7 @@
                             </tr>
                             <tr>
                                 <th>Division</th>
-                                <td colspan="3"><span id="show-kepada"></span>Department IT</td>
+                                <td colspan="3"><span id="show-bahagian"></span></td>
                             </tr>
                             <tr>
                                 <th>Status</th>
