@@ -10,6 +10,9 @@ use Str;
 
 class UserController extends Controller
 {
+    public function index(){
+        return view('user.pengguna');
+    }
 
     public function edit(User $user){
         return view('auth.profile', compact('user'));
@@ -49,4 +52,24 @@ class UserController extends Controller
         return redirect('/');
     }
 
+    public function storeUser(Request $request)
+    {
+        $request->validate([
+            'profile_path' => 'required',
+            'name' => 'required',
+            'designation' => 'required',
+            'tel_no' => 'required',
+            'dob' => 'required|date',
+            'identification' => 'required',
+            'address' => 'required'
+        ]);
+
+        $user = new User();
+        $user->fill($request->all());
+        $user->password = Hash::make($request->password);
+
+        $user->save();
+
+        return response()->json(['success'=>true]);
+    }
 }

@@ -68,8 +68,13 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/destroy/{type}', [App\Http\Controllers\TypeController::class, 'destroy'])->name('destroy');
     });
 
-    Route::view('/pengguna', 'superadmin.pengguna');
+    // Route::view('/pengguna', 'superadmin.pengguna');
     Route::view('/pegawai', 'superadmin.pentadbir');
+
+    Route::prefix('pengguna')->as('user.')->group(function(){
+        Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\UserController::class, 'storeUser'])->name('store');
+    });
 
     Route::view('/pengesahan', 'superadmin.selenggara');
     Route::view('/sijil', 'superadmin.selenggara');
