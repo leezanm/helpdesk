@@ -14,6 +14,12 @@
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <div class="col-2 col-form-label"><b>Emel :</b> </div>
+                        <div class="col">
+                            <input type="text" name="email" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-2 col-form-label"> <b>Nama Pengguna :</b> </div>
                         <div class="col">
                             <input type="text" name="name" class="form-control">
@@ -40,13 +46,14 @@
                     <div class="row mb-3">
                         <div class="col-2 col-form-label"> <b>Alamat Pengguna :</b> </div>
                         <div class="col">
-                            <textarea id="elm2" name="area"></textarea>
+                            <textarea id="address" name="address"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer text-end">
                     <button type="reset" class="btn btn-secondary waves-effect waves-light"><i class="bx bx-reset font-size-16 align-middle me-2"></i> Set Semula</button>
-                    <a href="#" class="btn btn-success waves-effect waves-light" onclick="Swal.fire('Berjaya','Maklumat Pengguna ditambah','success');" data-bs-dismiss="modal"><i class="bx bx-save font-size-16 align-middle me-2"></i> Hantar</a>
+                    <button class="btn btn-success btnSubmit" type="button"><i class="bx bx-save font-size-16 align-middle me-2"></i> Hantar</button>
+                    {{-- <a href="#" class="btn btn-success waves-effect waves-light" onclick="Swal.fire('Berjaya','Maklumat Pengguna ditambah','success');" data-bs-dismiss="modal"><i class="bx bx-save font-size-16 align-middle me-2"></i> Hantar</a> --}}
                 </div>
             </form>
         </div><!-- /.modal-content -->

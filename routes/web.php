@@ -74,6 +74,10 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::prefix('pengguna')->as('user.')->group(function(){
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
         Route::post('/create', [App\Http\Controllers\UserController::class, 'storeUser'])->name('store');
+        Route::get('/show/{user}', [App\Http\Controllers\UserController::class, 'showUser'])->name('showUser');
+        Route::get('/edit/{user}', [App\Http\Controllers\UserController::class, 'editUser'])->name('editUser');
+        Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
+        Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
     });
 
     Route::view('/pengesahan', 'superadmin.selenggara');

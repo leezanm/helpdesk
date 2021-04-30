@@ -46,9 +46,9 @@
                        <td>{{$loop->iteration}}</td>
                        <td>{{$division->desc}}</td>
                        <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('division.edit', $division->id)}}" data-update="{{route('division.update', $division->id)}}" data-modal="#edit_division_modal" > <i class="bx bxs-pen"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-modal="#show_division_modal" data-show="{{route('division.show', $division->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('division.destroy', $division->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('division.edit', $division->id)}}" data-update="{{route('division.update', $division->id)}}" data-modal="#edit_division_modal" > <i class="bx bxs-pen"></i></a>
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-modal="#show_division_modal" data-show="{{route('division.show', $division->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('division.destroy', $division->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
                        </td>
                    </tr>
                @endforeach

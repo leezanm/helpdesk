@@ -60,57 +60,46 @@
                     <th>Menilai dan analysis pekerja</th>
                     <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">AKTIF</span></td>
                     <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Dokumen" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deletedokumen"  title="Padam Dokumen"> <i class="bx bxs-trash align-middle"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Pengguna" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Pengguna" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deletedokumen"  title="Padam Pengguna"> <i class="bx bxs-trash align-middle"></i></a>
                     </td>
                </tr>
-               <tr>
-                <td>2</td>
-                <td class="p-0">
-                    <a href="#" class="list-group-item text-muted border-0">
-                        <div class="media align-items-center">
-                            <div class="me-3">
-                                <img src="{{asset('images/profile/default.png')}}" alt="" class="avatar-sm h-auto d-block rounded">
-                            </div>
-                            <div class="media-body overflow-hidden">
-                                <h5 class="font-size-13 text-truncate">Syamie Syamil</h5>
-                                <p class="mb-0 text-truncate">Pengurusan Fail</p>
-                            </div>
-                        </div>
-                    </a>
-                </td>
-                <th>Menyimpan rekod dan fail</th>
-                <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">AKTIF</span></td>
-                <td class="text-center">
-                    <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
-                    <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Dokumen" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a>
-                    <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deletedokumen"  title="Padam Dokumen"> <i class="bx bxs-trash align-middle"></i></a>
-                </td>
-           </tr>
-           <tr>
-            <td>3</td>
-            <td class="p-0">
-                <a href="#" class="list-group-item text-muted border-0">
-                    <div class="media align-items-center">
-                        <div class="me-3">
-                            <img src="{{asset('images/profile/default.png')}}" alt="" class="avatar-sm h-auto d-block rounded">
-                        </div>
-                        <div class="media-body overflow-hidden">
-                            <h5 class="font-size-13 text-truncate">Fatin binti Sakinah</h5>
-                            <p class="mb-0 text-truncate">HR</p>
-                        </div>
-                    </div>
-                </a>
-            </td>
-            <th>Membuat laporan pegawai</th>
-            <td><span class="badge rounded-pill bg-danger bg-gradient font-size-13">TIDAK AKTIF</span></td>
-            <td class="text-center">
-                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
-                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Dokumen" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a>
-                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deletedokumen"  title="Padam Dokumen"> <i class="bx bxs-trash align-middle"></i></a>
-            </td>
-       </tr>
+               @foreach ($users as $user)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td class="p-0">
+                            <a href="#" class="list-group-item text-muted border-0">
+                                <div class="media align-items-center">
+                                    <div class="me-3">
+                                        <img src="{{ $user->profile_picture }}" alt="" class="avatar-sm h-auto d-block rounded">
+                                    </div>
+                                    <div class="media-body overflow-hidden">
+                                        <h5 class="font-size-13 text-truncate">{{ $user->name }}</h5>
+                                        <p class="mb-0 text-truncate">{{ $user->designation }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </td>
+                        <th>{{ $user->email }}</th>
+                        <td>
+                            @if ($user->deleted_at)
+                                <span class="badge rounded-pill bg-danger bg-gradient font-size-13">TIDAK AKTIF</span>
+                            @else
+                                <span class="badge rounded-pill bg-success bg-gradient font-size-13">AKTIF</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Dokumen" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a> --}}
+                            {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deletedokumen"  title="Padam Dokumen"> <i class="bx bxs-trash align-middle"></i></a> --}}
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('user.editUser', $user->id)}}" data-update="{{route('user.updateUser', $user->id)}}" data-modal="#edit_user_modal" > <i class="bx bxs-pen"></i></a>
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('user.destroy', $user->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
+
+                        </td>
+                    </tr>
+               @endforeach
            </tbody>
        </table>
     </div>
@@ -125,11 +114,9 @@
 @section('script')
 <script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
 <script>
-    $('#document-datatable').DataTable();
-    $('#susunan').TouchSpin();
-    $('#susunan-edit').TouchSpin();
-    $(document).ready(function(){0<$("#address").length&&tinymce.init({selector:"textarea#content-edit",height:300,plugins:["advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker","searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking","save table contextmenu directionality emoticons template paste textcolor"],toolbar:"insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",style_formats:[{title:"Bold text",inline:"b"},{title:"Red text",inline:"span",styles:{color:"#ff0000"}},{title:"Red header",block:"h1",styles:{color:"#ff0000"}},{title:"Example 1",inline:"span",classes:"example1"},{title:"Example 2",inline:"span",classes:"example2"},{title:"Table styles"},{title:"Table row 1",selector:"tr",classes:"tablerow1"}]})});
+    $(document).ready(function(){0<$("#address").length&&tinymce.init({selector:"textarea#address",height:300,plugins:["advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker","searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking","save table contextmenu directionality emoticons template paste textcolor"],toolbar:"insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons",style_formats:[{title:"Bold text",inline:"b"},{title:"Red text",inline:"span",styles:{color:"#ff0000"}},{title:"Red header",block:"h1",styles:{color:"#ff0000"}},{title:"Example 1",inline:"span",classes:"example1"},{title:"Example 2",inline:"span",classes:"example2"},{title:"Table styles"},{title:"Table row 1",selector:"tr",classes:"tablerow1"}]})});
 </script>
+
 <script>
     function clearError(){
         $('textarea').removeClass('is-invalid');
@@ -149,9 +136,10 @@
         var form = $(this).closest('form');
         var formId = '#'+form.attr('id');
         var formData = new FormData( $(formId)[0] );
+        formData.append('address', tinymce.get('address').getContent());
         formData.append('_token', '{{csrf_token()}}')
         clearError(formId);
-        console.log(formData)
+        console.log(formData.get('designation'))
         console.log(form.serialize());
         $.ajax({
             url: form.attr('action'),
@@ -188,11 +176,15 @@
             url : currentRow.attr('data-show'),
             method : 'get',
             success : function(response){
+                console.log(response);
                 if(response.success){
-                    $('#show-file').html(response.data['name']);
-                    $('#show-section').html(response.data['section']);
-                    $('#show-file').attr('href', response.data['file']);
-                    $('#show-file').attr('download', response.data['name']+".pdf");
+                    $('#show-name').html(response.data['name']);
+                    $('#show-designation').html(response.data['designation']);
+                    $('#show-tel_no').html(response.data['tel_no']);
+                    $('#show-dob').html(response.data['dob']);
+                    $('#show-address').html(response.data['address']);
+                    $('#show-identification').html(response.data['identification']);
+                    $('#show-profile_path').attr('src', (response.data['profile_picture']));
                     clearStatus();
                     if(response.data['is_active']){
                         $('#show-is_active').addClass('bg-success')
@@ -214,23 +206,32 @@
         currentRow = $(row);
         modalId = currentRow.attr('data-modal');
         form = $(modalId + ' form');
-        form.attr('action', currentRow.attr('data-update'));
-        formId = '#' + form.attr('id');
         // console.log(modalId);
+        form.attr('action', currentRow.attr('data-update'));
+        // formId = '#' + form.attr('id');
+        // console.log(form.attr('id'));
         clearError(form.attr('action'));
         $.ajax({
             url : currentRow.attr('data-edit'),
             method : 'get',
             success : function(response){
-                console.log(response);
+                console.log(response.data);
+                data = response.data;
                 if(response.success){
-                    $(formId + ' input[name="name"]').val(response.data['name']);
-                    $(formId + ' input[name="section"]').val(response.data['section']);
-                    $(formId + ' input[name="sequence"]').val(response.data['sequence']);
-                    $('#edit-file').html(response.data['name']);
-                    $('#edit-file').attr('href', response.data['file']);
-                    $('#edit-file').attr('download', response.data['name']+".pdf");
-                    // console.log(formId);
+                    // form.find('input[name="dob"]').val()
+                    for (var property in data) {
+                        form.find('input[name="' + property + '"]').val(data[property]);
+                        form.find('select[name="' + property + '"]').val(data[property]);
+                        form.find('select[name="' + property + '"]').trigger('change');
+                        form.find('textarea[name="' + property + '"]').html(data[property]);
+                    }
+                    $('#edit-profile_path').attr('src', (response.data['profile_picture']));
+                    // $(form.attr('id') + ' input[name="name"]').val(response.data['name']);
+                    // $(form.attr('id') + ' input[name="identification"]').val(response.data['identification']);
+                    // $(form.attr('id') + ' input[name="dob"]').val(response.data['dob']);
+                    // $(form.attr('id') + ' input[name="designation"]').val(response.data['designation']);
+                    // $(form.attr('id') + ' input[name="tel_no"]').val(response.data['tel_no']);
+                    // $(form.attr('id') + ' textarea[name="address"]').html(response.data['address']);
                     $(modalId).modal('show');
                 }
             },

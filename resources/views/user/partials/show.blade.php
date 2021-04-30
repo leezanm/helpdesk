@@ -1,4 +1,4 @@
-<div id="show" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+<div id="show_user_modal" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div div class="modal-header">
@@ -9,7 +9,7 @@
                 <div class="row mb-3">
                     <div class="col"></div>
                     <div class="col-2">
-                        <img src="{{asset('images/profile/default.png')}}" alt="" class="avatar-lg h-auto d-block rounded">
+                        <img id="show-profile_path" alt="" class="avatar-lg h-auto d-block rounded">
                     </div>
                     <div class="col"></div>
                 </div>
@@ -18,22 +18,22 @@
                         <tbody>
                             <tr>
                                 <th>Nama Pengguna : </th>
-                                <td colspan="2">Muhammad Hazim bin Md Zulkeflee</td>
-                                <th>Jawatan : </th>
-                                <td colspan ="2">Industri</td>
+                                <td colspan="2" id="show-name"></td>
+                                <th >Jawatan : </th>
+                                <td colspan ="2" id="show-designation"></td>
                             </tr>
                             <tr>
                                 <th>No. Telefon : </th>
-                                <td>011-27658417</td>
+                                <td id="show-tel_no"></td>
                                 <th>Tarikh Lahir</th>
-                                <td>15-02-1970</td>
+                                <td id="show-dob"></td>
                                 <th>Kad Pengenalan</th>
-                                <td>700215029212</td>
+                                <td id="show-identification"></td>
                             </tr>
                             <tr>
                                 <th>Alamat</th>
-                                <td colspan="5">
-                                    No 18 Jalan Pulai 14 Taman Perdana , Cyberjaya Johor Bahru Johor
+                                <td colspan="5" id="show-address">
+
                                 </td>
                             </tr>
                         </tbody>
