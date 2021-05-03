@@ -186,8 +186,16 @@
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="{{ route('account.profile.edit', Auth::user()->id) }}"> <i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profil</span></a>
-                                <a class="dropdown-item d-block" href="{{ route('account.password.edit', Auth::user()->id) }}"><i class="bx bxs-key font-size-16 align-middle me-1"></i> <span key="t-settings">Tukar Kata Laluan</span></a>
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit-profile">
+                                    <i class="bx bx-user font-size-16 align-middle me-1"></i> <span
+                                        key="t-profile">Profil</span></a>
+                                <a class="dropdown-item d-block" href="#" data-bs-toggle="modal"
+                                    data-bs-target="#password-reset"><i
+                                        class="bx bxs-key font-size-16 align-middle me-1"></i> <span
+                                        key="t-settings">Tukar Kata Laluan</span></a>
+
+                                {{-- <a class="dropdown-item" href="{{ route('account.profile.edit', Auth::user()->id) }}"> <i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profil</span></a>
+                                <a class="dropdown-item d-block" href="{{ route('account.password.edit', Auth::user()->id) }}"><i class="bx bxs-key font-size-16 align-middle me-1"></i> <span key="t-settings">Tukar Kata Laluan</span></a> --}}
                                 {{-- <a class="dropdown-item" href="#"><i class="bx bx-lock-open font-size-16 align-middle me-1"></i> <span key="t-lock-screen">Kunci Skrin</span></a> --}}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Log Keluar</span></a>
@@ -235,8 +243,38 @@
 
         </div>
         <!-- END layout-wrapper -->
+        @include('auth.modal.reset_password')
+        @include('auth.modal.profile')
 
         @include('layouts.script')
         @yield('script')
+        <script>
+            $('.updatePassword').on('click', function() {
+
+                var form = $(this).closest('form');
+                var formData = new FormData(form[0]);
+                formData.append('_token', '{{ csrf_token() }}');
+                clearError(form);
+                $.ajax({
+                    url: form.attr('action'),
+                    method: form.attr('method'),
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        console.log(response);
+                        if (response.success) {
+                            // resetForm(formId);
+                            window.location.reload();
+                        }
+                    },
+                    error: function(errorResponse) {
+                        if (errorResponse.responseJSON.errors) {
+                            errorValidate(errorResponse, form);
+                        }
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
