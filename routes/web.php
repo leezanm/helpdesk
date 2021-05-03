@@ -52,14 +52,33 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
     Route::prefix('division')->as('division.')->group(function () {
         Route::get('/', [App\Http\Controllers\DivisionController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\DivisionController::class, 'store'])->name('store');
+        Route::get('/show/{division}', [App\Http\Controllers\DivisionController::class, 'show'])->name('show');
+        Route::get('/edit/{division}', [App\Http\Controllers\DivisionController::class, 'edit'])->name('edit');
+        Route::post('/update/{division}', [App\Http\Controllers\DivisionController::class, 'update'])->name('update');
+        Route::post('/destroy/{division}', [App\Http\Controllers\DivisionController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('type')->as('type.')->group(function () {
         Route::get('/', [App\Http\Controllers\TypeController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\TypeController::class, 'store'])->name('store');
+        Route::get('/show/{type}', [App\Http\Controllers\TypeController::class, 'show'])->name('show');
+        Route::get('/edit/{type}', [App\Http\Controllers\TypeController::class, 'edit'])->name('edit');
+        Route::post('/update/{type}', [App\Http\Controllers\TypeController::class, 'update'])->name('update');
+        Route::post('/destroy/{type}', [App\Http\Controllers\TypeController::class, 'destroy'])->name('destroy');
     });
 
-    Route::view('/pengguna', 'superadmin.pengguna');
+    // Route::view('/pengguna', 'superadmin.pengguna');
     Route::view('/pegawai', 'superadmin.pentadbir');
+
+    Route::prefix('pengguna')->as('user.')->group(function(){
+        Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\UserController::class, 'storeUser'])->name('store');
+        Route::get('/show/{user}', [App\Http\Controllers\UserController::class, 'showUser'])->name('showUser');
+        Route::get('/edit/{user}', [App\Http\Controllers\UserController::class, 'editUser'])->name('editUser');
+        Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
+        Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
+    });
 
     Route::view('/pengesahan', 'superadmin.selenggara');
     Route::view('/sijil', 'superadmin.selenggara');

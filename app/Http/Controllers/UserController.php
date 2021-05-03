@@ -10,6 +10,12 @@ use Str;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        //
+        $users = User::all();
+        return view('user.pengguna', compact('users'));
+    }
 
     public function edit(User $user){
         return view('auth.profile', compact('user'));
@@ -49,4 +55,81 @@ class UserController extends Controller
         return redirect('/');
     }
 
+    public function storeUser(Request $request)
+    {
+        $request->validate([
+            'profile_path' => 'nullable|image|max:256',
+            'name' => 'required',
+            'email' => 'required|email',
+            'designation' => 'required',
+            'tel_no' => 'required',
+            'dob' => 'required|date',
+            'identification' => 'required',
+            'address' => 'required'
+        ]);
+
+        $user = new User();
+        $user->fill($request->all());
+        $user->password = Hash::make('pass1234');
+
+        if($request->hasFile('profile_path')){
+            $fileName = 'profile_pic_'.$user->id.'.'.$request->file('profile_path')->getClientOriginalExtension();
+            $path = $request->file('profile_path')->storeAs('public/images/users',$fileName);
+            $user->profile_path = Str::of($path)->replace('public', 'storage');
+            // return $attributes['profile_path'];
+        }
+
+        $user->save();
+
+        return response()->json(['success'=>true]);
+    }
+
+    public function showUser(User $user)
+    {
+        $datas = [
+            'success' => true,
+            'data' => $user->append('profile_picture')
+        ];
+
+        return response()->json($datas);
+    }
+
+    public function editUser(User $user)
+    {
+        $datas = [
+            'success' => true,
+            'data' => $user->append('profile_picture')
+        ];
+
+        return response()->json($datas);
+    }
+
+    public function updateUser(Request $request, User $user)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'name' => 'required',
+            'designation' => 'required',
+            'tel_no' => 'required',
+            'dob' => 'required',
+            'identification' => 'required',
+            'address' => 'required'
+        ]);
+
+        $user = $user->fill($request->except('_token'));
+        $user->save();
+        $datas = [
+            'success' => true,
+            'data' => $user
+        ];
+
+        return response()->json($datas);
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return response()->json(['success' => true]);
+    }
 }

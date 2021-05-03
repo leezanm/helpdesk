@@ -38,6 +38,15 @@ class TypeController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'desc' => 'required'
+        ]);
+
+        $type = new Type();
+        $type->fill($request->all());
+        $type->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -49,6 +58,12 @@ class TypeController extends Controller
     public function show(Type $type)
     {
         //
+        $datas = [
+            'success' => true,
+            'data' => $type
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -60,6 +75,12 @@ class TypeController extends Controller
     public function edit(Type $type)
     {
         //
+        $datas = [
+            'success' => true,
+            'data' => $type
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -72,6 +93,14 @@ class TypeController extends Controller
     public function update(Request $request, Type $type)
     {
         //
+        $request->validate([
+            'desc' => 'required'
+        ]);
+
+        $type->fill($request->all());
+        $type->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -83,5 +112,8 @@ class TypeController extends Controller
     public function destroy(Type $type)
     {
         //
+        $type->delete();
+
+        return response()->json(['success' => true]);
     }
 }
