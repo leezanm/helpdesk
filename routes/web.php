@@ -29,6 +29,10 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/fbi', 'fbi.index');
     Route::view('/fbi-create', 'fbi.create');
 
+    Route::prefix('aduan')->as('report.')->group(function () {
+        Route::view('/show', 'show');
+    });
+
     Route::prefix('fbi')->group(function () {
         Route::get('/', [App\Http\Controllers\FbiController::class, 'index'])->name('fbi.index');
         Route::get('/show/{fbi}', [App\Http\Controllers\FbiController::class, 'show'])->name('fbi.show');
