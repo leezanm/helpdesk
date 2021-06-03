@@ -29,6 +29,17 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/fbi', 'fbi.index');
     Route::view('/fbi-create', 'fbi.create');
 
+    Route::prefix('aduan')->group(function () {
+        Route::view('/', 'aduan.index');
+        Route::view('/create', 'aduan.create');
+        // Route::get('/', [App\Http\Controllers\FbiController::class, 'index'])->name('aduan.index');
+        // Route::get('/show/{aduan}', [App\Http\Controllers\FbiController::class, 'show'])->name('aduan.show');
+        // Route::post('/create', [App\Http\Controllers\FbiController::class, 'store'])->name('aduan.store');
+        // Route::post('/edit/{aduan}', [App\Http\Controllers\FbiController::class, 'edit'])->name('aduan.edit');
+        // Route::post('/update/{aduan}', [App\Http\Controllers\FbiController::class, 'update'])->name('aduan.update');
+        // Route::post('/delete/{aduan}', [App\Http\Controllers\FbiController::class, 'destroy'])->name('aduan.destroy');
+    });
+
     Route::prefix('fbi')->group(function () {
         Route::get('/', [App\Http\Controllers\FbiController::class, 'index'])->name('fbi.index');
         Route::get('/show/{fbi}', [App\Http\Controllers\FbiController::class, 'show'])->name('fbi.show');

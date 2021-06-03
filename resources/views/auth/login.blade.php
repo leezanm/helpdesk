@@ -16,7 +16,7 @@
             <div class="bg-info bg-soft">
                 <div class="row">
                     <div class="col-md mt-3" style="text-align:-webkit-center">
-                        <img src="{{asset('images/logo.jpg')}}" alt="" width="150">
+                        <img src="{{asset('images/logo.png')}}" alt="" width="150">
                     </div>
                     <div class="col-md-12">
                         <div class="text-primary p-4">
@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="mt-5 text-center">
-            <p>© <script>document.write(new Date().getFullYear())</script> KLN.  KEMENTERIAN LUAR NEGERI</p>
+            <p>© <script>document.write(new Date().getFullYear())</script> KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR</p>
         </div>
     </div>
 </div>

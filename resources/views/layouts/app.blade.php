@@ -4,7 +4,7 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>KLN | KEMENTERIAN LUAR NEGARA</title>
+        <title>KPLB | KEMENTERIAN PEMBANGUNAN LUAR BANDAR</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -12,6 +12,13 @@
         <link rel="shortcut icon" href="{{asset('images/logo.png')}}">
 
         @include('layouts.css')
+        <!-- DataTables -->
+        <link href="{{asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+        <link href="{{asset('assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="{{asset('assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" /> 
+
         <!-- Bootstrap Css -->
         <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />
         <!-- Icons Css -->
@@ -102,7 +109,7 @@
                             <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="bx bx-bell bx-tada"></i>
-                                <span class="badge bg-danger rounded-pill">3</span>
+                                <span class="badge bg-danger rounded-pill">2</span>
                             </button>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                                 aria-labelledby="page-header-notifications-dropdown">
@@ -117,7 +124,7 @@
                                     </div>
                                 </div>
                                 <div data-simplebar style="max-height: 230px;">
-                                    <a href="{{url('/permohonan/francais/pemegang/show/kuiri')}}" class="text-reset notification-item">
+                                    <a href="#" class="text-reset notification-item">
                                         <div class="media">
                                             <div class="avatar-xs me-3">
                                                 <span class="avatar-title bg-info rounded-circle font-size-16">
@@ -125,9 +132,9 @@
                                                 </span>
                                             </div>
                                             <div class="media-body">
-                                                <h6 class="mt-0 mb-1" key="t-your-order">Permohonan Francaisor</h6>
+                                                <h6 class="mt-0 mb-1" key="t-your-order">Aduan Komputer</h6>
                                                 <div class="font-size-12 text-muted">
-                                                    <p class="mb-1" key="t-grammer">Kuiri dari pegawai. Sila semak permohonan</p>
+                                                    <p class="mb-1" key="t-grammer">Komputer Riba yang memerlukan perhatian</p>
                                                     <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">3 min lalu</span></p>
                                                 </div>
                                             </div>
@@ -142,27 +149,10 @@
                                                 </span>
                                             </div>
                                             <div class="media-body">
-                                                <h6 class="mt-0 mb-1" key="t-your-order">Peringatan LTPF</h6>
+                                                <h6 class="mt-0 mb-1" key="t-your-order">Ambil Maklum</h6>
                                                 <div class="font-size-12 text-muted">
-                                                    <p class="mb-1" key="t-grammer">Peringatan menghantar laporan tahunan perniagaan francais</p>
-                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">3 min lalu</span></p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-
-                                    <a href="#" class="text-reset notification-item">
-                                        <div class="media">
-                                            <div class="avatar-xs me-3">
-                                                <span class="avatar-title bg-success rounded-circle font-size-16">
-                                                    <i class="bx bx-check"></i>
-                                                </span>
-                                            </div>
-                                            <div class="media-body">
-                                                <h6 class="mt-0 mb-1" key="t-your-order">Permohonan Diluluskan</h6>
-                                                <div class="font-size-12 text-muted">
-                                                    <p class="mb-1" key="t-grammer">Permohonan pendaftaran francais telah diluluskan</p>
-                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">1 jam lalu</span></p>
+                                                    <p class="mb-1" key="t-grammer">Tindakan yang perlu diambil tentang aduan 90292-72621</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span key="t-min-ago">53 min lalu</span></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -228,7 +218,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © KLN. KEMENTERIAN LUAR NEGERI
+                                <script>document.write(new Date().getFullYear())</script> © KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR
                             </div>
                             {{-- <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">

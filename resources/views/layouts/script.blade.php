@@ -8,7 +8,7 @@
         <script src="{{asset('assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
         <script src="{{asset('assets/libs/tinymce/tinymce.min.js')}}"></script>
         <script src="{{asset('assets/libs/chart.js/Chart.bundle.min.js')}}"></script>
-        <script src="{{asset("assets/libs/sweetalert2/sweetalert2.min.js")}}"></script>
+        <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
         <script src="{{asset('assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
         <script src="{{asset('assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
         <script src="{{asset('assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js') }}"></script>

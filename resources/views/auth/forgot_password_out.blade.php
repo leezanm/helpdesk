@@ -22,7 +22,7 @@
                             <a href="index.html">
                                 <div class="avatar-md profile-user-wid mb-4">
                                     <span class="avatar-title rounded-circle bg-light">
-                                        <img src="{{ asset('images/logo.jpg') }}" alt="" class="rounded-circle" height="34">
+                                        <img src="{{ asset('images/logo.png') }}" alt="" class="rounded-circle" height="34">
                                     </span>
                                 </div>
                             </a>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="mt-5 text-center">
-                    <p>© <script>document.write(new Date().getFullYear())</script> KLN.  KEMENTERIAN LUAR NEGERI</p>
+                    <p>© <script>document.write(new Date().getFullYear())</script> KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR</p>
                 </div>
             </div>
         </div>
