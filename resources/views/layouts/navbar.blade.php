@@ -10,14 +10,8 @@
                 </li>
 
                 <li>
-                    <a class="nav-link" href="{{url('mbi')}}" id="topnav-mbi" role="button">
-                        <i class="bx bxs-food-menu me-2"></i><span key="t-mbi">MBI</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a class="nav-link" href="{{url('fbi')}}" id="topnav-fbi" role="button">
-                        <i class="bx bx-file-blank me-2"></i><span key="t-fbi">FBI</span>
+                    <a class="nav-link" href="{{url('aduan')}}" id="topnav-fbi" role="button">
+                        <i class="bx bx-file-blank me-2"></i><span key="t-fbi">Aduan</span>
                     </a>
                 </li>
 
