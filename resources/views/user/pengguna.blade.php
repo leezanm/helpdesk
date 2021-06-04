@@ -37,34 +37,11 @@
            <thead>
                 <th>#</th>
                 <th>Nama Pegawai</th>
-                <th>Tugas</th>
+                <th>E-mel</th>
                 <th width="10%">Status</th>
                 <th width="5%">Tindakan</th>
            </thead>
            <tbody class="align-middle">
-               <tr>
-                    <td>1</td>
-                    <td class="p-0">
-                        <a href="#" class="list-group-item text-muted border-0">
-                            <div class="media align-items-center">
-                                <div class="me-3">
-                                    <img src="{{asset('images/profile/default.png')}}" alt="" class="avatar-sm h-auto d-block rounded">
-                                </div>
-                                <div class="media-body overflow-hidden">
-                                    <h5 class="font-size-13 text-truncate">Muhammad Hazim bin Md Zulkeflee</h5>
-                                    <p class="mb-0 text-truncate">Industri</p>
-                                </div>
-                            </div>
-                        </a>
-                    </td>
-                    <th>Menilai dan analysis pekerja</th>
-                    <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">AKTIF</span></td>
-                    <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Pengguna" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Pengguna" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deletedokumen"  title="Padam Pengguna"> <i class="bx bxs-trash align-middle"></i></a>
-                    </td>
-               </tr>
                @foreach ($users as $user)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
