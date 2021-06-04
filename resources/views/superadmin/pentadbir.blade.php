@@ -57,7 +57,7 @@
                             </div>
                         </a>
                     </td>
-                    <th></th>
+                    <th>Keselamatan</th>
                     <td><span class="badge rounded-pill bg-success bg-gradient font-size-13">AKTIF</span></td>
                     <td class="text-center">
                         <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
@@ -80,7 +80,7 @@
                             </div>
                         </a>
                     </td>
-                    <th>Daerah</th>
+                    <th>Pengurusan Dokumen</th>
                     <td><span class="badge rounded-pill bg-danger bg-gradient font-size-13">AKTIF</span></td>
                     <td class="text-center">
                         <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
