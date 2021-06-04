@@ -8,7 +8,7 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i> Laman Utama</a></li>
-                        <li class="breadcrumb-item active">Peranan Pengguna</li>
+                        <li class="breadcrumb-item active">Peranan</li>
                     </ol>
                 </div>
 
@@ -20,6 +20,17 @@
 
 @section('content')
     <div class="card">
+        {{-- <div class="card-header">
+            <div class="row">
+                <div class="col text-end">
+                    <div class="button-items">
+                        <a class="btn btn-primary btn waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal_create_role">
+                            <i class="bx bxs-plus-square font-size-16 align-middle me-2"></i> Cipta
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
         <div class="card-body">
             <table id="datatable-role" class="table table-bordered">
                 <thead class="text-center align-middle">
@@ -31,26 +42,14 @@
                     </tr>
                 </thead>
                 <tbody class="text-center align-middle">
-                    <tr>
-                        <td>1</td>
-                        <td class="text-start">superadmin</td>
-                        <td class="text-start">Pentadbir Sistem</td>
-                        <td class="text-center">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_status" class="btn btn-primary waves-effect waves-light">
-                                <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td class="text-start">pengguna</td>
-                        <td class="text-start">Pengguna warga KPLB</td>
-                        <td class="text-center">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_category" class="btn btn-primary waves-effect waves-light">
-                                <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                            </a>
-                        </td>
-                    </tr>
+                    @foreach ($roles as $role)
+                        <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$role->name}}</td>
+                            <td>{{$role->desc}}</td>
+                            <th><a href="{{route('role.show', $role->name)}}">lihat</a></th>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

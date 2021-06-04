@@ -29,6 +29,7 @@
         <script src="{{asset('assets/libs/jquery-steps/build/jquery.steps.min.js')}}"></script>
         <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
         <script src="{{asset('assets/libs/jquery-steps/build/jquery.steps.min.js')}}"></script>
+        <script src="{{asset('assets/libs/bootstrap-rating/bootstrap-rating.min.js')}}"></script>
 
         <!-- flot plugins -->
         <script src="{{asset('assets/libs/flot-charts/jquery.flot.js') }}"></script>

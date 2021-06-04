@@ -82,42 +82,209 @@
         </table>
         <br>
         <hr>
-        <form>
-            <legend class="text-uppercase h5">Tindakan Helpdesk Admin</legend>
-            <div class="row mb-3">
-                <div class="col-md-2">
-                    <label class="col-form-label">Tindakan</label>
-                </div>
-                <div class="col-md-3">
-                    <select name="" class="form-select">
-                        <option value="">Menunggu Tindakan</option>
-                        <option value="">Majukan Kepada Juruteknik</option>
-                        <option value="">Majukan Kepada PPTM</option>
-                        <option value="">Majukan Kepada PTM</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-2">
-                    <label class="col-form-label">Majukan Kepada</label>
-                </div>
-                <div class="col-md-4">
-                    <select name="" class="form-select">
-                        <option value="">En. Muhammad Farhan Bin Zawawi</option>
-                        <option value="">Datuk. Muhammad Arham Bin Zulqarnaen</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="text-end">
-                        <a class="btn btn-success waves-effect waves-light save">
-                            <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                        </a>
+
+        @hasrole('helpdesk')
+            <form>
+                <legend class="text-uppercase h5">Tindakan Helpdesk Admin</legend>
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Tindakan</label>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="" class="form-select">
+                            <option value="">Menunggu Tindakan</option>
+                            <option value="">Majukan Kepada Juruteknik</option>
+                            <option value="">Majukan Kepada PPTM</option>
+                            <option value="">Majukan Kepada PTM</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-        </form>
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Majukan Kepada</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="" class="form-select">
+                            <option value="">En. Muhammad Farhan Bin Zawawi</option>
+                            <option value="">Datuk. Muhammad Arham Bin Zulqarnaen</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-end">
+                            <a class="btn btn-success waves-effect waves-light save">
+                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        @endhasrole
+
+        @hasrole('jtk')
+            <form> 
+                <legend class="text-uppercase h5">Tindakan Juruteknik</legend>
+
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Tindakan</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="status_id" class="form-select">
+                            <option value="">Menunggu Tindakan</option>
+                            <option value="1">Selesai</option>
+                            <option value="0">Tidak Selesai</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="sebabTakSelesai" class="collapse">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="col-form-label">Sebab</label>
+                        </div>
+                        <div class="col-md-4">
+                            <textarea name="" class="form-control"></textarea>
+                            <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-end">
+                            <a class="btn btn-success waves-effect waves-light save">
+                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        @endhasrole
+
+        @hasrole('pptm')
+            <form> 
+                <legend class="text-uppercase h5">Tindakan Pembantu Pegawai Teknologi Maklumat</legend>
+
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Tindakan</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="status_id" class="form-select">
+                            <option value="">Menunggu Tindakan</option>
+                            <option value="1">Selesai</option>
+                            <option value="0">Tidak Selesai</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="sebabTakSelesai" class="collapse">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="col-form-label">Sebab</label>
+                        </div>
+                        <div class="col-md-4">
+                            <textarea name="" class="form-control"></textarea>
+                            <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-end">
+                            <a class="btn btn-success waves-effect waves-light save">
+                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </form>
+        @endhasrole
+
+        @hasrole('ptm')
+            <form> 
+                <legend class="text-uppercase h5">Tindakan Pegawai Pembantu Teknologi Maklumat</legend>
+
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Tindakan</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="" class="form-select">
+                            <option value="">Menunggu Tindakan</option>
+                            <option value="">Selesai</option>
+                            <option value="">Tidak Selesai</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="sebabTakSelesai" class="collapse">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="col-form-label">Sebab</label>
+                        </div>
+                        <div class="col-md-4">
+                            <textarea name="" class="form-control"></textarea>
+                            <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-end">
+                            <a class="btn btn-success waves-effect waves-light save">
+                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </form>
+        @endhasrole
+
+        @hasrole('pengguna')
+            <form> 
+                <legend class="text-uppercase h5">Soal Selidik</legend>
+
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Rating</label>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="rating-star">
+                            <input type="hidden" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Komen</label>
+                    </div>
+                    <div class="col-md-4">
+                        <textarea name="" class="form-control"></textarea>
+                        <p>Komen anda adalah amat dihargai</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-end">
+                            <a class="btn btn-success waves-effect waves-light save">
+                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </form>
+        @endhasrole
 
         <legend class="text-uppercase h5 mb-3">Kronologi Aduan</legend>
         <div class="row">
@@ -167,5 +334,15 @@
 @endsection
 
 @section('script')
+    <script>
+        $('select[name="status_id"').on('change', function(){
+            if(this.value === '0'){
+                $('#sebabTakSelesai').removeClass('collapse');
+            } else {
+                $('#sebabTakSelesai').addClass('collapse');
+            }
 
+        });
+
+    </script>
 @endsection

@@ -19,13 +19,13 @@
                     </ul>
                 </li>
 
-                @hasrole('superadmin')
+                @can('view.report')
                     <li>
                         <a class="nav-link" href="{{url('/laporan')}}" id="topnav-laporan" role="button">
                             <i class="bx bxs-report me-2"></i><span key="t-laporan">Laporan</span>
                         </a>
                     </li>
-                @endhasrole
+                @endcan
 
                 {{-- <li>
                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#search" id="topnav-search" role="button">
@@ -33,51 +33,72 @@
                     </a>
                 </li> --}}
 
-                @hasrole('superadmin')
-                    <li class="menu-title" key="t-pentadbir">Pentadbir</li>
+                @canany(['manage.division','manage.category', 'manage.admin', 'manage.role'])
+                    <li class="menu-title" key="t-pentadbir">Pentadbiran</li>
+                @endcanany
+                
 
-                    <li>
-                        <a class="nav-link" href="{{url('/selenggara')}}" id="topnav-selenggara" role="button">
-                            <i class="bx bx-bookmark me-2"></i><span key="t-selenggara">Selenggara</span>
-                        </a>
-                    </li>
+                @canany(['manage.division','manage.category'])
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
+                        <i class="bx bx-cog me-2"></i><span>Selenggaraan</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        @can('manage.division')
+                            <li><a href="{{route('division.index')}}" key="t-division">Bahagian</a></li>
+                        @endcan
+                        @can('manage.category')
+                            <li><a href="{{route('type.index')}}" key="t-category">Kategori Aduan</a></li>
+                        @endcan
+                    </ul>
+                </li>
+                @endcanany
 
+                @canany(['manage.user','manage.admin'])
                     <li>
                         <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
                             <i class="bx bxs-group me-2"></i><span>Pengurusan pengguna</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="true">
-                            <li><a href="{{url('/pentadbir')}}" key="t-pegawai">Pentadbir</a></li>
-                            <li><a href="{{url('/pengguna')}}" key="t-pengguna">Pengguna</a></li>
+                            @can('manage.admin')
+                                <li><a href="{{url('/pentadbir')}}" key="t-pegawai">Pentadbir</a></li>
+                            @endcan
+                            @can('manage.user')
+                                <li><a href="{{url('/pengguna')}}" key="t-pengguna">Pengguna</a></li>
+                            @endcan
                         </ul>
                     </li>
+                @endcanany
 
+                @can('manage.role')
                     <li>
                         <a class="nav-link" href="{{url('/peranan')}}" id="topnav-role-management" role="button">
                             <i class="bx bxs-user-badge me-2"></i><span key="t-role-management">Pengurusan Peranan</span>
                         </a>
                     </li>
+                @endcan
 
-                    {{-- <li>
-                        <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                            <i class="bx bx-receipt me-2"></i><span>Peranan</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="true">
-                            <li><a href="{{url('/peranan')}}" key="t-pegawai">Senarai</a></li>
-                            <li><a href="{{url('#')}}" key="t-pengguna">Tambah</a></li>
-                        </ul>
-                    </li> --}}
+                {{-- <li>
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
+                        <i class="bx bx-receipt me-2"></i><span>Peranan</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="{{url('/peranan')}}" key="t-pegawai">Senarai</a></li>
+                        <li><a href="{{url('#')}}" key="t-pengguna">Tambah</a></li>
+                    </ul>
+                </li> --}}
 
-                    {{-- <li>
-                        <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                            <i class="bx bx-windows me-2"></i><span>Pengurusan Hebahan</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="true">
-                            <li><a href="{{url('#')}}" key="t-pegawai">Slider</a></li>
-                            <li><a href="{{url('/pengumuman')}}" key="t-pengguna">Pengumuman</a></li>
-                        </ul>
-                    </li> --}}
+                {{-- <li>
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
+                        <i class="bx bx-windows me-2"></i><span>Pengurusan Hebahan</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="{{url('#')}}" key="t-pegawai">Slider</a></li>
+                        <li><a href="{{url('/pengumuman')}}" key="t-pengguna">Pengumuman</a></li>
+                    </ul>
+                </li> --}}
 
+                @canany(['manage.audit-trail', 'manage.backup'])
                     <li class="menu-title" key="t-pentadbiran">Tetapan</li>
 
                     <li>
@@ -86,12 +107,12 @@
                         </a>
                     </li>
 
-                    {{-- <li>
+                    <li>
                         <a class="nav-link" href="{{url('/backup')}}" id="topnav-backup" role="button">
-                            <i class="bx bx-cylinder me-2"></i><span key="t-backup">Backup</span>
+                            <i class="bx bx-data me-2"></i><span key="t-backup">Backup</span>
                         </a>
-                    </li> --}}
-                @endhasrole
+                    </li>
+                @endcanany
 
             </ul>
 

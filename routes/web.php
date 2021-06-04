@@ -95,8 +95,11 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         
     });
 
-    Route::prefix('peranan')->group(function () {
-        Route::view('/', 'role.index');
+    Route::prefix('peranan')->as('role.')->group(function () {
+        Route::get('/', [App\Http\Controllers\RoleManagementController::class, 'index'])->name('index');
+        Route::get('/show/{role:name}', [App\Http\Controllers\RoleManagementController::class, 'show'])->name('show');
+        Route::post('/create', [App\Http\Controllers\RoleManagementController::class, 'store']);
+        Route::post('/edit/{role:name}', [App\Http\Controllers\RoleManagementController::class, 'update']);
     });
 
     Route::view('/pengesahan', 'superadmin.selenggara');
