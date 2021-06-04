@@ -17,15 +17,19 @@ class RoleSeeder extends Seeder
     {
         //
         $role = Role::create(['name' => 'jtk', 'desc' => 'Juruteknik']);
+        $role->syncPermissions(['aduan.create' ,'aduan.all', 'aduan.updateTask']);
 
         $role = Role::create(['name' => 'pptm', 'desc' => 'Pembantu Pegawai Teknologi Maklumat']);
+        $role->syncPermissions(['aduan.create', 'aduan.all', 'aduan.updateTask']);
 
         $role = Role::create(['name' => 'ptm', 'desc' => 'Pegawai Teknologi Maklumat']);
+        $role->syncPermissions(['aduan.create', 'aduan.all', 'aduan.updateTask']);
 
         $role = Role::create(['name' => 'pengguna', 'desc' => 'Warga KPLB']);
+        $role->syncPermissions(['aduan.create']);
 
         $role = Role::create(['name' => 'helpdesk', 'desc' => 'Admin Sistem']);
-        $role->syncPermissions(['manage.category', 'manage.user']);
+        $role->syncPermissions(['manage.category', 'manage.user', 'aduan.all', 'aduan.create', 'aduan.assignTask', 'view.report']);
 
         $role = Role::create(['name' => 'superadmin', 'desc' => 'Pentadbir Sitem Helpdesk']);
         $role->syncPermissions(Permission::pluck('name'));

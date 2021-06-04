@@ -38,6 +38,7 @@
                         <th>No</th>
                         <th>Peranan</th>
                         <th>Keterangan</th>
+                        <th>Permissions</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -47,6 +48,13 @@
                             <td>{{$loop->iteration}}</td>
                             <td>{{$role->name}}</td>
                             <td>{{$role->desc}}</td>
+                            <td class="text-start">
+                                <ul >
+                                    @foreach ($role->permissions as $permission)
+                                        <li>{{$permission->desc}}</li>
+                                    @endforeach
+                                </ul>
+                            </td>
                             <th><a href="{{route('role.show', $role->name)}}">lihat</a></th>
                         </tr>
                     @endforeach
