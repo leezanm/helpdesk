@@ -29,10 +29,10 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/fbi', 'fbi.index');
     Route::view('/fbi-create', 'fbi.create');
 
-    Route::prefix('aduan')->as('report.')->group(function () {
+    Route::prefix('aduan')->as('aduan.')->group(function () {
         Route::view('/', 'aduan.index');
         Route::view('/create', 'aduan.create');
-        Route::view('/show', 'show');
+        Route::view('/show', 'aduan.show');
         
     });
 
@@ -85,6 +85,13 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/edit/{user}', [App\Http\Controllers\UserController::class, 'editUser'])->name('editUser');
         Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
         Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('laporan')->as('laporan.')->group(function () {
+        Route::view('/', 'laporan.index');
+        Route::view('/mengikut-status-tindakan', 'aduan.show_by_status');
+        Route::view('/mengikut-kategori', 'aduan.show_by_category');
+        
     });
 
     Route::view('/pengesahan', 'superadmin.selenggara');

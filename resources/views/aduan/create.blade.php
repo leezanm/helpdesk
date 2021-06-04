@@ -99,12 +99,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-2 col-form-label">Muat Naik Laporan / Dokumen</label>
-                            <div class="col-md-4">
-                                <input class="form-control" type="file" id="laporan">
+
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label for="example-text-input" class="col-md-2 col-form-label">Muat Naik Laporan / Dokumen</label>
+                                <div action="#" class="dropzone" id="document-dropzone">
+                                    <div class="fallback">
+                                        <input name="file" type="file" multiple="multiple">
+                                    </div>
+                                    <div class="dz-message needsclick">
+                                        <div class="mb-3">
+                                            <i class="display-4 text-muted bx bxs-cloud-upload"></i>
+                                        </div>
+                                        
+                                        <h4>Drop files here or click to upload.</h4>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
                         <div class="mb-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="floatingCheck">
@@ -130,6 +143,43 @@
 @endsection
 
 @section('script')>
-<script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
+<script>
+  var uploadedDocumentMap = {}
+  Dropzone.options.documentDropzone = {
+    url: '#',
+    maxFilesize: 2, // MB
+    addRemoveLinks: true,
+    headers: {
+      'X-CSRF-TOKEN': "{{ csrf_token() }}"
+    },
+    success: function (file, response) {
+      $('form').append('<input type="hidden" name="document[]" value="' + response.name + '">')
+      uploadedDocumentMap[file.name] = response.name
+    },
+    removedfile: function (file) {
+      file.previewElement.remove()
+      var name = ''
+      if (typeof file.file_name !== 'undefined') {
+        name = file.file_name
+      } else {
+        name = uploadedDocumentMap[file.name]
+      }
+      $('form').find('input[name="document[]"][value="' + name + '"]').remove()
+    },
+    init: function () {
+      @if(isset($project) && $project->document)
+        var files =
+          {!! json_encode($project->document) !!}
+        for (var i in files) {
+          var file = files[i]
+          this.options.addedfile.call(this, file)
+          file.previewElement.classList.add('dz-complete')
+          $('form').append('<input type="hidden" name="document[]" value="' + file.file_name + '">')
+        }
+      @endif
+    }
+  }
+</script>
 @endsection

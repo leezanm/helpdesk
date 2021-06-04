@@ -28,7 +28,7 @@
                 <tr>
                     <th width="20%">Pemohon</th>
                     <td>
-                        <a href="" class="userProfile">Muhammad Hazim</a>
+                        <a href="#" class="userProfile">Muhammad Hazim</a>
                     </td>
                 </tr>
                 <tr>
@@ -118,6 +118,50 @@
                 </div>
             </div>
         </form>
+
+        <legend class="text-uppercase h5 mb-3">Kronologi Aduan</legend>
+        <div class="row">
+            <div class="col-lg-12">
+                <div>
+                    <ul class="verti-timeline list-unstyled">
+                        <li class="event-list">
+                            <div class="event-timeline-dot">
+                                <i class="bx bx-right-arrow-circle"></i>
+                            </div>
+                            <div class="media">
+                                <div class="me-3">
+                                    {{-- <i class="bx bx-copy-alt h2 text-primary"></i> --}}
+                                    1 June 2021, 10.00 AM
+                                </div>
+                                <div>
+                                    <p class="text-muted">Aduan dihantar oleh <a href="#">Muhammad Hazim</a>.</p>
+                                </div>
+                                {{-- <div class="media-body">
+                                    <div>
+                                        <h5>Ordered</h5>
+                                        <p class="text-muted">New common language will be more simple and regular than the existing.</p>
+                                    </div>
+                                </div> --}}
+                            </div>
+                        </li>
+                        <li class="event-list">
+                            <div class="event-timeline-dot">
+                                <i class="bx bx-right-arrow-circle"></i>
+                            </div>
+                            <div class="media">
+                                <div class="me-3">
+                                    {{-- <i class="bx bx-package h2 text-primary"></i> --}}
+                                    1 June 2021, 11.00 AM
+                                </div>
+                                <div>
+                                    <p class="text-muted">Aduan dimajukan kepada juruteknik <a href="#">En. Muhammad Hafiz</a> oleh admin helpdesk <a href="#">Pn. Aishah</a> untuk diambil tindakan.</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

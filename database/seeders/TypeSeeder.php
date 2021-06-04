@@ -16,19 +16,19 @@ class TypeSeeder extends Seeder
     {
         //
         $type = new Type();
-        $type->desc = 'Sekolah';
+        $type->desc = 'Komputer Riba (Notebook)';
         $type->save();
 
         $type = new Type();
-        $type->desc = 'Perubatan';
+        $type->desc = 'Komputer Meja (Desktop)';
         $type->save();
 
         $type = new Type();
-        $type->desc = 'KAT';
+        $type->desc = 'Peri sian Komputer';
         $type->save();
 
         $type = new Type();
-        $type->desc = 'BMTM';
+        $type->desc = 'Printer';
         $type->save();
     }
 }

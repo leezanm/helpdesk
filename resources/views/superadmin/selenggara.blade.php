@@ -31,14 +31,14 @@
            <tbody class="align-middle">
                <tr>
                     <td>1</td>
-                    <td>Bahagian</td>
+                    <td>Bahagian Pengguna</td>
                     <td class="text-center">
                         <a href="{{route('division.index')}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" > <i class="mdi mdi-eye align-middle"></i></a>
                     </td>
                </tr>
                <tr>
                     <td>2</td>
-                    <td>Jenis</td>
+                    <td>Kategori Aduan</td>
                     <td class="text-center">
                         <a href="{{route('type.index')}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="mdi mdi-eye align-middle"></i></a>
                     </td>

@@ -51,9 +51,9 @@
                         <td>28/12/2020</td>
                         <td><span class="badge bg-success font-size-12">Untuk Tindakan JTK</span></td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-primary waves-effect waves-light">
+                            <a href="{{url('/aduan/show')}}" class="btn btn-primary waves-effect waves-light">
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>

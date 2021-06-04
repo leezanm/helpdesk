@@ -10,10 +10,22 @@
                 </li>
 
                 <li>
-                    <a class="nav-link" href="{{url('aduan')}}" id="topnav-fbi" role="button">
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
                         <i class="bx bx-file-blank me-2"></i><span key="t-fbi">Aduan</span>
                     </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="{{url('/aduan/create')}}" key="t-aduan-create">Aduan Baru</a></li>
+                        <li><a href="{{url('/aduan')}}" key="t-aduan-list">Senarai Aduan</a></li>
+                    </ul>
                 </li>
+
+                @hasrole('superadmin')
+                    <li>
+                        <a class="nav-link" href="{{url('/dashboard')}}" id="topnav-laporan" role="button">
+                            <i class="bx bxs-report me-2"></i><span key="t-laporan">Laporan</span>
+                        </a>
+                    </li>
+                @endhasrole
 
                 {{-- <li>
                     <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#search" id="topnav-search" role="button">
