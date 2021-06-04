@@ -44,23 +44,29 @@
 
                     <li>
                         <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                            <i class="bx bx-user-plus me-2"></i><span>Pengurusan pengguna</span>
+                            <i class="bx bxs-group me-2"></i><span>Pengurusan pengguna</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="true">
-                            <li><a href="{{url('/pegawai')}}" key="t-pegawai">Pegawai</a></li>
+                            <li><a href="{{url('/pentadbir')}}" key="t-pegawai">Pentadbir</a></li>
                             <li><a href="{{url('/pengguna')}}" key="t-pengguna">Pengguna</a></li>
                         </ul>
                     </li>
 
                     <li>
+                        <a class="nav-link" href="{{url('/peranan')}}" id="topnav-role-management" role="button">
+                            <i class="bx bxs-user-badge me-2"></i><span key="t-role-management">Pengurusan Peranan</span>
+                        </a>
+                    </li>
+
+                    {{-- <li>
                         <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
                             <i class="bx bx-receipt me-2"></i><span>Peranan</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="true">
-                            <li><a href="{{url('#')}}" key="t-pegawai">Senarai</a></li>
+                            <li><a href="{{url('/peranan')}}" key="t-pegawai">Senarai</a></li>
                             <li><a href="{{url('#')}}" key="t-pengguna">Tambah</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     {{-- <li>
                         <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
