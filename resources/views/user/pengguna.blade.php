@@ -38,8 +38,7 @@
                 <th>#</th>
                 <th>Nama Pegawai</th>
                 <th>E-mel</th>
-                <th width="10%">Status</th>
-                <th width="5%">Tindakan</th>
+                <th>Tindakan</th>
            </thead>
            <tbody class="align-middle">
                @foreach ($users as $user)
@@ -59,13 +58,6 @@
                             </a>
                         </td>
                         <th>{{ $user->email }}</th>
-                        <td>
-                            @if ($user->deleted_at)
-                                <span class="badge rounded-pill bg-danger bg-gradient font-size-13">TIDAK AKTIF</span>
-                            @else
-                                <span class="badge rounded-pill bg-success bg-gradient font-size-13">AKTIF</span>
-                            @endif
-                        </td>
                         <td class="text-center">
                             {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
                             <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Dokumen" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a> --}}
@@ -113,7 +105,7 @@
         var form = $(this).closest('form');
         var formId = '#'+form.attr('id');
         var formData = new FormData( $(formId)[0] );
-        formData.append('address', tinymce.get('address').getContent());
+        // formData.append('address', tinymce.get('address').getContent());
         formData.append('_token', '{{csrf_token()}}')
         clearError(formId);
         console.log(formData.get('designation'))
@@ -192,7 +184,6 @@
             url : currentRow.attr('data-edit'),
             method : 'get',
             success : function(response){
-                console.log(response.data);
                 data = response.data;
                 if(response.success){
                     // form.find('input[name="dob"]').val()

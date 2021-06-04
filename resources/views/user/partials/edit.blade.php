@@ -1,5 +1,5 @@
 <div id="edit_user_modal" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div div class="modal-header">
                 <h5 class="modal-title" id="myExtraLargeModalLabel">Maklumat Pengguna</h5>
@@ -14,42 +14,55 @@
                         </div>
                         <div class="col"></div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped mb-0">
-                            <tbody>
-                                <tr>
-                                    <th>Nama Pengguna</th>
-                                    <td colspan="2">
-                                        <input type="text" class="form-control" name="name">
-                                    </td>
-                                    <th>Jawatan :</th>
-                                    <td colspan="2">
-                                        <input type="text" class="form-control" name="designation" >
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>No telefon</th>
-                                    <td>
-                                        <input type="text" class="form-control" name="tel_no">
-                                    </td>
-                                    <th>Tarikh Lahir</th>
-                                    <td>
-                                        <input type="date" class="form-control" name="dob">
-                                    </td>
-                                    <th>No Kad Pengenalan</th>
-                                    <td>
-                                        <input type="text" class="form-control" name="identification">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Alamat</th>
-                                    <td colspan="5">
-                                        <textarea id="elm1" name="address"> </textarea>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="col-form-label">Nama</label>
+                        </div>
+                        <div class="col">
+                            <input type="text" name="name" class="form-control">
+                        </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            Jawatan
+                        </div>
+                        <div class="col">
+                            <input type="text" name="designation" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            No Telefon
+                        </div>
+                        <div class="col">
+                           <input type="text" class="form-control" name="tel_no">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            Tarikh Lahir
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" name="dob">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            No Kad Pengenalan
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="identification">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            Alamat
+                        </div>
+                        <div class="col">
+                             <textarea  name="address" class="form-control" rows="5"> </textarea>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer text-end">
                     <button type="reset" class="btn btn-secondary waves-effect waves-light"><i

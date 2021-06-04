@@ -46,7 +46,7 @@
                     <div class="row mb-3">
                         <div class="col-2 col-form-label"> <b>Alamat Pengguna :</b> </div>
                         <div class="col">
-                            <textarea id="address" name="address"></textarea>
+                            <textarea name="address" class="form-control" rows="5"></textarea>
                         </div>
                     </div>
                 </div>
