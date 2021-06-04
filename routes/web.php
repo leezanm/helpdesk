@@ -89,8 +89,9 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::view('/', 'laporan.index');
-        Route::view('/mengikut-status-tindakan', 'aduan.show_by_status');
-        Route::view('/mengikut-kategori', 'aduan.show_by_category');
+        Route::view('/mengikut-status-tindakan', 'laporan.show_by_status');
+        Route::view('/mengikut-kategori', 'laporan.show_by_category');
+        Route::view('/mengikut-bahagian', 'laporan.show_by_user');
         
     });
 

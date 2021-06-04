@@ -21,7 +21,7 @@
 
                 @hasrole('superadmin')
                     <li>
-                        <a class="nav-link" href="{{url('/dashboard')}}" id="topnav-laporan" role="button">
+                        <a class="nav-link" href="{{url('/laporan')}}" id="topnav-laporan" role="button">
                             <i class="bx bxs-report me-2"></i><span key="t-laporan">Laporan</span>
                         </a>
                     </li>
