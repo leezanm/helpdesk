@@ -2,14 +2,6 @@
 
 @section('content')
 
-<style>
-    .body {
-                background: url(/images/backgrrund.jpg) !important;
-                background: aliceblue;
-                background-size: cover !important;
-            }
-</style>
-
 <div class="row justify-content-center m-5">
     <div class="col-md-8 col-lg-6 col-xl-5">
         <div class="card overflow-hidden">
@@ -65,7 +57,11 @@
             </div>
         </div>
         <div class="mt-5 text-center">
-            <p>© <script>document.write(new Date().getFullYear())</script> KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR</p>
+            <div class="card" style="opacity: 80%;">
+                <div class="card-body">
+                    © <script>document.write(new Date().getFullYear())</script> KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -49,8 +49,13 @@
 
                     </div>
                 </div>
+                
                 <div class="mt-5 text-center">
-                    <p>© <script>document.write(new Date().getFullYear())</script> KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR</p>
+                    <div class="card" style="opacity: 80%;">
+                        <div class="card-body">
+                            © <script>document.write(new Date().getFullYear())</script> KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
