@@ -76,7 +76,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     });
 
     // Route::view('/pengguna', 'superadmin.pengguna');
-    Route::view('/pegawai', 'superadmin.pentadbir');
+    Route::view('/pentadbir', 'superadmin.pentadbir');
 
     Route::prefix('pengguna')->as('user.')->group(function(){
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
@@ -89,15 +89,19 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::view('/', 'laporan.index');
-        Route::view('/mengikut-status-tindakan', 'aduan.show_by_status');
-        Route::view('/mengikut-kategori', 'aduan.show_by_category');
+        Route::view('/mengikut-status-tindakan', 'laporan.show_by_status');
+        Route::view('/mengikut-kategori', 'laporan.show_by_category');
+        Route::view('/mengikut-bahagian', 'laporan.show_by_user');
         
+    });
+
+    Route::prefix('peranan')->group(function () {
+        Route::view('/', 'role.index');
     });
 
     Route::view('/pengesahan', 'superadmin.selenggara');
     Route::view('/sijil', 'superadmin.selenggara');
     Route::view('/pengumuman', 'pengumuman');
-    Route::view('/peranan', 'peranan');
     Route::view('/backup', 'superadmin.backup');
 
     Route::prefix('account')->group(function () {
