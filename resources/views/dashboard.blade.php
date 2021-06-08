@@ -83,8 +83,138 @@
     </div>
 </div>
 
-
 <div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <thead class="table-light">
+                        <th>No</th>
+                        <th>Ticket</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><a href="javascript: void(0);" class="text-body fw-bold">1</a> </td>
+                            <td>97216-72612</td>
+                            <td>
+                                Komputer Riba Rosak
+                            </td>
+                            <td>
+                                <span class="badge badge-pill badge-soft-success font-size-11">Selesai</span>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#view_report_modal">
+                                    Lihat
+                                </a>
+                                @can('update', Model::class)
+                                    <a href="#" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#view_report_modal">
+                                        Lihat
+                                    </a>
+                                @endcan
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="javascript: void(0);" class="text-body fw-bold">2</a> </td>
+                            <td>82731-21234</td>
+                            <td>
+                                Mouse Rosak
+                            </td>
+                            <td>
+                                <span class="badge badge-pill badge-soft-danger font-size-11">Ditolak</span>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_category">
+                                    Lihat
+                                </a>
+                            </td>            
+                        <tr>
+                            <td><a href="javascript: void(0);" class="text-body fw-bold">3</a> </td>
+                            <td>51838-21235</td>
+                            <td>
+                                Internet Slow
+                            </td>
+                            <td>
+                                <span class="badge badge-pill badge-soft-info font-size-11">Ambil Maklum</span>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_category">
+                                    Lihat
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a href="javascript: void(0);" class="text-body fw-bold">4</a> </td>
+                            <td>82718-82790</td>
+                            <td>
+                                Editor Word mempunyai masalah
+                            </td>
+                            <td>
+                                <span class="badge badge-pill badge-soft-info font-size-11">Ambil Maklum</span>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_category">
+                                    Lihat
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card" style="max-height: 30rem;">
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="me-2">
+                        <h5 class="card-title mb-4">Jumlah Tindakan Mengikut Jawatan</h5>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle table-nowrap mb-0">
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Jawatan</th>
+                            <th scope="col">Jumlah</th>
+                        </tr>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>
+                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Admin</a></h5>
+                                    <p class="text-muted mb-0">Dikemaskini : 10 Nov, 2020</p>
+                                </td>
+                                <td> 125</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>
+                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Helpdesk</a></h5>
+                                    <p class="text-muted mb-0">Dikemaskini :  02 Nov, 2020</p>
+                                </td>
+                                <td> 102</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>
+                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Teknologi</a></h5>
+                                    <p class="text-muted mb-0">Dikemaskini :  24 Oct, 2020</p>
+                                </td>
+                                <td> 98</td>           
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{-- <div class="row">
     <div class="col-sm-12 col-md-8">
         <div class="card" style="max-height: 30rem;">
         <div class="card-body">
@@ -115,7 +245,7 @@
                             <span class="badge badge-pill badge-soft-success font-size-11">Selesai</span>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".transaction-detailModal">
+                            <button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#view_report_modal">
                                 Lihat
                             </button>
                         </td>
@@ -172,86 +302,53 @@
     </div>
     <div class="col-sm-12 col-md-4">
         <div class="card" style="max-height: 30rem;">
-        <div class="card-body">
-            <div class="d-flex">
-                <div class="me-2">
-                    <h5 class="card-title mb-4">Jumlah Tindakan Mengikut Jawatan</h5>
+            <div class="card-body">
+                <div class="d-flex">
+                    <div class="me-2">
+                        <h5 class="card-title mb-4">Jumlah Tindakan Mengikut Jawatan</h5>
+                    </div>
                 </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table align-middle table-nowrap mb-0">
-                    <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Jawatan</th>
-                        <th scope="col">Jumlah</th>
-                      </tr>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>
-                                <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Admin</a></h5>
-                                <p class="text-muted mb-0">Dikemaskini : 10 Nov, 2020</p>
-                            </td>
-                            <td> 125</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>
-                                <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Helpdesk</a></h5>
-                                <p class="text-muted mb-0">Dikemaskini :  02 Nov, 2020</p>
-                            </td>
-                            <td> 102</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>
-                                <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Teknologi</a></h5>
-                                <p class="text-muted mb-0">Dikemaskini :  24 Oct, 2020</p>
-                            </td>
-                            <td> 98</td>           
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="transaction-detailModalLabel">Maklumat Aduan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table align-middle table-nowrap">
+                    <table class="table align-middle table-nowrap mb-0">
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Jawatan</th>
+                            <th scope="col">Jumlah</th>
+                        </tr>
                         <tbody>
                             <tr>
-                                <td>No. Tiket : </td>
-                                <td><span class="text-primary">97216-72612</span></td>
+                                <td>1</td>
+                                <td>
+                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Admin</a></h5>
+                                    <p class="text-muted mb-0">Dikemaskini : 10 Nov, 2020</p>
+                                </td>
+                                <td> 125</td>
                             </tr>
                             <tr>
-                                <td>Nama pengadu : </td>
-                                <td><span class="text-primary">Malik Kunanlan</span></td>
+                                <td>2</td>
+                                <td>
+                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Helpdesk</a></h5>
+                                    <p class="text-muted mb-0">Dikemaskini :  02 Nov, 2020</p>
+                                </td>
+                                <td> 102</td>
                             </tr>
                             <tr>
-                                <td>Butiran Aduan : </td>
-                                <td>Aduan Komputer riba rosak yang tidak boleh dibuka akibat bateri yang sudah kembung dan mempunyai bateri hayat yang pendek</td>
+                                <td>3</td>
+                                <td>
+                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Teknologi</a></h5>
+                                    <p class="text-muted mb-0">Dikemaskini :  24 Oct, 2020</p>
+                                </td>
+                                <td> 98</td>           
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
         </div>
     </div>
-</div>
-<!-- end modal -->
+</div> --}}
+
+@include('partials.modal.view_report')
 
 @endsection
 

@@ -33,29 +33,30 @@
         </div>
         <div class="card-body">
             <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tiket</th>
-                        <th>Subjek</th>
-                        <th>Tarikh & Masa Aduan</th>
-                        <th>Status</th>
-                        <th class="text-center">Tindakan</th>
-                    </tr>
+                <thead class="text-center align-middle">
+                    <th>No</th>
+                    <th>Tiket</th>
+                    <th>Subjek</th>
+                    <th>Kategori Aduan</th>
+                    <th>Tarikh Aduan</th>
+                    <th>Status</th>
+                    <th class="text-center">Tindakan</th>
                 </thead>
-                <tbody class="align-middle">
-                    <tr>
-                        <td>1</td>
-                        <td>281222020-10000</td>
-                        <td>Masalah Komputer</td>
-                        <td>28/12/2020</td>
-                        <td><span class="badge bg-success font-size-12">Untuk Tindakan JTK</span></td>
-                        <td class="text-center">
-                            <a href="{{url('/aduan/show')}}" class="btn btn-primary waves-effect waves-light">
-                                <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                            </a>
-                        </td>
-                    </tr>
+                <tbody class="text-center align-middle">
+                    @foreach ($reports as $report)
+                        <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$report->ticket_no}}</td>
+                            <td class="text-start">{{$report->subject}}</td>
+                            <td>{{$report->category->desc}}</td>
+                            <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                            <td><span class="{{$report->status->class}}">{{$report->status->desc}}</span></td>
+                            <td>
+                                 <a href="{{route('aduan.show', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bx-search-alt align-middle"></i></a>
+                                 {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bx-pen align-middle"></i></a> --}}
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

@@ -28,7 +28,7 @@
                 <tr>
                     <th width="20%">Pemohon</th>
                     <td>
-                        <a href="#" class="userProfile">Muhammad Hazim</a>
+                        <a href="#" class="userProfile">{{$report->reportBy->name}}</a>
                     </td>
                 </tr>
                 <tr>
@@ -38,9 +38,15 @@
                     </td>
                 </tr>
                 <tr>
+                    <th width="20%">Username</th>
+                    <td>
+                        {{$report->reportBy->username}}
+                    </td>
+                </tr>
+                <tr>
                     <th width="20%">Email</th>
                     <td>
-                        hazim@gmail.com
+                        {{$report->reportBy->email}}
                     </td>
                 </tr>
             </tbody>
@@ -57,25 +63,25 @@
                 <tr>
                     <th width="20%">Subjek</th>
                     <td>
-                        Aduan Kerosakan Komputer
+                        {{$report->subject}}
                     </td>
                 </tr>
                 <tr>
                     <th width="20%">Dihantar Pada</th>
                     <td>
-                        3 June 2021, 2:43 PM
+                        {{ convertDateFormat($report->submitted_at, 'd F Y') }}
                     </td>
                 </tr>
                 <tr>
                     <th width="20%">Kategori Kerosakan</th>
                     <td>
-                        Komputer Riba (Notebook)
+                        {{$report->category->desc}}
                     </td>
                 </tr>
                 <tr>
                     <th width="20%">Aduan</th>
                     <td>
-                        Komputer hang bila on online meeting menggunakan google meet
+                        {!!$report->remark!!}
                     </td>
                 </tr>
             </tbody>
@@ -83,172 +89,98 @@
         <br>
         <hr>
 
-        @hasrole('helpdesk')
-            <form>
-                <legend class="text-uppercase h5">Tindakan Helpdesk Admin</legend>
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Tindakan</label>
-                    </div>
-                    <div class="col-md-3">
-                        <select name="" class="form-select">
-                            <option value="">Menunggu Tindakan</option>
-                            <option value="">Majukan Kepada Juruteknik</option>
-                            <option value="">Majukan Kepada PPTM</option>
-                            <option value="">Majukan Kepada PTM</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Majukan Kepada</label>
-                    </div>
-                    <div class="col-md-4">
-                        <select name="" class="form-select">
-                            <option value="">En. Muhammad Farhan Bin Zawawi</option>
-                            <option value="">Datuk. Muhammad Arham Bin Zulqarnaen</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-end">
-                            <a class="btn btn-success waves-effect waves-light save">
-                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        @endhasrole
+        @can('aduan.assignTask')
+            @if ($report->report_status_id == 2)
+                <form action="{{route('aduan.task.store', $report->id)}}" method="POST">
+                    @csrf
+                    {{-- <legend class="text-uppercase h5">Tindakan Helpdesk Admin</legend> --}}
 
-        @hasrole('jtk')
-            <form> 
-                <legend class="text-uppercase h5">Tindakan Juruteknik</legend>
-
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Tindakan</label>
-                    </div>
-                    <div class="col-md-4">
-                        <select name="status_id" class="form-select">
-                            <option value="">Menunggu Tindakan</option>
-                            <option value="1">Selesai</option>
-                            <option value="0">Tidak Selesai</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="sebabTakSelesai" class="collapse">
                     <div class="row mb-3">
                         <div class="col-md-2">
-                            <label class="col-form-label">Sebab</label>
+                            <label class="col-form-label">Majukan Kepada</label>
                         </div>
                         <div class="col-md-4">
-                            <textarea name="" class="form-control"></textarea>
-                            <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
+                            <select id="majukan_kepada_peranan" class="form-select">
+                                <option value="">Sila Pilih</option>
+                                @foreach ($roles as $role)
+                                    <option value="{{$role->name}}">{{$role->desc}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-end">
-                            <a class="btn btn-success waves-effect waves-light save">
-                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-        @endhasrole
-
-        @hasrole('pptm')
-            <form> 
-                <legend class="text-uppercase h5">Tindakan Pembantu Pegawai Teknologi Maklumat</legend>
-
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Tindakan</label>
-                    </div>
-                    <div class="col-md-4">
-                        <select name="status_id" class="form-select">
-                            <option value="">Menunggu Tindakan</option>
-                            <option value="1">Selesai</option>
-                            <option value="0">Tidak Selesai</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="sebabTakSelesai" class="collapse">
                     <div class="row mb-3">
                         <div class="col-md-2">
-                            <label class="col-form-label">Sebab</label>
+                            <label class="col-form-label">Kepada</label>
                         </div>
                         <div class="col-md-4">
-                            <textarea name="" class="form-control"></textarea>
-                            <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
+                            <select name="assigned_to_id" id="assigned_to_id" class="form-select">
+
+                            </select>
                         </div>
                     </div>
-                </div> 
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-end">
-                            <a class="btn btn-success waves-effect waves-light save">
-                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                            </a>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success waves-effect waves-light">
+                                    <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-            </form>
-        @endhasrole
+                </form>
+            @endif
+        @endcan
 
-        @hasrole('ptm')
-            <form> 
-                <legend class="text-uppercase h5">Tindakan Pegawai Pembantu Teknologi Maklumat</legend>
+        @isset($current_task)
+            @can('aduan.updateTask')
+                @if (in_array($current_task->task_status_id, [1,2]) && $current_task->assignedTo->is(\Auth::user()) )
+                    <form action="{{route('aduan.task.update', $current_task->id)}}" method="POST"> 
+                        @csrf
+                        {{-- <legend class="text-uppercase h5">Tindakan Juruteknik</legend> --}}
 
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Tindakan</label>
-                    </div>
-                    <div class="col-md-4">
-                        <select name="" class="form-select">
-                            <option value="">Menunggu Tindakan</option>
-                            <option value="">Selesai</option>
-                            <option value="">Tidak Selesai</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="sebabTakSelesai" class="collapse">
-                    <div class="row mb-3">
-                        <div class="col-md-2">
-                            <label class="col-form-label">Sebab</label>
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="col-form-label">Status Aduan</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="task_status_id" class="form-select">
+                                    @foreach ($task_statuses as $task_status)
+                                        <option value="{{$task_status->id}}" @if( $current_task->task_status_id  == $task_status->id ) selected @endif >{{$task_status->desc}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <textarea name="" class="form-control"></textarea>
-                            <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-end">
-                            <a class="btn btn-success waves-effect waves-light save">
-                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                            </a>
+                        <div id="sebabTakSelesai" class="collapse">
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label class="col-form-label">Sebab</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <textarea name="remark" class="form-control"></textarea>
+                                    <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-            </form>
-        @endhasrole
 
-        @hasrole('pengguna')
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-success waves-effect waves-light">
+                                        <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                @endif
+            @endcan
+        @endisset
+
+        @can($report->reportBy->is(\Auth::user()) && $report->report_status_id == 10 )
             <form> 
                 <legend class="text-uppercase h5">Soal Selidik</legend>
 
@@ -284,65 +216,67 @@
                 </div>
                 
             </form>
-        @endhasrole
+        @endif
 
-        <legend class="text-uppercase h5 mb-3">Kronologi Aduan</legend>
-        <div class="row">
-            <div class="col-lg-12">
-                <div>
-                    <ul class="verti-timeline list-unstyled">
-                        <li class="event-list">
-                            <div class="event-timeline-dot">
-                                <i class="bx bx-right-arrow-circle"></i>
-                            </div>
-                            <div class="media">
-                                <div class="me-3">
-                                    {{-- <i class="bx bx-copy-alt h2 text-primary"></i> --}}
-                                    1 June 2021, 10.00 AM
-                                </div>
-                                <div>
-                                    <p class="text-muted">Aduan dihantar oleh <a href="#">Muhammad Hazim</a>.</p>
-                                </div>
-                                {{-- <div class="media-body">
-                                    <div>
-                                        <h5>Ordered</h5>
-                                        <p class="text-muted">New common language will be more simple and regular than the existing.</p>
-                                    </div>
-                                </div> --}}
-                            </div>
-                        </li>
-                        <li class="event-list">
-                            <div class="event-timeline-dot">
-                                <i class="bx bx-right-arrow-circle"></i>
-                            </div>
-                            <div class="media">
-                                <div class="me-3">
-                                    {{-- <i class="bx bx-package h2 text-primary"></i> --}}
-                                    1 June 2021, 11.00 AM
-                                </div>
-                                <div>
-                                    <p class="text-muted">Aduan dimajukan kepada juruteknik <a href="#">En. Muhammad Hafiz</a> oleh admin helpdesk <a href="#">Pn. Aishah</a> untuk diambil tindakan.</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <legend class="text-uppercase h5 mb-3">Kronologi Tindakan</legend>
+        <table class="table table-bordered">
+            <thead class="text-center align-middle">
+                <th>No.</th>
+                <th>Diberikan Oleh</th>
+                <th>Diberikan Kepada</th>
+                <th>Diberikan Pada</th>
+                <th>Status</th>
+            </thead>
+            <tbody class="text-center align-middle">
+                @foreach ($tasks as $task)
+                    <tr>
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$task->assignedBy->name}}</td>
+                        <td>{{$task->assignedTo->name}}</td>
+                        <td>{{convertDateFormat($task->assigned_at, 'd F Y')}}</td>
+                        <td><span class="{{$task->taskStatus->class}}">{{$task->taskStatus->desc}}</span></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
     </div>
 </div>
 @endsection
 
 @section('script')
     <script>
-        $('select[name="status_id"').on('change', function(){
-            if(this.value === '0'){
+        $('select[name="task_status_id"').on('change', function(){
+            if(this.value === '4'){
                 $('#sebabTakSelesai').removeClass('collapse');
             } else {
                 $('#sebabTakSelesai').addClass('collapse');
             }
 
         });
+
+        $('#majukan_kepada_peranan').on('change', function(){
+            $('#assigned_to_id').empty();
+            if(this.value){
+                var role_name = this.value;
+                $.post(
+                    "{{url('api/get-users-by-role')}}",
+                    {
+                        role_name : role_name
+                    },
+                    function(response){
+                        option = '<option value="">Sila Pilih</option>'
+                        if(response.success){
+                            response.users.forEach(user => {
+                                option += '<option value="'+ user.id +'">'+ user.name +'</option>';
+                            });
+                        } 
+
+                        $('#assigned_to_id').append(option);
+                    }
+                )
+            } 
+        })
 
     </script>
 @endsection

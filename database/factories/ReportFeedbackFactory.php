@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\mbi;
+use App\Models\ReportFeedback;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class MbiFactory extends Factory
+class ReportFeedbackFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = mbi::class;
+    protected $model = ReportFeedback::class;
 
     /**
      * Define the model's default state.
