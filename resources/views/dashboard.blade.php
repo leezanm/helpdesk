@@ -88,23 +88,25 @@
     <div class="col-sm-12 col-md-8">
         <div class="card" style="max-height: 30rem;">
             <div class="card-body">
-                <div class="d-flex flex-wrap">
-                    <h5 class="card-title me-2 mb-4">Aduan Hari ini</h5>
-                </div>
 
-                <div class="table-responsive">
-                    <table class="table align-middle table-nowrap mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="align-middle">No</th>
-                                <th class="align-middle">Ticket</th>
-                                <th class="align-middle">Subject</th>
-                                <th class="align-middle">Status</th>
-                                <th class="align-middle">Tindakan</th>
+                @hasrole('helpdesk')
+                    <div class="d-flex flex-wrap">
+                        <h5 class="card-title me-2 mb-4">Aduan Baru</h5>
+                    </div>
 
-                            </tr>
-                        </thead>
-                        @hasrole('helpdesk')
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="align-middle">No</th>
+                                    <th class="align-middle">Ticket</th>
+                                    <th class="align-middle">Subject</th>
+                                    <th class="align-middle">Tarikh Aduan</th>
+                                    <th class="align-middle">Status</th>
+                                    <th class="align-middle">Tindakan</th>
+
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr>
                                     <td><a href="javascript: void(0);" class="text-body fw-bold">1</a> </td>
@@ -112,6 +114,7 @@
                                     <td>
                                         Komputer Riba Rosak
                                     </td>
+                                    <td>3 June 2021</td>
                                     <td>
                                         <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
                                     </td>
@@ -128,6 +131,7 @@
                                     <td>
                                         Internet Slow
                                     </td>
+                                    <td>3 June 2021</td>
                                     <td>
                                         <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
                                     </td>
@@ -144,6 +148,7 @@
                                     <td>
                                         Editor Word mempunyai masalah
                                     </td>
+                                    <td>3 June 2021</td>
                                     <td>
                                         <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
                                     </td>
@@ -155,7 +160,25 @@
                                 </tr>
 
                             </tbody>
-                        @else
+                        </table>
+                    </div>
+                @else
+                    <div class="d-flex flex-wrap">
+                        <h5 class="card-title me-2 mb-4">Aduan Hari ini</h5>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="align-middle">No</th>
+                                    <th class="align-middle">Ticket</th>
+                                    <th class="align-middle">Subject</th>
+                                    <th class="align-middle">Status</th>
+                                    <th class="align-middle">Tindakan</th>
+
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr>
                                     <td><a href="javascript: void(0);" class="text-body fw-bold">1</a> </td>
@@ -209,9 +232,9 @@
                                 </tr>
 
                             </tbody>
-                        @endhasrole
-                    </table>
-                </div>
+                        </table>
+                    </div>
+                @endhasrole
             </div>
         </div>
     </div>
