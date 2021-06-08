@@ -14,34 +14,28 @@
                         <i class="bx bx-file-blank me-2"></i><span key="t-fbi">Aduan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-
+                        
                         @hasrole('pengguna')
-                            <div class="dropdown-divider"></div>
-                            <li class="bg-light"><a href="javascript: void(0);" class="text-info"><strong>PENGGUNA</strong></a></li>
-                            <div class="dropdown-divider"></div>
-
+                            <x-sidebar-divider :title="'PENGGUNA'"></x-sidebar-divider>
                 
                             <li><a href="{{url('/aduan/create')}}" key="t-aduan-create">Aduan Baru</a></li>
                             <li><a href="{{url('/aduan')}}" key="t-aduan-list">Aduan Saya</a></li>
                         @endhasrole
 
                         @hasanyrole('jtk|ptm|pptm')
-                            <div class="dropdown-divider"></div>
-                            <li class="bg-light"><a href="javascript: void(0);" class="text-info"><strong>PEG TEKNIKAL</strong></a></li>
-                            <div class="dropdown-divider"></div>
+                            <x-sidebar-divider :title="'PEG TEKNIKAL'"></x-sidebar-divider>
 
                             <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
                             <li><a href="{{url('/aduan/untuk-tindakan')}}" key="t-aduan-list">Untuk Tindakan</a></li>
                         @endhasanyrole
 
                         @hasrole('helpdesk')
-                            <div class="dropdown-divider"></div>
-                            <li class="bg-light"><a href="javascript: void(0);" class="text-info"><strong>PENTADBIR HELPDESK</strong></a></li>
-                            <div class="dropdown-divider"></div>
+                            <x-sidebar-divider :title="'PENTADBIR HELPDESK'"></x-sidebar-divider>
 
                             <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
                             <li><a href="{{url('/aduan/dihantar')}}" key="t-aduan-list">Aduan Dihantar</a></li>
                         @endhasrole
+                        
                     </ul>
                 </li>
 
