@@ -1,0 +1,51 @@
+<div id="user_feedback" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+            <div div class="modal-header">
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Laporan Mengikut Kategori</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form> 
+                    <legend class="text-uppercase h5">Soal Selidik</legend>
+
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="col-form-label">Rating</label>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="rating-star">
+                                <input type="hidden" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="col-form-label">Komen</label>
+                        </div>
+                        <div class="col-md-10">
+                            <textarea name="" class="form-control" rows="5"></textarea>
+                            <p>Komen anda adalah amat dihargai</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-end">
+                                <a class="btn btn-success waves-effect waves-light save">
+                                    <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+            {{-- <div class="modal-footer text-end">
+                <button class="btn btn-secondary" type="reset">Set Semula</button>
+                <button id="btnCreate" class="btn btn-success" type="button">Simpan</button>
+            </div> --}}
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>

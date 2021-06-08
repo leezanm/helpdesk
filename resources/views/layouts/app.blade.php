@@ -66,7 +66,10 @@
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="bx bx-search-alt"></span>
                             </div>
-                        </form> --}}
+                        </form>
+                        <span class="navbar-text align-middle">
+                            Hi, {{Auth::user()->name}} , {{Auth::user()->getRoleNames()[0]}}
+                        </span> --}}
 
                     </div>
 
