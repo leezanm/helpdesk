@@ -31,6 +31,8 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
     Route::prefix('aduan')->as('aduan.')->group(function () {
         Route::view('/', 'aduan.index');
+        Route::view('/dihantar', 'aduan.index');
+        Route::view('/untuk-tindakan', 'aduan.index');
         Route::view('/create', 'aduan.create');
         Route::view('/show', 'aduan.show');
         
@@ -86,6 +88,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
         Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
     });
+    Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'index'])->name('index');
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::view('/', 'laporan.index');

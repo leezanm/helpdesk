@@ -71,9 +71,9 @@
                             Hi, {{Auth::user()->name}} , {{Auth::user()->getRoleNames()[0]}}
                         </span> --}}
 
-                        <h3 class="app-search d-none d-lg-block m-3">
-                            Selamat Datang , {{Auth::user()->name}} ( {{Auth::user()->getRoleNames()[0]}} )
-                        </h3>
+                        <h5 class="app-search d-none d-lg-block m-3">
+                            Selamat Datang , {{Auth::user()->name}} ( {{Auth::user()->roles()->first()->desc}} )
+                        </h5>
 
                     </div>
 

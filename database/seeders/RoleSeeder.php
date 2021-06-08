@@ -28,10 +28,10 @@ class RoleSeeder extends Seeder
         $role = Role::create(['name' => 'pengguna', 'desc' => 'Warga KPLB']);
         $role->syncPermissions(['aduan.create']);
 
-        $role = Role::create(['name' => 'helpdesk', 'desc' => 'Admin Sistem']);
+        $role = Role::create(['name' => 'helpdesk', 'desc' => 'Admin KPLB Helpdesk']);
         $role->syncPermissions(['manage.category', 'manage.user', 'aduan.all', 'aduan.create', 'aduan.assignTask', 'view.report']);
 
-        $role = Role::create(['name' => 'superadmin', 'desc' => 'Pentadbir Sitem Helpdesk']);
+        $role = Role::create(['name' => 'superadmin', 'desc' => 'Jurutadbir Sistem']);
         $role->syncPermissions(Permission::pluck('name'));
     }
 }
