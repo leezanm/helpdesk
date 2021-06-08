@@ -1,8 +1,8 @@
-<div id="view_report_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+<div id="view_report_modal" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Maklumat Aduan</h5>
+            <div div class="modal-header">
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Laporan Mengikut Kategori</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -22,12 +22,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th width="20%">Username</th>
-                            <td>
-                                hazim
-                            </td>
-                        </tr>
-                        <tr>
                             <th width="20%">Email</th>
                             <td>
                                 hazim@gmail.com
@@ -41,13 +35,13 @@
                         <tr>
                             <th width="20%">No Ticket</th>
                             <td>
-                                97216-72612
+                                ADU019376
                             </td>
                         </tr>
                         <tr>
                             <th width="20%">Subjek</th>
                             <td>
-                                Komputer Riba Rosak
+                                Aduan Kerosakan Komputer
                             </td>
                         </tr>
                         <tr>
@@ -65,7 +59,7 @@
                         <tr>
                             <th width="20%">Aduan</th>
                             <td>
-                                Skrin monitor bila on tidak keluar apa2
+                                Komputer hang bila on online meeting menggunakan google meet
                             </td>
                         </tr>
                     </tbody>
