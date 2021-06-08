@@ -71,6 +71,10 @@
                             Hi, {{Auth::user()->name}} , {{Auth::user()->getRoleNames()[0]}}
                         </span> --}}
 
+                        <h3 class="app-search d-none d-lg-block m-3">
+                            Selamat Datang , {{Auth::user()->name}} ( {{Auth::user()->getRoleNames()[0]}} )
+                        </h3>
+
                     </div>
 
                     <div class="d-flex">
