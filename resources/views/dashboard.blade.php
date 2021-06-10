@@ -306,6 +306,78 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Pecahan Aduan Mengikut Kategori Dan Status</h4>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0 table-nowrap">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>Kategori</th>
+                                    <th>Dihantar</th>
+                                    <th>Dihantar (Ambil Maklum)</th>
+                                    <th>Dalam Tindakan</th>
+                                    <th>Selesai</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="media align-items-center">
+                                            <div class="me-3">
+                                                <img src="https://www.lenovo.com/medias/ThinkBook-Plus-XXTBXTM8021-725x515.png?context=bWFzdGVyfHJvb3R8Mjc3NjYwfGltYWdlL3BuZ3xoNjcvaDc0LzExNTc0NDA3NTk0MDE0LnBuZ3w5NjNlM2JmYjNiMmY0Njc0MTIyM2NhM2M5MDBiNmQ0OTc2MGY4NGIyYmUyMTc4YmQ1N2NhNzA2ZjJkZDczNTQz" alt=""title="" class="avatar-sm h-auto d-block rounded" />
+                                            </div>
+                                            <div class="media-body overflow-hidden">
+                                                <h5 class="font-size-13 text-truncate"> KOMPUTER RIBA (NOTEBOOK)</h5>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>4</td>
+                                    <td>24</td>
+                                    <td>13</td>
+                                    <td>62</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="media align-items-center">
+                                            <div class="me-3">
+                                                <img src="https://www.lenovo.com/medias/lenovo-tower-thinkstation-p620-slim-hero.png?context=bWFzdGVyfHJvb3R8MTM2MzA1fGltYWdlL3BuZ3xoNTQvaDE0LzEwOTYxOTAxMTI1NjYyLnBuZ3xlMDFiYTlmNTRlMTM5M2ZiMGRmMzBjYjMwNGExOWNmMTg4Y2RkOTQwMGQwYjhhNDcwYzU1YzJhNTg0ZmMxM2M5" alt=""title="" class="avatar-sm h-auto d-block rounded" />
+                                            </div>
+                                            <div class="media-body overflow-hidden">
+                                                <h5 class="font-size-13 text-truncate"> KOMPUTER MEJA (DESKTOP)</h5>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>5</td>
+                                    <td>10</td>
+                                    <td>11</td>
+                                    <td>40</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="media align-items-center">
+                                            <div class="me-3">
+                                                <img src="https://image.shutterstock.com/image-vector/computers-peripherals-vector-icons-realistic-260nw-263177087.jpg" alt=""title="" class="avatar-sm h-auto d-block rounded" />
+                                            </div>
+                                            <div class="media-body overflow-hidden">
+                                                <h5 class="font-size-13 text-truncate"> PERALATAN KOMPUTER</h5>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>5</td>
+                                    <td>7</td>
+                                    <td>3</td>
+                                    <td>12</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endhasrole
 
 <!-- Modal -->
