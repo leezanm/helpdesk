@@ -297,6 +297,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Jumlah Aduan Vs Aduan Selesai</h4>
+                    <div id="mix-line-bar" class="e-charts"></div>
+                </div>
+            </div>
+        </div>
     </div>
 @endhasrole
 
@@ -384,5 +392,94 @@
             myChart.setOption(option);
         }
 
+    </script>
+    <script>
+        dom=document.getElementById("mix-line-bar"),
+        myChart = echarts.init(dom);
+        option = null, (app = {}).title = "Data view", option = {
+            grid: {
+                zlevel: 0,
+                x: 80,
+                x2: 50,
+                y: 30,
+                y2: 30,
+                borderWidth: 0,
+                backgroundColor: "rgba(0,0,0,0)",
+                borderColor: "rgba(0,0,0,0)"
+            },
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "cross",
+                    crossStyle: {
+                        color: "#999"
+                    }
+                }
+            },
+            toolbox: {
+                orient: "center",
+                left: 0,
+                top: 20,
+                feature: {
+                    magicType: {
+                        type: ["line", "bar"],
+                        title: {
+                            line: "For line chart",
+                            bar: "For bar chart"
+                        }
+                    },
+                    saveAsImage: {
+                        title: "Download Image"
+                    }
+                }
+            },
+            color: ["#34c38f", "#556ee6"],
+            legend: {
+                data: ["Jumlah Aduan", "Aduan Selesai"],
+                textStyle: {
+                    color: "#8791af"
+                }
+            },
+            xAxis: [{
+                type: "category",
+                data: ["Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"],
+                axisPointer: {
+                    type: "shadow"
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: "#8791af"
+                    }
+                }
+            }],
+            yAxis: [{
+                type: "value",
+                name: "Bilangan Aduan",
+                min: 0,
+                interval: 50,
+                axisLine: {
+                    lineStyle: {
+                        color: "#8791af"
+                    }
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: "rgba(166, 176, 207, 0.1)"
+                    }
+                },
+                axisLabel: {
+                    formatter: "{value}"
+                }
+            }],
+            series: [{
+                name: "Jumlah Aduan",
+                type: "bar",
+                data: [10, 4, 7, 23, 25, 16, 15]
+            }, {
+                name: "Aduan Selesai",
+                type: "bar",
+                data: [8, 4, 5, 20, 21, 16, 14]
+            }]
+        }, option && "object" == typeof option && myChart.setOption(option, !0);
     </script>
 @endsection
