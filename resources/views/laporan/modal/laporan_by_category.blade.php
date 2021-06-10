@@ -1,5 +1,5 @@
 <div id="modal_laporan_by_category" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div div class="modal-header">
                 <h5 class="modal-title" id="myExtraLargeModalLabel">Laporan Mengikut Kategori</h5>
@@ -41,43 +41,43 @@
                             <tbody class="text-center align-middle">
                                 <tr>
                                     <td class="text-start">Acara (Event)</td>
-                                    <td>299</td>
+                                    <td><a href="/laporan/mengikut-kategori">299</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">E-mel / Akaun Pengguna</td>
-                                    <td>56</td>
+                                    <td><a href="/laporan/mengikut-kategori">56</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Komputer Meja (Desktop)</td>
-                                    <td>114</td>
+                                    <td><a href="/laporan/mengikut-kategori">114</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Komputer Riba (Notebook)</td>
-                                    <td>2</td>
+                                    <td><a href="/laporan/mengikut-kategori">2</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Lain-lain</td>
-                                    <td>15</td>
+                                    <td><a href="/laporan/mengikut-kategori">15</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Pencetak / Pengimbas</td>
-                                    <td>57</td>
+                                    <td><a href="/laporan/mengikut-kategori">57</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Perisian</td>
-                                    <td>27</td>
+                                    <td><a href="/laporan/mengikut-kategori">27</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Perkakasan</td>
-                                    <td>5</td>
+                                    <td><a href="/laporan/mengikut-kategori">5</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Rangkaian</td>
-                                    <td>30</td>
+                                    <td><a href="/laporan/mengikut-kategori">30</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Sistem Aplikasi</td>
-                                    <td>13</td>
+                                    <td><a href="/laporan/mengikut-kategori">13</a></td>
                                 </tr>
                             </tbody>
                             <tfoot class="text-center align-middle">
@@ -89,6 +89,36 @@
                         </table>
                     </div>
                 </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tiket</th>
+                            <th>Subjek</th>
+                            <th>Tarikh & Masa Aduan</th>
+                            <th>Status</th>
+                            <th class="text-center">Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        <tr>
+                            <td>1</td>
+                            <td>281222020-10000</td>
+                            <td>Masalah Komputer</td>
+                            <td>28/12/2020</td>
+                            <td>
+                                <span class="badge bg-success font-size-12">Dalam Tindakan JTK</span>
+                                <br>
+                                <a href="">Muhammad Hazim</a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{url('/aduan/show')}}" class="btn btn-primary waves-effect waves-light">
+                                    <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             {{-- <div class="modal-footer text-end">
                 <button class="btn btn-secondary" type="reset">Set Semula</button>
