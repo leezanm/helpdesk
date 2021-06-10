@@ -286,6 +286,20 @@
     </div>
 </div>
 
+@hasrole('helpdesk')
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Jumlah Aduan Mengikut Kategori</h4>
+                    {{-- <div id="pie-chart" class="e-charts"></div>--}}
+                    <div id="sektor" class="e-charts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endhasrole
+
 <!-- Modal -->
 <div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -326,5 +340,49 @@
 @endsection
 
 @section('script')
+    <script type="text/javascript">
+        var dom = document.getElementById("sektor");
+        var myChart = echarts.init(dom);
+        var app = {};
+        var option;
+        option = {
+            // title: {
+            //     text: 'ss',
+            //     subtext: 'ss',
+            //     left: 'center'
+            // },
+            tooltip: {
+                trigger: 'item'
+            },
+            // legend: {
+            //     orient: 'vertical',
+            //     left: 'left',
+            // },
+            series: [
+                {
+                    // name: 'ss',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        {value: 1048, name: 'Event'},
+                        {value: 735, name: 'Komputer Riba (Notebook)'},
+                        {value: 580, name: 'Komputer Meja (Desktop)'},
+                        {value: 484, name: 'Peralatan Komputer'},
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
 
+        if (option && typeof option === 'object') {
+            myChart.setOption(option);
+        }
+
+    </script>
 @endsection
