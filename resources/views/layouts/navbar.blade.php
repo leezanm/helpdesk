@@ -11,30 +11,30 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bx-file-blank me-2"></i><span key="t-fbi">Aduan</span>
+                        <i class="bx bx-file-blank me-2"></i><span key="t-aduan">Aduan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         
-                        @hasrole('pengguna')
-                            <x-sidebar-divider :title="'PENGGUNA'"></x-sidebar-divider>
+                        {{-- @hasrole('pengguna')
+                            <x-sidebar-divider :title="'PENGGUNA'"></x-sidebar-divider> --}}
                 
-                            <li><a href="{{url('/aduan/create')}}" key="t-aduan-create">Aduan Baru</a></li>
-                            <li><a href="{{url('/aduan')}}" key="t-aduan-list">Aduan Saya</a></li>
-                        @endhasrole
+                            <li><a href="{{url('/aduan/create')}}" key="t-aduan-create">Cipta Aduan</a></li>
+                            <li><a href="{{url('/aduan/user')}}/{{Auth::user()->username}}" key="t-aduan-list">Aduan Saya</a></li>
+                        {{-- @endhasrole --}}
 
-                        @hasanyrole('jtk|ptm|pptm')
+                        @can('aduan.updateTask')
                             <x-sidebar-divider :title="'PEG TEKNIKAL'"></x-sidebar-divider>
 
                             <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
                             <li><a href="{{url('/aduan/untuk-tindakan')}}" key="t-aduan-list">Untuk Tindakan</a></li>
-                        @endhasanyrole
+                        @endcan
 
-                        @hasrole('helpdesk')
+                        @can('aduan.assignTask')
                             <x-sidebar-divider :title="'PENTADBIR HELPDESK'"></x-sidebar-divider>
 
                             <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
                             <li><a href="{{url('/aduan/dihantar')}}" key="t-aduan-list">Aduan Dihantar</a></li>
-                        @endhasrole
+                        @endcan
                         
                     </ul>
                 </li>
@@ -122,17 +122,22 @@
                 @canany(['manage.audit-trail', 'manage.backup'])
                     <li class="menu-title" key="t-pentadbiran">Tetapan</li>
 
-                    <li>
-                        <a class="nav-link" href="{{url('/audit-trail')}}" id="topnav-log-sistem" role="button">
-                            <i class="bx bx-code-alt me-2"></i><span key="t-audit">Log Sistem</span>
-                        </a>
-                    </li>
+                    @can('manage.audit-trail')
+                        <li>
+                            <a class="nav-link" href="{{url('/audit-trail')}}" id="topnav-log-sistem" role="button">
+                                <i class="bx bx-code-alt me-2"></i><span key="t-audit">Log Sistem</span>
+                            </a>
+                        </li>
+                    @endcan
+                    
+                    @can('manage.backup')
+                        <li>
+                            <a class="nav-link" href="{{url('/backup')}}" id="topnav-backup" role="button">
+                                <i class="bx bx-data me-2"></i><span key="t-backup">Backup</span>
+                            </a>
+                        </li> 
+                    @endcan
 
-                    <li>
-                        <a class="nav-link" href="{{url('/backup')}}" id="topnav-backup" role="button">
-                            <i class="bx bx-data me-2"></i><span key="t-backup">Backup</span>
-                        </a>
-                    </li>
                 @endcanany
 
             </ul>
@@ -140,6 +145,5 @@
         </div>
     </div>
 </div>
-@include('mbi.partials.search')
 
 

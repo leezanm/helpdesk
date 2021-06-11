@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Str;
 
 class UserController extends Controller
@@ -14,7 +15,8 @@ class UserController extends Controller
     {
         //
         $users = User::all();
-        return view('user.pengguna', compact('users'));
+        $roles = Role::all()->except(6);
+        return view('user.pengguna', compact('users', 'roles'));
     }
 
     public function edit(User $user){

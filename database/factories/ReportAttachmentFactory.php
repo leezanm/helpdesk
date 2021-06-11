@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\fbi;
+use App\Models\ReportAttachment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class FbiFactory extends Factory
+class ReportAttachmentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = fbi::class;
+    protected $model = ReportAttachment::class;
 
     /**
      * Define the model's default state.

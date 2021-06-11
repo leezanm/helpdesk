@@ -26,35 +26,24 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/dashboard', 'dashboard');
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
 
-    Route::view('/fbi', 'fbi.index');
-    Route::view('/fbi-create', 'fbi.create');
-
     Route::prefix('aduan')->as('aduan.')->group(function () {
-        Route::view('/', 'aduan.index');
-        Route::view('/dihantar', 'aduan.index');
-        Route::view('/untuk-tindakan', 'aduan.index');
-        Route::view('/create', 'aduan.create');
-        Route::view('/show', 'aduan.show');
+        Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/user/{user:username}', [App\Http\Controllers\ReportController::class, 'indexUser'])->name('index-user');
+        Route::get('/untuk-tindakan', [App\Http\Controllers\ReportController::class, 'indexUntukTindakan'])->name('index-untuk-tindakan');
+        Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar');
+        Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
+        Route::post('/create', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
+        Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show');
+
+        Route::prefix('task')->as('task.')->group(function () {
+            Route::post('/create/{report}', [App\Http\Controllers\TaskController::class, 'store'])->name('store');
+            Route::post('/edit/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('update');
+        });
         
+        Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
     });
 
-    Route::prefix('fbi')->group(function () {
-        Route::get('/', [App\Http\Controllers\FbiController::class, 'index'])->name('fbi.index');
-        Route::get('/show/{fbi}', [App\Http\Controllers\FbiController::class, 'show'])->name('fbi.show');
-        Route::post('/create', [App\Http\Controllers\FbiController::class, 'store'])->name('fbi.store');
-        Route::post('/edit/{fbi}', [App\Http\Controllers\FbiController::class, 'edit'])->name('fbi.edit');
-        Route::post('/update/{fbi}', [App\Http\Controllers\FbiController::class, 'update'])->name('fbi.update');
-        Route::post('/delete/{fbi}', [App\Http\Controllers\FbiController::class, 'destroy'])->name('fbi.destroy');
-    });
-
-    Route::prefix('mbi')->group(function () {
-        Route::get('/', [App\Http\Controllers\MbiController::class, 'index'])->name('mbi.index');
-        Route::get('/show/{mbi}', [App\Http\Controllers\MbiController::class, 'show'])->name('mbi.show');
-        Route::post('/create', [App\Http\Controllers\MbiController::class, 'store'])->name('mbi.store');
-        Route::post('/edit/{mbi}', [App\Http\Controllers\MbiController::class, 'edit'])->name('mbi.edit');
-        Route::post('/update/{mbi}', [App\Http\Controllers\MbiController::class, 'update'])->name('mbi.update');
-        Route::post('/delete/{mbi}', [App\Http\Controllers\MbiController::class, 'destroy'])->name('mbi.destroy');
-    });
+    
 
     Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index']);
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);

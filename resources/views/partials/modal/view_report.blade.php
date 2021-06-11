@@ -47,7 +47,7 @@
                         <tr>
                             <th width="20%">Dihantar Pada</th>
                             <td>
-                                3 June 2021, 2:43 PM
+                                {{ convertDateFormat(today(), 'd F Y') }}
                             </td>
                         </tr>
                         <tr>
@@ -64,11 +64,12 @@
                         </tr>
                     </tbody>
                 </table>
+                <br>
+                <hr>
             </div>
-            {{-- <div class="modal-footer text-end">
-                <button class="btn btn-secondary" type="reset">Set Semula</button>
-                <button id="btnCreate" class="btn btn-success" type="button">Simpan</button>
-            </div> --}}
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>
