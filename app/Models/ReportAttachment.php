@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class ReportAttachment extends Model
 {
     use HasFactory;
+
+    public function report(){
+        return $this->belongsTo(Report::class);
+    }
+
+    public function getFileUrlAttribute(){
+        return asset($this->path);
+    }
 }

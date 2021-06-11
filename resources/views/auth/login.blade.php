@@ -24,7 +24,7 @@
                     <form class="form-horizontal" method="POST" action="{{route('login')}}">
                         @csrf
                         <div class="mb-3">
-                            <label for="username" class="form-label @error('username') is-invalid @enderror">Username</label>
+                            <label for="username" class="form-label @error('username') is-invalid @enderror">Nama Pengguna (AD)</label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="">
                             @error('username') <p class="text-danger">{{$message}}</p> @enderror
                         </div>

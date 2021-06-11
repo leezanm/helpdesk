@@ -33,12 +33,13 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar');
         Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
         Route::post('/create', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
+        Route::post('/update/{report}', [App\Http\Controllers\ReportController::class, 'update'])->name('update');
         Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show');
 
-        Route::prefix('task')->as('task.')->group(function () {
-            Route::post('/create/{report}', [App\Http\Controllers\TaskController::class, 'store'])->name('store');
-            Route::post('/edit/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('update');
-        });
+        // Route::prefix('task')->as('task.')->group(function () {
+        //     Route::post('/create/{report}', [App\Http\Controllers\TaskController::class, 'store'])->name('store');
+        //     Route::post('/edit/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('update');
+        // });
         
         Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
     });

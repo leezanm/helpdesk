@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Models\Ref\ReportStatus;
+use App\Observers\ReportObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Report extends Model
 {
@@ -30,7 +32,16 @@ class Report extends Model
         return $this->hasMany(Task::class);
     }
 
+    public function trails(){
+        return $this->hasMany(ReportTrail::class);
+    }
+
     public function currentTask(){
         return $this->hasOne(Task::class)->latest();
+    }
+
+    protected static function booted()
+    {   
+        Report::observe(ReportObserver::class);
     }
 }

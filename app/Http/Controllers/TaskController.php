@@ -38,7 +38,7 @@ class TaskController extends Controller
     public function store(Request $request, Report $report)
     {
         //
-        $report->report_status_id = 3;
+        $report->report_status_id = 4;
         $report->save();
 
         $task = new Task();

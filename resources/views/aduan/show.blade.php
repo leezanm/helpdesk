@@ -28,7 +28,7 @@
                 <tr>
                     <th width="20%">Pemohon</th>
                     <td>
-                        <a href="#" class="userProfile">{{$report->reportBy->name}}</a>
+                        <a class="userProfile" data-Id="{{$report->reportBy->id}}" role="button">{{$report->reportBy->name}}</a>
                     </td>
                 </tr>
                 <tr>
@@ -55,15 +55,21 @@
         <table class="table table-striped">
             <tbody>
                 <tr>
-                    <th width="20%">No Ticket</th>
+                    <th width="20%">No Tiket</th>
                     <td>
-                        ADU019376
+                        {{$report->ticket_no}}
                     </td>
                 </tr>
                 <tr>
                     <th width="20%">Subjek</th>
                     <td>
                         {{$report->subject}}
+                    </td>
+                </tr>
+                <tr>
+                    <th width="20%">Status</th>
+                    <td>
+                        <span class="{{$report->status->class}} font-size-12">{{$report->status->desc}}</span>
                     </td>
                 </tr>
                 <tr>
@@ -86,59 +92,98 @@
                 </tr>
             </tbody>
         </table>
+
+        <h6>Lampiran</h6>
+        <table id="datatable-lampiran" class="table table-bordered">
+            <thead>
+                <th>#</th>
+                <th>Fail</th>
+                <th>Jenis</th>
+                <th></th>
+            </thead>
+            <tbody>
+                @foreach ($attachments as $attachment)
+                    <tr>
+                        <td>{{$loop->iteration}}</td>
+                        <td><a href="{{$attachment->file_url}}" target="_blank">{{$attachment->name}}</a></td>
+                        <td>{{$attachment->type}}</td>
+                        <td></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
         <br>
         <hr>
 
         @can('aduan.assignTask')
-            @if ($report->report_status_id == 2)
-                <form action="{{route('aduan.task.store', $report->id)}}" method="POST">
-                    @csrf
-                    {{-- <legend class="text-uppercase h5">Tindakan Helpdesk Admin</legend> --}}
+            <form action="{{route('aduan.update', $report->id)}}" method="POST">
+                @csrf
+                <legend class="text-uppercase h5">Tindakan Admin</legend>
 
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Tindakan</label>
+                    </div>
+                    <div class="col-md-4">
+                        <select name="tindakan" class="form-select">
+                            <option value="">Sila Pilih</option>
+                            <option value="1" @if(old('tindakan') == '1') selected @endif>Majukan Kepada</option>
+            
+                            @if ($report->report_status_id == 4 )
+                                <option value="2">Selesai</option>
+                            @endif
+
+                        </select>
+                        @error('tindakan') <p class="text-danger">{{$message}}</p> @enderror
+                    </div>
+                </div>
+
+                <div id="tindakan-majukan-kepada" class="@error('assigned_to_id') @else collapse @enderror">
                     <div class="row mb-3">
                         <div class="col-md-2">
-                            <label class="col-form-label">Majukan Kepada</label>
+                            <label class="col-form-label">Peranan Pengguna</label>
                         </div>
                         <div class="col-md-4">
-                            <select id="majukan_kepada_peranan" class="form-select">
+                            <select name="peranan" id="majukan_kepada_peranan" class="form-select">
                                 <option value="">Sila Pilih</option>
                                 @foreach ($roles as $role)
-                                    <option value="{{$role->name}}">{{$role->desc}}</option>
+                                    <option value="{{$role->name}}" @if($role->name == old('peranan')) selected @endif>{{$role->desc}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div class="row mb-3 collapse" id="peg_teknikal_selections">
                         <div class="col-md-2">
                             <label class="col-form-label">Kepada</label>
                         </div>
                         <div class="col-md-4">
-                            <select name="assigned_to_id" id="assigned_to_id" class="form-select">
+                            <select name="assigned_to_id" id="assigned_to_id" class="form-select" disabled>
 
                             </select>
+                            @error('assigned_to_id') <p class="text-danger">{{$message}}</p> @enderror
                         </div>
                     </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-success waves-effect waves-light">
-                                    <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                                </button>
-                            </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success waves-effect waves-light">
+                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                            </button>
                         </div>
                     </div>
-                </form>
-            @endif
+                </div>
+            </form>
         @endcan
 
-        @isset($current_task)
+        {{-- @isset($current_task)
             @can('aduan.updateTask')
                 @if (in_array($current_task->task_status_id, [1,2]) && $current_task->assignedTo->is(\Auth::user()) )
                     <form action="{{route('aduan.task.update', $current_task->id)}}" method="POST"> 
                         @csrf
-                        {{-- <legend class="text-uppercase h5">Tindakan Juruteknik</legend> --}}
 
                         <div class="row mb-3">
                             <div class="col-md-2">
@@ -178,12 +223,13 @@
                     </form>
                 @endif
             @endcan
-        @endisset
+        @endisset --}}
 
-        @can($report->reportBy->is(\Auth::user()) && $report->report_status_id == 10 )
-            <form> 
+        @if($report->reportBy->is(\Auth::user()) && $report->report_status_id == 4 )
+            <form action="" method="POST"> 
+                @csrf
+
                 <legend class="text-uppercase h5">Soal Selidik</legend>
-
                 <div class="row mb-3">
                     <div class="col-md-2">
                         <label class="col-form-label">Rating</label>
@@ -218,9 +264,9 @@
             </form>
         @endif
 
-        <legend class="text-uppercase h5 mb-3">Kronologi Tindakan</legend>
+        <legend class="text-uppercase h5 mb-3">Kronologi Aduan</legend>
         <table class="table table-bordered">
-            <thead class="text-center align-middle">
+            {{-- <thead class="text-center align-middle">
                 <th>No.</th>
                 <th>Diberikan Oleh</th>
                 <th>Diberikan Kepada</th>
@@ -237,7 +283,31 @@
                         <td><span class="{{$task->taskStatus->class}}">{{$task->taskStatus->desc}}</span></td>
                     </tr>
                 @endforeach
-            </tbody>
+            </tbody> --}}
+                <div class="mt-5">
+                    <ul class="verti-timeline list-unstyled">
+
+                        @foreach ($trails as $trail)
+                            <li class="event-list">
+                                <div class="event-timeline-dot">
+                                    <i class="bx bx-right-arrow-circle"></i>
+                                </div>
+                                <div class="media">
+                                    <div class="me-5">
+                                        {{convertDateFormat($trail->created_at,'d F Y g:i A')}}
+                                        {{-- <i class="bx bx-copy-alt h2 text-primary"></i> --}}
+                                    </div>
+                                    <div class="media-body">
+                                        <div>
+                                            <span class="{{$trail->status->class}}">{{$trail->status->desc}}</span>
+                                            <p class="text-muted">{!!$trail->message!!}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
         </table>
 
     </div>
@@ -246,6 +316,8 @@
 
 @section('script')
     <script>
+        $('#datatable-lampiran').DataTable();
+
         $('select[name="task_status_id"').on('change', function(){
             if(this.value === '4'){
                 $('#sebabTakSelesai').removeClass('collapse');
@@ -254,6 +326,18 @@
             }
 
         });
+
+        $('select[name="tindakan"]').on('change', function(){
+            if(this.value == 1){
+                $('#tindakan-majukan-kepada').removeClass('collapse');
+                $('#majukan_kepada_peranan').trigger('change');
+            } else {
+                $('#tindakan-majukan-kepada').addClass('collapse');
+                $('#assigned_to_id').prop('disabled', true);
+                $('#peg_teknikal_selections').addClass('collapse');
+            }
+            
+        })
 
         $('#majukan_kepada_peranan').on('change', function(){
             $('#assigned_to_id').empty();
@@ -265,18 +349,26 @@
                         role_name : role_name
                     },
                     function(response){
-                        option = '<option value="">Sila Pilih</option>'
+                        
                         if(response.success){
+                            option = '<option value="">Sila Pilih</option>';
                             response.users.forEach(user => {
                                 option += '<option value="'+ user.id +'">'+ user.name +'</option>';
                             });
+                            
+                            $('#assigned_to_id').append(option);
+                            $('#assigned_to_id').prop('disabled', false);
+                            $('#peg_teknikal_selections').removeClass('collapse');
                         } 
-
-                        $('#assigned_to_id').append(option);
                     }
                 )
-            } 
+            } else {
+                $('#assigned_to_id').prop('disabled', true);
+                $('#peg_teknikal_selections').addClass('collapse');
+            }
         })
+
+        $('#majukan_kepada_peranan').trigger('change');
 
     </script>
 @endsection
