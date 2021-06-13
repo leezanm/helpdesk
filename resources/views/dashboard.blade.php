@@ -85,16 +85,16 @@
 
 <div class="row">
     <div class="col-sm-12 col-md-8">
-        <div class="card" style="max-height: 30rem;">
+        <div class="card">
             <div class="card-body">
 
                 @can('aduan.assignTask')
                     <div class="d-flex flex-wrap">
-                        <h5 class="card-title me-2 mb-4">Aduan Baru</h5>
+                        <h5 class="card-title me-2 mb-4">Aduan Yang Belum Diproses</h5>
                     </div>
-                @else
+                @elsecan('aduan.updateTask')
                     <div class="d-flex flex-wrap">
-                        <h5 class="card-title me-2 mb-4">Aduan Hari ini</h5>
+                        <h5 class="card-title me-2 mb-4">Tugasan Saya</h5>
                     </div>
                 @endcan
 
@@ -112,56 +112,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><a href="javascript: void(0);" class="text-body fw-bold">1</a> </td>
-                                <td>97216-72612</td>
-                                <td>
-                                    Komputer Riba Rosak
-                                </td>
-                                <td>3 June 2021</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
-                                </td>
-                                <td>
-                                    <a href="/aduan/show" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                        Lihat
-                                    </a>
-                                </td>
-                            </tr>    
-
-                            <tr>
-                                <td><a href="javascript: void(0);" class="text-body fw-bold">3</a> </td>
-                                <td>51838-21235</td>
-                                <td>
-                                    Internet Slow
-                                </td>
-                                <td>3 June 2021</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
-                                </td>
-                                <td>
-                                    <a href="/aduan/show" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                        Lihat
-                                    </a>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td><a href="javascript: void(0);" class="text-body fw-bold">4</a> </td>
-                                <td>82718-82790</td>
-                                <td>
-                                    Editor Word mempunyai masalah
-                                </td>
-                                <td>3 June 2021</td>
-                                <td>
-                                    <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
-                                </td>
-                                <td>
-                                    <a href="/aduan/show" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                        Lihat
-                                    </a>
-                                </td>
-                            </tr>
+                            @foreach ($reports as $report)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$report->ticket_no}}</td>
+                                    <td>{{$report->subject}}</td>
+                                    <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                                    <td><span class="{{$report->status->class}}">{{$report->status->desc}}</span></td>
+                                    <td>
+                                        <a href="{{route('aduan.show',$report->id)}}" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">Lihat</a>
+                                    </td>
+                                </tr>
+                            @endforeach
 
                         </tbody>
                     </table>
@@ -311,50 +273,6 @@
     </div>
 @endhasrole
 
-<!-- Modal -->
-<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="transaction-detailModalLabel">Maklumat Aduan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table align-middle table-nowrap">
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Admin</a></h5>
-                                    <p class="text-muted mb-0">Dikemaskini : 10 Nov, 2020</p>
-                                </td>
-                                <td> 125</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Helpdesk</a></h5>
-                                    <p class="text-muted mb-0">Dikemaskini :  02 Nov, 2020</p>
-                                </td>
-                                <td> 102</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Teknologi</a></h5>
-                                    <p class="text-muted mb-0">Dikemaskini :  24 Oct, 2020</p>
-                                </td>
-                                <td> 98</td>           
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end modal -->
     @include('partials.modal.view_report')
     @include('partials.modal.feedback')
 @endsection

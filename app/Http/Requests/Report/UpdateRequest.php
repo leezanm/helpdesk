@@ -25,8 +25,9 @@ class UpdateRequest extends FormRequest
     {
         return [
             //
-            'tindakan' => 'required',
-            'assigned_to_id' => 'bail|required_if:tindakan,1|exists:users,id'
+            'subject' => 'required',
+            'report_category_id' => 'required|exists:report_categories,id',
+            'remark' => 'required',
         ];
     }
 }

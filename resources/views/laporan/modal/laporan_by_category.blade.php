@@ -38,8 +38,8 @@
                                 <th>Kategori</th>
                                 <th>Bilangan</th>
                             </thead>
-                            <tbody class="text-center align-middle">
-                                <tr>
+                            <tbody class="text-center align-middle laporanTbody">
+                                {{-- <tr>
                                     <td class="text-start">Acara (Event)</td>
                                     <td><a href="/laporan/mengikut-kategori">299</a></td>
                                 </tr>
@@ -78,12 +78,12 @@
                                 <tr>
                                     <td class="text-start">Sistem Aplikasi</td>
                                     <td><a href="/laporan/mengikut-kategori">13</a></td>
-                                </tr>
+                                </tr> --}}
                             </tbody>
                             <tfoot class="text-center align-middle">
                                 <tr>
                                     <th>Jumlah</th>
-                                    <th>618</th>
+                                    <th class="laporanTotal"></th>
                                 </tr>
                             </tfoot>
                         </table>

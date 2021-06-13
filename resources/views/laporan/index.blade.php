@@ -32,7 +32,7 @@
                 <tbody class="text-center align-middle">
                     <tr>
                         <td>1</td>
-                        <td class="text-start"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_status">Laporan Mengikut Status Tindakan</a></td>
+                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-status')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_status">Laporan Mengikut Status Tindakan</a></td>
                         <td class="text-center">
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_status" class="btn btn-primary waves-effect waves-light">
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
@@ -41,7 +41,7 @@
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td class="text-start"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_category">Laporan Mengikut Kategori Aduan</a></td>
+                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-category')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_category">Laporan Mengikut Kategori Aduan</a></td>
                         <td class="text-center">
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_category" class="btn btn-primary waves-effect waves-light">
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
@@ -91,6 +91,36 @@
 
 <script>
     $('#datatable-laporan').DataTable();
+
+    $('#datatable-laporan').on('click', '.laporan', function(){
+        var modal = $( $(this).data('bs-target') );
+        var url = $(this).data('url');
+        modal.find('.laporanTbody').empty();
+        $.ajax({
+            url: url,
+            type: 'post',
+            success: function(response){
+                if(response.success){
+                    laporan = response.laporan;
+                    var body = '';
+                    var total = 0;
+                    laporan.forEach(status => {
+                        tr = '<tr>';
+                        tr += '<td>'+status.desc+'</td>';
+                        tr += '<td>'+status.jumlah+'</td>';
+                        tr += '</tr>';
+                        body += tr;
+                        total += status.jumlah;
+                    });
+                    modal.find('.laporanTbody').append(body);
+                    modal.find('.laporanTotal').html(total);
+                }
+            },
+            error: function(error){
+                console.log(error)
+            }
+        })
+    });
 </script>
 
 @endsection

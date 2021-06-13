@@ -27,7 +27,7 @@ class ReportTrailStatusSeeder extends Seeder
 
         $status = new ReportTrailStatus();
         $status->desc = 'Dihantar (Ambil Maklum)';
-        $status->class = 'badge bg-info bg-soft';
+        $status->class = 'badge bg-info';
         $status->save();
 
         $status = new ReportTrailStatus();

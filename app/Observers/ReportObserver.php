@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Helpers\RefNo;
 use App\Models\Report;
 use App\Models\ReportTrail;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,15 @@ class ReportObserver
     {
         //
         $report->report_by_id = Auth::user()->id;
+    }
+
+    public function saving(Report $report)
+    {
+        //
+        if($report->report_status_id == 2 && blank($report->ticket_no)){
+            $report->ticket_no = RefNo::ticketNo();
+        }
+        
     }
 
     /**

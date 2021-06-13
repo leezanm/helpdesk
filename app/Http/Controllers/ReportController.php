@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Report\AssignTaskRequest;
 use App\Http\Requests\Report\UpdateRequest;
 use App\Models\Ref\ReportStatus;
 use App\Models\Ref\TaskStatus;
@@ -11,8 +12,12 @@ use App\Models\ReportCategory;
 use App\Models\ReportTrail;
 use App\Models\Task;
 use App\Models\User;
+use App\Notifications\ReportAssignedNotification;
+use App\Notifications\ReportReceivedAdminNotification;
+use App\Notifications\ReportSendNotification;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
@@ -88,7 +93,16 @@ class ReportController extends Controller
             $report->attachments()->saveMany($report_attachments);
         }
 
-        return redirect()->route('aduan.index');
+        if( $report->report_status_id == 2){
+            $report_sent_notification = new ReportSendNotification($report);
+            $this->notifySingle(Auth::user(), $report_sent_notification);
+
+            $report_received_admin_notification = new ReportReceivedAdminNotification();
+            $users = User::permission('aduan.assignTask')->get();
+            $this->notifyGroup($users, $report_received_admin_notification);
+        }
+
+        return redirect()->route('aduan.index-user', Auth::user()->id);
     }
 
     /**
@@ -121,6 +135,8 @@ class ReportController extends Controller
     public function edit(Report $report)
     {
         //
+        $report_categories = ReportCategory::orderBy('desc')->get();
+        return view('aduan.edit', compact('report', 'report_categories'));
     }
 
     /**
@@ -133,32 +149,37 @@ class ReportController extends Controller
     public function update(UpdateRequest $request, Report $report)
     {
         //
-        
-        // switch($request->tindakan){
-        //     case '1':
-        //         $user = User::find($request->assigned_to_id);
-        //         $this->assignOfficer($request, $report, $user);
-        //         break;
-        //     case '2':
-        //         $user = $report->reportBy;
-        //         $this->updateFinish($request,$report, $user);
-        //         break;
-        // }
-
-        // $report->report_status_id = $request
-        $user = User::find($request->assigned_to_id);
-        $report->report_status_id = 4;
-
-        $trail = new ReportTrail();
-        $trail->message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . '</a> untuk disemak';
-        $trail->assigned_to_id = $request->assigned_to_id;
-        $trail->updated_by_id = Auth::user()->id;
-        $trail->status_id = 4;
-
+        $report->report_by_id = Auth::user()->id;
+        $report->remark = $request->remark;
+        $report->subject = $request->subject;
+        $report->report_status_id = $request->report_status_id;
+        $report->report_category_id = $request->report_category_id;
+        $report->submitted_at = $request->report_status_id == 2 ? now() : null;
         $report->save();
-        $report->trails()->save($trail);
+        
+        if(filled($request->attachment_paths)){
+            $report_attachments = [];
+            foreach($request->attachment_paths as $index => $path){
+                $report_attachment = new ReportAttachment();
+                $report_attachment->name = $request->attachment_names[$index];
+                $report_attachment->path = $path;
+                $report_attachment->type = $request->attachment_types[$index];
 
-        return redirect()->back();
+                array_push($report_attachments, $report_attachment);
+            }
+            $report->attachments()->saveMany($report_attachments);
+        }
+
+        if( $report->report_status_id == 2){
+            $report_sent_notification = new ReportSendNotification($report);
+            $this->notifySingle(Auth::user(), $report_sent_notification);
+
+            $report_received_admin_notification = new ReportReceivedAdminNotification();
+            $users = User::permission('aduan.assignTask')->get();
+            $this->notifyGroup($users, $report_received_admin_notification);
+        }
+
+        return redirect()->route('aduan.index-user', Auth::user()->id);
 
     }
 
@@ -171,6 +192,28 @@ class ReportController extends Controller
     public function destroy(Report $report)
     {
         //
+    }
+
+    public function assignTask(AssignTaskRequest $request, Report $report)
+    {
+
+        $user = User::find($request->assigned_to_id);
+        $report->report_status_id = 4;
+
+        $trail = new ReportTrail();
+        $trail->message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . '</a> untuk disemak';
+        $trail->assigned_to_id = $request->assigned_to_id;
+        $trail->updated_by_id = Auth::user()->id;
+        $trail->status_id = 4;
+
+        $report->save();
+        $report->trails()->save($trail);
+        
+        $notification = new ReportAssignedNotification();
+        $this->notifySingle($user,$notification);
+
+        return redirect()->back();
+
     }
 
     public function assignOfficer(Request $request,Report $report, User $user) : void{
@@ -191,15 +234,17 @@ class ReportController extends Controller
         } catch(Exception $e){}
     }
 
-    public function updateFinish(Request $request,Report $report, User $user){
+    public function updateFeedback(Request $request,Report $report){
 
         $report->report_status_id = 5;
+        $report->completed_at = now();
+        $report->rating = $request->rating;
+        $report->feedback = $request->feedback;
 
         $trail = new ReportTrail();
-        $trail->message = 'Aduan telah ditanda selesai dengan <br></br>';
-        $trail->assigned_to_id = $request->assigned_to_id;
+        $trail->message = 'Aduan telah ditanda selesai dengan <br> <b>Rating</b> <br> '. $request->rating. ' <br> <b>Komen</b> <br> '. $request->feedback;
         $trail->updated_by_id = Auth::user()->id;
-        $trail->status_id = 4;
+        $trail->status_id = 5;
 
         $report->save();
         $report->trails()->save($trail);
@@ -207,6 +252,28 @@ class ReportController extends Controller
         try{
 
         } catch(Exception $e){}
+
+        return redirect()->back();
+    }
+
+    public function notifySingle($user, $notification){
+        if(filled($user)){
+            try{
+                $user->notify($notification);
+            } catch(Exception $e){
+
+            }
+        }
+    }
+
+    public function notifyGroup($users, $notification){
+        if(filled($users)){
+            try{
+                Notification::send($users, $notification );
+            } catch(Exception $e){
+
+            }
+        }
     }
 
 }

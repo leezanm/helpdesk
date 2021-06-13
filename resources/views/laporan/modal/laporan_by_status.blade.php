@@ -38,7 +38,10 @@
                                 <th>Status</th>
                                 <th>Bilangan</th>
                             </thead>
-                            <tbody class="text-center align-middle">
+                            <tbody class="text-center align-middle laporanTbody">
+
+                            </tbody>
+                            {{-- <tbody class="text-center align-middle">
                                 <tr>
                                     <td class="text-start">Dihantar</td>
                                     <td><a href="/laporan/mengikut-status-tindakan">16</a></td>
@@ -55,11 +58,11 @@
                                     <td class="text-start">Selesai</td>
                                     <td><a href="/laporan/mengikut-status-tindakan">600</a></td>
                                 </tr>
-                            </tbody>
+                            </tbody> --}}
                             <tfoot class="text-center align-middle">
                                 <tr>
                                     <th>Jumlah</th>
-                                    <th>620</th>
+                                    <th class="laporanTotal"></th>
                                 </tr>
                                 <tr>
                                     <th>Prestasi</th>

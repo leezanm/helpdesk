@@ -52,8 +52,11 @@
                             <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
                             <td><span class="{{$report->status->class}}">{{$report->status->desc}}</span></td>
                             <td>
-                                 <a href="{{route('aduan.show', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bx-search-alt align-middle"></i></a>
-                                 {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bx-pen align-middle"></i></a> --}}
+                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bxs-show align-middle"></i></a>
+                                 @if ($report->report_status_id == 1)
+                                     <a href="{{route('aduan.edit', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bxs-pen align-middle"></i></a>
+                                 @endif
+                                {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bx-pen align-middle"></i></a> --}}
                             </td>
                         </tr>
                     @endforeach

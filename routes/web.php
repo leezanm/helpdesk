@@ -33,8 +33,11 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar');
         Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
         Route::post('/create', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
-        Route::post('/update/{report}', [App\Http\Controllers\ReportController::class, 'update'])->name('update');
-        Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show');
+        Route::get('/edit/{report}', [App\Http\Controllers\ReportController::class, 'edit'])->name('edit');
+        Route::post('/edit/{report}', [App\Http\Controllers\ReportController::class, 'update'])->name('update');
+        Route::post('/update-task/{report}', [App\Http\Controllers\ReportController::class, 'assignTask'])->name('update-task');
+        Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show')->middleware('update-aduan-status');
+        Route::post('/feedback/{report}', [App\Http\Controllers\ReportController::class, 'updateFeedback'])->name('update-feedback');
 
         // Route::prefix('task')->as('task.')->group(function () {
         //     Route::post('/create/{report}', [App\Http\Controllers\TaskController::class, 'store'])->name('store');
@@ -81,7 +84,8 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'index'])->name('index');
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
-        Route::view('/', 'laporan.index');
+        Route::get('/', [App\Http\Controllers\LaporanController::class,'index']);
+        // Route::view('/', 'laporan.index');
         Route::view('/mengikut-status-tindakan', 'laporan.show_by_status');
         Route::view('/mengikut-kategori', 'laporan.show_by_category');
         Route::view('/mengikut-bahagian', 'laporan.show_by_user');

@@ -117,66 +117,68 @@
         <hr>
 
         @can('aduan.assignTask')
-            <form action="{{route('aduan.update', $report->id)}}" method="POST">
-                @csrf
-                <legend class="text-uppercase h5">Tindakan Admin</legend>
+            @if (in_array($report->report_status_id, [3,4]))
+                <form action="{{route('aduan.update-task', $report->id)}}" method="POST">
+                    @csrf
+                    <legend class="text-uppercase h5">Tindakan Admin</legend>
 
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Tindakan</label>
-                    </div>
-                    <div class="col-md-4">
-                        <select name="tindakan" class="form-select">
-                            <option value="">Sila Pilih</option>
-                            <option value="1" @if(old('tindakan') == '1') selected @endif>Majukan Kepada</option>
-            
-                            @if ($report->report_status_id == 4 )
-                                <option value="2">Selesai</option>
-                            @endif
-
-                        </select>
-                        @error('tindakan') <p class="text-danger">{{$message}}</p> @enderror
-                    </div>
-                </div>
-
-                <div id="tindakan-majukan-kepada" class="@error('assigned_to_id') @else collapse @enderror">
                     <div class="row mb-3">
                         <div class="col-md-2">
-                            <label class="col-form-label">Peranan Pengguna</label>
+                            <label class="col-form-label">Tindakan</label>
                         </div>
                         <div class="col-md-4">
-                            <select name="peranan" id="majukan_kepada_peranan" class="form-select">
+                            <select name="tindakan" class="form-select">
                                 <option value="">Sila Pilih</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{$role->name}}" @if($role->name == old('peranan')) selected @endif>{{$role->desc}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3 collapse" id="peg_teknikal_selections">
-                        <div class="col-md-2">
-                            <label class="col-form-label">Kepada</label>
-                        </div>
-                        <div class="col-md-4">
-                            <select name="assigned_to_id" id="assigned_to_id" class="form-select" disabled>
+                                <option value="1" @if(old('tindakan') == '1') selected @endif>Majukan Kepada</option>
+                
+                                {{-- @if ($report->report_status_id == 4 )
+                                    <option value="2">Selesai</option>
+                                @endif --}}
 
                             </select>
-                            @error('assigned_to_id') <p class="text-danger">{{$message}}</p> @enderror
+                            @error('tindakan') <p class="text-danger">{{$message}}</p> @enderror
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-success waves-effect waves-light">
-                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                            </button>
+                    <div id="tindakan-majukan-kepada" class="@error('assigned_to_id') @else collapse @enderror">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="col-form-label">Peranan Pengguna</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="peranan" id="majukan_kepada_peranan" class="form-select">
+                                    <option value="">Sila Pilih</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{$role->name}}" @if($role->name == old('peranan')) selected @endif>{{$role->desc}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 collapse" id="peg_teknikal_selections">
+                            <div class="col-md-2">
+                                <label class="col-form-label">Kepada</label>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="assigned_to_id" id="assigned_to_id" class="form-select" disabled>
+
+                                </select>
+                                @error('assigned_to_id') <p class="text-danger">{{$message}}</p> @enderror
+                            </div>
                         </div>
                     </div>
-                </div>
-            </form>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success waves-effect waves-light">
+                                    <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            @endif
         @endcan
 
         {{-- @isset($current_task)
@@ -226,7 +228,7 @@
         @endisset --}}
 
         @if($report->reportBy->is(\Auth::user()) && $report->report_status_id == 4 )
-            <form action="" method="POST"> 
+            <form action="{{route('aduan.update-feedback', $report->id)}}" method="POST"> 
                 @csrf
 
                 <legend class="text-uppercase h5">Soal Selidik</legend>
@@ -236,7 +238,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="rating-star">
-                            <input type="hidden" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted"/>
+                            <input type="hidden" name="rating" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted"/>
                         </div>
                     </div>
                 </div>
@@ -246,7 +248,7 @@
                         <label class="col-form-label">Komen</label>
                     </div>
                     <div class="col-md-4">
-                        <textarea name="" class="form-control"></textarea>
+                        <textarea name="feedback" class="form-control"></textarea>
                         <p>Komen anda adalah amat dihargai</p>
                     </div>
                 </div>
@@ -254,9 +256,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="text-end">
-                            <a class="btn btn-success waves-effect waves-light save">
+                            <button type="submit" class="btn btn-success waves-effect waves-light">
                                 <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
