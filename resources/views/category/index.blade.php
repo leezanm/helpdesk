@@ -41,14 +41,14 @@
                 <th class="text-center" width="10%">Tindakan</th>
            </thead>
            <tbody class="align-middle">
-               @foreach ($types as $type)
+               @foreach ($report_categories as $report_category)
                    <tr>
                        <td>{{$loop->iteration}}</td>
-                       <td>{{$type->desc}}</td>
+                       <td>{{$report_category->desc}}</td>
                        <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('type.edit', $type->id)}}" data-update="{{route('type.update', $type->id)}}" data-modal="#edit_type_modal" > <i class="bx bxs-pen"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-modal="#show_type_modal" data-show="{{route('type.show', $type->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('type.destroy', $type->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('category.edit', $report_category->id)}}" data-update="{{route('category.update', $report_category->id)}}" data-modal="#edit_type_modal" > <i class="bx bxs-pen"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-modal="#show_type_modal" data-show="{{route('category.show', $report_category->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
+                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('category.destroy', $report_category->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
                        </td>
                    </tr>
                @endforeach
@@ -58,9 +58,9 @@
 </div>
 
 
-@include('type._modal.create')
-@include('type._modal.show')
-@include('type._modal.edit')
+@include('category._modal.create')
+@include('category._modal.show')
+@include('category._modal.edit')
 
 @endsection
 
@@ -189,10 +189,13 @@
                             _token: '{{csrf_token()}}'
                         },
                         success: function(response){
+                            console.log(response)
                             if(response.success){
                                 // currentRow.closest('tr').remove();
                                 // Swal.fire('Berjaya', 'Maklumat berjaya dipadam', 'success');
                                 window.location.reload();
+                            } else {
+                                Swal.fire('Gagal', response.message, 'error');
                             }
                         },
                         error: function(error){

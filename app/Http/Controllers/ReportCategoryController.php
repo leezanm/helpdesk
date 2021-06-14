@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ReportCategory;
+use Exception;
 use Illuminate\Http\Request;
 
 class ReportCategoryController extends Controller
@@ -15,6 +16,8 @@ class ReportCategoryController extends Controller
     public function index()
     {
         //
+        $report_categories = ReportCategory::orderBy('desc')->get();
+        return view('category.index', compact('report_categories'));
     }
 
     /**
@@ -36,6 +39,15 @@ class ReportCategoryController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'desc' => 'required'
+        ]);
+
+        $type = new ReportCategory();
+        $type->fill($request->all());
+        $type->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -47,6 +59,12 @@ class ReportCategoryController extends Controller
     public function show(ReportCategory $reportCategory)
     {
         //
+        $datas = [
+            'success' => true,
+            'data' => $reportCategory
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -58,6 +76,12 @@ class ReportCategoryController extends Controller
     public function edit(ReportCategory $reportCategory)
     {
         //
+        $datas = [
+            'success' => true,
+            'data' => $reportCategory
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -70,6 +94,14 @@ class ReportCategoryController extends Controller
     public function update(Request $request, ReportCategory $reportCategory)
     {
         //
+        $request->validate([
+            'desc' => 'required'
+        ]);
+
+        $reportCategory->fill($request->all());
+        $reportCategory->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -81,5 +113,9 @@ class ReportCategoryController extends Controller
     public function destroy(ReportCategory $reportCategory)
     {
         //
+        $reportCategory->is_active = false;
+        $reportCategory->save();
+
+        return response()->json(['success' => true]);
     }
 }

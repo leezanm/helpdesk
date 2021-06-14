@@ -44,5 +44,6 @@
 
         <!-- echarts js -->
         <script src="{{asset('assets/libs/echarts/echarts.min.js') }}"></script>
+        <script src="{{asset('js/notification.js') }}"></script>
 
         <script src="{{asset('assets/js/app.js')}}"></script>

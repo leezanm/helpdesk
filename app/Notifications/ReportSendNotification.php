@@ -30,7 +30,7 @@ class ReportSendNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -40,7 +40,7 @@ class ReportSendNotification extends Notification
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
-    {   
+    {
         $report =$this->report;
         return (new MailMessage)
                     ->subject('KPLB Helpdesk - Aduan Berjaya Dihantar')
@@ -59,8 +59,14 @@ class ReportSendNotification extends Notification
      */
     public function toArray($notifiable)
     {
+        $report =$this->report;
         return [
             //
+            'title' => 'Aduan Berjaya Dihantar',
+            'message' => 'Aduan anda berjaya dihantar. No tiket aduan adalah '. $report->ticket_no,
+            'url' => route('aduan.show', $report->id),
+            'icon' => 'bx bxs-paper-plane',
+            'color' => 'bg-success'
         ];
     }
 }

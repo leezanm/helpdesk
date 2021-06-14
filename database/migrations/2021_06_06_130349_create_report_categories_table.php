@@ -16,6 +16,8 @@ class CreateReportCategoriesTable extends Migration
         Schema::create('report_categories', function (Blueprint $table) {
             $table->id();
             $table->string('desc');
+            $table->string('image_path')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

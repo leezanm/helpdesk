@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Report\AssignTaskRequest;
+use App\Http\Requests\Report\StoreRequest;
 use App\Http\Requests\Report\UpdateRequest;
 use App\Models\Ref\ReportStatus;
 use App\Models\Ref\TaskStatus;
@@ -58,7 +59,7 @@ class ReportController extends Controller
     public function create()
     {
         //
-        $report_categories = ReportCategory::orderBy('desc')->get();
+        $report_categories = ReportCategory::active()->orderBy('desc')->get();
         return view('aduan.create', compact('report_categories'));
     }
 
@@ -68,18 +69,25 @@ class ReportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         //
+
         $report = new Report();
+        $report->is_bp = $request->is_bp ;
         $report->report_by_id = Auth::user()->id;
         $report->remark = $request->remark;
         $report->subject = $request->subject;
         $report->report_status_id = $request->report_status_id;
         $report->report_category_id = $request->report_category_id;
         $report->submitted_at = $request->report_status_id == 2 ? now() : null;
+
+        if($report->is_bp){
+            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email'));
+        }
+
         $report->save();
-        
+
         if(filled($request->attachment_paths)){
             $report_attachments = [];
             foreach($request->attachment_paths as $index => $path){
@@ -97,7 +105,7 @@ class ReportController extends Controller
             $report_sent_notification = new ReportSendNotification($report);
             $this->notifySingle(Auth::user(), $report_sent_notification);
 
-            $report_received_admin_notification = new ReportReceivedAdminNotification();
+            $report_received_admin_notification = new ReportReceivedAdminNotification($report);
             $users = User::permission('aduan.assignTask')->get();
             $this->notifyGroup($users, $report_received_admin_notification);
         }
@@ -135,7 +143,7 @@ class ReportController extends Controller
     public function edit(Report $report)
     {
         //
-        $report_categories = ReportCategory::orderBy('desc')->get();
+        $report_categories = ReportCategory::active()->orderBy('desc')->get();
         return view('aduan.edit', compact('report', 'report_categories'));
     }
 
@@ -156,7 +164,7 @@ class ReportController extends Controller
         $report->report_category_id = $request->report_category_id;
         $report->submitted_at = $request->report_status_id == 2 ? now() : null;
         $report->save();
-        
+
         if(filled($request->attachment_paths)){
             $report_attachments = [];
             foreach($request->attachment_paths as $index => $path){
@@ -208,8 +216,8 @@ class ReportController extends Controller
 
         $report->save();
         $report->trails()->save($trail);
-        
-        $notification = new ReportAssignedNotification();
+
+        $notification = new ReportAssignedNotification($report);
         $this->notifySingle($user,$notification);
 
         return redirect()->back();

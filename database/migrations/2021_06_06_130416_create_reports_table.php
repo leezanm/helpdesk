@@ -18,9 +18,13 @@ class CreateReportsTable extends Migration
             $table->string('ticket_no')->nullable();
             $table->string('subject');
             $table->text('remark');
-            $table->boolean('is_bp')->default(0);
             $table->foreignId('report_by_id')->constrained('users');
-            $table->foreignId('report_for_id')->nullable()->constrained('users');
+            $table->boolean('is_bp')->default(0);
+            $table->foreignId('bp_user_id')->nullable()->constrained('users');
+            $table->string('bp_name')->nullable();
+            $table->string('bp_username')->nullable();
+            $table->string('bp_bahagian')->nullable();
+            $table->string('bp_email')->nullable();
             $table->foreignId('report_status_id')->constrained('_report_statuses');
             $table->foreignId('report_category_id')->constrained();
             $table->timestamp('submitted_at')->nullable();

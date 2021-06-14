@@ -14,10 +14,10 @@
                         <i class="bx bx-file-blank me-2"></i><span key="t-aduan">Aduan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        
+
                         {{-- @hasrole('pengguna')
                             <x-sidebar-divider :title="'PENGGUNA'"></x-sidebar-divider> --}}
-                
+
                             <li><a href="{{url('/aduan/create')}}" key="t-aduan-create">Cipta Aduan</a></li>
                             <li><a href="{{url('/aduan/user')}}/{{Auth::user()->username}}" key="t-aduan-list">Aduan Saya</a></li>
                         {{-- @endhasrole --}}
@@ -35,7 +35,7 @@
                             <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
                             <li><a href="{{url('/aduan/dihantar')}}" key="t-aduan-list">Aduan Dihantar</a></li>
                         @endcan
-                        
+
                     </ul>
                 </li>
 
@@ -56,7 +56,7 @@
                 @canany(['manage.division','manage.category', 'manage.admin', 'manage.role'])
                     <li class="menu-title" key="t-pentadbir">Pentadbiran</li>
                 @endcanany
-                
+
 
                 @canany(['manage.division','manage.category'])
                 <li>
@@ -68,7 +68,7 @@
                             <li><a href="{{route('division.index')}}" key="t-division">Bahagian</a></li>
                         @endcan
                         @can('manage.category')
-                            <li><a href="{{route('type.index')}}" key="t-category">Kategori Aduan</a></li>
+                            <li><a href="{{route('category.index')}}" key="t-category">Kategori Aduan</a></li>
                         @endcan
                     </ul>
                 </li>
@@ -129,13 +129,13 @@
                             </a>
                         </li>
                     @endcan
-                    
+
                     @can('manage.backup')
                         <li>
                             <a class="nav-link" href="{{url('/backup')}}" id="topnav-backup" role="button">
                                 <i class="bx bx-data me-2"></i><span key="t-backup">Backup</span>
                             </a>
-                        </li> 
+                        </li>
                     @endcan
 
                 @endcanany

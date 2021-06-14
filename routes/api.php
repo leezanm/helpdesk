@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::as('api.')->group(function () {
     Route::post('get-users-by-role', [App\Http\Controllers\Api\ListController::class, 'getUsersByRole'])->name('get-users-by-role');
+    Route::post('get-user', [App\Http\Controllers\Api\UserController::class, 'show'])->name('get-user');
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::post('/by-status', [App\Http\Controllers\LaporanController::class, 'laporanByStatusApi'])->name('by-status');

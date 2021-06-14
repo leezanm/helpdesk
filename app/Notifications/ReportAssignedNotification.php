@@ -16,9 +16,10 @@ class ReportAssignedNotification extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($report)
     {
         //
+        $this->report =$report;
     }
 
     /**
@@ -29,7 +30,7 @@ class ReportAssignedNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -54,8 +55,14 @@ class ReportAssignedNotification extends Notification
      */
     public function toArray($notifiable)
     {
+        $report = $this->report;
         return [
             //
+            'title' => 'Tugasan Baru',
+            'message' => 'Aduan bernombor '. $report->ticket_no . ' telah ditugaskan kepada anda',
+            'url' => route('aduan.show', $report->id),
+            'icon' => 'bx bx-task',
+            'color' => 'bg-warning'
         ];
     }
 }

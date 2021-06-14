@@ -12,6 +12,8 @@ class Report extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['bp_username', 'bp_name', 'bp_bahagian', 'bp_email'];
+
     public function category(){
         return $this->belongsTo(ReportCategory::class, 'report_category_id');
     }
@@ -20,7 +22,17 @@ class Report extends Model
         return $this->belongsTo(ReportStatus::class, 'report_status_id');
     }
 
+    /*
+    *pengadu
+    */
     public function reportBy(){
+        return $this->belongsTo(User::class);
+    }
+
+    /*
+    bagi pihak user
+    */
+    public function bpUser(){
         return $this->belongsTo(User::class);
     }
 
@@ -41,7 +53,7 @@ class Report extends Model
     }
 
     protected static function booted()
-    {   
+    {
         Report::observe(ReportObserver::class);
     }
 }

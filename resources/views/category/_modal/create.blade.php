@@ -1,7 +1,7 @@
 <div id="create_type_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
-            <form action="{{route('type.store')}}" id="create_type_modal_form" method="POST" enctype="multipart/form-data">
+            <form action="{{route('category.store')}}" id="create_type_modal_form" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h5 class="modal-title" id="myExtraLargeModalLabel">Tambah Jenis</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

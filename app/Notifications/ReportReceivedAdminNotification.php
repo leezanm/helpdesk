@@ -16,9 +16,10 @@ class ReportReceivedAdminNotification extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($report)
     {
         //
+        $this->report = $report;
     }
 
     /**
@@ -29,7 +30,7 @@ class ReportReceivedAdminNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -54,8 +55,14 @@ class ReportReceivedAdminNotification extends Notification
      */
     public function toArray($notifiable)
     {
+        $report = $this->report;
         return [
             //
+            'title' => 'Aduan Baru Diterima',
+            'message' => 'Aduan baru memerlukan perhatian. No tiket aduan : '. $report->ticket_no,
+            'url' => route('aduan.show', $report->id),
+            'icon' => 'bx bx-mail-send',
+            'color' => 'bg-info'
         ];
     }
 }

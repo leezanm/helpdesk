@@ -23,7 +23,12 @@ Route::view('/forgot-password-out', 'auth.forgot_password_out');
 Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/test', 'example');
 
-    Route::view('/dashboard', 'dashboard');
+    Route::prefix('notification')->as('notification.')->group(function () {
+
+        Route::get('/', [App\Http\Controllers\NotificationController::class, 'listNotification']);
+        Route::get('/read/{notification}', [App\Http\Controllers\NotificationController::class, 'read'])->name('read');
+    });
+
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::prefix('aduan')->as('aduan.')->group(function () {
@@ -43,11 +48,11 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         //     Route::post('/create/{report}', [App\Http\Controllers\TaskController::class, 'store'])->name('store');
         //     Route::post('/edit/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('update');
         // });
-        
+
         Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
     });
 
-    
+
 
     Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index']);
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
@@ -61,13 +66,13 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/destroy/{division}', [App\Http\Controllers\DivisionController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('type')->as('type.')->group(function () {
-        Route::get('/', [App\Http\Controllers\TypeController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\TypeController::class, 'store'])->name('store');
-        Route::get('/show/{type}', [App\Http\Controllers\TypeController::class, 'show'])->name('show');
-        Route::get('/edit/{type}', [App\Http\Controllers\TypeController::class, 'edit'])->name('edit');
-        Route::post('/update/{type}', [App\Http\Controllers\TypeController::class, 'update'])->name('update');
-        Route::post('/destroy/{type}', [App\Http\Controllers\TypeController::class, 'destroy'])->name('destroy');
+    Route::prefix('kategori')->as('category.')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\ReportCategoryController::class, 'store'])->name('store');
+        Route::get('/show/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'show'])->name('show');
+        Route::get('/edit/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'edit'])->name('edit');
+        Route::post('/update/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'update'])->name('update');
+        Route::post('/destroy/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'destroy'])->name('destroy');
     });
 
     // Route::view('/pengguna', 'superadmin.pengguna');
@@ -89,7 +94,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::view('/mengikut-status-tindakan', 'laporan.show_by_status');
         Route::view('/mengikut-kategori', 'laporan.show_by_category');
         Route::view('/mengikut-bahagian', 'laporan.show_by_user');
-        
+
     });
 
     Route::prefix('peranan')->as('role.')->group(function () {
