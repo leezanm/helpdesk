@@ -41,10 +41,14 @@ class ReportAssignedNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $report = $this->report;
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        ->subject('KPLB Helpdesk - Tugasan Baru')
+        ->greeting('Salam Sejahtera,')
+        ->line('Aduan baru telah ditugaskan kepada anda')
+        ->line('Maklumat Aduan')
+        ->line('No Tiket : '. $report->ticket_no)
+        ->action('Lihat', url('/'));
     }
 
     /**
