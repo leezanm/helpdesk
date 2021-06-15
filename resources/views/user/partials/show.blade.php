@@ -34,7 +34,7 @@
                             </tr>
                             <tr>
                                 <th>Kad Pengenalan</th>
-                                <td id="show-identification"></td>
+                                <td id="show-ic_no"></td>
                             </tr>
                             <tr>
                                 <th>Alamat</th>

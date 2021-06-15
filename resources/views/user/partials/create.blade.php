@@ -5,7 +5,7 @@
                 <h5 class="modal-title" id="myExtraLargeModalLabel">Maklumat Pengguna</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <form id="create_user_modal_form" action="{{route('user.store')}}" method="post" enctype="multipart/form-data">
 
                 <div class="modal-body">
@@ -17,9 +17,16 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-2 col-form-label"> <b>Nama Pengguna :</b> </div>
+                        <div class="col-2 col-form-label"> <b>Nama Penuh Pengguna :</b> </div>
                         <div class="col">
                             <input type="text" name="name" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-2 col-form-label"> <b>Nama Pengguna (AD):</b> </div>
+                        <div class="col">
+                            <input type="text" name="username" class="form-control">
                         </div>
                     </div>
 
@@ -45,7 +52,7 @@
                         </div>
                         <div class="col-2 col-form-label"> <b>Kad pengenalan :</b> </div>
                         <div class="col">
-                            <input type="text" name="identification" class="form-control">
+                            <input type="text" name="ic_no" class="form-control">
                         </div>
                     </div>
 

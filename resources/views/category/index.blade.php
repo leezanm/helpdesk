@@ -4,13 +4,13 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Jenis</h4>
+                <h4 class="mb-sm-0 font-size-18">Kategori Aduan</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i> Laman Utama</a></li>
                         <li class="breadcrumb-item ">Selenggara</li>
-                        <li class="breadcrumb-item active">Jenis</li>
+                        <li class="breadcrumb-item active">Kategori Aduan</li>
                     </ol>
                 </div>
 
@@ -38,18 +38,26 @@
            <thead>
                 <th width="5">Bil</th>
                 <th>Nama</th>
+                <th>Imej</th>
+                <th>Status</th>
                 <th class="text-center" width="10%">Tindakan</th>
            </thead>
            <tbody class="align-middle">
                @foreach ($report_categories as $report_category)
                    <tr>
-                       <td>{{$loop->iteration}}</td>
-                       <td>{{$report_category->desc}}</td>
-                       <td class="text-center">
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('category.edit', $report_category->id)}}" data-update="{{route('category.update', $report_category->id)}}" data-modal="#edit_type_modal" > <i class="bx bxs-pen"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-modal="#show_type_modal" data-show="{{route('category.show', $report_category->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
-                        <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('category.destroy', $report_category->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
-                       </td>
+                        <td>{{$loop->iteration}}</td>
+                        <td>{{$report_category->desc}}</td>
+                        <td>
+                            <img src="{{ $report_category->image }}" alt="" class="avatar-sm h-auto d-block rounded">
+                        </td>
+                        <td><span class="badge {{$report_category->is_active? 'bg-success' : 'bg-danger'}}">{{$report_category->is_active? 'Aktif' : 'Tidak Aktif'}}</span></td>
+                        <td class="text-center">
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-info" data-modal="#show_type_modal" data-show="{{route('category.show', $report_category->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
+                            @if ($report_category->is_active)
+                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('category.edit', $report_category->id)}}" data-update="{{route('category.update', $report_category->id)}}" data-modal="#edit_type_modal" > <i class="bx bxs-pen"></i></a>
+                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('category.destroy', $report_category->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
+                            @endif
+                        </td>
                    </tr>
                @endforeach
            </tbody>
@@ -127,6 +135,8 @@
                 console.log(response.success);
                 if(response.success){
                     $('#show-desc').html(response.data.desc);
+                    $('#show-status').html(response.data.status);
+                    $('#category-image').attr('src', response.data.image);
                     clearStatus();
                     if(response.data['is_active']){
                         $('#show-is_active').addClass('bg-success')

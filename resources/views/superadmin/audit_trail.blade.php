@@ -36,7 +36,7 @@
                     <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{$audit_trail->created_at}}</td>
-                        <td><a href="#" class="viewPelaku" data-id="{{$audit_trail->user_id}}">{{$audit_trail->user->name}}</a></td>
+                        <td><a href="#" class="userProfile" data-userId="{{$audit_trail->user_id}}">{{$audit_trail->user->name}}</a></td>
                         <td>{{$audit_trail->ip}}</td>
                         <td>{{$audit_trail->method}}</td>
                         <td class="text-left">{{$audit_trail->url}}</td>

@@ -50,6 +50,20 @@ class ReportController extends Controller
         return view('aduan.index', compact('reports'));
     }
 
+    public function indexUntukTindakan()
+    {
+        //
+        $reports = Report::where('report_status_id', 4)
+                    ->join('report_trails', 'reports.id', 'report_trails.report_id')
+                    ->select('reports.*', 'report_trails.id as trail_id', 'assigned_to_id')
+                    ->where('report_trails.id', \DB::raw('(select id from report_trails where report_id = reports.id order by id desc limit 1)'))
+                    ->where('assigned_to_id', Auth::user()->id)
+                    ->orderBy('submitted_at', 'desc')
+                    ->get();
+
+        return view('aduan.index', compact('reports'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -182,7 +196,7 @@ class ReportController extends Controller
             $report_sent_notification = new ReportSendNotification($report);
             $this->notifySingle(Auth::user(), $report_sent_notification);
 
-            $report_received_admin_notification = new ReportReceivedAdminNotification();
+            $report_received_admin_notification = new ReportReceivedAdminNotification($report);
             $users = User::permission('aduan.assignTask')->get();
             $this->notifyGroup($users, $report_received_admin_notification);
         }

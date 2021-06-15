@@ -25,16 +25,21 @@
                         @can('aduan.updateTask')
                             <x-sidebar-divider :title="'PEG TEKNIKAL'"></x-sidebar-divider>
 
-                            <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
+                            {{-- <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li> --}}
                             <li><a href="{{url('/aduan/untuk-tindakan')}}" key="t-aduan-list">Untuk Tindakan</a></li>
                         @endcan
 
                         @can('aduan.assignTask')
                             <x-sidebar-divider :title="'PENTADBIR HELPDESK'"></x-sidebar-divider>
 
-                            <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
+                            {{-- <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li> --}}
                             <li><a href="{{url('/aduan/dihantar')}}" key="t-aduan-list">Aduan Dihantar</a></li>
                         @endcan
+
+                        @canany(['aduan.assignTask','aduan.updateTask'])
+                            <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
+                        @endcanany
+
 
                     </ul>
                 </li>

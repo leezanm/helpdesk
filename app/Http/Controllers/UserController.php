@@ -62,11 +62,12 @@ class UserController extends Controller
         $request->validate([
             'profile_path' => 'nullable|image|max:256',
             'name' => 'required',
+            'username' => 'required|unique:users,username',
             'email' => 'required|email',
             'designation' => 'required',
             'tel_no' => 'required',
             'dob' => 'required|date',
-            'identification' => 'required',
+            'ic_no' => 'required',
             'address' => 'required'
         ]);
 
@@ -130,7 +131,8 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $user->delete();
+        $user->is_active = false;
+        $user->save();
 
         return response()->json(['success' => true]);
     }

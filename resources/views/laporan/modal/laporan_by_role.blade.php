@@ -6,31 +6,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Daripada</label>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="position-relative" id="laporan-role-from">
-                            <input type="text" name="from" class="form-control text-center" data-provide="datepicker"
-                                data-date-container="#laporan-role-from" data-date-autoclose="true"
-                                data-date-end-date="+0d" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label class="col-form-label">Sehingga</label>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="position-relative" id="laporan-role-to">
-                            <input type="text" name="to" class="form-control text-center" data-provide="datepicker"
-                                data-date-container="#laporan-role-to" data-date-autoclose="true"
-                                data-date-end-date="+0d" autocomplete="off">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-secondary">Pilih</button>
-                    </div>
-                </div>
                 <div class="row justify-content-md-center">
                     <div class="col-md-8">
                         <table class="table table-bordered">

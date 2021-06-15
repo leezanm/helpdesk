@@ -40,16 +40,12 @@ class Report extends Model
         return $this->hasMany(ReportAttachment::class);
     }
 
-    public function tasks(){
-        return $this->hasMany(Task::class);
-    }
-
     public function trails(){
         return $this->hasMany(ReportTrail::class);
     }
 
-    public function currentTask(){
-        return $this->hasOne(Task::class)->latest();
+    public function currentTrail(){
+        return $this->hasOne(ReportTrail::class)->latest();
     }
 
     protected static function booted()

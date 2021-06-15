@@ -108,4 +108,18 @@ class UserController extends Controller
     {
         //
     }
+
+    public function getUserProfile(Request $request){
+
+        $user = User::findOrFail($request->user_id);
+        $user->makeHidden('deleted_at', 'created_at', 'updated_at','profile_path', 'email_verified_at');
+        $user->append('profile_picture');
+
+        $datas = [
+            'success' => true,
+            'userProfile' => $user
+        ];
+
+        return response()->json($datas);
+    }
 }

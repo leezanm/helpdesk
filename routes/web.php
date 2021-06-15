@@ -54,7 +54,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
 
 
-    Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index']);
+    Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index'])->middleware('can:manage.audit-trail');
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
 
     Route::prefix('division')->as('division.')->group(function () {
@@ -91,9 +91,12 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::get('/', [App\Http\Controllers\LaporanController::class,'index']);
         // Route::view('/', 'laporan.index');
-        Route::view('/mengikut-status-tindakan', 'laporan.show_by_status');
-        Route::view('/mengikut-kategori', 'laporan.show_by_category');
-        Route::view('/mengikut-bahagian', 'laporan.show_by_user');
+        Route::get('/mengikut-status-tindakan', [App\Http\Controllers\LaporanController::class, 'viewByStatus'])->name('view-by-status');
+        Route::get('/mengikut-kategori', [App\Http\Controllers\LaporanController::class, 'viewByCategory'])->name('view-by-category');
+        Route::get('/soal-selidik', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-rating');
+        Route::get('/mengikut-user', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-user');
+        // Route::get('/mengikut-kategori', 'laporan.show_by_category');
+        // Route::get('/mengikut-bahagian', 'laporan.show_by_user');
 
     });
 
@@ -107,7 +110,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/pengesahan', 'superadmin.selenggara');
     Route::view('/sijil', 'superadmin.selenggara');
     Route::view('/pengumuman', 'pengumuman');
-    Route::view('/backup', 'superadmin.backup');
+    // Route::view('/backup', 'superadmin.backup');
 
     Route::prefix('account')->group(function () {
         Route::get('profile/{user}', [App\Http\Controllers\UserController::class, 'edit'])->name('account.profile.show');
@@ -115,5 +118,14 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('profile/edit/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('account.profile.update');
         Route::get('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordEdit'])->name('account.password.edit');
         Route::post('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordUpdate'])->name('account.password.update');
+    });
+
+    Route::prefix('backup')->as('backup.')->middleware('can:manage.backup')->group(function () {
+        Route::get('/', [App\Http\Controllers\BackupContoller::class, 'index'])->name('index');
+        Route::get('/full', [App\Http\Controllers\BackupContoller::class, 'backupFull'])->name('full');
+        Route::get('/database', [App\Http\Controllers\BackupContoller::class, 'backupDB'])->name('database');
+        Route::get('/file', [App\Http\Controllers\BackupContoller::class, 'backupFile'])->name('file');
+        Route::get('/download/{filename}', [App\Http\Controllers\BackupContoller::class, 'download'])->name('download');
+        Route::get('/delete/{filename}', [App\Http\Controllers\BackupContoller::class, 'destroy'])->name('delete');
     });
 });

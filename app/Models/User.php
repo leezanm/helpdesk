@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'designation',
@@ -37,6 +38,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes'
     ];
 
     /**
@@ -48,10 +51,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public $append = ['profile_picture'];
-
     public function getProfilePictureAttribute()
     {
-        return asset($this->profile_path);
+        return file_exists( public_path($this->profile_path) ) ? asset($this->profile_path) : asset('images/profile/default.png') ;
     }
 }

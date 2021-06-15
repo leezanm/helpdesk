@@ -12,4 +12,12 @@ class ReportTrail extends Model
     public function status(){
         return $this->belongsTo(Ref\ReportTrailStatus::class);
     }
+
+    public function assignedTo(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function updatedBy(){
+        return $this->belongsTo(User::class);
+    }
 }

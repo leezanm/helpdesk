@@ -2,16 +2,32 @@
     <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="myExtraLargeModalLabel">Papar Maklumat Jenis</h5>
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Papar Maklumat Kategori Aduan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
+                <div class="row mb-2">
+                    <div class="col ">
+                        <center><img id="category-image" src="" alt="" class="avatar-xl h-auto d-block rounded"></center>
+                    </div>
+                </div>
+
                 <div class="row mb-2">
                     <div class="col-md-3">
-                        <label for=""><b>Keterangan : </b></label>
+                        <label for=""><b>Nama : </b></label>
                     </div>
                     <div class="col-md-9">
                         <span id="show-desc"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label for=""><b>Status : </b></label>
+                    </div>
+                    <div class="col-md-9">
+                        <span id="show-status"></span>
                     </div>
                 </div>
             </div>

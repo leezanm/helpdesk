@@ -38,6 +38,7 @@
                 <th>#</th>
                 <th>Nama Pegawai</th>
                 <th>E-mel</th>
+                <th>Status</th>
                 <th>Tindakan</th>
            </thead>
            <tbody class="align-middle">
@@ -58,6 +59,13 @@
                             </a>
                         </td>
                         <th>{{ $user->email }}</th>
+                        <th>
+                            @if ($user->is_active)
+                                <span class="badge bg-success">AKTIF</span>
+                            @else
+                                <span class="badge bg-danger">TIDAK AKTIF</span>
+                            @endif
+                        </th>
                         <td class="text-center">
                             {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
                             <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Dokumen" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a> --}}
@@ -145,15 +153,19 @@
             url : currentRow.attr('data-show'),
             method : 'get',
             success : function(response){
-                console.log(response);
                 if(response.success){
-                    $('#show-name').html(response.data['name']);
-                    $('#show-designation').html(response.data['designation']);
-                    $('#show-tel_no').html(response.data['tel_no']);
-                    $('#show-dob').html(response.data['dob']);
-                    $('#show-address').html(response.data['address']);
-                    $('#show-identification').html(response.data['identification']);
-                    $('#show-profile_path').attr('src', (response.data['profile_picture']));
+
+                    var user = response.data;
+
+                    for (const attribute in user) {
+                        if (attribute == 'profile_path') {
+                            $('#show-profile_path').attr('src', (response.data[attribute]));
+                        } else {
+                            $('#show-'+attribute).html(user[attribute]);
+                        }
+                    }
+
+
                     clearStatus();
                     if(response.data['is_active']){
                         $('#show-is_active').addClass('bg-success')

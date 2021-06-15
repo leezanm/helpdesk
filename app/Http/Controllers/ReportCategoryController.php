@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ReportCategory;
 use Exception;
 use Illuminate\Http\Request;
-
+use Str;
 class ReportCategoryController extends Controller
 {
     /**
@@ -16,7 +16,7 @@ class ReportCategoryController extends Controller
     public function index()
     {
         //
-        $report_categories = ReportCategory::orderBy('desc')->get();
+        $report_categories = ReportCategory::orderBy('desc')->get()->append('image');
         return view('category.index', compact('report_categories'));
     }
 
@@ -43,9 +43,16 @@ class ReportCategoryController extends Controller
             'desc' => 'required'
         ]);
 
-        $type = new ReportCategory();
-        $type->fill($request->all());
-        $type->save();
+        $reportCategory = new ReportCategory();
+        $reportCategory->fill($request->except('file'));
+
+        if($request->hasFile('file')){
+
+            $path = $request->file('file')->store('public/images/categories');
+            $reportCategory->image_path = Str::of($path)->replace('public', 'storage');
+        }
+
+        $reportCategory->save();
 
         return response()->json(['success' => true]);
     }
@@ -59,6 +66,15 @@ class ReportCategoryController extends Controller
     public function show(ReportCategory $reportCategory)
     {
         //
+
+        if($reportCategory->is_active){
+            $status = '<span class="badge bg-success">Aktif</span>';
+        } else {
+            $status = '<span class="badge bg-danger">Tidak Aktif</span>';
+        }
+
+        $reportCategory->append('image');
+        $reportCategory->setAttribute('status', $status);
         $datas = [
             'success' => true,
             'data' => $reportCategory
@@ -98,7 +114,14 @@ class ReportCategoryController extends Controller
             'desc' => 'required'
         ]);
 
-        $reportCategory->fill($request->all());
+        $reportCategory->fill($request->except('file'));
+
+        if($request->hasFile('file')){
+
+            $path = $request->file('file')->store('public/images/categories');
+            $reportCategory->image_path = Str::of($path)->replace('public', 'storage');
+        }
+
         $reportCategory->save();
 
         return response()->json(['success' => true]);

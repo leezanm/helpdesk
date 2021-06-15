@@ -299,9 +299,11 @@
         <!-- END layout-wrapper -->
         @include('auth.modal.reset_password')
         @include('auth.modal.profile')
+        @include('partials.modal.profile_modal')
 
         @include('layouts.script')
         @yield('script')
+        <script src="{{asset('js/user.js')}}"></script>
         <script>
             $('.updatePassword').on('click', function() {
 

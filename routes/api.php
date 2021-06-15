@@ -21,10 +21,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::as('api.')->group(function () {
     Route::post('get-users-by-role', [App\Http\Controllers\Api\ListController::class, 'getUsersByRole'])->name('get-users-by-role');
     Route::post('get-user', [App\Http\Controllers\Api\UserController::class, 'show'])->name('get-user');
+    Route::post('get-user-profile', [App\Http\Controllers\Api\UserController::class, 'getUserProfile'])->name('get-user-profile');
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::post('/by-status', [App\Http\Controllers\LaporanController::class, 'laporanByStatusApi'])->name('by-status');
         Route::post('/by-category', [App\Http\Controllers\LaporanController::class, 'laporanByCategoryApi'])->name('by-category');
+        Route::post('/by-rating', [App\Http\Controllers\LaporanController::class, 'laporanByRatingApi'])->name('by-rating');
     });
 });
 
