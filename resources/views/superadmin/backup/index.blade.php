@@ -23,14 +23,14 @@
 @section('content')
     <div class="row mb-1">
         <div class="col text-end">
-            <a href="{{route('backup.database')}}" class="waves-effect waves-light text-center font-size-16 text-secondary me-3">
-                <i class="bx bx-list-ol bx-tada-hover font-size-24 align-middle me-2"></i> <br> <span class="text-dark align-middle">Penuh</span>
+            <a href="{{route('backup.full')}}" class="waves-effect waves-light text-center font-size-16 text-secondary me-3">
+                <i class="bx bx-box bx-tada-hover font-size-24 align-middle me-2"></i> <br> <span class="text-dark align-middle">Penuh</span>
             </a>
             <a href="{{route('backup.database')}}" class="waves-effect waves-light text-center font-size-16 text-secondary me-3">
-                <i class="bx bx-list-ol bx-tada-hover font-size-24 align-middle me-2"></i> <br> <span class="text-dark align-middle">Pangkalan Data</span>
+                <i class="bx bx-data bx-tada-hover font-size-24 align-middle me-2"></i> <br> <span class="text-dark align-middle">Pangkalan Data</span>
             </a>
-            <a href="{{route('backup.database')}}" class="waves-effect waves-light text-center font-size-16 text-secondary me-3">
-                <i class="bx bx-list-ol bx-tada-hover font-size-24 align-middle me-2"></i> <br> <span class="text-dark align-middle">Fail</span>
+            <a href="{{route('backup.file')}}" class="waves-effect waves-light text-center font-size-16 text-secondary me-3">
+                <i class="bx bx-folder bx-tada-hover font-size-24 align-middle me-2"></i> <br> <span class="text-dark align-middle">Fail</span>
             </a>
         </div>
     </div>
