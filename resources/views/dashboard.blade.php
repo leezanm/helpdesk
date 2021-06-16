@@ -179,7 +179,7 @@
     </div>
 </div>
 
-@can('dashboard.viewChart')
+@can('dashboard.viewGraph')
     <div class="row">
         <div class="col-xl-4">
             <div class="card">
