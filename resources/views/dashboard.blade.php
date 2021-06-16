@@ -230,7 +230,7 @@
 @endsection
 
 @section('script')
-    @can('dashboard.viewChart')
+    @can('dashboard.viewGraph')
         <script type="text/javascript">
 
             var dom = document.getElementById("sektor");
