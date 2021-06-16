@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LaporanController extends Controller
 {
     //
-    public function index(){
+    public function index(Request $request){
 
         return view('laporan.index');
     }
@@ -90,6 +90,29 @@ class LaporanController extends Controller
         return view('laporan.show_by_rating', compact('laporans', 'reports' , 'from', 'to', 'title'));
     }
 
+    public function viewByRole(Request $request){
+        $title = 'Mengikut Peranan Pengguna';
+        $from = $request->from;
+        $to = $request->to;
+
+        $laporans = \DB::table('roles')
+                    ->select('desc')
+                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (2,3,4) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_category_id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
+                    ->orderBy('desc', 'asc')
+                    ->whereIn('id', [1,2,3])
+                    ->get();
+
+        $reports = Report::when(filled($from), function($query) use($from){
+                                $query->whereDate('submitted_at', '>=', Carbon::parse($from));
+                            })
+                            ->when(filled($to), function($query) use($to){
+                                $query->whereDate('submitted_at', '<=', Carbon::parse($to));
+                            })
+                            ->orderBy('submitted_at', 'desc')->get();
+
+        return view('laporan.show', compact('laporans', 'reports' , 'from', 'to', 'title'));
+    }
+
 
     //return response json
     public function laporanByStatusApi(Request $request){
@@ -139,14 +162,16 @@ class LaporanController extends Controller
         $to = Carbon::parse($request->to);
         $to_check = filled($request->to);
 
-        $laporan =  \DB::table('report_categories as category')
+        $laporan = \DB::table('roles')
                     ->select('desc')
-                    ->selectRaw('ifnull((select count(*) from reports where report_category_id = category.id group by report_category_id),0) as jumlah')
+                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (2,3,4) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_category_id),0) as jumlah', [$from_check, $from, $to_check, $to])
                     ->orderBy('desc', 'asc')
+                    ->whereIn('id', [1,2,3])
                     ->get();
         $datas =[
             'success' => true,
-            'laporan' => $laporan
+            'laporan' => $laporan,
+            'url' => route('laporan.view-by-role')
         ];
         return response()->json($datas);
     }

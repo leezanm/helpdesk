@@ -27,6 +27,7 @@ Route::as('api.')->group(function () {
         Route::post('/by-status', [App\Http\Controllers\LaporanController::class, 'laporanByStatusApi'])->name('by-status');
         Route::post('/by-category', [App\Http\Controllers\LaporanController::class, 'laporanByCategoryApi'])->name('by-category');
         Route::post('/by-rating', [App\Http\Controllers\LaporanController::class, 'laporanByRatingApi'])->name('by-rating');
+        Route::post('/by-role', [App\Http\Controllers\LaporanController::class, 'laporanByRoleyApi'])->name('by-role');
     });
 
     Route::prefix('dashboard')->as('dashboard.')->group(function () {

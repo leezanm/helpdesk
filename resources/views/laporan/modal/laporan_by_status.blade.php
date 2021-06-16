@@ -39,10 +39,10 @@
                                     <th>Jumlah</th>
                                     <th class="laporanTotal"></th>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <th>Prestasi</th>
                                     <th>97.09</th>
-                                </tr>
+                                </tr> --}}
                             </tfoot>
                         </table>
                     </div>

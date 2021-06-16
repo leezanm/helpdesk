@@ -1,5 +1,5 @@
 <div id="modal_laporan_by_role" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div div class="modal-header">
                 <h5 class="modal-title" id="myExtraLargeModalLabel">Jumlah Aduan Mengikut Peranan Pengguna</h5>
@@ -13,7 +13,7 @@
                                 <th>Peranan</th>
                                 <th>Bilangan</th>
                             </thead>
-                            <tbody class="text-center align-middle">
+                            <tbody class="text-center align-middle laporanTbody">
                                 <tr>
                                     <td class="text-start">JTK</td>
                                     <td>16</td>
@@ -26,13 +26,13 @@
                             <tfoot class="text-center align-middle">
                                 <tr>
                                     <th>Jumlah</th>
-                                    <th>618</th>
+                                    <th class="laporanTotal">618</th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
-                <table class="table table-bordered">
+                {{-- <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -61,12 +61,11 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> --}}
             </div>
-            {{-- <div class="modal-footer text-end">
-                <button class="btn btn-secondary" type="reset">Set Semula</button>
-                <button id="btnCreate" class="btn btn-success" type="button">Simpan</button>
-            </div> --}}
+            <div class="modal-footer text-end">
+                <a href="{{route('laporan.view-by-role')}}" target="_blank" class="btn btn-outline-secondary">Lihat Penuh</a>
+            </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>

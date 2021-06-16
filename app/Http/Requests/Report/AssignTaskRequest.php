@@ -26,7 +26,8 @@ class AssignTaskRequest extends FormRequest
         return [
             //
             'tindakan' => 'required',
-            'assigned_to_id' => 'bail|required_if:tindakan,1|exists:users,id'
+            'assigned_to_id' => 'bail|required_if:tindakan,1|exists:users,id',
+            'peranan' => 'exists:roles,name'
         ];
     }
 }

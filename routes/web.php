@@ -44,11 +44,6 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show')->middleware('update-aduan-status');
         Route::post('/feedback/{report}', [App\Http\Controllers\ReportController::class, 'updateFeedback'])->name('update-feedback');
 
-        // Route::prefix('task')->as('task.')->group(function () {
-        //     Route::post('/create/{report}', [App\Http\Controllers\TaskController::class, 'store'])->name('store');
-        //     Route::post('/edit/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('update');
-        // });
-
         Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
     });
 
@@ -92,13 +87,11 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::get('/', [App\Http\Controllers\LaporanController::class,'index']);
-        // Route::view('/', 'laporan.index');
         Route::get('/mengikut-status-tindakan', [App\Http\Controllers\LaporanController::class, 'viewByStatus'])->name('view-by-status');
         Route::get('/mengikut-kategori', [App\Http\Controllers\LaporanController::class, 'viewByCategory'])->name('view-by-category');
         Route::get('/soal-selidik', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-rating');
         Route::get('/mengikut-user', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-user');
-        // Route::get('/mengikut-kategori', 'laporan.show_by_category');
-        // Route::get('/mengikut-bahagian', 'laporan.show_by_user');
+        Route::get('/mengikut-peranan', [App\Http\Controllers\LaporanController::class, 'viewByRole'])->name('view-by-role');
 
     });
 

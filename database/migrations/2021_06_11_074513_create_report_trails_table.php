@@ -18,6 +18,7 @@ class CreateReportTrailsTable extends Migration
             $table->text('message');
             $table->foreignId('report_id')->constrained();
             $table->foreignId('assigned_to_id')->nullable()->constrained('users');
+            $table->foreignId('assigned_to_role_id')->nullable()->constrained('roles');
             $table->foreignId('status_id')->constrained('_report_trail_statuses');
             $table->foreignId('updated_by_id')->constrained('users');
             $table->timestamps();

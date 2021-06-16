@@ -228,11 +228,13 @@ class ReportController extends Controller
     {
 
         $user = User::find($request->assigned_to_id);
+        $role = Role::where('name', $request->peranan)->first();
         $report->report_status_id = 4;
 
         $trail = new ReportTrail();
         $trail->message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . '</a> untuk disemak';
         $trail->assigned_to_id = $request->assigned_to_id;
+        $trail->assigned_to_role_id = $role->id;
         $trail->updated_by_id = Auth::user()->id;
         $trail->status_id = 4;
 

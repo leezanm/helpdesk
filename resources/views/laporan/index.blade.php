@@ -86,7 +86,7 @@
                     </tr>
                     <tr>
                         <td>4</td>
-                        <td class="text-start"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role">Jumlah Aduan Mengikut Peranan Pengguna</a></td>
+                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-role')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role">Jumlah Aduan Mengikut Peranan Pengguna</a></td>
                         <td class="text-center">
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role" class="btn btn-primary waves-effect waves-light">
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
