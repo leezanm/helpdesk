@@ -23,6 +23,11 @@ Route::as('api.')->group(function () {
     Route::post('get-user', [App\Http\Controllers\Api\UserController::class, 'show'])->name('get-user');
     Route::post('get-user-profile', [App\Http\Controllers\Api\UserController::class, 'getUserProfile'])->name('get-user-profile');
 
+    Route::prefix('aduan')->as('aduan.')->group(function () {
+        Route::post('/get-report/{report}', [App\Http\Controllers\Api\ReportController::class, 'show'])->name('get-report');
+        Route::post('/update-feedback/{report}', [App\Http\Controllers\Api\ReportController::class, 'updateFeedback'])->name('update-feedback');
+    });
+
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::post('/by-status', [App\Http\Controllers\LaporanController::class, 'laporanByStatusApi'])->name('by-status');
         Route::post('/by-category', [App\Http\Controllers\LaporanController::class, 'laporanByCategoryApi'])->name('by-category');

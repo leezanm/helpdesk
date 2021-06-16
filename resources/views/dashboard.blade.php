@@ -96,6 +96,10 @@
                     <div class="d-flex flex-wrap">
                         <h5 class="card-title me-2 mb-4">Tugasan Saya</h5>
                     </div>
+                @else
+                    <div class="d-flex flex-wrap">
+                        <h5 class="card-title me-2 mb-4">Aduan Saya</h5>
+                    </div>
                 @endcan
 
                 <div class="table-responsive">
@@ -120,7 +124,15 @@
                                     <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
                                     <td><span class="{{$report->status->class}}">{{$report->status->desc}}</span></td>
                                     <td>
-                                        <a href="{{route('aduan.show',$report->id)}}" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">Lihat</a>
+                                        @can('aduan.assignTask')
+                                            <a href="{{route('aduan.show',$report->id)}}" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">Lihat</a>
+                                        @else
+                                            <a class="btn btn-primary btn-sm btn-rounded waves-effect waves-light viewReport" data-url="{{route('api.aduan.get-report', $report->id)}}"  data-bs-target="#view_report_modal" role="button">Lihat</a>
+                                        @endcan
+
+                                        @if ($report->report_status_id == 4 && $report->reportBy->is(\Auth::user()))
+                                            <a class="btn btn-success btn-sm btn-rounded waves-effect waves-light updateFeedback" data-action="{{route('api.aduan.update-feedback', $report->id)}}" data-bs-toggle="modal" data-bs-target="#user_feedback" role="button">Selesai</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -434,4 +446,64 @@
             });
         </script>
     @endcan
+    <script>
+        $('.viewReport').on('click', function(){
+            var modal = $( $(this).data('bs-target') );
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'post',
+                success:function(response){
+                    if(response.success){
+                        report = response.report;
+                        pengadu = response.pengadu;
+
+                        for (var attribute in report) {
+                            $('#report-'+attribute).html(report[attribute])
+                        }
+
+                        for (var attribute in pengadu) {
+                            $('#report-user-'+attribute).html(pengadu[attribute])
+                        }
+                        modal.modal('show');
+                    }
+                },
+                error:function(error){
+                    console.log(error);
+                    swal.fire('Gagal', 'Gagal mendapatkan maklumat aduan. \n Sila lihat melalui modul senarai aduan', 'error');
+                }
+            })
+        });
+
+        $('.updateFeedback').on('click', function(){
+            var modal = $( $(this).data('bs-target') );
+            var form = modal.find('form');
+            var url = $(this).data('action');
+            form.attr('action', url);
+            console.log(form);
+        });
+
+        $('.submitFeedback').on('click', function(){
+            form = $(this).parents('form');
+            url = form.attr('action');
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    user_id:'{{Auth::user()->id}}',
+                    rating: form.find('input[name="rating"]').val(),
+                    feedback: form.find('textarea[name="feedback"]').val(),
+                },
+                success:function(response){
+                    if(response.success){
+                        window.location.reload();
+                    }
+                },
+                error:function(error){
+                    console.log(error);
+                }
+            });
+        })
+    </script>
 @endsection
