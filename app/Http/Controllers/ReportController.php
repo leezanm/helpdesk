@@ -14,6 +14,8 @@ use App\Models\ReportTrail;
 use App\Models\Task;
 use App\Models\User;
 use App\Notifications\ReportAssignedNotification;
+use App\Notifications\ReportDoneAdminNotification;
+use App\Notifications\ReportDoneReporterNotification;
 use App\Notifications\ReportReceivedAdminNotification;
 use App\Notifications\ReportSendNotification;
 use Exception;
@@ -171,12 +173,18 @@ class ReportController extends Controller
     public function update(UpdateRequest $request, Report $report)
     {
         //
+        $report->is_bp = $request->is_bp ;
         $report->report_by_id = Auth::user()->id;
         $report->remark = $request->remark;
         $report->subject = $request->subject;
         $report->report_status_id = $request->report_status_id;
         $report->report_category_id = $request->report_category_id;
         $report->submitted_at = $request->report_status_id == 2 ? now() : null;
+
+        if($report->is_bp){
+            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email'));
+        }
+
         $report->save();
 
         if(filled($request->attachment_paths)){
@@ -271,9 +279,14 @@ class ReportController extends Controller
         $report->save();
         $report->trails()->save($trail);
 
-        try{
 
-        } catch(Exception $e){}
+        $report_sent_notification = new ReportDoneReporterNotification($report);
+        $this->notifySingle(Auth::user(), $report_sent_notification);
+
+        $report_received_admin_notification = new ReportDoneAdminNotification($report);
+        $users = User::permission('aduan.assignTask')->get();
+        $this->notifyGroup($users, $report_received_admin_notification);
+
 
         return redirect()->back();
     }

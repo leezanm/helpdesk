@@ -169,7 +169,7 @@
                                     <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Teknologi</a></h5>
                                     <p class="text-muted mb-0">Dikemaskini :  24 Oct, 2020</p>
                                 </td>
-                                <td> 98</td>           
+                                <td> 98</td>
                             </tr>
                         </tbody>
                     </table>
@@ -179,12 +179,12 @@
     </div>
 </div>
 
-@hasrole('helpdesk.admin')
+@can('dashboard.viewChart')
     <div class="row">
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Jumlah Aduan Mengikut Kategori</h4>
+                    <h4 class="card-title mb-4">Jumlah Aduan Mengikut Kategori Minggu Ini</h4>
                     {{-- <div id="pie-chart" class="e-charts"></div>--}}
                     <div id="sektor" class="e-charts"></div>
                 </div>
@@ -193,7 +193,7 @@
         <div class="col-xl-8">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Jumlah Aduan Vs Aduan Selesai</h4>
+                    <h4 class="card-title mb-4">Jumlah Aduan Vs Aduan Selesai Minggu Ini</h4>
                     <div id="mix-line-bar" class="e-charts"></div>
                 </div>
             </div>
@@ -203,10 +203,10 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-3">Pecahan Aduan Mengikut Kategori Dan Status</h4>
+                    <h4 class="card-title mb-3">Pecahan Aduan Mengikut Kategori Dan Status Minggu Ini</h4>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0 table-nowrap">
-                            <thead class="table-secondary">
+                            <thead class="table-secondary text-center">
                                 <tr>
                                     <th>Kategori</th>
                                     <th>Dihantar</th>
@@ -215,55 +215,7 @@
                                     <th>Selesai</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="media align-items-center">
-                                            <div class="me-3">
-                                                <img src="https://www.lenovo.com/medias/ThinkBook-Plus-XXTBXTM8021-725x515.png?context=bWFzdGVyfHJvb3R8Mjc3NjYwfGltYWdlL3BuZ3xoNjcvaDc0LzExNTc0NDA3NTk0MDE0LnBuZ3w5NjNlM2JmYjNiMmY0Njc0MTIyM2NhM2M5MDBiNmQ0OTc2MGY4NGIyYmUyMTc4YmQ1N2NhNzA2ZjJkZDczNTQz" alt=""title="" class="avatar-sm h-auto d-block rounded" />
-                                            </div>
-                                            <div class="media-body overflow-hidden">
-                                                <h5 class="font-size-13 text-truncate"> KOMPUTER RIBA (NOTEBOOK)</h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>4</td>
-                                    <td>24</td>
-                                    <td>13</td>
-                                    <td>62</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="media align-items-center">
-                                            <div class="me-3">
-                                                <img src="https://www.lenovo.com/medias/lenovo-tower-thinkstation-p620-slim-hero.png?context=bWFzdGVyfHJvb3R8MTM2MzA1fGltYWdlL3BuZ3xoNTQvaDE0LzEwOTYxOTAxMTI1NjYyLnBuZ3xlMDFiYTlmNTRlMTM5M2ZiMGRmMzBjYjMwNGExOWNmMTg4Y2RkOTQwMGQwYjhhNDcwYzU1YzJhNTg0ZmMxM2M5" alt=""title="" class="avatar-sm h-auto d-block rounded" />
-                                            </div>
-                                            <div class="media-body overflow-hidden">
-                                                <h5 class="font-size-13 text-truncate"> KOMPUTER MEJA (DESKTOP)</h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>5</td>
-                                    <td>10</td>
-                                    <td>11</td>
-                                    <td>40</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="media align-items-center">
-                                            <div class="me-3">
-                                                <img src="https://image.shutterstock.com/image-vector/computers-peripherals-vector-icons-realistic-260nw-263177087.jpg" alt=""title="" class="avatar-sm h-auto d-block rounded" />
-                                            </div>
-                                            <div class="media-body overflow-hidden">
-                                                <h5 class="font-size-13 text-truncate"> PERALATAN KOMPUTER</h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>5</td>
-                                    <td>7</td>
-                                    <td>3</td>
-                                    <td>12</td>
-                                </tr>
+                            <tbody id="tbody-category_by_status" class="text-center">
                             </tbody>
                         </table>
                     </div>
@@ -271,145 +223,215 @@
             </div>
         </div>
     </div>
-@endhasrole
+@endcan
 
     @include('partials.modal.view_report')
     @include('partials.modal.feedback')
 @endsection
 
 @section('script')
-    <script type="text/javascript">
-        var dom = document.getElementById("sektor");
-        var myChart = echarts.init(dom);
-        var app = {};
-        var option;
-        option = {
-            // title: {
-            //     text: 'ss',
-            //     subtext: 'ss',
-            //     left: 'center'
-            // },
-            tooltip: {
-                trigger: 'item'
-            },
-            // legend: {
-            //     orient: 'vertical',
-            //     left: 'left',
-            // },
-            series: [
-                {
-                    // name: 'ss',
-                    type: 'pie',
-                    radius: '50%',
-                    data: [
-                        {value: 1048, name: 'Event'},
-                        {value: 735, name: 'Komputer Riba (Notebook)'},
-                        {value: 580, name: 'Komputer Meja (Desktop)'},
-                        {value: 484, name: 'Peralatan Komputer'},
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+    @can('dashboard.viewChart')
+        <script type="text/javascript">
+
+            var dom = document.getElementById("sektor");
+            var pieChart = echarts.init(dom);
+            var app = {};
+            var option;
+            var pieData = [];
+            option = {
+
+                tooltip: {
+                    trigger: 'item'
+                },
+
+                series: [
+                    {
+                        // name: 'ss',
+                        type: 'pie',
+                        radius: '50%',
+                        data:pieData,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
                         }
                     }
-                }
-            ]
-        };
+                ]
+            };
 
-        if (option && typeof option === 'object') {
-            myChart.setOption(option);
-        }
+            if (option && typeof option === 'object') {
+                pieChart.setOption(option);
+            }
 
-    </script>
-    <script>
-        dom=document.getElementById("mix-line-bar"),
-        myChart = echarts.init(dom);
-        option = null, (app = {}).title = "Data view", option = {
-            grid: {
-                zlevel: 0,
-                x: 80,
-                x2: 50,
-                y: 30,
-                y2: 30,
-                borderWidth: 0,
-                backgroundColor: "rgba(0,0,0,0)",
-                borderColor: "rgba(0,0,0,0)"
-            },
-            tooltip: {
-                trigger: "axis",
-                axisPointer: {
-                    type: "cross",
-                    crossStyle: {
-                        color: "#999"
+            $.ajax({
+                url:'{{route("api.dashboard.pie-chart")}}',
+                type:'post',
+                success: function(response){
+                    if(response.success){
+                        pieData = response.data;
+                        pieChart.setOption({
+                            series:[
+                                {
+                        // name: 'ss',
+                                    type: 'pie',
+                                    radius: '50%',
+                                    data:pieData,
+                                    // data: [
+                                    //     {value: 1048, name: 'Event'},
+                                    //     {value: 735, name: 'Komputer Riba (Notebook)'},
+                                    //     {value: 580, name: 'Komputer Meja (Desktop)'},
+                                    //     {value: 484, name: 'Peralatan Komputer'},
+                                    // ],
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        });
                     }
                 }
-            },
-            toolbox: {
-                orient: "center",
-                left: 0,
-                top: 20,
-                feature: {
-                    magicType: {
-                        type: ["line", "bar"],
-                        title: {
-                            line: "For line chart",
-                            bar: "For bar chart"
+            });
+
+        </script>
+        <script>
+            dom=document.getElementById("mix-line-bar"),
+            barChart = echarts.init(dom);
+            option = null, (app = {}).title = "Data view", option = {
+                grid: {
+                    zlevel: 0,
+                    x: 80,
+                    x2: 50,
+                    y: 30,
+                    y2: 30,
+                    borderWidth: 0,
+                    backgroundColor: "rgba(0,0,0,0)",
+                    borderColor: "rgba(0,0,0,0)"
+                },
+                tooltip: {
+                    trigger: "axis"
+                },
+                toolbox: {
+                    orient: "center",
+                    left: 0,
+                    top: 20,
+                    feature: {
+                        magicType: {
+                            type: ["line", "bar"],
+                            title: {
+                                line: "For line chart",
+                                bar: "For bar chart"
+                            }
+                        },
+                        saveAsImage: {
+                            title: "Download Image"
+                        }
+                    }
+                },
+                color: ["#34c38f", "#556ee6"],
+                legend: {
+                    data: ["Jumlah Aduan", "Aduan Selesai"],
+                    textStyle: {
+                        color: "#8791af"
+                    }
+                },
+                xAxis: [{
+                    type: "category",
+                    data: ["Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"],
+                    axisPointer: {
+                        type: "shadow"
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: "#8791af"
+                        }
+                    }
+                }],
+                yAxis: [{
+                    type: "value",
+                    name: "Bilangan Aduan",
+                    min: 0,
+                    interval: 50,
+                    axisLine: {
+                        lineStyle: {
+                            color: "#8791af"
                         }
                     },
-                    saveAsImage: {
-                        title: "Download Image"
+                    splitLine: {
+                        lineStyle: {
+                            color: "rgba(166, 176, 207, 0.1)"
+                        }
+                    },
+                    axisLabel: {
+                        formatter: "{value}"
+                    }
+                }],
+                series: [{
+                    name: "Jumlah Aduan",
+                    type: "bar",
+                    data: [10, 4, 7, 23, 25, 16, 15]
+                }, {
+                    name: "Aduan Selesai",
+                    type: "bar",
+                    data: [8, 4, 5, 20, 21, 16, 14]
+                }]
+            }, option && "object" == typeof option && barChart.setOption(option, !0);
+
+            $.ajax({
+                url:'{{route("api.dashboard.bar-chart")}}',
+                type:'post',
+                success: function(response){
+                    if(response.success){
+                        barChart.setOption({
+                                series: [{
+                                        name: "Jumlah Aduan",
+                                        type: "bar",
+                                        data: response.data.sent
+                                    }, {
+                                        name: "Aduan Selesai",
+                                        type: "bar",
+                                        data: response.data.completed
+                                    }]
+                            })
                     }
                 }
-            },
-            color: ["#34c38f", "#556ee6"],
-            legend: {
-                data: ["Jumlah Aduan", "Aduan Selesai"],
-                textStyle: {
-                    color: "#8791af"
-                }
-            },
-            xAxis: [{
-                type: "category",
-                data: ["Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"],
-                axisPointer: {
-                    type: "shadow"
-                },
-                axisLine: {
-                    lineStyle: {
-                        color: "#8791af"
+            });
+        </script>
+        <script>
+            $('#tbody-category_by_status').empty();
+            $.ajax({
+                url:'{{route("api.dashboard.category-table")}}',
+                type:'post',
+                success: function(response){
+                    if(response.success){
+                        var category_by_status = response.category_by_status;
+                        category_by_status.forEach(category => {
+                            row = '<tr>';
+                            row +=  '<td class="text-start">'+
+                                        '<div class="media align-items-center">'+
+                                            '<div class="me-3">'+
+                                                '<img src="'+category.image_path+'" alt=""title="" class="avatar-sm h-auto d-block rounded" />'+
+                                            '</div>'+
+                                            '<div class="media-body overflow-hidden">'+
+                                                '<h5 class="font-size-13 text-truncate"> '+category.desc+'</h5>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>';
+                            row += '<td>'+category.dihantar+'</td>';
+                            row += '<td>'+category.dihantar_ambil_maklum+'</td>';
+                            row += '<td>'+category.sedang_disemak+'</td>';
+                            row += '<td>'+category.selesai+'</td>';
+                            row += '</tr>';
+                            $('#tbody-category_by_status').append(row);
+                        });
                     }
                 }
-            }],
-            yAxis: [{
-                type: "value",
-                name: "Bilangan Aduan",
-                min: 0,
-                interval: 50,
-                axisLine: {
-                    lineStyle: {
-                        color: "#8791af"
-                    }
-                },
-                splitLine: {
-                    lineStyle: {
-                        color: "rgba(166, 176, 207, 0.1)"
-                    }
-                },
-                axisLabel: {
-                    formatter: "{value}"
-                }
-            }],
-            series: [{
-                name: "Jumlah Aduan",
-                type: "bar",
-                data: [10, 4, 7, 23, 25, 16, 15]
-            }, {
-                name: "Aduan Selesai",
-                type: "bar",
-                data: [8, 4, 5, 20, 21, 16, 14]
-            }]
-        }, option && "object" == typeof option && myChart.setOption(option, !0);
-    </script>
+            });
+        </script>
+    @endcan
 @endsection

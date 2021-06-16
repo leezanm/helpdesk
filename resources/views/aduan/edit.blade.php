@@ -28,17 +28,17 @@
                 <div class="card-body">
                     <h4 class="card-title">Maklumat Aduan</h4>
                     <p class="card-title-desc">Sila isi butiran tersebut</p>
-                    <form method="POST"> 
-                        @csrf                  
+                    <form method="POST">
+                        @csrf
                         <div class="row mb-3">
                             <div class="col-sm-2">
-                                <label for="rujukan">Bentuk Aduan</label>                                    
+                                <label for="rujukan">Bentuk Aduan</label>
                             </div>
                             <div class="col">
                                 <div class="row">
                                     <div class="col-xl-2 col-sm-4">
                                         <label class="card-radio-label">
-                                            <input type="radio" name="bentuk_aduan" id="individu" class="card-radio-input">
+                                            <input type="radio" name="is_bp" value="0" class="card-radio-input" @if($report->is_bp == 0) checked @endif>
                                             <div class="card-radio">
                                                 <i class="fas fa-user font-size-24 text-primary align-middle me-2"></i>
                                                 <span>Individu</span>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-xl-2 col-sm-4">
                                         <label class="card-radio-label">
-                                            <input type="radio" name="bentuk_aduan" id="wakil" class="card-radio-input" checked>
+                                            <input type="radio" name="is_bp" value="1" class="card-radio-input" @if(old('is_bp',$report->is_bp) == 1) checked @endif>
                                             <div class="card-radio">
                                                 <i class="fas fa-user-friends font-size-24 text-primary align-middle me-2"></i>
                                                 <span>Wakil</span>
@@ -59,42 +59,80 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-md-3 col-form-label">Nama Akaun Pengguna</label>
+                            <label class="col-md-2 col-form-label">Nama Pengadu</label>
                             <div class="col-md-4">
                                 <input type="text" class="form-control" value="{{$report->reportBy->username}}" disabled>
                             </div>
                         </div>
 
-                        <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-3 col-form-label">Subjek</label>
-                            <div class="col-md-9">
-                                <input class="form-control" type="text" name="subject" value="{{old('subject',$report->subject)}}">
+                        <div id="bagi-pihak-detail" class="collapse">
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Nama Akaun (AD) <span class="text-danger">*</span></label>
+                                <div class="col-md-4">
+                                    <input id="bp_username" name="bp_username" type="text" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Nama Penuh</label>
+                                <div class="col-md-10">
+                                    <input id="bp_name" name="bp_name" type="text" class="form-control"  readonly>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Email</label>
+                                <div class="col-md-4">
+                                    <input id="bp_email" name="bp_email" type="text" class="form-control"  readonly>
+                                </div>
+
+                                <label class="col-md-2 col-form-label">Bahagian</label>
+                                <div class="col-md-4">
+                                    <input id="bp_bahagian" name="bp_bahagian" type="text" class="form-control"  readonly>
+                                </div>
                             </div>
                         </div>
 
                         <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-3 col-form-label">Kategori Aduan</label>
+                            <label for="example-text-input" class="col-md-2 col-form-label">Kategori Aduan</label>
                             <div class="col-md-4">
                                 <select name="report_category_id" class="form-select">
                                     @foreach ($report_categories as $report_category)
                                         <option value="{{$report_category->id}}" @if(old('report_category_id', $report->report_category_id)) selected @endif>{{$report_category->desc}}</option>
                                     @endforeach
                                 </select>
+                                @error('report_category_id')
+                                    <p class="text-danger">{{$message}}</p>
+                                @enderror
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-sm">
-                                <div class="mb-3">
-                                    <label for="productdesc" class="mb-2">Butiran Aduan</label>
-                                    <textarea id="elm1" name="remark">{!! old('remark', $report->remark) !!}</textarea>
-                                </div>
+                        <div class="mt-3 mb-3 row">
+                            <label for="example-text-input" class="col-md-2 col-form-label">Subjek</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" name="subject" value="{{old('subject',$report->subject)}}">
+                                @error('subject')
+                                    <p class="text-danger">{{$message}}</p>
+                                @enderror
                             </div>
                         </div>
 
                         <div class="row mb-3">
+
+                            <label class="col-md-2 col-form-label">Butiran Aduan <span class="text-danger">*</span></label>
                             <div class="col">
-                                <label for="example-text-input" class="col-md-2 col-form-label">Muat Naik Laporan / Dokumen</label>
+                                <textarea id="elm1" name="remark">{!! old('remark', $report->remark) !!}</textarea>
+                                @error('remark')
+                                    <p class="text-danger">{{$message}}</p>
+                                @enderror
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="example-text-input" class="col-md-2 col-form-label">Muat Naik Laporan / Dokumen</label>
+                            <div class="col-md-10">
+
                                 <div action="#" class="dropzone" id="document-dropzone">
                                     <div class="fallback">
                                         <input name="file" type="file" multiple="multiple">
@@ -103,10 +141,11 @@
                                         <div class="mb-3">
                                             <i class="display-4 text-muted bx bxs-cloud-upload"></i>
                                         </div>
-                                        
+
                                         <h4>Drop files here or click to upload.</h4>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -122,7 +161,7 @@
                             {{-- <a href="{{url('aduan')}}" class="btn btn-primary waves-effect waves-light">Simpan</a>
                             <a href="{{url('aduan')}}" class="btn btn-success waves-effect waves-light">Hantar</a> --}}
                             <button type="submit" name="report_status_id" value="1" class="btn btn-secondary waves-effect waves-light">Draf</button>
-                            <button type="submit" name="report_status_id" value="2" class="btn btn-success waves-effect waves-light">Hantar</button> 
+                            <button type="submit" name="report_status_id" value="2" class="btn btn-success waves-effect waves-light">Hantar</button>
                         </div>
                     </form>
                 </div>
@@ -136,6 +175,44 @@
 @section('script')>
 {{-- <script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
+<script>
+    $('input[name="is_bp"]').on('change', function(){
+
+        if(this.value == '1'){
+            $('#bagi-pihak-detail').removeClass('collapse');
+        } else {
+            $('#bagi-pihak-detail').addClass('collapse');
+        }
+
+    });
+
+    $('#bp_username').on('change', function(){
+        var username = this.value;
+        console.log(username);
+        $.ajax({
+            url: "{{route('api.get-user')}}",
+            type: "post",
+            data: {
+                bp_username : username
+            },
+            success: function(response){
+                console.log(response);
+                if(response.success){
+                    $('#bp_name').val(response.bp_name);
+                    $('#bp_bahagian').val(response.bp_bahagian);
+                    $('#bp_email').val(response.bp_email);;
+                } else {;
+                    swal.fire('Gagal', response.message, 'error');
+                }
+            },
+            error: function(error){
+                console.log(error);
+            }
+        });
+    });
+
+    $('input[name="is_bp"]:checked').trigger('change');
+</script>
 <script>
   var uploadedDocumentMap = {}, uploadedDocumentType = {}, uploadedDocumentPath = {};
   Dropzone.options.documentDropzone = {

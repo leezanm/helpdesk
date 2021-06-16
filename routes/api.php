@@ -28,6 +28,12 @@ Route::as('api.')->group(function () {
         Route::post('/by-category', [App\Http\Controllers\LaporanController::class, 'laporanByCategoryApi'])->name('by-category');
         Route::post('/by-rating', [App\Http\Controllers\LaporanController::class, 'laporanByRatingApi'])->name('by-rating');
     });
+
+    Route::prefix('dashboard')->as('dashboard.')->group(function () {
+        Route::post('/pie-chart', [App\Http\Controllers\Api\DashboardController::class, 'pieChart'])->name('pie-chart');
+        Route::post('/bar-chart', [App\Http\Controllers\Api\DashboardController::class, 'barChart'])->name('bar-chart');
+        Route::post('/category-table', [App\Http\Controllers\Api\DashboardController::class, 'categoryTable'])->name('category-table');
+    });
 });
 
 

@@ -48,7 +48,7 @@ class ReportSendNotification extends Notification
                     ->line('Aduan anda berjaya dihantar')
                     ->line('Maklumat Aduan')
                     ->line('No Tiket : '. $report->ticket_no)
-                    ->action('Lihat', url('/'));
+                    ->action('Lihat', route('aduan.show', $report->id));
     }
 
     /**

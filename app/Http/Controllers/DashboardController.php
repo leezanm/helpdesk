@@ -14,9 +14,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $newUser = User::all()->count();
-        $mbiTotal = 0;
-        $fbiTotal = 0;
+        $newUser = \DB::table('reports')->count();
+        $mbiTotal = \DB::table('reports')->where('report_status_id', 5)->count();
+        $fbiTotal = \DB::table('reports')->where('report_status_id', 4)->count();
 
         $currentDay = Carbon::today();
         $currentMonth = Carbon::today()->month;
@@ -32,6 +32,7 @@ class DashboardController extends Controller
         $reports_query = Report::query();
 
         $user = Auth::user();
+
         if($user->hasPermissionTo('aduan.assignTask')){
             $reports_query->whereIn('report_status_id', [2,3]);
         } elseif($user->hasPermissionTo('aduan.updateTask')){

@@ -28,6 +28,10 @@ class UpdateRequest extends FormRequest
             'subject' => 'required',
             'report_category_id' => 'required|exists:report_categories,id',
             'remark' => 'required',
+            'bp_username' => 'required_if:is_bp,1',
+            'bp_name' => 'required_if:is_bp,1',
+            'bp_email' => 'required_if:is_bp,1',
+            'bp_bahagian' => 'required_if:is_bp,1',
         ];
     }
 }

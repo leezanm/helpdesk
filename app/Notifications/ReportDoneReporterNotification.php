@@ -16,9 +16,10 @@ class ReportDoneReporterNotification extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($report)
     {
         //
+        $this->report = $report;
     }
 
     /**
@@ -29,7 +30,7 @@ class ReportDoneReporterNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['mail'];
     }
 
     /**
@@ -40,10 +41,12 @@ class ReportDoneReporterNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $report = $this->report;
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        ->subject('KPLB Helpdesk - Maklum Balas Aduan Berjaya Dihantar')
+        ->greeting('Salam Sejahtera,')
+        ->line('Maklum balas bagi aduan bernombor '. $report->ticket_no. ' berjaya dihantar')
+        ->action('Lihat', route('aduan.show', $report->id));
     }
 
     /**

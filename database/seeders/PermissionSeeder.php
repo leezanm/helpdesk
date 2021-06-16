@@ -30,5 +30,6 @@ class PermissionSeeder extends Seeder
 
         Permission::create(['name' => 'manage.audit-trail', 'desc' => 'Lihat audit trail']);
         Permission::create(['name' => 'manage.backup', 'desc' => 'Backup database']);
+        Permission::create(['name' => 'dashboard.viewGraph', 'desc' => 'Lihat Statistik Aduan']);
     }
 }
