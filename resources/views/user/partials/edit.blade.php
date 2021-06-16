@@ -5,61 +5,94 @@
                 <h5 class="modal-title" id="myExtraLargeModalLabel">Maklumat Pengguna</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="#edit_user_modal_form" action="" method="post">
+            <form id="edit_user_modal_form" action="" method="post">
+                <input id="edit-user_id" type="hidden" name="user_id">
                 <div class="modal-body">
                     <div class="row mb-3">
-                        <div class="col"></div>
-                        <div class="col-2">
-                            <img id="edit-profile_path" alt="" class="avatar-lg h-auto d-block rounded ">
+                        <div class="col">
+                           <center> <img id="edit-profile_path" alt="" class="avatar-lg h-auto d-block rounded "></center>
                         </div>
-                        <div class="col"></div>
                     </div>
+
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <label class="col-form-label">Nama</label>
+                            <label class="col-form-label">Nama Penuh Pengguna</label>
                         </div>
                         <div class="col">
                             <input type="text" name="name" class="form-control">
+                            <p class="text-danger error-name error collapse"></p>
                         </div>
                     </div>
+
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            Jawatan
+                            <label class="col-form-label">Nama Pengguna (AD)</label>
                         </div>
                         <div class="col">
-                            <input type="text" name="designation" class="form-control">
+                            <input type="text" name="username" class="form-control" disabled>
+                            <p class="text-danger error-username error collapse"></p>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="col-form-label">Email</label>
+                        </div>
+                        <div class="col">
+                           <input type="text" class="form-control" name="email">
+                           <p class="text-danger error-email error collapse"></p>
                         </div>
                     </div>
+
                     <div class="row mb-3">
+
                         <div class="col-md-3">
-                            No Telefon
+                            <label class="col-form-label">No Telefon</label>
                         </div>
                         <div class="col">
                            <input type="text" class="form-control" name="tel_no">
+                           <p class="text-danger error-tel_no error collapse"></p>
                         </div>
-                    </div>
-                    <div class="row mb-3">
+
                         <div class="col-md-3">
-                            Tarikh Lahir
+                            <label class="col-form-label">No Kad Pengenalan</label>
                         </div>
                         <div class="col">
-                            <input type="date" class="form-control" name="dob">
+                            <input type="text" class="form-control" name="ic_no">
+                            <p class="text-danger error-ic_no error collapse"></p>
                         </div>
                     </div>
+
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            No Kad Pengenalan
+                            <label class="col-form-label">Jawatan</label>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control" name="identification">
+                            <input type="text" name="designation" class="form-control">
+                            <p class="text-danger error-designation error collapse"></p>
                         </div>
                     </div>
+
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            Alamat
+                            <label class="col-form-label">Alamat</label>
                         </div>
                         <div class="col">
                              <textarea  name="address" class="form-control" rows="5"> </textarea>
+                             <p class="text-danger error-address error collapse"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-2 col-form-label"> <b>Peranan:</b> </div>
+                        <div class="col">
+                            @foreach ($roles as $role)
+                                <div class="form-check">
+                                    <input class="form-check-input edit_role_check" name="roles[]" type="checkbox" id="edit_role_check-{{$role->id}}" value="{{$role->name}}">
+                                    <label class="form-check-label" for="edit_role_check-{{$role->id}}">
+                                        {{$role->desc}}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <p class="text-danger error-roles error collapse"></p>
                         </div>
                     </div>
 
@@ -67,9 +100,9 @@
                 <div class="modal-footer text-end">
                     <button type="reset" class="btn btn-secondary waves-effect waves-light"><i
                             class="bx bx-reset font-size-16 align-middle me-2"></i> Set Semula</button>
-                    <a href="#" class="btn btn-success waves-effect waves-light"
-                        onclick="Swal.fire('Berjaya','Maklumat Pengguna dikemaskini','success');"
-                        data-bs-dismiss="modal"><i class="bx bx-save font-size-16 align-middle me-2"></i> Hantar</a>
+                    <a href="#" class="btn btn-success waves-effect waves-light btnSubmit">
+                        <i class="bx bx-save font-size-16 align-middle me-2"></i> Hantar
+                    </a>
                 </div>
             </form>
         </div><!-- /.modal-content -->

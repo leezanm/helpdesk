@@ -86,11 +86,11 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="true">
                             @can('manage.admin')
-                                <li><a href="{{url('/pentadbir')}}" key="t-pegawai">Pentadbir Helpdesk</a></li>
+                                <li><a href="{{url('/pengguna/pentadbir')}}" key="t-pegawai">Pentadbir Helpdesk</a></li>
                             @endcan
                             @can('manage.user')
                                 <li><a href="{{url('/pengguna')}}" key="t-pengguna">Pengguna</a></li>
-                                <li><a href="{{url('/peg-teknikal')}}" key="t-pengguna">Peg. Teknikal</a></li>
+                                <li><a href="{{url('/pengguna/peg-teknikal')}}" key="t-pengguna">Peg. Teknikal</a></li>
                             @endcan
                         </ul>
                     </li>
@@ -103,26 +103,6 @@
                         </a>
                     </li>
                 @endcan
-
-                {{-- <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bx-receipt me-2"></i><span>Peranan</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{url('/peranan')}}" key="t-pegawai">Senarai</a></li>
-                        <li><a href="{{url('#')}}" key="t-pengguna">Tambah</a></li>
-                    </ul>
-                </li> --}}
-
-                {{-- <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bx-windows me-2"></i><span>Pengurusan Hebahan</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{url('#')}}" key="t-pegawai">Slider</a></li>
-                        <li><a href="{{url('/pengumuman')}}" key="t-pengguna">Pengumuman</a></li>
-                    </ul>
-                </li> --}}
 
                 @canany(['manage.audit-trail', 'manage.backup'])
                     <li class="menu-title" key="t-pentadbiran">Tetapan</li>

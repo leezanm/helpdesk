@@ -23,9 +23,8 @@ class User extends Authenticatable
         'email',
         'password',
         'designation',
-        'dob',
         'tel_no',
-        'identification',
+        'ic_no',
         'address',
         'profile_path',
     ];

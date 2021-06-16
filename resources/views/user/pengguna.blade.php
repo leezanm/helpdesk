@@ -67,12 +67,13 @@
                             @endif
                         </th>
                         <td class="text-center">
-                            {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Papar Dokumen" data-bs-toggle="modal" data-bs-target="#show"> <i class="mdi mdi-eye align-middle"></i></a>
-                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"  title="Kemaskini Dokumen" data-bs-toggle="modal" data-bs-target="#edit"> <i class="bx bxs-pen align-middle"></i></a> --}}
-                            {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deletedokumen"  title="Padam Dokumen"> <i class="bx bxs-trash align-middle"></i></a> --}}
+                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-info" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
                             <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('user.editUser', $user->id)}}" data-update="{{route('user.updateUser', $user->id)}}" data-modal="#edit_user_modal" > <i class="bx bxs-pen"></i></a>
-                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('user.destroy', $user->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
+                            @if ($user->is_active)
+                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('user.destroy', $user->id)}}" onclick="delRow(this)"> <i class="bx bx-lock"></i></a>
+                            @else
+                                <a href="{{route('user.restore', $user->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-success"> <i class="bx bx-lock-open"></i></a>
+                            @endif
 
                         </td>
                     </tr>
@@ -99,6 +100,7 @@
         $('textarea').removeClass('is-invalid');
         $('input').removeClass('is-invalid');
         $('.error').addClass('collapse');
+        $('.error').html('');
     }
     function clearStatus(){
         $('#show-is_active').removeClass('bg-success')
@@ -116,8 +118,6 @@
         // formData.append('address', tinymce.get('address').getContent());
         formData.append('_token', '{{csrf_token()}}')
         clearError(formId);
-        console.log(formData.get('designation'))
-        console.log(form.serialize());
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
@@ -138,8 +138,8 @@
                         $(formId + ' input[name="'+key+'"]').addClass('is-invalid');
                         $(formId + ' textarea[name="'+key+'"]').addClass('is-invalid');
                         $(formId + ' select[name="'+key+'"]').addClass('is-invalid');
-                        $(formId + ' #error-'+key).html(error[0]);
-                        $(formId + ' #error-'+key).removeClass('collapse');
+                        $(formId + ' .error-'+key).html(error[0]);
+                        $(formId + ' .error-'+key).removeClass('collapse');
                     })
                 }
             }
@@ -187,31 +187,35 @@
         currentRow = $(row);
         modalId = currentRow.attr('data-modal');
         form = $(modalId + ' form');
-        // console.log(modalId);
         form.attr('action', currentRow.attr('data-update'));
-        // formId = '#' + form.attr('id');
-        // console.log(form.attr('id'));
+
         clearError(form.attr('action'));
+
+        $('.edit_role_check').prop('checked', false);
+
         $.ajax({
             url : currentRow.attr('data-edit'),
             method : 'get',
             success : function(response){
                 data = response.data;
+                user_roles = response.user_roles;
                 if(response.success){
-                    // form.find('input[name="dob"]').val()
+
                     for (var property in data) {
                         form.find('input[name="' + property + '"]').val(data[property]);
                         form.find('select[name="' + property + '"]').val(data[property]);
                         form.find('select[name="' + property + '"]').trigger('change');
                         form.find('textarea[name="' + property + '"]').html(data[property]);
+
                     }
+
+                    user_roles.forEach(user_role => {
+                        form.find('#edit_role_check-'+user_role.id).prop('checked',true);
+                    });
+
                     $('#edit-profile_path').attr('src', (response.data['profile_picture']));
-                    // $(form.attr('id') + ' input[name="name"]').val(response.data['name']);
-                    // $(form.attr('id') + ' input[name="identification"]').val(response.data['identification']);
-                    // $(form.attr('id') + ' input[name="dob"]').val(response.data['dob']);
-                    // $(form.attr('id') + ' input[name="designation"]').val(response.data['designation']);
-                    // $(form.attr('id') + ' input[name="tel_no"]').val(response.data['tel_no']);
-                    // $(form.attr('id') + ' textarea[name="address"]').html(response.data['address']);
+                    $('#edit-user_id').val(data.id);
+
                     $(modalId).modal('show');
                 }
             },

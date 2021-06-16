@@ -14,8 +14,24 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::all();
-        $roles = Role::all()->except(6);
+        $users = User::role('pengguna')->orderBy('name', 'asc')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->get();
+        return view('user.pengguna', compact('users', 'roles'));
+    }
+
+    public function indexPegTeknikal()
+    {
+        //
+        $users = User::permission('aduan.updateTask')->orderBy('name', 'asc')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->get();
+        return view('user.pengguna', compact('users', 'roles'));
+    }
+
+    public function indexPentadbir()
+    {
+        //
+        $users = User::permission('manage.user')->orderBy('name', 'asc')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->get();
         return view('user.pengguna', compact('users', 'roles'));
     }
 
@@ -66,9 +82,10 @@ class UserController extends Controller
             'email' => 'required|email',
             'designation' => 'required',
             'tel_no' => 'required',
-            'dob' => 'required|date',
             'ic_no' => 'required',
-            'address' => 'required'
+            'address' => 'required',
+            'roles' => 'required',
+            'roles.*' => 'required|exists:roles,name'
         ]);
 
         $user = new User();
@@ -83,6 +100,8 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        $user->syncRoles($request->roles);
 
         return response()->json(['success'=>true]);
     }
@@ -99,9 +118,11 @@ class UserController extends Controller
 
     public function editUser(User $user)
     {
+        $user_roles = $user->roles;
         $datas = [
             'success' => true,
-            'data' => $user->append('profile_picture')
+            'data' => $user->append('profile_picture'),
+            'user_roles' => $user_roles
         ];
 
         return response()->json($datas);
@@ -114,13 +135,16 @@ class UserController extends Controller
             'name' => 'required',
             'designation' => 'required',
             'tel_no' => 'required',
-            'dob' => 'required',
-            'identification' => 'required',
-            'address' => 'required'
+            'ic_no' => 'nullable|unique:users,ic_no,'.$request->user_id,
+            'address' => 'required',
+            'roles' => 'required',
+            'roles.*' => 'required|exists:roles,name'
         ]);
 
         $user = $user->fill($request->except('_token'));
         $user->save();
+        $user->syncRoles($request->roles);
+
         $datas = [
             'success' => true,
             'data' => $user
@@ -135,5 +159,13 @@ class UserController extends Controller
         $user->save();
 
         return response()->json(['success' => true]);
+    }
+
+    public function restore(User $user)
+    {
+        $user->is_active = true;
+        $user->save();
+
+        return redirect()->back();
     }
 }

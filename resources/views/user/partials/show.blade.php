@@ -29,10 +29,6 @@
                                 <td id="show-tel_no"></td>
                             </tr>
                             <tr>
-                                <th>Tarikh Lahir</th>
-                                <td id="show-dob"></td>
-                            </tr>
-                            <tr>
                                 <th>Kad Pengenalan</th>
                                 <td id="show-ic_no"></td>
                             </tr>

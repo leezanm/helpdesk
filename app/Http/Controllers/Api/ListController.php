@@ -13,7 +13,7 @@ class ListController extends Controller
 
     public function getUsersByRole(Request $request){
 
-        $users = User::role($request->role_name)->get();
+        $users = User::role($request->role_name)->where('is_active', true)->get();
         $datas = [
             'success' => true,
             'users' => $users

@@ -13,6 +13,7 @@
                         <div class="col-2 col-form-label"><b>Gambar :</b> </div>
                         <div class="col">
                             <input type="file" name="profile_path" class="form-control">
+                            <p class="text-danger error-profile_path error collapse"></p>
                         </div>
                     </div>
 
@@ -20,6 +21,7 @@
                         <div class="col-2 col-form-label"> <b>Nama Penuh Pengguna :</b> </div>
                         <div class="col">
                             <input type="text" name="name" class="form-control">
+                            <p class="text-danger error-name error collapse"></p>
                         </div>
                     </div>
 
@@ -27,17 +29,12 @@
                         <div class="col-2 col-form-label"> <b>Nama Pengguna (AD):</b> </div>
                         <div class="col">
                             <input type="text" name="username" class="form-control">
+                            <p class="text-danger error-username error collapse"></p>
                         </div>
-                    </div>
-
-                    <div class="row mb-3">
                         <div class="col-2 col-form-label"><b>Emel :</b> </div>
                         <div class="col">
                             <input type="text" name="email" class="form-control">
-                        </div>
-                        <div class="col-2 col-form-label"> <b>Jawatan :</b> </div>
-                        <div class="col">
-                            <input type="text" name="designation" class="form-control">
+                            <p class="text-danger error-email error collapse"></p>
                         </div>
                     </div>
 
@@ -45,14 +42,22 @@
                         <div class="col-2 col-form-label"> <b>No telefon :</b> </div>
                         <div class="col">
                             <input type="text" name="tel_no" class="form-control">
+                            <p class="text-danger error-tel_no error collapse"></p>
                         </div>
-                        <div class="col-2 col-form-label"> <b>Tarikh Lahir :</b> </div>
-                        <div class="col">
-                            <input type="date" name="dob" class="form-control">
-                        </div>
+
                         <div class="col-2 col-form-label"> <b>Kad pengenalan :</b> </div>
                         <div class="col">
                             <input type="text" name="ic_no" class="form-control">
+                            <p class="text-danger error-ic_no error collapse"></p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+
+                        <div class="col-2 col-form-label"> <b>Jawatan :</b> </div>
+                        <div class="col">
+                            <input type="text" name="designation" class="form-control">
+                            <p class="text-danger error-designation error collapse"></p>
                         </div>
                     </div>
 
@@ -60,17 +65,22 @@
                         <div class="col-2 col-form-label"> <b>Alamat Pengguna :</b> </div>
                         <div class="col">
                             <textarea name="address" class="form-control" rows="5"></textarea>
+                            <p class="text-danger error-address error collapse"></p>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-2 col-form-label"> <b>Peranan:</b> </div>
                         <div class="col">
-                            <select name="role_id" class="form-select">
-                                @foreach ($roles as $role)
-                                    <option value="{{$role->id}}">{{$role->desc}}</option>
-                                @endforeach
-                            </select>
+                            @foreach ($roles as $role)
+                                <div class="form-check">
+                                    <input class="form-check-input" name="roles[]" type="checkbox" id="role_check-{{$role->id}}" value="{{$role->name}}" @if($role->name == 'pengguna') checked @endif>
+                                    <label class="form-check-label" for="role_check-{{$role->id}}">
+                                        {{$role->desc}}
+                                    </label>
+                                </div>
+                            @endforeach
+                            <p class="text-danger error-roles error collapse"></p>
                         </div>
                     </div>
 

@@ -76,7 +76,6 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     });
 
     // Route::view('/pengguna', 'superadmin.pengguna');
-    Route::view('/pentadbir', 'superadmin.pentadbir');
 
     Route::prefix('pengguna')->as('user.')->group(function(){
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
@@ -85,8 +84,11 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/edit/{user}', [App\Http\Controllers\UserController::class, 'editUser'])->name('editUser');
         Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
         Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
+        Route::get('/restore/{user}', [App\Http\Controllers\UserController::class, 'restore'])->name('restore');
+        Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('index');
+        Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('index');
     });
-    Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'index'])->name('index');
+
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
         Route::get('/', [App\Http\Controllers\LaporanController::class,'index']);
