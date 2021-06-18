@@ -138,9 +138,19 @@
                                 {{convertDateFormat($report->completed_at, 'd F Y, g:i A')}}
                             </td>
                             <td>
-                                <div class="rating-star">
+                                @php
+                                    if($report->rating >= 4){
+                                        $rating_color = 'bg-success';
+                                    } elseif ($report->rating > 2) {
+                                        $rating_color = 'bg-warning';
+                                    } else{
+                                        $rating_color = 'bg-danger';
+                                    }
+                                @endphp
+                                <span class="badge {{$rating_color}} font-size-13">{{$report->rating}}</span>
+                                {{-- <div class="rating-star">
                                     <input type="hidden" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted" value="{{$report->rating}}" disabled />
-                                </div>
+                                </div> --}}
                             </td>
                             <td class="text-center">
                                 <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">

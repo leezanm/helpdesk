@@ -6,18 +6,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <label class="col-form-label">Bahagian</label>
-                    </div>
-                    <div class="col-md-5">
-                        <select class="form-select">
-                            <option value="">Semua Bahagian</option>
-                            <option value="">Divisyen 1</option>
-                            <option value="">Divisyen 2</option>
-                        </select>
-                    </div>
-                </div>
+
                 <div class="row justify-content-md-center">
                     <div class="col-md-8">
                         <table class="table table-bordered">

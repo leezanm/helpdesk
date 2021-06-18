@@ -75,7 +75,7 @@
                             </a>
                         </td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td>3</td>
                         <td class="text-start"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_user">Jumlah Aduan Mengikut Pengguna dan Bahagian</a></td>
                         <td class="text-center">
@@ -83,9 +83,9 @@
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
                             </a>
                         </td>
-                    </tr>
+                    </tr> --}}
                     <tr>
-                        <td>4</td>
+                        <td>3</td>
                         <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-role')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role">Jumlah Aduan Mengikut Peranan Pengguna</a></td>
                         <td class="text-center">
                             <a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role" class="btn btn-primary waves-effect waves-light">
@@ -94,7 +94,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>5</td>
+                        <td>4</td>
                         <td class="text-start"><a href="#" id="rating" data-url="{{route('api.laporan.by-rating')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_soal_selidik">Laporan Soal Selidik</a></td>
                         <td class="text-center">
                             <a href="{{route('laporan.view-by-rating')}}" class="btn btn-primary waves-effect waves-light">
@@ -137,8 +137,8 @@
                     var total = 0;
                     laporan.forEach(status => {
                         tr = '<tr>';
-                        tr += '<td>'+status.desc+'</td>';
-                        tr += '<td><a href="'+response.url+'" role="button">'+status.jumlah+'</a></td>';
+                        tr += '<td><a href="'+status.url+'" role="button">'+status.desc+'</a></td>';
+                        tr += '<td>'+status.jumlah+'</td>';
                         tr += '</tr>';
                         body += tr;
                         total += status.jumlah;
