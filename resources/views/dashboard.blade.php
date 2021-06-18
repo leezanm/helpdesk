@@ -84,7 +84,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 col-md-8">
+    <div class="col-sm-12 col-md-12">
         <div class="card">
             <div class="card-body">
 
@@ -143,7 +143,7 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    {{-- <div class="col-sm-12 col-md-4">
         <div class="card" style="max-height: 30rem;">
             <div class="card-body">
                 <div class="d-flex">
@@ -188,7 +188,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 @can('dashboard.viewGraph')
