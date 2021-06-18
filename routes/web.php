@@ -70,6 +70,12 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/destroy/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'destroy'])->name('destroy');
     });
 
+    Route::prefix('status')->as('status.')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReportStatusController::class, 'index'])->name('index');
+        Route::post('/edit/{reportStatus}', [App\Http\Controllers\ReportStatusController::class, 'edit'])->name('edit');
+        Route::post('/update/{reportStatus}', [App\Http\Controllers\ReportStatusController::class, 'update'])->name('update');
+    });
+
     // Route::view('/pengguna', 'superadmin.pengguna');
 
     Route::prefix('pengguna')->as('user.')->group(function(){

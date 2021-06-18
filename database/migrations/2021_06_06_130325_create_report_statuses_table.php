@@ -16,6 +16,7 @@ class CreateReportStatusesTable extends Migration
         Schema::create('_report_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('desc');
+            $table->string('reference');
             $table->string('class');
             $table->timestamps();
             $table->softDeletes();

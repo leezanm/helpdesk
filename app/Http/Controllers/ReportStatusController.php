@@ -15,6 +15,8 @@ class ReportStatusController extends Controller
     public function index()
     {
         //
+        $report_statuses = ReportStatus::orderBy('id')->get();
+        return view('status.index', compact('report_statuses'));
     }
 
     /**
@@ -58,6 +60,13 @@ class ReportStatusController extends Controller
     public function edit(ReportStatus $reportStatus)
     {
         //
+        $datas = [
+            'success' => true,
+            'object' => $reportStatus
+        ];
+
+        return response()->json($datas);
+
     }
 
     /**
@@ -70,6 +79,14 @@ class ReportStatusController extends Controller
     public function update(Request $request, ReportStatus $reportStatus)
     {
         //
+        $reportStatus->desc = $request->desc;
+        $reportStatus->save();
+
+        $datas = [
+            'success' => true
+        ];
+
+        return response()->json($datas);
     }
 
     /**
