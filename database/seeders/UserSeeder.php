@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
             'name' => 'Fatin',
             'email' => 'fatin@gmail.com',
             'username' => 'fatin',
-            'password' => Hash::make('pass1234')
+            'password' => Hash::make('pass1234'),
+            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('pengguna');
 
@@ -28,7 +29,8 @@ class UserSeeder extends Seeder
             'name' => 'Farhan',
             'email' => 'farhan@gmail.com',
             'username' => 'farhan',
-            'password' => Hash::make('pass1234')
+            'password' => Hash::make('pass1234'),
+            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('helpdesk.admin');
 
@@ -36,7 +38,8 @@ class UserSeeder extends Seeder
             'name' => 'Hazim',
             'email' => 'hazim@gmail.com',
             'username' => 'hazim',
-            'password' => Hash::make('pass1234')
+            'password' => Hash::make('pass1234'),
+            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('jtk');
 
@@ -44,7 +47,8 @@ class UserSeeder extends Seeder
             'name' => 'Syamil',
             'email' => 'syamil@gmail.com',
             'username' => 'syamil',
-            'password' => Hash::make('pass1234')
+            'password' => Hash::make('pass1234'),
+            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('pptm');
 
@@ -52,7 +56,8 @@ class UserSeeder extends Seeder
             'name' => 'Syahmi',
             'email' => 'syahmi@gmail.com',
             'username' => 'syahmi',
-            'password' => Hash::make('pass1234')
+            'password' => Hash::make('pass1234'),
+            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('ptm');
 
@@ -60,7 +65,8 @@ class UserSeeder extends Seeder
             'name' => 'arham',
             'email' => 'arham@gmail.com',
             'username' => 'arham',
-            'password' => Hash::make('pass1234')
+            'password' => Hash::make('pass1234'),
+            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('superadmin');
 

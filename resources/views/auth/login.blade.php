@@ -49,9 +49,9 @@
                             <button class="btn btn-primary waves-effect waves-light" type="submit">Log Masuk</button>
                         </div>
 
-                        <div class="mt-4 text-center">
+                        {{-- <div class="mt-4 text-center">
                             <a href="{{url('/forgot-password-out')}}" class="text-muted"><i class="mdi mdi-lock me-1"></i> Terlupa Kata Laluan?</a>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>

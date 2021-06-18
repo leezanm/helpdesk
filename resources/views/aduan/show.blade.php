@@ -98,8 +98,7 @@
             <thead>
                 <th>#</th>
                 <th>Fail</th>
-                <th>Jenis</th>
-                <th></th>
+                <th width="20%">Jenis</th>
             </thead>
             <tbody>
                 @foreach ($attachments as $attachment)
@@ -107,7 +106,6 @@
                         <td>{{$loop->iteration}}</td>
                         <td><a href="{{$attachment->file_url}}" target="_blank">{{$attachment->name}}</a></td>
                         <td>{{$attachment->type}}</td>
-                        <td></td>
                     </tr>
                 @endforeach
             </tbody>
@@ -130,7 +128,7 @@
                             <select name="tindakan" class="form-select">
                                 <option value="">Sila Pilih</option>
                                 <option value="1" @if(old('tindakan') == '1') selected @endif>Majukan Kepada</option>
-                
+
                                 {{-- @if ($report->report_status_id == 4 )
                                     <option value="2">Selesai</option>
                                 @endif --}}
@@ -184,7 +182,7 @@
         {{-- @isset($current_task)
             @can('aduan.updateTask')
                 @if (in_array($current_task->task_status_id, [1,2]) && $current_task->assignedTo->is(\Auth::user()) )
-                    <form action="{{route('aduan.task.update', $current_task->id)}}" method="POST"> 
+                    <form action="{{route('aduan.task.update', $current_task->id)}}" method="POST">
                         @csrf
 
                         <div class="row mb-3">
@@ -228,7 +226,7 @@
         @endisset --}}
 
         @if($report->reportBy->is(\Auth::user()) && $report->report_status_id == 4 )
-            <form action="{{route('aduan.update-feedback', $report->id)}}" method="POST"> 
+            <form action="{{route('aduan.update-feedback', $report->id)}}" method="POST">
                 @csrf
 
                 <legend class="text-uppercase h5">Soal Selidik</legend>
@@ -262,7 +260,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </form>
         @endif
 
@@ -338,7 +336,7 @@
                 $('#assigned_to_id').prop('disabled', true);
                 $('#peg_teknikal_selections').addClass('collapse');
             }
-            
+
         })
 
         $('#majukan_kepada_peranan').on('change', function(){
@@ -351,17 +349,17 @@
                         role_name : role_name
                     },
                     function(response){
-                        
+
                         if(response.success){
                             option = '<option value="">Sila Pilih</option>';
                             response.users.forEach(user => {
                                 option += '<option value="'+ user.id +'">'+ user.name +'</option>';
                             });
-                            
+
                             $('#assigned_to_id').append(option);
                             $('#assigned_to_id').prop('disabled', false);
                             $('#peg_teknikal_selections').removeClass('collapse');
-                        } 
+                        }
                     }
                 )
             } else {

@@ -65,12 +65,16 @@ class UserController extends Controller
     public function passwordUpdate(Request $request,User $user){
         $request->validate([
             'old_password' => 'required|password',
-            'new_password' => 'required|confirmed',
-            'new_password_confirmation' => 'required',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
         ]);
         $user->update(['password' => Hash::make($request->new_password)]);
         Auth::logout();
-        return redirect('/');
+
+        $datas = [
+            'success' => true
+        ];
+        return response()->json($datas);
     }
 
     public function storeUser(Request $request)

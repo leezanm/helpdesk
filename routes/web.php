@@ -52,14 +52,14 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index'])->middleware('can:manage.audit-trail');
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
 
-    Route::prefix('division')->as('division.')->group(function () {
-        Route::get('/', [App\Http\Controllers\DivisionController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\DivisionController::class, 'store'])->name('store');
-        Route::get('/show/{division}', [App\Http\Controllers\DivisionController::class, 'show'])->name('show');
-        Route::get('/edit/{division}', [App\Http\Controllers\DivisionController::class, 'edit'])->name('edit');
-        Route::post('/update/{division}', [App\Http\Controllers\DivisionController::class, 'update'])->name('update');
-        Route::post('/destroy/{division}', [App\Http\Controllers\DivisionController::class, 'destroy'])->name('destroy');
-    });
+    // Route::prefix('department')->as('department.')->group(function () {
+    //     Route::get('/', [App\Http\Controllers\DepartmentController::class, 'index'])->name('index');
+    //     Route::post('/create', [App\Http\Controllers\DepartmentController::class, 'store'])->name('store');
+    //     Route::get('/show/{department}', [App\Http\Controllers\DepartmentController::class, 'show'])->name('show');
+    //     Route::get('/edit/{department}', [App\Http\Controllers\DepartmentController::class, 'edit'])->name('edit');
+    //     Route::post('/update/{department}', [App\Http\Controllers\DepartmentController::class, 'update'])->name('update');
+    //     Route::post('/destroy/{department}', [App\Http\Controllers\DepartmentController::class, 'destroy'])->name('destroy');
+    // });
 
     Route::prefix('kategori')->as('category.')->group(function () {
         Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
@@ -90,7 +90,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/mengikut-status-tindakan', [App\Http\Controllers\LaporanController::class, 'viewByStatus'])->name('view-by-status');
         Route::get('/mengikut-kategori', [App\Http\Controllers\LaporanController::class, 'viewByCategory'])->name('view-by-category');
         Route::get('/soal-selidik', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-rating');
-        Route::get('/mengikut-user', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-user');
+        Route::get('/mengikut-user', [App\Http\Controllers\LaporanController::class, 'viewByUser'])->name('view-by-user');
         Route::get('/mengikut-peranan', [App\Http\Controllers\LaporanController::class, 'viewByRole'])->name('view-by-role');
 
     });
@@ -109,9 +109,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
 
     Route::prefix('account')->group(function () {
         Route::get('profile/{user}', [App\Http\Controllers\UserController::class, 'edit'])->name('account.profile.show');
-        Route::get('profile/edit/{user}', [App\Http\Controllers\UserController::class, 'edit'])->name('account.profile.edit');
         Route::post('profile/edit/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('account.profile.update');
-        Route::get('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordEdit'])->name('account.password.edit');
         Route::post('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordUpdate'])->name('account.password.update');
     });
 

@@ -69,9 +69,6 @@
                         <i class="bx bx-cog me-2"></i><span>Selenggaraan</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        @can('manage.division')
-                            <li><a href="{{route('division.index')}}" key="t-division">Bahagian</a></li>
-                        @endcan
                         @can('manage.category')
                             <li><a href="{{route('category.index')}}" key="t-category">Kategori Aduan</a></li>
                         @endcan

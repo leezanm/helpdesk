@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Report;
+use App\Models\ReportTrail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -154,6 +155,55 @@ class LaporanController extends Controller
                             ->orderBy('submitted_at', 'desc')->get();
 
         return view('laporan.show_by_role', compact('laporans', 'reports' , 'from', 'to', 'title', 'peranan'));
+    }
+
+    public function viewByUser(Request $request){
+
+        $from = $request->from;
+        $to = $request->to;
+        $username = $request->username;
+        $department = $request->department;
+
+        $role_ids = Role::whereHas('permissions', function($query){
+                                $query->where('name', 'aduan.updateTask');
+                            })
+                            ->pluck('id', 'id')->forget(6);
+                            // return $role_ids;
+        $laporans = \DB::table('users')
+                    ->leftJoin('report_trails', 'users.id', '=', 'report_trails.assigned_to_id')
+                    ->select('name', 'username')
+                    ->selectRaw('count(report_trails.id) as jumlah')
+                    ->whereExists(function($query) use ($role_ids){
+                        $query->select('*')
+                              ->from('model_has_roles')
+                              ->where('model_type', 'App\\Models\\User')
+                              ->whereIn('role_id', $role_ids)
+                              ->whereColumn('model_id', 'users.id');
+                    })
+                    ->when(filled($username), function($query) use($username){
+                        $query->where('username', $username);
+                    })
+                    ->when(filled($department), function($query) use($department){
+                        $query->where('ldap_bahagian', $department);
+                    })
+                    ->groupBy('name', 'username')
+                    ->orderBy('name', 'asc')
+                    ->get();
+
+        $report_trails = ReportTrail::join('reports', 'reports.id', '=', 'report_trails.report_id')
+                        ->when(filled($username) || filled($department), function($query) use($username, $department){
+                            $query->whereExists(function($subQuery) use ($username, $department){
+                                $subQuery->select(\DB::raw(1))
+                                            ->from('users')
+                                            ->whereColumn('users.id', 'report_trails.assigned_to_id')
+                                            ->whereRaw('if(?,username = ?, true) and if(?,ldap_bahagian = ?, true)',[filled($username), $username, filled($department), $department]);
+                            });
+                        })
+                        ->whereNotNull('assigned_to_id')
+                        ->get();
+        $departments = \DB::table('users')->whereNotNull('ldap_bahagian')->distinct()->pluck('ldap_bahagian');
+
+        return view('laporan.show_by_user', compact('laporans', 'report_trails' , 'from', 'to', 'departments', 'username', 'department'));
     }
 
 

@@ -13,13 +13,13 @@ class CreateDivisionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('divisions', function (Blueprint $table) {
-            $table->id();
-            $table->string('desc');
-            $table->foreignId('department_id')->constrained();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        // Schema::create('divisions', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('desc');
+        //     $table->foreignId('department_id')->constrained();
+        //     $table->timestamps();
+        //     $table->softDeletes();
+        // });
     }
 
     /**
@@ -29,6 +29,6 @@ class CreateDivisionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('divisions');
+        // Schema::dropIfExists('divisions');
     }
 }

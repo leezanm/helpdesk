@@ -318,7 +318,6 @@
                     processData: false,
                     contentType: false,
                     success: function(response) {
-                        console.log(response);
                         if (response.success) {
                             // resetForm(formId);
                             window.location.reload();

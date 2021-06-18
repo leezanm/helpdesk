@@ -386,11 +386,11 @@
                 series: [{
                     name: "Jumlah Aduan",
                     type: "bar",
-                    data: [10, 4, 7, 23, 25, 16, 15]
+                    data: []
                 }, {
                     name: "Aduan Selesai",
                     type: "bar",
-                    data: [8, 4, 5, 20, 21, 16, 14]
+                    data: []
                 }]
             }, option && "object" == typeof option && barChart.setOption(option, !0);
 
