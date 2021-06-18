@@ -16,33 +16,12 @@
                             <tbody class="text-center align-middle laporanTbody">
 
                             </tbody>
-                            {{-- <tbody class="text-center align-middle">
-                                <tr>
-                                    <td class="text-start">Dihantar</td>
-                                    <td><a href="/laporan/mengikut-status-tindakan">16</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-start">Dihantar (Ambil Maklum)</td>
-                                    <td><a href="/laporan/mengikut-status-tindakan">2</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-start">Dalam Tindakan</td>
-                                    <td><a href="/laporan/mengikut-status-tindakan">2</a></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-start">Selesai</td>
-                                    <td><a href="/laporan/mengikut-status-tindakan">600</a></td>
-                                </tr>
-                            </tbody> --}}
+
                             <tfoot class="text-center align-middle">
                                 <tr>
                                     <th>Jumlah</th>
-                                    <th class="laporanTotal"></th>
+                                    <th class="laporanTotal">0</th>
                                 </tr>
-                                {{-- <tr>
-                                    <th>Prestasi</th>
-                                    <th>97.09</th>
-                                </tr> --}}
                             </tfoot>
                         </table>
                     </div>

@@ -77,7 +77,7 @@
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td class="text-start"><a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_user">Jumlah Aduan Mengikut Pengguna dan Bahagian</a></td>
+                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-user')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_user">Jumlah Aduan Mengikut Pengguna dan Bahagian</a></td>
                         <td class="text-center">
                             <a href="{{route('laporan.view-by-user')}}" class="btn btn-primary waves-effect waves-light">
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
@@ -132,16 +132,16 @@
             },
             success: function(response){
                 if(response.success){
-                    laporan = response.laporan;
+                    laporans = response.laporan;
                     var body = '';
                     var total = 0;
-                    laporan.forEach(status => {
+                    laporans.forEach(laporan => {
                         tr = '<tr>';
-                        tr += '<td><a href="'+status.url+'" role="button">'+status.desc+'</a></td>';
-                        tr += '<td>'+status.jumlah+'</td>';
+                        tr += '<td><a href="'+laporan.url+'" role="button">'+laporan.desc+'</a></td>';
+                        tr += '<td>'+laporan.jumlah+'</td>';
                         tr += '</tr>';
                         body += tr;
-                        total += status.jumlah;
+                        total += laporan.jumlah;
                     });
                     modal.find('.laporanTbody').append(body);
                     modal.find('.laporanTotal').html(total);

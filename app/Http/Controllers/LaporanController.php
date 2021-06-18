@@ -312,4 +312,49 @@ class LaporanController extends Controller
         ];
         return response()->json($datas);
     }
+
+    public function laporanByUserApi(Request $request){
+        $from = Carbon::parse($request->from);
+        $from_check = filled($request->from);
+        $to = Carbon::parse($request->to);
+        $to_check = filled($request->to);
+
+        $role_ids = Role::whereHas('permissions', function($query){
+            $query->where('name', 'aduan.updateTask');
+        })
+        ->pluck('id', 'id')->forget(6);
+        // return $role_ids;
+        $laporans = \DB::table('users')
+                    ->leftJoin('report_trails', 'users.id', '=', 'report_trails.assigned_to_id')
+                    ->select('name as desc', 'username')
+                    ->selectRaw('count(report_trails.id) as jumlah')
+                    ->whereExists(function($query) use ($role_ids){
+                        $query->select('*')
+                            ->from('model_has_roles')
+                            ->where('model_type', 'App\\Models\\User')
+                            ->whereIn('role_id', $role_ids)
+                            ->whereColumn('model_id', 'users.id');
+                    })
+                    ->when($from_check, function($query) use($from){
+                        $query->where('report_trails.created_at', '>=', $from);
+                    })
+                    ->when($to_check, function($query) use($to){
+                        $query->where('report_trails.created_at', '<=', $to);
+                    })
+                    ->groupBy('desc', 'username')
+                    ->orderBy('desc', 'asc')
+                    ->get();
+
+        $laporans->transform(function($item,$key){
+            $item->url = route('laporan.view-by-user',['username' => $item->username]);
+            return $item;
+        });
+
+        $datas =[
+            'success' => true,
+            'laporan' => $laporans
+        ];
+
+        return response()->json($datas);
+    }
 }
