@@ -72,8 +72,6 @@
                         @can('manage.category')
                             <li><a href="{{route('category.index')}}" key="t-category">Kategori Aduan</a></li>
                         @endcan
-                    </ul>
-                    <ul class="sub-menu" aria-expanded="true">
                         @can('manage.category')
                             <li><a href="{{route('status.index')}}" key="t-category">Status Aduan</a></li>
                         @endcan
