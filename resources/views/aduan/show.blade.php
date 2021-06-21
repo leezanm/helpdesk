@@ -28,13 +28,13 @@
                 <tr>
                     <th width="20%">Pemohon</th>
                     <td>
-                        <a class="userProfile" data-Id="{{$report->reportBy->id}}" role="button">{{$report->reportBy->name}}</a>
+                        <a class="userProfile" data-userId="{{$report->reportBy->id}}" role="button">{{$report->reportBy->name}}</a>
                     </td>
                 </tr>
                 <tr>
                     <th width="20%">Jabatan</th>
                     <td>
-                        Bahagian Teknologi Maklumat
+                        {{$report->reportBy->ldap_bahagian}}
                     </td>
                 </tr>
                 <tr>
@@ -51,9 +51,38 @@
                 </tr>
             </tbody>
         </table>
+
         <legend class="text-uppercase h5">MAKLUMAT ADUAN</legend>
         <table class="table table-striped">
             <tbody>
+                @if ($report->is_bp)
+                    <tr >
+                        <th width="20%"></th>
+                        <th>Bagi Pihak</th>
+                    </tr>
+                    <tr>
+                        <th width="20%">Nama Penuh Pengguna</th>
+                        <td>
+                            @if ($report->bp_user_id)
+                                <a data-userId="{{$report->bp_user_id}}" class="userProfile" role="button">{{$report->bp_name}}</a>
+                            @else
+                                {{$report->bp_name}}
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">Nama Pengguna (AD)</th>
+                        <td>
+                            {{$report->bp_username}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th width="20%">Email Pengguna</th>
+                        <td>
+                            {{$report->bp_email}}
+                        </td>
+                    </tr>
+                @endif
                 <tr>
                     <th width="20%">No Tiket</th>
                     <td>
