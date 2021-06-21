@@ -81,7 +81,7 @@
                 <div class="col-md-8">
                     <table class="table table-bordered">
                         <thead class="text-center align-middle">
-                            <th>Status</th>
+                            <th>Peranan</th>
                             <th>Bilangan</th>
                         </thead>
                         <tbody class="text-center align-middle">
