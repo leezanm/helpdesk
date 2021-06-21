@@ -110,6 +110,7 @@
                                 <th class="align-middle">Ticket</th>
                                 <th class="align-middle">Subject</th>
                                 <th class="align-middle">Tarikh Aduan</th>
+                                <th class="align-middle">Durasi</th>
                                 <th class="align-middle">Status</th>
                                 <th class="align-middle">Tindakan</th>
 
@@ -122,7 +123,8 @@
                                     <td>{{$report->ticket_no}}</td>
                                     <td>{{$report->subject}}</td>
                                     <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
-                                    <td><span class="{{$report->status->class}}">{{$report->status->desc}}</span></td>
+                                    <td>{!! getDuration($report) !!}</td>
+                                    <td><span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span></td>
                                     <td>
                                         @can('aduan.assignTask')
                                             <a href="{{route('aduan.show',$report->id)}}" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">Lihat</a>
