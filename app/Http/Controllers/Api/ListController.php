@@ -13,7 +13,11 @@ class ListController extends Controller
 
     public function getUsersByRole(Request $request){
 
-        $users = User::role($request->role_name)->where('is_active', true)->get();
+        $users = User::role($request->role_name)
+                        ->where('is_active', true)
+                        ->orderBy('ldap_bahagian', 'asc')
+                        ->orderBy('name', 'asc')
+                        ->get();
         $datas = [
             'success' => true,
             'users' => $users

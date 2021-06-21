@@ -99,7 +99,7 @@ class ReportController extends Controller
         $report->submitted_at = $request->report_status_id == 2 ? now() : null;
 
         if($report->is_bp){
-            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email'));
+            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email', 'bp_user_id'));
         }
 
         $report->save();
@@ -160,7 +160,10 @@ class ReportController extends Controller
     {
         //
         $report_categories = ReportCategory::active()->orderBy('desc')->get();
-        return view('aduan.edit', compact('report', 'report_categories'));
+        $attachments = $report->attachments;
+        $attachments->append('file_url');
+
+        return view('aduan.edit', compact('report', 'report_categories', 'attachments'));
     }
 
     /**
@@ -182,7 +185,7 @@ class ReportController extends Controller
         $report->submitted_at = $request->report_status_id == 2 ? now() : null;
 
         if($report->is_bp){
-            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email'));
+            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email', 'bp_user_id'));
         }
 
         $report->save();

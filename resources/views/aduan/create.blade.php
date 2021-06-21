@@ -70,6 +70,7 @@
                                 <label class="col-md-2 col-form-label">Nama Akaun (AD) <span class="text-danger">*</span></label>
                                 <div class="col-md-4">
                                     <input id="bp_username" name="bp_username" type="text" class="form-control">
+                                    <input id="bp_user_id" name="bp_user_id" type="hidden" class="form-control">
                                 </div>
                             </div>
 
@@ -176,6 +177,7 @@
 {{-- <script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
 <script>
+    const auth_username = '{{Auth::user()->username}}';
     $('input[name="is_bp"]').on('change', function(){
 
         if(this.value == '1'){
@@ -188,7 +190,17 @@
 
     $('#bp_username').on('change', function(){
         var username = this.value;
-        console.log(username);
+
+        $('#bp_name').val(null);
+        $('#bp_bahagian').val(null);
+        $('#bp_email').val(null);
+        $('#bp_user_id').val(null);
+
+        if(username == auth_username){
+            swal.fire('Gagal', 'Username mestilah dari pengguna lain', 'error');
+            return;
+        }
+
         $.ajax({
             url: "{{route('api.get-user')}}",
             type: "post",
@@ -196,12 +208,14 @@
                 bp_username : username
             },
             success: function(response){
-                console.log(response);
+                console.log(response)
                 if(response.success){
                     $('#bp_name').val(response.bp_name);
                     $('#bp_bahagian').val(response.bp_bahagian);
-                    $('#bp_email').val(response.bp_email);;
-                } else {;
+                    $('#bp_email').val(response.bp_email);
+                    $('#bp_user_id').val(response.bp_user_id);
+                    console.log($('#bp_user_id').val())
+                } else {
                     swal.fire('Gagal', response.message, 'error');
                 }
             },
@@ -229,6 +243,7 @@
       uploadedDocumentMap[file.name] = response.name
       uploadedDocumentPath[file.name] = response.path
       uploadedDocumentType[file.name] = response.type
+
     },
     removedfile: function (file) {
       file.previewElement.remove()
@@ -237,12 +252,13 @@
         name = file.file_name
       } else {
         name = uploadedDocumentMap[file.name]
-        type = uploadedDocumentPath[file.name]
-        path = uploadedDocumentType[file.name]
+        type = uploadedDocumentType[file.name]
+        path = uploadedDocumentPath[file.name]
       }
       $('form').find('input[name="attachment_names[]"][value="' + name + '"]').remove()
       $('form').find('input[name="attachment_paths[]"][value="' + path + '"]').remove()
       $('form').find('input[name="attachment_types[]"][value="' + type + '"]').remove()
+
     }
   }
 </script>

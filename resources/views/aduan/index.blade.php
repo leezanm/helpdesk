@@ -39,6 +39,7 @@
                     <th>Subjek</th>
                     <th>Kategori Aduan</th>
                     <th>Tarikh Aduan</th>
+                    <th>Durasi</th>
                     <th>Status</th>
                     <th class="text-center">Tindakan</th>
                 </thead>
@@ -50,6 +51,9 @@
                             <td class="text-start">{{$report->subject}}</td>
                             <td>{{$report->category->desc}}</td>
                             <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                            <td>
+                                {!! getDuration($report) !!}
+                            </td>
                             <td><span class="{{$report->status->class}}">{{$report->status->desc}}</span></td>
                             <td>
                                 <a href="{{route('aduan.show', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bxs-show align-middle"></i></a>

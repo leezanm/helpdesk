@@ -353,7 +353,7 @@
                         if(response.success){
                             option = '<option value="">Sila Pilih</option>';
                             response.users.forEach(user => {
-                                option += '<option value="'+ user.id +'">'+ user.name +'</option>';
+                                option += '<option value="'+ user.id +'">'+ user.name + ' ('+ user.ldap_bahagian +')' +'</option>';
                             });
 
                             $('#assigned_to_id').append(option);

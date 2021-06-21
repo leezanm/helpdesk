@@ -69,26 +69,26 @@
                             <div class="row mb-3">
                                 <label class="col-md-2 col-form-label">Nama Akaun (AD) <span class="text-danger">*</span></label>
                                 <div class="col-md-4">
-                                    <input id="bp_username" name="bp_username" type="text" class="form-control">
+                                    <input id="bp_username" name="bp_username" type="text" class="form-control" value="{{$report->bp_username}}">
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label class="col-md-2 col-form-label">Nama Penuh</label>
                                 <div class="col-md-10">
-                                    <input id="bp_name" name="bp_name" type="text" class="form-control"  readonly>
+                                    <input id="bp_name" name="bp_name" type="text" class="form-control" value="{{$report->bp_name}}"  readonly>
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <label class="col-md-2 col-form-label">Email</label>
                                 <div class="col-md-4">
-                                    <input id="bp_email" name="bp_email" type="text" class="form-control"  readonly>
+                                    <input id="bp_email" name="bp_email" type="text" class="form-control" value="{{$report->bp_email}}"  readonly>
                                 </div>
 
                                 <label class="col-md-2 col-form-label">Bahagian</label>
                                 <div class="col-md-4">
-                                    <input id="bp_bahagian" name="bp_bahagian" type="text" class="form-control"  readonly>
+                                    <input id="bp_bahagian" name="bp_bahagian" type="text" class="form-control" value="{{$report->bp_bahagian}}"  readonly>
                                 </div>
                             </div>
                         </div>
@@ -125,6 +125,32 @@
                                 @error('remark')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
+                            </div>
+
+                        </div>
+
+                        <div class="row mb-3">
+
+                            <label class="col-md-2 col-form-label">Lampiran Di Muat Naik</label>
+                            <div class="col">
+                                <table id="datatable-lampiran" class="table table-bordered">
+                                    <thead class="text-center align-middle">
+                                        <th>Fail</th>
+                                        <th width="20%">Jenis</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody class="text-center align-middle">
+                                        @foreach ($attachments as $attachment)
+                                            <tr>
+                                                <td class="text-start text-wrap"><a href="{{$attachment->file_url}}" target="_blank">{{$attachment->name}}</a></td>
+                                                <td>{{$attachment->type}}</td>
+                                                <td>
+                                                    <a data-url="{{route('aduan.attachments.delete', $attachment->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger deleteFile" role="button"> <i class="bx bxs-trash align-middle"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
 
                         </div>
@@ -176,6 +202,32 @@
 {{-- <script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
 <script>
+
+    const datatable_lampiran = $('#datatable-lampiran').DataTable();
+
+    datatable_lampiran.on('click', '.deleteFile', function(){
+        var url = $(this).data('url');
+        var cur_row = $(this).parents('tr');
+        $.ajax({
+            url: url,
+            type: 'post',
+            data:{
+                _token: '{{csrf_token()}}'
+            },
+            success:function(response){
+                if(response.success){
+                    datatable_lampiran.row(cur_row)
+                                      .remove()
+                                      .draw();
+                }
+            },
+            error:function(){
+
+            }
+
+        })
+    })
+
     $('input[name="is_bp"]').on('change', function(){
 
         if(this.value == '1'){
@@ -237,8 +289,8 @@
         name = file.file_name
       } else {
         name = uploadedDocumentMap[file.name]
-        type = uploadedDocumentPath[file.name]
-        path = uploadedDocumentType[file.name]
+        type = uploadedDocumentType[file.name]
+        path = uploadedDocumentPath[file.name]
       }
       $('form').find('input[name="attachment_names[]"][value="' + name + '"]').remove()
       $('form').find('input[name="attachment_paths[]"][value="' + path + '"]').remove()

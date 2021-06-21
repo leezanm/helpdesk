@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReportStatus\UpdateRequest;
 use App\Models\Ref\ReportStatus;
 use Illuminate\Http\Request;
 
@@ -76,7 +77,7 @@ class ReportStatusController extends Controller
      * @param  \App\Models\Ref\ReportStatus  $reportStatus
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ReportStatus $reportStatus)
+    public function update(UpdateRequest $request, ReportStatus $reportStatus)
     {
         //
         $reportStatus->desc = $request->desc;

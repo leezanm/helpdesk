@@ -11,9 +11,9 @@
 
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <label class="col-form-label">Nama untuk kegunaan Sistem <span class="text-danger">*</span></label>
+                                <label class="col-form-label">Nama untuk kegunaan Sistem </label>
                                 <input type="text" name="reference" class="form-control" disabled>
-                                <p id="error-desc" class="text-danger collapse error"></p>
+                                <p id="error-reference" class="text-danger collapse error"></p>
                             </div>
                         </div>
 

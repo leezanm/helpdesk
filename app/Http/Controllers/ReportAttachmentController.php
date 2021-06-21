@@ -35,7 +35,7 @@ class ReportAttachmentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
 
         if ($request->hasFile('file')) {
             $path = $request->file('file')->store('public/aduan/attachments');
@@ -93,5 +93,7 @@ class ReportAttachmentController extends Controller
     public function destroy(ReportAttachment $reportAttachment)
     {
         //
+        $reportAttachment->delete();
+        return response()->json(['success' => true]);
     }
 }

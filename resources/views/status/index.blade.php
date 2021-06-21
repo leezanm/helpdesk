@@ -27,8 +27,8 @@
        <table id="audit" class="table table-bordered table-striped table-hover">
            <thead>
                 <th width="5">Bil</th>
-                <th>Nama Kegunaan Sistem</th>
                 <th>Keterangan</th>
+                <th>Nama Kegunaan Sistem</th>
                 <th>Badge Colour</th>
                 <th class="text-center" width="10%">Tindakan</th>
            </thead>

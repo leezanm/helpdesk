@@ -49,30 +49,43 @@ class UserController extends Controller
 
         $message = null;
 
-        $ad = new \Adldap\Adldap();
-        $ad->addProvider(config('ldap')['connections']['default']['settings']);
+        $user = User::firstWhere('username', $request->bp_username);
 
-        try{
-            $provider = $ad->connect();
-            $connected = true;
-        } catch(Exception $e){
-            return response()->json(['success' => false, 'message' => 'Tidak dapat connect ke AD. Sila hubungi admin']);
+        if(filled($user)){
+
+            $bp_name = $user->name;
+            $bp_bahagian = $user->ldap_bahagian;
+            $bp_email = $user->email;
+            $bp_user_id = $user->id;
+
+        } else{
+
+            $ad = new \Adldap\Adldap();
+            $ad->addProvider(config('ldap')['connections']['default']['settings']);
+
+            try{
+                $provider = $ad->connect();
+                $connected = true;
+            } catch(Exception $e){
+                return response()->json(['success' => false, 'message' => 'Tidak dapat connect ke AD. Sila hubungi admin']);
+            }
+
+            if($connected){
+                $ldap_user = $provider->search()->search(['cn', 'physicaldeliveryofficename', 'userprincipalname'])->findBy('samaccountname', $request->bp_username);
+            }
+
+            if(filled($ldap_user)){
+                $user = User::create([]);
+                $success = true;
+                $bp_name = $ldap_user->cn;
+                $bp_bahagian = $ldap_user->physicaldeliveryofficename;
+                $bp_email = $ldap_user->userprincipalname;
+            } else {
+                return response()->json(['success' => false, 'message' => 'Pengguna tidak dijumpai']);
+            }
         }
 
-        if($connected){
-            $ldap_user = $provider->search()->findBy('samaccountname', $request->bp_username);
-        }
-
-        if(filled($ldap_user)){
-            $success = true;
-            $bp_name = $ldap_user->cn;
-            $bp_bahagian = $ldap_user->physicaldeliveryofficename;
-            $bp_email = $ldap_user->userprincipalname;
-            $bp_user_id = User::where('username', $request->bp_username)->value('id');
-        } else {
-            $message = 'Pengguna tidak dijumpai di dalam AD';
-        }
-
+        $success = true;
         $datas = [
             'success' => $success,
             'bp_name' => $bp_name,

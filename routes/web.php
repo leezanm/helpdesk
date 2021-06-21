@@ -45,6 +45,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/feedback/{report}', [App\Http\Controllers\ReportController::class, 'updateFeedback'])->name('update-feedback');
 
         Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
+        Route::post('/attachments/delete/{reportAttachment}', [App\Http\Controllers\ReportAttachmentController::class, 'destroy'])->name('attachments.delete');
     });
 
 
