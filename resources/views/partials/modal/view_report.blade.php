@@ -17,7 +17,7 @@
                         </tr>
                         <tr>
                             <th width="20%">Jabatan</th>
-                            <td id="report-user-department">
+                            <td id="report-user-ldap_bahagian">
 
                             </td>
                         </tr>

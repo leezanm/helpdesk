@@ -21,6 +21,10 @@
                         <td id="userProfile-email" class="userProfileContent"></td>
                     </tr>
                     <tr>
+                        <th>Bahagian</th>
+                        <td id="userProfile-ldap_bahagian" class="userProfileContent"></td>
+                    </tr>
+                    <tr>
                         <th>No. Kad Pengenalan</th>
                         <td id="userProfile-ic_no" class="userProfileContent"></td>
                     </tr>
