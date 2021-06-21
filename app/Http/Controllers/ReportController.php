@@ -41,7 +41,7 @@ class ReportController extends Controller
     public function indexUser()
     {
         //
-        $reports = Report::where('report_by_id', Auth::user()->id)->orderBy('submitted_at', 'desc')->get();
+        $reports = Report::where('report_by_id', Auth::user()->id)->orWhere('bp_user_id', Auth::user()->id)->orderBy('submitted_at', 'desc')->get();
         return view('aduan.index', compact('reports'));
     }
 

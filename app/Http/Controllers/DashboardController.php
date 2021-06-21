@@ -42,7 +42,7 @@ class DashboardController extends Controller
             ->where('report_trails.id', \DB::raw('(select id from report_trails where report_id = reports.id order by id desc limit 1)'))
             ->where('assigned_to_id', Auth::user()->id);
         } else {
-            $reports_query->where('report_by_id', $user->id)->whereNull('completed_at');
+            $reports_query->where('report_by_id', $user->id)->orWhere('bp_user_id', Auth::user()->id)->whereNull('completed_at');
         }
 
         $reports = $reports_query->orderBy('submitted_at', 'desc')->get();
