@@ -88,10 +88,18 @@ class ReportController extends Controller
     public function store(StoreRequest $request)
     {
         //
+        // return $request->attachment_names['4f8d661-9c5c-41ac-8668-25cfd209c090'];
+        // return (array)json_decode($request->attachment_names)['4f8d661-9c5c-41ac-8668-25cfd209c090'];
+
+        $attachment_uuids = json_decode($request->attachment_uuids,true);
+        $attachment_names = json_decode($request->attachment_names,true);
+        $attachment_paths = json_decode($request->attachment_paths,true);
+        $attachment_types = json_decode($request->attachment_types,true);
 
         $report = new Report();
         $report->is_bp = $request->is_bp ;
         $report->report_by_id = Auth::user()->id;
+        $report->bahagian_pengadu = Auth::user()->ldap_bahagian;
         $report->remark = $request->remark;
         $report->subject = $request->subject;
         $report->report_status_id = $request->report_status_id;
@@ -104,13 +112,14 @@ class ReportController extends Controller
 
         $report->save();
 
-        if(filled($request->attachment_paths)){
+        if(filled($attachment_uuids)){
             $report_attachments = [];
-            foreach($request->attachment_paths as $index => $path){
+            foreach($attachment_uuids as $uuid => $item){
+
                 $report_attachment = new ReportAttachment();
-                $report_attachment->name = $request->attachment_names[$index];
-                $report_attachment->path = $path;
-                $report_attachment->type = $request->attachment_types[$index];
+                $report_attachment->name = $attachment_names[$uuid];
+                $report_attachment->path = $attachment_paths[$uuid];
+                $report_attachment->type = $attachment_types[$uuid];
 
                 array_push($report_attachments, $report_attachment);
             }
@@ -126,7 +135,8 @@ class ReportController extends Controller
             $this->notifyGroup($users, $report_received_admin_notification);
         }
 
-        return redirect()->route('aduan.index-user', Auth::user()->id);
+        return response()->json(['success' => true]);
+        // return redirect()->route('aduan.index-user', Auth::user()->id);
     }
 
     /**
@@ -176,8 +186,14 @@ class ReportController extends Controller
     public function update(UpdateRequest $request, Report $report)
     {
         //
+        $attachment_uuids = json_decode($request->attachment_uuids,true);
+        $attachment_names = json_decode($request->attachment_names,true);
+        $attachment_paths = json_decode($request->attachment_paths,true);
+        $attachment_types = json_decode($request->attachment_types,true);
+
         $report->is_bp = $request->is_bp ;
         $report->report_by_id = Auth::user()->id;
+        $report->bahagian_pengadu = Auth::user()->ldap_bahagian;
         $report->remark = $request->remark;
         $report->subject = $request->subject;
         $report->report_status_id = $request->report_status_id;
@@ -190,13 +206,14 @@ class ReportController extends Controller
 
         $report->save();
 
-        if(filled($request->attachment_paths)){
+        if(filled($attachment_uuids)){
             $report_attachments = [];
-            foreach($request->attachment_paths as $index => $path){
+            foreach($attachment_uuids as $uuid => $item){
+
                 $report_attachment = new ReportAttachment();
-                $report_attachment->name = $request->attachment_names[$index];
-                $report_attachment->path = $path;
-                $report_attachment->type = $request->attachment_types[$index];
+                $report_attachment->name = $attachment_names[$uuid];
+                $report_attachment->path = $attachment_paths[$uuid];
+                $report_attachment->type = $attachment_types[$uuid];
 
                 array_push($report_attachments, $report_attachment);
             }
@@ -212,7 +229,8 @@ class ReportController extends Controller
             $this->notifyGroup($users, $report_received_admin_notification);
         }
 
-        return redirect()->route('aduan.index-user', Auth::user()->id);
+        return response()->json(['success' => true]);
+        // return redirect()->route('aduan.index-user', Auth::user()->id);
 
     }
 

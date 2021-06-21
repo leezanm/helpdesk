@@ -28,7 +28,7 @@
                 <div class="card-body">
                     <h4 class="card-title">Maklumat Aduan</h4>
                     <p class="card-title-desc">Sila isi butiran tersebut</p>
-                    <form method="POST">
+                    <form id="report_form" method="POST">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-sm-2">
@@ -70,6 +70,8 @@
                                 <label class="col-md-2 col-form-label">Nama Akaun (AD) <span class="text-danger">*</span></label>
                                 <div class="col-md-4">
                                     <input id="bp_username" name="bp_username" type="text" class="form-control" value="{{$report->bp_username}}">
+                                    <input id="bp_username" name="bp_user_id" type="hidden" class="form-control" value="{{$report->bp_user_id}}">
+                                    <p class="text-danger error-bp_username error"></p>
                                 </div>
                             </div>
 
@@ -77,6 +79,7 @@
                                 <label class="col-md-2 col-form-label">Nama Penuh</label>
                                 <div class="col-md-10">
                                     <input id="bp_name" name="bp_name" type="text" class="form-control" value="{{$report->bp_name}}"  readonly>
+                                    <p class="text-danger error-bp_name error"></p>
                                 </div>
                             </div>
 
@@ -84,11 +87,13 @@
                                 <label class="col-md-2 col-form-label">Email</label>
                                 <div class="col-md-4">
                                     <input id="bp_email" name="bp_email" type="text" class="form-control" value="{{$report->bp_email}}"  readonly>
+                                    <p class="text-danger error-bp_email error"></p>
                                 </div>
 
                                 <label class="col-md-2 col-form-label">Bahagian</label>
                                 <div class="col-md-4">
                                     <input id="bp_bahagian" name="bp_bahagian" type="text" class="form-control" value="{{$report->bp_bahagian}}"  readonly>
+                                    <p class="text-danger error-bp_bahagian error"></p>
                                 </div>
                             </div>
                         </div>
@@ -104,6 +109,7 @@
                                 @error('report_category_id')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
+                                <p class="text-danger error-report_category_id error"></p>
                             </div>
                         </div>
 
@@ -114,6 +120,7 @@
                                 @error('subject')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
+                                <p class="text-danger error-subject error"></p>
                             </div>
                         </div>
 
@@ -125,6 +132,7 @@
                                 @error('remark')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
+                                <p class="text-danger error-remark error"></p>
                             </div>
 
                         </div>
@@ -175,19 +183,20 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="floatingCheck">
-                                    <label class="form-check-label" for="floatingCheck">
-                                      Dengan ini saya mengaku dan mengesahkan semua kenyataan dan butir-butir yang dikemukakan di atas adalah benar
-                                    </label>
-                                </div>
+                        {{-- <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="floatingCheck">
+                                <label class="form-check-label" for="floatingCheck">
+                                    Dengan ini saya mengaku dan mengesahkan semua kenyataan dan butir-butir yang dikemukakan di atas adalah benar
+                                </label>
                             </div>
+                        </div> --}}
+
                         <div class="d-flex flex-wrap gap-2 float-end">
                             {{-- <a href="{{url('aduan')}}" class="btn btn-primary waves-effect waves-light">Simpan</a>
                             <a href="{{url('aduan')}}" class="btn btn-success waves-effect waves-light">Hantar</a> --}}
-                            <button type="submit" name="report_status_id" value="1" class="btn btn-secondary waves-effect waves-light">Draf</button>
-                            <button type="submit" name="report_status_id" value="2" class="btn btn-success waves-effect waves-light">Hantar</button>
+                            <button type="button" name="report_status_id" value="1" class="btn btn-secondary waves-effect waves-light submit">Draf</button>
+                            <button type="button" name="report_status_id" value="2" class="btn btn-success waves-effect waves-light submit">Hantar</button>
                         </div>
                     </form>
                 </div>
@@ -240,7 +249,17 @@
 
     $('#bp_username').on('change', function(){
         var username = this.value;
-        console.log(username);
+
+        $('#bp_name').val(null);
+        $('#bp_bahagian').val(null);
+        $('#bp_email').val(null);
+        $('#bp_user_id').val(null);
+
+        if(username == auth_username){
+            swal.fire('Gagal', 'Username mestilah dari pengguna lain', 'error');
+            return;
+        }
+
         $.ajax({
             url: "{{route('api.get-user')}}",
             type: "post",
@@ -248,17 +267,19 @@
                 bp_username : username
             },
             success: function(response){
-                console.log(response);
+                console.log(response)
                 if(response.success){
                     $('#bp_name').val(response.bp_name);
                     $('#bp_bahagian').val(response.bp_bahagian);
-                    $('#bp_email').val(response.bp_email);;
-                } else {;
+                    $('#bp_email').val(response.bp_email);
+                    $('#bp_user_id').val(response.bp_user_id);
+                    console.log($('#bp_user_id').val())
+                } else {
                     swal.fire('Gagal', response.message, 'error');
                 }
             },
             error: function(error){
-                console.log(error);
+
             }
         });
     });
@@ -266,36 +287,61 @@
     $('input[name="is_bp"]:checked').trigger('change');
 </script>
 <script>
-  var uploadedDocumentMap = {}, uploadedDocumentType = {}, uploadedDocumentPath = {};
-  Dropzone.options.documentDropzone = {
-    url: '{{route("aduan.attachments.store")}}',
-    maxFilesize: 2, // MB
-    addRemoveLinks: true,
-    headers: {
-      'X-CSRF-TOKEN': "{{ csrf_token() }}"
-    },
-    success: function (file, response) {
-      $('form').append('<input type="hidden" name="attachment_names[]" value="' + response.name + '">')
-      $('form').append('<input type="hidden" name="attachment_paths[]" value="' + response.path + '">')
-      $('form').append('<input type="hidden" name="attachment_types[]" value="' + response.type + '">')
-      uploadedDocumentMap[file.name] = response.name
-      uploadedDocumentPath[file.name] = response.path
-      uploadedDocumentType[file.name] = response.type
-    },
-    removedfile: function (file) {
-      file.previewElement.remove()
-      var name = ''
-      if (typeof file.file_name !== 'undefined') {
-        name = file.file_name
-      } else {
-        name = uploadedDocumentMap[file.name]
-        type = uploadedDocumentType[file.name]
-        path = uploadedDocumentPath[file.name]
+    var uploadedDocumentMap = {}, uploadedDocumentType = {}, uploadedDocumentPath = {}, uploadedDocumentUuid = {};
+    Dropzone.options.documentDropzone = {
+      url: '{{route("aduan.attachments.store")}}',
+      maxFilesize: 2, // MB
+      addRemoveLinks: true,
+      headers: {
+        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+      },
+      success: function (file, response) {
+
+          uploadedDocumentUuid[file.upload.uuid] = file.upload.uuid;
+          uploadedDocumentMap[file.upload.uuid] = response.name
+          uploadedDocumentPath[file.upload.uuid] = response.path;
+          uploadedDocumentType[file.upload.uuid] = response.type;
+      },
+      removedfile: function (file) {
+          file.previewElement.remove()
+
+          delete uploadedDocumentUuid[file.upload.uuid];
+          delete uploadedDocumentMap[file.upload.uuid];
+          delete uploadedDocumentPath[file.upload.uuid];
+          delete uploadedDocumentType[file.upload.uuid];
       }
-      $('form').find('input[name="attachment_names[]"][value="' + name + '"]').remove()
-      $('form').find('input[name="attachment_paths[]"][value="' + path + '"]').remove()
-      $('form').find('input[name="attachment_types[]"][value="' + type + '"]').remove()
     }
-  }
-</script>
+
+    $('.submit').on('click', function(){
+
+        form = $('#report_form');
+        var formData = new FormData( $('#report_form')[0] );
+        formData.append('report_status_id', this.value);
+        formData.append('attachment_uuids', JSON.stringify(uploadedDocumentMap));
+        formData.append('attachment_names', JSON.stringify(uploadedDocumentMap));
+        formData.append('attachment_paths', JSON.stringify(uploadedDocumentPath));
+        formData.append('attachment_types', JSON.stringify(uploadedDocumentType));
+        formData.append('remark', tinymce.get('elm1').getContent());
+
+        clearError(form);
+        $.ajax({
+            type:'post',
+            data:formData,
+            processData: false,
+            contentType: false,
+            success:function(response){
+                // console.log(JSON.parse(response));
+                if(response.success){
+                    window.location.href = "{{route('aduan.index-user', Auth::user()->username)}}";
+                }
+            //
+            },
+            error:function(error){
+                console.log(error);
+                errorValidate(error, form);
+            }
+        });
+
+    })
+  </script>
 @endsection

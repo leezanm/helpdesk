@@ -19,6 +19,7 @@ class CreateReportsTable extends Migration
             $table->string('subject');
             $table->text('remark');
             $table->foreignId('report_by_id')->constrained('users');
+            $table->string('bahagian_pengadu')->nullable();
             $table->boolean('is_bp')->default(0);
             $table->foreignId('bp_user_id')->nullable()->constrained('users');
             $table->string('bp_name')->nullable();

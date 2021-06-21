@@ -9,7 +9,8 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i> Laman Utama</a></li>
-                        <li class="breadcrumb-item active">Horizontal Layout</li>
+                        <li class="breadcrumb-item ">Aduan</li>
+                        <li class="breadcrumb-item active">{{$report->ticket_no}}</li>
                     </ol>
                 </div>
 

@@ -16,17 +16,17 @@
                             <tbody class="text-center align-middle laporanTbody">
                                 <tr>
                                     <td class="text-start">JTK</td>
-                                    <td>16</td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">PPTM</td>
-                                    <td>602</td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                             <tfoot class="text-center align-middle">
                                 <tr>
                                     <th>Jumlah</th>
-                                    <th class="laporanTotal">618</th>
+                                    <th class="laporanTotal"></th>
                                 </tr>
                             </tfoot>
                         </table>

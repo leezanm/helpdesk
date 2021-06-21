@@ -121,10 +121,15 @@ class LaporanController extends Controller
     }
 
     public function viewByRole(Request $request){
-        $title = 'Mengikut Peranan Pengguna';
+        $title = 'Mengikut Pegawai Teknikal';
         $from = $request->from;
         $to = $request->to;
         $peranan = $request->peranan;
+
+        $role_ids = Role::whereHas('permissions', function($query){
+            $query->where('name', 'aduan.updateTask');
+        })
+        ->pluck('id', 'id')->forget(6);
 
         $laporans = \DB::table('roles')
                     ->select('name', 'desc')
@@ -134,27 +139,23 @@ class LaporanController extends Controller
                     ->when(filled($peranan), function($query) use ($peranan){
                         $query->where('name', $peranan);
                     },
-                    function($query){
-                        $query->whereIn('id', [1,2,3]);
+                    function($query) use ($role_ids){
+                        $query->whereIn('id', $role_ids);
                     })
                     ->get();
 
-        $role = filled($peranan)? Role::firstWhere('name', $peranan) : null;
+        $report_trails = ReportTrail::join('reports', 'reports.id', '=', 'report_trails.report_id')
+                        ->select('report_trails.*', 'reports.ticket_no', 'reports.subject')
+                        ->when(filled($peranan), function($query) use($peranan){
+                            $query->whereHas('assignedToRole', function($subQuery) use($peranan){
+                                $subQuery->where('name',$peranan);
+                            });
+                        })
+                        ->whereNotNull('assigned_to_id')
+                        ->orderBy('report_trails.id', 'desc')
+                        ->get();
 
-        $reports = Report::when(filled($from), function($query) use($from){
-                                $query->whereDate('submitted_at', '>=', Carbon::parse($from));
-                            })
-                            ->when(filled($to), function($query) use($to){
-                                $query->whereDate('submitted_at', '<=', Carbon::parse($to));
-                            })
-                            ->when(filled($role), function($query) use($role){
-                                $query->whereHas('trails', function($subQuery) use($role){
-                                    $subQuery->where('assigned_to_role_id', $role->id);
-                                });
-                            })
-                            ->orderBy('submitted_at', 'desc')->get();
-
-        return view('laporan.show_by_role', compact('laporans', 'reports' , 'from', 'to', 'title', 'peranan'));
+        return view('laporan.show_by_role', compact('laporans', 'report_trails' , 'from', 'to', 'title', 'peranan'));
     }
 
     public function viewByUser(Request $request){
@@ -204,6 +205,30 @@ class LaporanController extends Controller
         $departments = \DB::table('users')->whereNotNull('ldap_bahagian')->distinct()->pluck('ldap_bahagian');
 
         return view('laporan.show_by_user', compact('laporans', 'report_trails' , 'from', 'to', 'departments', 'username', 'department'));
+    }
+
+    public function viewByDepartment(Request $request){
+
+        $from = $request->from;
+        $to = $request->to;
+        $department = $request->department;
+
+        $departments = \DB::table('users')->whereNotNull('ldap_bahagian')->distinct()->pluck('ldap_bahagian');
+
+        $laporans = \DB::table('users')
+                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id in (2,3,4,5) ) as jumlah')
+                    ->when(filled($department), function($query) use($department){
+                        $query->where('ldap_bahagian', $department);
+                    })
+                    ->groupBy('bahagian')
+                    ->orderBy('bahagian', 'asc')
+                    ->get();
+
+        $reports = Report::when(filled($department), function($query) use ($department){
+                                $query->where('bahagian_pengadu', $department);
+                            })->get();
+
+        return view('laporan.show_by_department', compact('laporans', 'reports' , 'from', 'to', 'departments', 'department'));
     }
 
 
@@ -347,6 +372,32 @@ class LaporanController extends Controller
 
         $laporans->transform(function($item,$key){
             $item->url = route('laporan.view-by-user',['username' => $item->username]);
+            return $item;
+        });
+
+        $datas =[
+            'success' => true,
+            'laporan' => $laporans
+        ];
+
+        return response()->json($datas);
+    }
+
+    public function laporanByDepartmentApi(Request $request){
+        $from = Carbon::parse($request->from);
+        $from_check = filled($request->from);
+        $to = Carbon::parse($request->to);
+        $to_check = filled($request->to);
+
+        // return $role_ids;
+        $laporans = \DB::table('users')
+                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id in (2,3,4,5) ) as jumlah')
+                    ->groupBy('bahagian')
+                    ->orderBy('bahagian', 'asc')
+                    ->get();
+
+        $laporans->transform(function($item,$key){
+            $item->url = route('laporan.view-by-department',['department' => $item->bahagian]);
             return $item;
         });
 

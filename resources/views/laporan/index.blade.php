@@ -77,18 +77,18 @@
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-user')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_user">Jumlah Aduan Mengikut Pengguna dan Bahagian</a></td>
+                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-department')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_department">Laporan Aduan Mengikut Bahagian</a></td>
                         <td class="text-center">
-                            <a href="{{route('laporan.view-by-user')}}" class="btn btn-primary waves-effect waves-light">
+                            <a href="{{route('laporan.view-by-department')}}" class="btn btn-primary waves-effect waves-light">
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td>4</td>
-                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-role')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role">Jumlah Aduan Mengikut Peranan Pengguna</a></td>
+                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-role')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role">Laporan Aduan Mengikut Pegawai Teknikal</a></td>
                         <td class="text-center">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role" class="btn btn-primary waves-effect waves-light">
+                            <a href="{{route('laporan.view-by-role')}}" class="btn btn-primary waves-effect waves-light" role="button">
                                 <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
                             </a>
                         </td>
@@ -108,7 +108,7 @@
     </div>
     @include('laporan.modal.laporan_by_status')
     @include('laporan.modal.laporan_by_category')
-    @include('laporan.modal.laporan_by_user')
+    @include('laporan.modal.laporan_by_department')
     @include('laporan.modal.laporan_by_role')
     @include('laporan.modal.laporan_soal_selidik')
 
@@ -136,8 +136,16 @@
                     var body = '';
                     var total = 0;
                     laporans.forEach(laporan => {
+                        var desc = '';
+
+                        if(laporan.hasOwnProperty('bahagian')){
+                            desc = laporan.bahagian
+                        } else {
+                            desc = laporan.desc;
+                        }
+
                         tr = '<tr>';
-                        tr += '<td><a href="'+laporan.url+'" role="button">'+laporan.desc+'</a></td>';
+                        tr += '<td><a href="'+laporan.url+'" role="button">'+ desc+'</a></td>';
                         tr += '<td>'+laporan.jumlah+'</td>';
                         tr += '</tr>';
                         body += tr;

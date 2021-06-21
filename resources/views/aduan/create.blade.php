@@ -28,7 +28,7 @@
                 <div class="card-body">
                     <h4 class="card-title">Maklumat Aduan</h4>
                     <p class="card-title-desc">Sila isi butiran tersebut</p>
-                    <form method="POST">
+                    <form id="report_form" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-sm-2">
@@ -70,6 +70,7 @@
                                 <label class="col-md-2 col-form-label">Nama Akaun (AD) <span class="text-danger">*</span></label>
                                 <div class="col-md-4">
                                     <input id="bp_username" name="bp_username" type="text" class="form-control">
+                                    <p class="text-danger error-bp_username error"></p>
                                     <input id="bp_user_id" name="bp_user_id" type="hidden" class="form-control">
                                 </div>
                             </div>
@@ -78,6 +79,7 @@
                                 <label class="col-md-2 col-form-label">Nama Penuh</label>
                                 <div class="col-md-10">
                                     <input id="bp_name" name="bp_name" type="text" class="form-control"  readonly>
+                                    <p class="text-danger error-bp_name error"></p>
                                 </div>
                             </div>
 
@@ -85,11 +87,13 @@
                                 <label class="col-md-2 col-form-label">Email</label>
                                 <div class="col-md-4">
                                     <input id="bp_email" name="bp_email" type="text" class="form-control"  readonly>
+                                    <p class="text-danger error-bp_email error"></p>
                                 </div>
 
                                 <label class="col-md-2 col-form-label">Bahagian</label>
                                 <div class="col-md-4">
                                     <input id="bp_bahagian" name="bp_bahagian" type="text" class="form-control"  readonly>
+                                    <p class="text-danger error-bp_bahagian error"></p>
                                 </div>
                             </div>
                         </div>
@@ -103,8 +107,9 @@
                                     @endforeach
                                 </select>
                                 @error('report_category_id')
-                                    <p class="text-danger">{{$message}}</p>
+                                    <p class="text-danger" >{{$message}}</p>
                                 @enderror
+                                <p class="text-danger error-report_category_id error"></p>
                             </div>
                         </div>
 
@@ -115,6 +120,7 @@
                                 @error('subject')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
+                                <p class="text-danger error-subject error"></p>
                             </div>
                         </div>
 
@@ -125,6 +131,7 @@
                                 @error('remark')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
+                                <p class="text-danger error-remark error"></p>
                             </div>
                         </div>
 
@@ -134,7 +141,7 @@
 
                                 <div action="#" class="dropzone" id="document-dropzone">
                                     <div class="fallback">
-                                        <input name="file" type="file" multiple="multiple">
+                                        <input name="file" type="file" multiple="multiple" accept=".pdf,.jpeg">
                                     </div>
                                     <div class="dz-message needsclick">
                                         <div class="mb-3">
@@ -148,20 +155,18 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="pengakuan">
                                 <label class="form-check-label" for="floatingCheck">
                                     Dengan ini saya mengaku dan mengesahkan semua kenyataan dan butir-butir yang dikemukakan di atas adalah benar
                                 </label>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="d-flex flex-wrap gap-2 float-end">
-                            {{-- <a href="{{url('aduan')}}" class="btn btn-primary waves-effect waves-light">Simpan</a>
-                            <a href="{{url('aduan')}}" class="btn btn-success waves-effect waves-light">Hantar</a> --}}
-                            <button type="submit" name="report_status_id" value="1" class="btn btn-secondary waves-effect waves-light">Draf</button>
-                            <button type="submit" name="report_status_id" value="2" class="btn btn-success waves-effect waves-light">Hantar</button>
+                            <button type="button" name="report_status_id" value="1" class="btn btn-secondary waves-effect waves-light submit">Draf</button>
+                            <button type="button" name="report_status_id" value="2" class="btn btn-success waves-effect waves-light submit">Hantar</button>
                         </div>
 
                     </form>
@@ -220,7 +225,7 @@
                 }
             },
             error: function(error){
-                console.log(error);
+
             }
         });
     });
@@ -228,7 +233,7 @@
     $('input[name="is_bp"]:checked').trigger('change');
 </script>
 <script>
-  var uploadedDocumentMap = {}, uploadedDocumentType = {}, uploadedDocumentPath = {};
+  var uploadedDocumentMap = {}, uploadedDocumentType = {}, uploadedDocumentPath = {}, uploadedDocumentUuid = {};
   Dropzone.options.documentDropzone = {
     url: '{{route("aduan.attachments.store")}}',
     maxFilesize: 2, // MB
@@ -237,29 +242,52 @@
       'X-CSRF-TOKEN': "{{ csrf_token() }}"
     },
     success: function (file, response) {
-      $('form').append('<input type="hidden" name="attachment_names[]" value="' + response.name + '">')
-      $('form').append('<input type="hidden" name="attachment_paths[]" value="' + response.path + '">')
-      $('form').append('<input type="hidden" name="attachment_types[]" value="' + response.type + '">')
-      uploadedDocumentMap[file.name] = response.name
-      uploadedDocumentPath[file.name] = response.path
-      uploadedDocumentType[file.name] = response.type
 
+        uploadedDocumentUuid[file.upload.uuid] = file.upload.uuid;
+        uploadedDocumentMap[file.upload.uuid] = response.name
+        uploadedDocumentPath[file.upload.uuid] = response.path;
+        uploadedDocumentType[file.upload.uuid] = response.type;
     },
     removedfile: function (file) {
-      file.previewElement.remove()
-      var name = ''
-      if (typeof file.file_name !== 'undefined') {
-        name = file.file_name
-      } else {
-        name = uploadedDocumentMap[file.name]
-        type = uploadedDocumentType[file.name]
-        path = uploadedDocumentPath[file.name]
-      }
-      $('form').find('input[name="attachment_names[]"][value="' + name + '"]').remove()
-      $('form').find('input[name="attachment_paths[]"][value="' + path + '"]').remove()
-      $('form').find('input[name="attachment_types[]"][value="' + type + '"]').remove()
+        file.previewElement.remove()
 
+        delete uploadedDocumentUuid[file.upload.uuid];
+        delete uploadedDocumentMap[file.upload.uuid];
+        delete uploadedDocumentPath[file.upload.uuid];
+        delete uploadedDocumentType[file.upload.uuid];
     }
   }
+
+  $('.submit').on('click', function(){
+
+    form = $('#report_form');
+    var formData = new FormData( $('#report_form')[0] );
+    formData.append('report_status_id', this.value);
+    formData.append('attachment_uuids', JSON.stringify(uploadedDocumentMap));
+    formData.append('attachment_names', JSON.stringify(uploadedDocumentMap));
+    formData.append('attachment_paths', JSON.stringify(uploadedDocumentPath));
+    formData.append('attachment_types', JSON.stringify(uploadedDocumentType));
+    formData.append('remark', tinymce.get('elm1').getContent());
+
+    clearError(form);
+    $.ajax({
+        type:'post',
+        data:formData,
+        processData: false,
+        contentType: false,
+        success:function(response){
+            // console.log(JSON.parse(response));
+            if(response.success){
+                window.location.href = "{{route('aduan.index-user', Auth::user()->username)}}";
+            }
+        //
+        },
+        error:function(error){
+            console.log(error);
+            errorValidate(error, form);
+        }
+    });
+
+  })
 </script>
 @endsection

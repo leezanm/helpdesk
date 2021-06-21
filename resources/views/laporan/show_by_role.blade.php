@@ -108,30 +108,29 @@
                         <th>No</th>
                         <th>Tiket</th>
                         <th>Subjek</th>
-                        <th>Tarikh Aduan</th>
+                        <th>Ditugaskan Pada</th>
+                        <th>Peg. Teknikal</th>
                         <th>Status</th>
                         <th class="text-center">Tindakan</th>
                     </tr>
                 </thead>
                 <tbody class="align-middle">
-                    @foreach ($reports as $report)
+                    @foreach ($report_trails as $report_trail)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$report->ticket_no}}</td>
-                            <td>{{$report->subject}}</td>
-                            <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                            <td>{{$report_trail->ticket_no}}</td>
+                            <td>{{$report_trail->subject}}</td>
+                            <td>{{convertDateFormat($report_trail->created_at, 'd F Y, g:i A')}}</td>
                             <td>
-                                <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
-                                @if ($report->report_status_id == 3)
-                                    <br>
-                                    <a href="#" class="userProfile" data-userId="{{$report->currentTrail->updated_by_id}}">{{$report->currentTrail->updatedBy->name}}</a>
-                                @elseif($report->report_status_id == 4)
-                                    <br>
-                                    <a href="#" class="userProfile" data-userId="{{$report->currentTrail->assigned_to_id}}">{{$report->currentTrail->assignedTo->name}}</a>
-                                @endif
+                                <a href="#" class="userProfile" data-userId="{{$report_trail->assigned_to_id}}">{{$report_trail->assignedTo->name}}</a>
+                                <br>
+                                {{$report_trail->assignedTo->ldap_bahagian}}
+                            </td>
+                            <td>
+                                <span class="{{$report_trail->report->status->class}} font-size-11">{{$report_trail->report->status->desc}}</span>
                             </td>
                             <td class="text-center">
-                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
+                                <a href="{{route('aduan.show', $report_trail->report_id)}}" class="btn btn-primary waves-effect waves-light">
                                     <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
                                 </a>
                             </td>

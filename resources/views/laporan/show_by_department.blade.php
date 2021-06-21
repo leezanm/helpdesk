@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Jumlah Aduan Ditugaskan Mengikut Pengguna dan Bahagian</h4>
+                <h4 class="mb-sm-0 font-size-18">Jumlah Aduan Mengikut Bahagian</h4>
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i> Laman Utama</a></li>
@@ -32,7 +32,6 @@
         <div class="card-body">
 
             <form>
-                <input type="hidden" name="username" value="{{$username}}">
                 <div class="row mb-3">
                     <div class="col-md-2">
                         <label class="col-form-label">Daripada</label>
@@ -58,7 +57,7 @@
                     <div class="col-md-2">
                         {{-- <button class="btn btn-secondary" type="button" onclick="$('input').val('')">Set Semula</button> --}}
                         <button class="btn btn-primary" type="submit">Pilih</button>
-                        <a href="{{route('laporan.view-by-user')}}" class="btn btn-secondary" role="button">Set Semula</a>
+                        <a href="{{route('laporan.view-by-department')}}" class="btn btn-secondary" role="button">Set Semula</a>
 
                     </div>
                 </div>
@@ -82,13 +81,13 @@
                 <div class="col-md-8">
                     <table class="table table-bordered">
                         <thead class="text-center align-middle">
-                            <th>Peg. Teknikal</th>
+                            <th>Bahagian</th>
                             <th>Bilangan</th>
                         </thead>
                         <tbody class="text-center align-middle">
                             @foreach ($laporans as $laporan)
                                 <tr>
-                                    <td><a href="{{route('laporan.view-by-user', ['username' => $laporan->username, 'department' => $department, 'from' => $from, 'to' => $to])}}">{{$laporan->name}}</a></td>
+                                    <td><a href="{{route('laporan.view-by-department', ['department' => $laporan->bahagian, 'from' => $from, 'to' => $to])}}">{{$laporan->bahagian}}</a></td>
                                     <td>{{$laporan->jumlah}}</td>
                                 </tr>
                             @endforeach
@@ -109,22 +108,20 @@
                         <th>Tiket</th>
                         <th>Subjek</th>
                         <th>Tarikh & Masa Aduan</th>
-                        <th>Peg. Teknikal</th>
+                        <th>Bahagian</th>
                         {{-- <th>Status</th> --}}
                         <th class="text-center">Tindakan</th>
                     </tr>
                 </thead>
                 <tbody class="text-center align-middle">
-                    @foreach ($report_trails as $report_trail)
+                    @foreach ($reports as $report)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$report_trail->ticket_no}}</td>
-                            <td class="text-start">{{$report_trail->subject}}</td>
-                            <td>{{convertDateFormat($report_trail->submitted_at, 'd F Y, g:i A')}}</td>
+                            <td>{{$report->ticket_no}}</td>
+                            <td class="text-start">{{$report->subject}}</td>
+                            <td>{{convertDateFormat($report->submitted_at, 'd F Y, g:i A')}}</td>
                             <td>
-                                {{$report_trail->assignedTo->name}}
-                                <br>
-                                <small>{{$report_trail->assignedTo->ldap_bahagian}}</small>
+                                {{$report->bahagian_pengadu}}
                             </td>
                             {{-- <td>
                                 <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
@@ -137,7 +134,7 @@
                                 @endif
                             </td> --}}
                             <td class="text-center">
-                                <a href="{{route('aduan.show', $report_trail->report_id)}}" class="btn btn-primary waves-effect waves-light">
+                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
                                     <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
                                 </a>
                             </td>

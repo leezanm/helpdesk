@@ -9,7 +9,8 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Laman Utama</a></li>
-                        <li class="breadcrumb-item active">Senarai Audit Trail</li>
+                        <li class="breadcrumb-item">Pentadbiran</li>
+                        <li class="breadcrumb-item active">Audit Trail</li>
                     </ol>
                 </div>
 

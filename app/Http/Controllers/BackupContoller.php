@@ -35,7 +35,7 @@ class BackupContoller extends Controller
 
 	public function download($filename)
 	{
-		return response()->download(storage_path("app\Kplb-Helpdesk\\". $filename));
+		return response()->download(storage_path("app/Kplb-Helpdesk/". $filename));
 	}
 
 	public function destroy($filename) {
@@ -44,7 +44,8 @@ class BackupContoller extends Controller
 		Storage::disk('local')->delete( $filename);
 
 		Session::flash('successMessage', 'Backup Berjaya Dipadam');
-		return back();
+		// return redirect()->back();
+        return redirect()->route('backup.index');
 	}
 
 	public function backupFull(Request $request)
@@ -52,7 +53,8 @@ class BackupContoller extends Controller
 		$exitCode = Artisan::call('backup:run');
 
 		Session::flash('successMessage', 'Backup Berjaya Dicipta');
-		return redirect('/pentadbiran/backup/list');
+		// return redirect('/pentadbiran/backup/list');
+        return redirect()->route('backup.index');
 	}
 
 	public function backupDB(Request $request)
@@ -71,6 +73,7 @@ class BackupContoller extends Controller
 		]);
 
 		Session::flash('successMessage', 'Backup Berjaya Dicipta');
-		return redirect('/pentadbiran/backup/list');
+		// return redirect('/pentadbiran/backup/list');
+        return redirect()->route('backup.index');
 	}
 }

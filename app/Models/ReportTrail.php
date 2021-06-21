@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role;
 
 class ReportTrail extends Model
 {
@@ -15,6 +16,10 @@ class ReportTrail extends Model
 
     public function assignedTo(){
         return $this->belongsTo(User::class);
+    }
+
+    public function assignedToRole(){
+        return $this->belongsTo(Role::class);
     }
 
     public function updatedBy(){

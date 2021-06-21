@@ -71,7 +71,7 @@ class UserController extends Controller
             }
 
             if($connected){
-                $ldap_user = $provider->search()->search(['cn', 'physicaldeliveryofficename', 'userprincipalname'])->findBy('samaccountname', $request->bp_username);
+                $ldap_user = $provider->search()->select(['cn', 'physicaldeliveryofficename', 'userprincipalname'])->findBy('samaccountname', $request->bp_username);
             }
 
             if(filled($ldap_user)){

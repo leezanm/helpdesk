@@ -38,6 +38,11 @@
                     <th>Tiket</th>
                     <th>Subjek</th>
                     <th>Kategori Aduan</th>
+
+                    @can('aduan.assignTask')
+                        <th>Pengadu</th>
+                    @endcan
+
                     <th>Tarikh Aduan</th>
                     <th>Durasi</th>
                     <th>Status</th>
@@ -50,6 +55,15 @@
                             <td>{{$report->ticket_no}}</td>
                             <td class="text-start">{{$report->subject}}</td>
                             <td>{{$report->category->desc}}</td>
+
+                            @can('aduan.assignTask')
+                               <td>
+                                    <a data-userId="{{$report->reportBy->id}}" class="userProfile" role="button">{{$report->reportBy->name}}</a>
+                                    <br>
+                                    {{$report->reportBy->ldap_bahagian}}
+                               </td>
+                             @endcan
+
                             <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
                             <td>
                                 {!! getDuration($report) !!}

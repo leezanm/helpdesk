@@ -1,8 +1,8 @@
-<div id="modal_laporan_by_user" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+<div id="modal_laporan_by_department" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div div class="modal-header">
-                <h5 class="modal-title" id="myExtraLargeModalLabel">Jumlah Aduan Mengikut Pengguna dan Bahagian</h5>
+                <h5 class="modal-title" id="myExtraLargeModalLabel">Laporan Aduan Mengikut Bahagian</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="modal-footer text-end">
-                <a href="{{route('laporan.view-by-user')}}" target="_blank" class="btn btn-outline-secondary">Lihat Penuh</a>
+                <a href="{{route('laporan.view-by-department')}}" target="_blank" class="btn btn-outline-secondary">Lihat Penuh</a>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
