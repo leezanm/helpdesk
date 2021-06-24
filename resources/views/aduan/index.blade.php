@@ -68,7 +68,7 @@
                             <td>
                                 {!! getDuration($report) !!}
                             </td>
-                            <td><span class="{{$report->status->class}}">{{$report->status->desc}}</span></td>
+                            <td><span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span></td>
                             <td>
                                 <a href="{{route('aduan.show', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bxs-show align-middle"></i></a>
                                  @if ($report->report_status_id == 1)

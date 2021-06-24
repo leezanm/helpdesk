@@ -252,12 +252,24 @@ class ReportController extends Controller
         $role = Role::where('name', $request->peranan)->first();
         $report->report_status_id = 4;
 
+        switch ($request->tindakan){
+            case 1 :
+                $trail_status_id = 4;
+                $message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . ' ('.$role->desc.')' . '</a> untuk disemak';
+                break;
+            case 2 :
+                $trail_status_id = 6;
+                $message = 'Aduan telah ditugaskan semula kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . ' ('.$role->desc.')' . '</a> untuk disemak';
+                break;
+        }
+
         $trail = new ReportTrail();
-        $trail->message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . '</a> untuk disemak';
+        $trail->message = $message;
         $trail->assigned_to_id = $request->assigned_to_id;
         $trail->assigned_to_role_id = $role->id;
         $trail->updated_by_id = Auth::user()->id;
-        $trail->status_id = 4;
+        $trail->reassignment_remark = $request->reassignment_remark;
+        $trail->status_id = $trail_status_id;
 
         $report->save();
         $report->trails()->save($trail);

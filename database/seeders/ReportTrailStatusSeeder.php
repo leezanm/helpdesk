@@ -39,5 +39,10 @@ class ReportTrailStatusSeeder extends Seeder
         $status->desc = 'Selesai';
         $status->class = 'badge bg-success';
         $status->save();
+
+        $status = new ReportTrailStatus();
+        $status->desc = 'Ditugaskan Semula';
+        $status->class = 'badge bg-warning';
+        $status->save();
     }
 }

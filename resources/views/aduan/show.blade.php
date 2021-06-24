@@ -157,8 +157,11 @@
                         <div class="col-md-4">
                             <select name="tindakan" class="form-select">
                                 <option value="">Sila Pilih</option>
-                                <option value="1" @if(old('tindakan') == '1') selected @endif>Majukan Kepada</option>
-
+                                @if ($report->report_status_id == 3)
+                                    <option value="1" @if(old('tindakan') == '1') selected @endif>Majukan Kepada</option>
+                                @else
+                                    <option value="2" @if(old('tindakan') == '2') selected @endif>Penugasan Semula</option>
+                                @endif
                                 {{-- @if ($report->report_status_id == 4 )
                                     <option value="2">Selesai</option>
                                 @endif --}}
@@ -192,6 +195,17 @@
 
                                 </select>
                                 @error('assigned_to_id') <p class="text-danger">{{$message}}</p> @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tindakan-penugasan-semula" class="collapse">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <label class="col-form-label">Sebab</label>
+                            </div>
+                            <div class="col-md-4">
+                                <textarea id="reassignment_remark" name="reassignment_remark" rows="5" class="form-control" disabled></textarea>
                             </div>
                         </div>
                     </div>
@@ -295,50 +309,31 @@
         @endif
 
         <legend class="text-uppercase h5 mb-3">Kronologi Aduan</legend>
-        <table class="table table-bordered">
-            {{-- <thead class="text-center align-middle">
-                <th>No.</th>
-                <th>Diberikan Oleh</th>
-                <th>Diberikan Kepada</th>
-                <th>Diberikan Pada</th>
-                <th>Status</th>
-            </thead>
-            <tbody class="text-center align-middle">
-                @foreach ($tasks as $task)
-                    <tr>
-                        <td>{{$loop->iteration}}</td>
-                        <td>{{$task->assignedBy->name}}</td>
-                        <td>{{$task->assignedTo->name}}</td>
-                        <td>{{convertDateFormat($task->assigned_at, 'd F Y')}}</td>
-                        <td><span class="{{$task->taskStatus->class}}">{{$task->taskStatus->desc}}</span></td>
-                    </tr>
-                @endforeach
-            </tbody> --}}
-                <div class="mt-5">
-                    <ul class="verti-timeline list-unstyled">
 
-                        @foreach ($trails as $trail)
-                            <li class="event-list">
-                                <div class="event-timeline-dot">
-                                    <i class="bx bx-right-arrow-circle"></i>
+        <div class="mt-5">
+            <ul class="verti-timeline list-unstyled">
+
+                @foreach ($trails as $trail)
+                    <li class="event-list">
+                        <div class="event-timeline-dot">
+                            <i class="bx bx-right-arrow-circle"></i>
+                        </div>
+                        <div class="media">
+                            <div class="me-5">
+                                {{convertDateFormat($trail->created_at,'d F Y g:i A')}}
+                                {{-- <i class="bx bx-copy-alt h2 text-primary"></i> --}}
+                            </div>
+                            <div class="media-body">
+                                <div>
+                                    <span class="{{$trail->status->class}} font-size-11">{{$trail->status->desc}}</span>
+                                    <p class="text-muted">{!!$trail->message!!}</p>
                                 </div>
-                                <div class="media">
-                                    <div class="me-5">
-                                        {{convertDateFormat($trail->created_at,'d F Y g:i A')}}
-                                        {{-- <i class="bx bx-copy-alt h2 text-primary"></i> --}}
-                                    </div>
-                                    <div class="media-body">
-                                        <div>
-                                            <span class="{{$trail->status->class}}">{{$trail->status->desc}}</span>
-                                            <p class="text-muted">{!!$trail->message!!}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-        </table>
+                            </div>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
     </div>
 </div>
@@ -358,13 +353,21 @@
         });
 
         $('select[name="tindakan"]').on('change', function(){
-            if(this.value == 1){
+            if(this.value == 1 || this.value == 2){
                 $('#tindakan-majukan-kepada').removeClass('collapse');
                 $('#majukan_kepada_peranan').trigger('change');
             } else {
                 $('#tindakan-majukan-kepada').addClass('collapse');
                 $('#assigned_to_id').prop('disabled', true);
                 $('#peg_teknikal_selections').addClass('collapse');
+            }
+
+            if(this.value == 2){
+                $('#tindakan-penugasan-semula').removeClass('collapse');
+                $('#reassignment_remark').attr('disabled', false);
+            } else {
+                $('#tindakan-penugasan-semula').addClass('collapse');
+                $('#reassignment_remark').attr('disabled', true);
             }
 
         })

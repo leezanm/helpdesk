@@ -70,6 +70,10 @@ class ReportTrailController extends Controller
     public function update(Request $request, ReportTrail $reportTrail)
     {
         //
+        $reportTrail->technical_remark = $request->technical_remark;
+        $reportTrail->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
