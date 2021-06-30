@@ -1,5 +1,5 @@
 <div id="modal_laporan_by_status" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div div class="modal-header">
                 <h5 class="modal-title" id="myExtraLargeModalLabel">Laporan Mengikut Status Tindakan</h5>
@@ -40,22 +40,26 @@
                             </thead>
                             <tbody class="text-center align-middle">
                                 <tr>
-                                    <td class="text-start">Belum Mula (Baru)</td>
-                                    <td>16</td>
+                                    <td class="text-start">Dihantar</td>
+                                    <td><a href="/laporan/mengikut-status-tindakan">16</a></td>
                                 </tr>
                                 <tr>
-                                    <td class="text-start">Ambil Maklum</td>
-                                    <td>2</td>
+                                    <td class="text-start">Dihantar (Ambil Maklum)</td>
+                                    <td><a href="/laporan/mengikut-status-tindakan">2</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-start">Dalam Tindakan</td>
+                                    <td><a href="/laporan/mengikut-status-tindakan">2</a></td>
                                 </tr>
                                 <tr>
                                     <td class="text-start">Selesai</td>
-                                    <td>600</td>
+                                    <td><a href="/laporan/mengikut-status-tindakan">600</a></td>
                                 </tr>
                             </tbody>
                             <tfoot class="text-center align-middle">
                                 <tr>
                                     <th>Jumlah</th>
-                                    <th>618</th>
+                                    <th>620</th>
                                 </tr>
                                 <tr>
                                     <th>Prestasi</th>
@@ -65,6 +69,36 @@
                         </table>
                     </div>
                 </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tiket</th>
+                            <th>Subjek</th>
+                            <th>Tarikh & Masa Aduan</th>
+                            <th>Status</th>
+                            <th class="text-center">Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        <tr>
+                            <td>1</td>
+                            <td>281222020-10000</td>
+                            <td>Masalah Komputer</td>
+                            <td>28/12/2020</td>
+                            <td>
+                                <span class="badge bg-success font-size-12">Dalam Tindakan JTK</span>
+                                <br>
+                                <a href="">Muhammad Hazim</a>
+                            </td>
+                            <td class="text-center">
+                                <a href="{{url('/aduan/show')}}" class="btn btn-primary waves-effect waves-light">
+                                    <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             {{-- <div class="modal-footer text-end">
                 <button class="btn btn-secondary" type="reset">Set Semula</button>

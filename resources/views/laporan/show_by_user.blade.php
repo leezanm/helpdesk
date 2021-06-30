@@ -93,7 +93,7 @@
                     </table>
                 </div>
             </div>
-            <table id="datatable-laporan-user" class="table table-bordered">
+            <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                 <thead>
                     <tr>
                         <th>No</th>
@@ -130,7 +130,7 @@
 @section('script')
 
 <script>
-    $('#datatable-laporan-user').DataTable();
+$(document).ready(function(){$("#datatable-buttons").DataTable({lengthChange:!1,buttons:["copy","excel","pdf"]}).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)")});
 </script>
 
 @endsection
