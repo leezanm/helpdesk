@@ -26,19 +26,19 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-
                     <h4 class="card-title">Maklumat Aduan</h4>
                     <p class="card-title-desc">Sila isi butiran tersebut</p>
-                    <form>                   
-                        <div class="row">
+                    <form id="report_form" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row mb-3">
                             <div class="col-sm-2">
-                                <label for="rujukan">Bentuk Aduan</label>                                    
+                                <label for="rujukan">Bentuk Aduan</label>
                             </div>
                             <div class="col">
                                 <div class="row">
                                     <div class="col-xl-2 col-sm-4">
                                         <label class="card-radio-label">
-                                            <input type="radio" name="bentuk-aduan" id="individu" class="card-radio-input">
+                                            <input type="radio" name="is_bp" value="0" class="card-radio-input" @if(old('is_bp') != '1') checked @endif>
                                             <div class="card-radio">
                                                 <i class="fas fa-user font-size-24 text-primary align-middle me-2"></i>
                                                 <span>Individu</span>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-xl-2 col-sm-4">
                                         <label class="card-radio-label">
-                                            <input type="radio" name="bentuk-aduan" id="wakil" class="card-radio-input" checked>
+                                            <input type="radio" name="is_bp" value="1" class="card-radio-input" @if(old('is_bp') == '1') checked @endif>
                                             <div class="card-radio">
                                                 <i class="fas fa-user-friends font-size-24 text-primary align-middle me-2"></i>
                                                 <span>Wakil</span>
@@ -57,83 +57,119 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-2 col-form-label">Nama Pengadu</label>
+
+                        <div class="row mb-3">
+                            <label class="col-md-2 col-form-label">Nama Pengadu</label>
                             <div class="col-md-4">
-                                <input class="form-control" type="text" id="nama-pengadu">
-                            </div>
-                            <label for="example-text-input" class="col-md-2 col-form-label">Username</label>
-                            <div class="col-md-4">
-                                <input class="form-control" type="text" id="username">
+                                <input type="text" class="form-control" value="{{\Auth::user()->username}}" disabled>
                             </div>
                         </div>
-                        <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-2 col-form-label">Nama Penuh</label>
-                            <div class="col-md-4">
-                                <input class="form-control" type="text" id="nama-penuh">
+
+                        <div id="bagi-pihak-detail" class="collapse">
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Nama Akaun (AD) <span class="text-danger">*</span></label>
+                                <div class="col-md-4">
+                                    <input id="bp_username" name="bp_username" type="text" class="form-control">
+                                    <p class="text-danger error-bp_username error"></p>
+                                    <input id="bp_user_id" name="bp_user_id" type="hidden" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-2 col-form-label">Email</label>
-                            <div class="col-md-4">
-                                <input class="form-control" type="email" id="email">
+
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Nama Penuh</label>
+                                <div class="col-md-10">
+                                    <input id="bp_name" name="bp_name" type="text" class="form-control"  readonly>
+                                    <p class="text-danger error-bp_name error"></p>
+                                </div>
                             </div>
-                            <label for="example-text-input" class="col-md-2 col-form-label">Bahagian</label>
-                            <div class="col-md-4">
-                                <input class="form-control" type="text" id="bahagian">
-                            </div>
-                        </div>
-                        <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-2 col-form-label">Subjek</label>
-                            <div class="col-md-4">
-                                <input class="form-control" type="text" id="nama-penuh">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm">
-                                <div class="mb-3">
-                                    <label for="productdesc" class="mb-2">Butiran Aduan</label>
-                                    <form method="post">
-                                        <textarea id="elm1" name="area"></textarea>
-                                    </form>
+
+                            <div class="row mb-3">
+                                <label class="col-md-2 col-form-label">Email</label>
+                                <div class="col-md-4">
+                                    <input id="bp_email" name="bp_email" type="text" class="form-control"  readonly>
+                                    <p class="text-danger error-bp_email error"></p>
+                                </div>
+
+                                <label class="col-md-2 col-form-label">Bahagian</label>
+                                <div class="col-md-4">
+                                    <input id="bp_bahagian" name="bp_bahagian" type="text" class="form-control"  readonly>
+                                    <p class="text-danger error-bp_bahagian error"></p>
                                 </div>
                             </div>
                         </div>
 
+                        <div class="mt-3 mb-3 row">
+                            <label for="example-text-input" class="col-md-2 col-form-label">Kategori Aduan</label>
+                            <div class="col-md-4">
+                                <select name="report_category_id" class="form-select">
+                                    @foreach ($report_categories as $report_category)
+                                        <option value="{{$report_category->id}}">{{$report_category->desc}}</option>
+                                    @endforeach
+                                </select>
+                                @error('report_category_id')
+                                    <p class="text-danger" >{{$message}}</p>
+                                @enderror
+                                <p class="text-danger error-report_category_id error"></p>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 mb-3 row">
+                            <label for="example-text-input" class="col-md-2 col-form-label">Subjek <span class="text-danger">*</span></label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" name="subject">
+                                @error('subject')
+                                    <p class="text-danger">{{$message}}</p>
+                                @enderror
+                                <p class="text-danger error-subject error"></p>
+                            </div>
+                        </div>
+
                         <div class="row mb-3">
-                            <div class="col">
-                                <label for="example-text-input" class="col-md-2 col-form-label">Muat Naik Laporan / Dokumen</label>
+                            <label class="col-md-2 col-form-label">Butiran Aduan <span class="text-danger">*</span></label>
+                            <div class="col-md-10">
+                                <textarea id="elm1" name="remark"></textarea>
+                                @error('remark')
+                                    <p class="text-danger">{{$message}}</p>
+                                @enderror
+                                <p class="text-danger error-remark error"></p>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="example-text-input" class="col-md-2 col-form-label">Muat Naik Laporan / Dokumen</label>
+                            <div class="col-md-10">
+
                                 <div action="#" class="dropzone" id="document-dropzone">
                                     <div class="fallback">
-                                        <input name="file" type="file" multiple="multiple">
+                                        <input name="file" type="file" multiple="multiple" accept=".pdf,.jpeg">
                                     </div>
                                     <div class="dz-message needsclick">
                                         <div class="mb-3">
                                             <i class="display-4 text-muted bx bxs-cloud-upload"></i>
                                         </div>
-                                        
+
                                         <h4>Drop files here or click to upload.</h4>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="floatingCheck">
-                                    <label class="form-check-label" for="floatingCheck">
-                                      Dengan ini saya mengaku dan mengesahkan semua kenyataan dan butir-butir yang dikemukakan di atas adalah benar
-                                    </label>
-                                </div>
+                        {{-- <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="pengakuan">
+                                <label class="form-check-label" for="floatingCheck">
+                                    Dengan ini saya mengaku dan mengesahkan semua kenyataan dan butir-butir yang dikemukakan di atas adalah benar
+                                </label>
                             </div>
+                        </div> --}}
+
                         <div class="d-flex flex-wrap gap-2 float-end">
-                            <a href="{{url('aduan')}}" class="btn btn-primary waves-effect waves-light">Simpan</a>
-                            <a href="{{url('aduan')}}" class="btn btn-success waves-effect waves-light">Hantar</a>
-                            <!-- <button type="submit" class="btn btn-primary waves-effect waves-light">Simpan</button> -->
-                            <!-- <button type="button" class="btn btn-success waves-effect waves-light">Hantar</button> -->
+                            <button type="button" name="report_status_id" value="1" class="btn btn-secondary waves-effect waves-light submit">Draf</button>
+                            <button type="button" name="report_status_id" value="2" class="btn btn-success waves-effect waves-light submit">Hantar</button>
                         </div>
-                    </form>
 
+                    </form>
                 </div>
             </div>
 
@@ -146,40 +182,112 @@
 {{-- <script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script> --}}
 <script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
 <script>
-  var uploadedDocumentMap = {}
+    const auth_username = '{{Auth::user()->username}}';
+    $('input[name="is_bp"]').on('change', function(){
+
+        if(this.value == '1'){
+            $('#bagi-pihak-detail').removeClass('collapse');
+        } else {
+            $('#bagi-pihak-detail').addClass('collapse');
+        }
+
+    });
+
+    $('#bp_username').on('change', function(){
+        var username = this.value;
+
+        $('#bp_name').val(null);
+        $('#bp_bahagian').val(null);
+        $('#bp_email').val(null);
+        $('#bp_user_id').val(null);
+
+        if(username == auth_username){
+            swal.fire('Gagal', 'Username mestilah dari pengguna lain', 'error');
+            return;
+        }
+
+        $.ajax({
+            url: "{{route('api.get-user')}}",
+            type: "post",
+            data: {
+                bp_username : username
+            },
+            success: function(response){
+                console.log(response)
+                if(response.success){
+                    $('#bp_name').val(response.bp_name);
+                    $('#bp_bahagian').val(response.bp_bahagian);
+                    $('#bp_email').val(response.bp_email);
+                    $('#bp_user_id').val(response.bp_user_id);
+                    console.log($('#bp_user_id').val())
+                } else {
+                    swal.fire('Gagal', response.message, 'error');
+                }
+            },
+            error: function(error){
+
+            }
+        });
+    });
+
+    $('input[name="is_bp"]:checked').trigger('change');
+</script>
+<script>
+  var uploadedDocumentMap = {}, uploadedDocumentType = {}, uploadedDocumentPath = {}, uploadedDocumentUuid = {};
   Dropzone.options.documentDropzone = {
-    url: '#',
+    url: '{{route("aduan.attachments.store")}}',
     maxFilesize: 2, // MB
     addRemoveLinks: true,
     headers: {
       'X-CSRF-TOKEN': "{{ csrf_token() }}"
     },
     success: function (file, response) {
-      $('form').append('<input type="hidden" name="document[]" value="' + response.name + '">')
-      uploadedDocumentMap[file.name] = response.name
+
+        uploadedDocumentUuid[file.upload.uuid] = file.upload.uuid;
+        uploadedDocumentMap[file.upload.uuid] = response.name
+        uploadedDocumentPath[file.upload.uuid] = response.path;
+        uploadedDocumentType[file.upload.uuid] = response.type;
     },
     removedfile: function (file) {
-      file.previewElement.remove()
-      var name = ''
-      if (typeof file.file_name !== 'undefined') {
-        name = file.file_name
-      } else {
-        name = uploadedDocumentMap[file.name]
-      }
-      $('form').find('input[name="document[]"][value="' + name + '"]').remove()
-    },
-    init: function () {
-      @if(isset($project) && $project->document)
-        var files =
-          {!! json_encode($project->document) !!}
-        for (var i in files) {
-          var file = files[i]
-          this.options.addedfile.call(this, file)
-          file.previewElement.classList.add('dz-complete')
-          $('form').append('<input type="hidden" name="document[]" value="' + file.file_name + '">')
-        }
-      @endif
+        file.previewElement.remove()
+
+        delete uploadedDocumentUuid[file.upload.uuid];
+        delete uploadedDocumentMap[file.upload.uuid];
+        delete uploadedDocumentPath[file.upload.uuid];
+        delete uploadedDocumentType[file.upload.uuid];
     }
   }
+
+  $('.submit').on('click', function(){
+
+    form = $('#report_form');
+    var formData = new FormData( $('#report_form')[0] );
+    formData.append('report_status_id', this.value);
+    formData.append('attachment_uuids', JSON.stringify(uploadedDocumentMap));
+    formData.append('attachment_names', JSON.stringify(uploadedDocumentMap));
+    formData.append('attachment_paths', JSON.stringify(uploadedDocumentPath));
+    formData.append('attachment_types', JSON.stringify(uploadedDocumentType));
+    formData.append('remark', tinymce.get('elm1').getContent());
+
+    clearError(form);
+    $.ajax({
+        type:'post',
+        data:formData,
+        processData: false,
+        contentType: false,
+        success:function(response){
+            // console.log(JSON.parse(response));
+            if(response.success){
+                window.location.href = "{{route('aduan.index-user', Auth::user()->username)}}";
+            }
+        //
+        },
+        error:function(error){
+            console.log(error);
+            errorValidate(error, form);
+        }
+    });
+
+  })
 </script>
 @endsection

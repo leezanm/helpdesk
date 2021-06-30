@@ -4,12 +4,12 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Senarai Aduan Mengikut Kategori</h4>
+                <h4 class="mb-sm-0 font-size-18">Senarai Aduan {{$title}}</h4>
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="#"><i class="bx bx-home-alt"></i> Laman Utama</a></li>
                         <li class="breadcrumb-item ">Laporan</li>
-                        <li class="breadcrumb-item active">Mengikut Kategori</li>
+                        <li class="breadcrumb-item active">{{$title}}</li>
                     </ol>
                 </div>
 
@@ -31,45 +31,52 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-2">
-                    <label class="col-form-label">Daripada</label>
-                </div>
-                <div class="col-md-3">
-                    <div class="position-relative" id="laporan-user-from">
-                        <input type="text" name="from" class="form-control text-center" data-provide="datepicker"
-                            data-date-container="#laporan-user-from" data-date-autoclose="true"
-                            data-date-end-date="+0d" autocomplete="off">
+
+            <form>
+                <input type="hidden" name="category" value="{{$category}}">
+                <div class="row mb-3">
+                    <div class="col-md-2">
+                        <label class="col-form-label">Daripada</label>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="position-relative" id="laporan-user-from">
+                            <input type="text" name="from" class="form-control text-center" data-provide="datepicker"
+                                data-date-container="#laporan-user-from" data-date-autoclose="true"
+                                data-date-end-date="+0d" autocomplete="off" value="{{$from}}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="col-form-label">Sehingga</label>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="position-relative" id="laporan-user-to">
+                            <input type="text" name="to" class="form-control text-center" data-provide="datepicker"
+                                data-date-container="#laporan-user-to" data-date-autoclose="true"
+                                data-date-end-date="+0d" autocomplete="off" value="{{$to}}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit">Pilih</button>
+                        <a href="{{route('laporan.view-by-category')}}" class="btn btn-secondary" role="button">Set Semula</a>
                     </div>
                 </div>
+            </form>
+
+            {{-- <div class="row mb-3">
                 <div class="col-md-2">
-                    <label class="col-form-label">Sehingga</label>
-                </div>
-                <div class="col-md-3">
-                    <div class="position-relative" id="laporan-user-to">
-                        <input type="text" name="to" class="form-control text-center" data-provide="datepicker"
-                            data-date-container="#laporan-user-to" data-date-autoclose="true"
-                            data-date-end-date="+0d" autocomplete="off">
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-secondary">Pilih</button>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-2">
-                    <label class="col-form-label">Bahagian</label>
+                    <label class="col-form-label">Status</label>
                 </div>
                 <div class="col-md-5">
                     <select class="form-select">
-                        <option value="">Semua Kategori</option>
-                        <option value="">Acara</option>
-                        <option value="">Komputer Riba (Notebook)</option>
-                        <option value="">Komputer Meja (Desktop)</option>
-                        <option value="">Lain-Lain</option>
+                        <option value="">Semua Status</option>
+                        <option value="">Dihantar</option>
+                        <option value="">Dihantar (Ambil Maklum)</option>
+                        <option value="">Dalam Tindakan</option>
+                        <option value="">Selesai</option>
                     </select>
                 </div>
-            </div>
+            </div> --}}
+
             <div class="row justify-content-md-center">
                 <div class="col-md-8">
                     <table class="table table-bordered">
@@ -78,84 +85,58 @@
                             <th>Bilangan</th>
                         </thead>
                         <tbody class="text-center align-middle">
-                            <tr>
-                                <td class="text-start">Acara (Event)</td>
-                                <td>299</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">E-mel / Akaun Pengguna</td>
-                                <td>56</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Komputer Meja (Desktop)</td>
-                                <td>114</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Komputer Riba (Notebook)</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Lain-lain</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Pencetak / Pengimbas</td>
-                                <td>57</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Perisian</td>
-                                <td>27</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Perkakasan</td>
-                                <td>5</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Rangkaian</td>
-                                <td>30</td>
-                            </tr>
-                            <tr>
-                                <td class="text-start">Sistem Aplikasi</td>
-                                <td>13</td>
-                            </tr>
+                            @foreach ($laporans as $laporan)
+                                <tr>
+                                    <td><a href="{{route('laporan.view-by-category', ['category' => $laporan->desc, 'from' => $from, 'to' => $to])}}">{{$laporan->desc}}</a></td>
+                                    <td>{{$laporan->jumlah}}</td>
+                                </tr>
+                            @endforeach
                         </tbody>
                         <tfoot class="text-center align-middle">
                             <tr>
                                 <th>Jumlah</th>
-                                <th>618</th>
+                                <th>{{$laporans->sum('jumlah')}}</th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
+
             <table id="datatable-buttons" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>Tiket</th>
                         <th>Subjek</th>
-                        <th>Tarikh & Masa Aduan</th>
+                        <th>Tarikh Aduan</th>
                         <th>Status</th>
                         <th class="text-center">Tindakan</th>
                     </tr>
                 </thead>
                 <tbody class="align-middle">
-                    <tr>
-                        <td>1</td>
-                        <td>281222020-10000</td>
-                        <td>Masalah Komputer</td>
-                        <td>28/12/2020</td>
-                        <td>
-                            <span class="badge bg-success font-size-12">Dalam Tindakan JTK</span>
-                            <br>
-                            <a href="">Muhammad Hazim</a>
-                        </td>
-                        <td class="text-center">
-                            <a href="{{url('/aduan/show')}}" class="btn btn-primary waves-effect waves-light">
-                                <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                            </a>
-                        </td>
-                    </tr>
+                    @foreach ($reports as $report)
+                        <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$report->ticket_no}}</td>
+                            <td>{{$report->subject}}</td>
+                            <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                            <td>
+                                <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
+                                @if ($report->report_status_id == 3)
+                                    <br>
+                                    <a href="#" class="userProfile" data-userId="{{$report->currentTrail->updated_by_id}}">{{$report->currentTrail->updatedBy->name}}</a>
+                                @elseif($report->report_status_id == 4)
+                                    <br>
+                                    <a href="#" class="userProfile" data-userId="{{$report->currentTrail->assigned_to_id}}">{{$report->currentTrail->assignedTo->name}}</a>
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
+                                    <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

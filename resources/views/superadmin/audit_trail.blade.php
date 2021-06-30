@@ -9,7 +9,8 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Laman Utama</a></li>
-                        <li class="breadcrumb-item active">Senarai Audit Trail</li>
+                        <li class="breadcrumb-item">Pentadbiran</li>
+                        <li class="breadcrumb-item active">Audit Trail</li>
                     </ol>
                 </div>
 
@@ -36,7 +37,7 @@
                     <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{$audit_trail->created_at}}</td>
-                        <td><a href="#" class="viewPelaku" data-id="{{$audit_trail->user_id}}">{{$audit_trail->user->name}}</a></td>
+                        <td><a href="#" class="userProfile" data-userId="{{$audit_trail->user_id}}">{{$audit_trail->user->name}}</a></td>
                         <td>{{$audit_trail->ip}}</td>
                         <td>{{$audit_trail->method}}</td>
                         <td class="text-left">{{$audit_trail->url}}</td>

@@ -11,20 +11,20 @@
                     <tbody>
                         <tr>
                             <th width="20%">Pemohon</th>
-                            <td>
-                                <a href="#" class="userProfile">Muhammad Hazim</a>
+                            <td id="report-user-name">
+
                             </td>
                         </tr>
                         <tr>
                             <th width="20%">Jabatan</th>
-                            <td>
-                                Bahagian Teknologi Maklumat
+                            <td id="report-user-ldap_bahagian">
+
                             </td>
                         </tr>
                         <tr>
                             <th width="20%">Email</th>
-                            <td>
-                                hazim@gmail.com
+                            <td id="report-user-email">
+
                             </td>
                         </tr>
                     </tbody>
@@ -34,41 +34,42 @@
                     <tbody>
                         <tr>
                             <th width="20%">No Ticket</th>
-                            <td>
-                                ADU019376
+                            <td id="report-ticket_no">
+
                             </td>
                         </tr>
                         <tr>
                             <th width="20%">Subjek</th>
-                            <td>
-                                Aduan Kerosakan Komputer
+                            <td id="report-subject">
+
                             </td>
                         </tr>
                         <tr>
                             <th width="20%">Dihantar Pada</th>
-                            <td>
-                                3 June 2021, 2:43 PM
+                            <td id="report-submitted_at">
+
                             </td>
                         </tr>
                         <tr>
                             <th width="20%">Kategori Kerosakan</th>
-                            <td>
-                                Komputer Riba (Notebook)
+                            <td id="report-report_category">
+
                             </td>
                         </tr>
                         <tr>
                             <th width="20%">Aduan</th>
-                            <td>
-                                Komputer hang bila on online meeting menggunakan google meet
+                            <td id="report-remark">
+
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <br>
+                <hr>
             </div>
-            {{-- <div class="modal-footer text-end">
-                <button class="btn btn-secondary" type="reset">Set Semula</button>
-                <button id="btnCreate" class="btn btn-success" type="button">Simpan</button>
-            </div> --}}
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
 </div>

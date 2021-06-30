@@ -24,9 +24,9 @@
                     <form class="form-horizontal" method="POST" action="{{route('login')}}">
                         @csrf
                         <div class="mb-3">
-                            <label for="username" class="form-label @error('email') is-invalid @enderror">E-mel</label>
-                            <input type="text" class="form-control" id="username" name="email" placeholder="">
-                            @error('email') <p class="text-danger">{{$message}}</p> @enderror
+                            <label for="username" class="form-label @error('username') is-invalid @enderror">Nama Pengguna (AD)</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="">
+                            @error('username') <p class="text-danger">{{$message}}</p> @enderror
                         </div>
 
                         <div class="mb-3">
@@ -49,9 +49,9 @@
                             <button class="btn btn-primary waves-effect waves-light" type="submit">Log Masuk</button>
                         </div>
 
-                        <div class="mt-4 text-center">
+                        {{-- <div class="mt-4 text-center">
                             <a href="{{url('/forgot-password-out')}}" class="text-muted"><i class="mdi mdi-lock me-1"></i> Terlupa Kata Laluan?</a>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>

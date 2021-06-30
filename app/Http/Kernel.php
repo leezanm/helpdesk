@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
 
         //custom
         'audit-trail' => \App\Http\Middleware\AuditTrail::class,
+        'update-aduan-status' => \App\Http\Middleware\UpdateReportStatus::class,
     ];
 }

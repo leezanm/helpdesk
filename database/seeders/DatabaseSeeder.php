@@ -17,11 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionSeeder::class,
             RoleSeeder::class,
+            // DepartmentSeeder::class,
+            // DivisionSeeder::class,
             UserSeeder::class,
-            DivisionSeeder::class,
-            TypeSeeder::class,
-            // FbiSeeder::class,
-            // MbiSeeder::class,
+            ReportStatusSeeder::class,
+            ReportCategorySeeder::class,
+            ReportTrailStatusSeeder::class,
         ]);
     }
 }

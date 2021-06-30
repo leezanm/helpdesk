@@ -17,6 +17,7 @@ class DivisionSeeder extends Seeder
         //
         $division = new Division();
         $division->desc = 'Division 1';
+        $division->department_id = 1;
         $division->save();
     }
 }

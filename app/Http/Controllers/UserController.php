@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 use Str;
 
 class UserController extends Controller
@@ -13,8 +14,25 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::all();
-        return view('user.pengguna', compact('users'));
+        $users = User::role('pengguna')->orderBy('name', 'asc')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->get();
+        return view('user.pengguna', compact('users', 'roles'));
+    }
+
+    public function indexPegTeknikal()
+    {
+        //
+        $users = User::permission('aduan.updateTask')->orderBy('name', 'asc')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->get();
+        return view('user.pengguna', compact('users', 'roles'));
+    }
+
+    public function indexPentadbir()
+    {
+        //
+        $users = User::permission('manage.user')->orderBy('name', 'asc')->get();
+        $roles = Role::where('name', '!=', 'superadmin')->get();
+        return view('user.pengguna', compact('users', 'roles'));
     }
 
     public function edit(User $user){
@@ -47,12 +65,16 @@ class UserController extends Controller
     public function passwordUpdate(Request $request,User $user){
         $request->validate([
             'old_password' => 'required|password',
-            'new_password' => 'required|confirmed',
-            'new_password_confirmation' => 'required',
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required',
         ]);
         $user->update(['password' => Hash::make($request->new_password)]);
         Auth::logout();
-        return redirect('/');
+
+        $datas = [
+            'success' => true
+        ];
+        return response()->json($datas);
     }
 
     public function storeUser(Request $request)
@@ -60,12 +82,14 @@ class UserController extends Controller
         $request->validate([
             'profile_path' => 'nullable|image|max:256',
             'name' => 'required',
+            'username' => 'required|unique:users,username',
             'email' => 'required|email',
             'designation' => 'required',
             'tel_no' => 'required',
-            'dob' => 'required|date',
-            'identification' => 'required',
-            'address' => 'required'
+            'ic_no' => 'required',
+            'address' => 'required',
+            'roles' => 'required',
+            'roles.*' => 'required|exists:roles,name'
         ]);
 
         $user = new User();
@@ -80,6 +104,8 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        $user->syncRoles($request->roles);
 
         return response()->json(['success'=>true]);
     }
@@ -96,9 +122,11 @@ class UserController extends Controller
 
     public function editUser(User $user)
     {
+        $user_roles = $user->roles;
         $datas = [
             'success' => true,
-            'data' => $user->append('profile_picture')
+            'data' => $user->append('profile_picture'),
+            'user_roles' => $user_roles
         ];
 
         return response()->json($datas);
@@ -111,13 +139,16 @@ class UserController extends Controller
             'name' => 'required',
             'designation' => 'required',
             'tel_no' => 'required',
-            'dob' => 'required',
-            'identification' => 'required',
-            'address' => 'required'
+            'ic_no' => 'nullable|unique:users,ic_no,'.$request->user_id,
+            'address' => 'required',
+            'roles' => 'required',
+            'roles.*' => 'required|exists:roles,name'
         ]);
 
         $user = $user->fill($request->except('_token'));
         $user->save();
+        $user->syncRoles($request->roles);
+
         $datas = [
             'success' => true,
             'data' => $user
@@ -128,8 +159,17 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        $user->delete();
+        $user->is_active = false;
+        $user->save();
 
         return response()->json(['success' => true]);
+    }
+
+    public function restore(User $user)
+    {
+        $user->is_active = true;
+        $user->save();
+
+        return redirect()->back();
     }
 }

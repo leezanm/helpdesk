@@ -5,8 +5,8 @@
                 <h5 class="modal-title" id="myExtraLargeModalLabel">Laporan Mengikut Kategori</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form> 
+            <form method="POST">
+                <div class="modal-body">
                     <legend class="text-uppercase h5">Soal Selidik</legend>
 
                     <div class="row mb-3">
@@ -15,7 +15,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="rating-star">
-                                <input type="hidden" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted"/>
+                                <input type="hidden" name="rating" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted"/>
                             </div>
                         </div>
                     </div>
@@ -25,27 +25,17 @@
                             <label class="col-form-label">Komen</label>
                         </div>
                         <div class="col-md-10">
-                            <textarea name="" class="form-control" rows="5"></textarea>
+                            <textarea name="feedback" class="form-control" rows="5"></textarea>
                             <p>Komen anda adalah amat dihargai</p>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="text-end">
-                                <a class="btn btn-success waves-effect waves-light save">
-                                    <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </form>
-            </div>
-            {{-- <div class="modal-footer text-end">
-                <button class="btn btn-secondary" type="reset">Set Semula</button>
-                <button id="btnCreate" class="btn btn-success" type="button">Simpan</button>
-            </div> --}}
+                </div>
+                <div class="modal-footer text-end">
+                    <a class="btn btn-success waves-effect waves-light submitFeedback">
+                        <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                    </a>
+                </div>
+            </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>

@@ -23,62 +23,65 @@ Route::view('/forgot-password-out', 'auth.forgot_password_out');
 Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/test', 'example');
 
-    Route::view('/dashboard', 'dashboard');
+    Route::prefix('notification')->as('notification.')->group(function () {
+
+        Route::get('/', [App\Http\Controllers\NotificationController::class, 'listNotification']);
+        Route::get('/read/{notification}', [App\Http\Controllers\NotificationController::class, 'read'])->name('read');
+    });
+
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
 
-    Route::view('/fbi', 'fbi.index');
-    Route::view('/fbi-create', 'fbi.create');
-
     Route::prefix('aduan')->as('aduan.')->group(function () {
-        Route::view('/', 'aduan.index');
-        Route::view('/dihantar', 'aduan.index');
-        Route::view('/untuk-tindakan', 'aduan.index');
-        Route::view('/create', 'aduan.create');
-        Route::view('/show', 'aduan.show');
-        
+        Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index');
+        Route::get('/user/{user:username}', [App\Http\Controllers\ReportController::class, 'indexUser'])->name('index-user');
+        Route::get('/untuk-tindakan', [App\Http\Controllers\ReportController::class, 'indexUntukTindakan'])->name('index-untuk-tindakan');
+        Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar');
+        Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
+        Route::post('/create', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
+        Route::get('/edit/{report}', [App\Http\Controllers\ReportController::class, 'edit'])->name('edit');
+        Route::post('/edit/{report}', [App\Http\Controllers\ReportController::class, 'update'])->name('update');
+        Route::post('/update-task/{report}', [App\Http\Controllers\ReportController::class, 'assignTask'])->name('update-task');
+        Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show')->middleware('update-aduan-status');
+        Route::post('/feedback/{report}', [App\Http\Controllers\ReportController::class, 'updateFeedback'])->name('update-feedback');
+
+        Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
+        Route::post('/attachments/delete/{reportAttachment}', [App\Http\Controllers\ReportAttachmentController::class, 'destroy'])->name('attachments.delete');
+
+        Route::prefix('trail')->group(function () {
+            Route::post('/update/{reportTrail}', [App\Http\Controllers\ReportTrailController::class, 'update'])->name('update');
+        });
     });
 
-    Route::prefix('fbi')->group(function () {
-        Route::get('/', [App\Http\Controllers\FbiController::class, 'index'])->name('fbi.index');
-        Route::get('/show/{fbi}', [App\Http\Controllers\FbiController::class, 'show'])->name('fbi.show');
-        Route::post('/create', [App\Http\Controllers\FbiController::class, 'store'])->name('fbi.store');
-        Route::post('/edit/{fbi}', [App\Http\Controllers\FbiController::class, 'edit'])->name('fbi.edit');
-        Route::post('/update/{fbi}', [App\Http\Controllers\FbiController::class, 'update'])->name('fbi.update');
-        Route::post('/delete/{fbi}', [App\Http\Controllers\FbiController::class, 'destroy'])->name('fbi.destroy');
-    });
 
-    Route::prefix('mbi')->group(function () {
-        Route::get('/', [App\Http\Controllers\MbiController::class, 'index'])->name('mbi.index');
-        Route::get('/show/{mbi}', [App\Http\Controllers\MbiController::class, 'show'])->name('mbi.show');
-        Route::post('/create', [App\Http\Controllers\MbiController::class, 'store'])->name('mbi.store');
-        Route::post('/edit/{mbi}', [App\Http\Controllers\MbiController::class, 'edit'])->name('mbi.edit');
-        Route::post('/update/{mbi}', [App\Http\Controllers\MbiController::class, 'update'])->name('mbi.update');
-        Route::post('/delete/{mbi}', [App\Http\Controllers\MbiController::class, 'destroy'])->name('mbi.destroy');
-    });
 
-    Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index']);
+    Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index'])->middleware('can:manage.audit-trail');
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
 
-    Route::prefix('division')->as('division.')->group(function () {
-        Route::get('/', [App\Http\Controllers\DivisionController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\DivisionController::class, 'store'])->name('store');
-        Route::get('/show/{division}', [App\Http\Controllers\DivisionController::class, 'show'])->name('show');
-        Route::get('/edit/{division}', [App\Http\Controllers\DivisionController::class, 'edit'])->name('edit');
-        Route::post('/update/{division}', [App\Http\Controllers\DivisionController::class, 'update'])->name('update');
-        Route::post('/destroy/{division}', [App\Http\Controllers\DivisionController::class, 'destroy'])->name('destroy');
+    // Route::prefix('department')->as('department.')->group(function () {
+    //     Route::get('/', [App\Http\Controllers\DepartmentController::class, 'index'])->name('index');
+    //     Route::post('/create', [App\Http\Controllers\DepartmentController::class, 'store'])->name('store');
+    //     Route::get('/show/{department}', [App\Http\Controllers\DepartmentController::class, 'show'])->name('show');
+    //     Route::get('/edit/{department}', [App\Http\Controllers\DepartmentController::class, 'edit'])->name('edit');
+    //     Route::post('/update/{department}', [App\Http\Controllers\DepartmentController::class, 'update'])->name('update');
+    //     Route::post('/destroy/{department}', [App\Http\Controllers\DepartmentController::class, 'destroy'])->name('destroy');
+    // });
+
+    Route::prefix('kategori')->as('category.')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
+        Route::post('/create', [App\Http\Controllers\ReportCategoryController::class, 'store'])->name('store');
+        Route::get('/show/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'show'])->name('show');
+        Route::get('/edit/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'edit'])->name('edit');
+        Route::post('/update/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'update'])->name('update');
+        Route::post('/destroy/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('type')->as('type.')->group(function () {
-        Route::get('/', [App\Http\Controllers\TypeController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\TypeController::class, 'store'])->name('store');
-        Route::get('/show/{type}', [App\Http\Controllers\TypeController::class, 'show'])->name('show');
-        Route::get('/edit/{type}', [App\Http\Controllers\TypeController::class, 'edit'])->name('edit');
-        Route::post('/update/{type}', [App\Http\Controllers\TypeController::class, 'update'])->name('update');
-        Route::post('/destroy/{type}', [App\Http\Controllers\TypeController::class, 'destroy'])->name('destroy');
+    Route::prefix('status')->as('status.')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReportStatusController::class, 'index'])->name('index');
+        Route::post('/edit/{reportStatus}', [App\Http\Controllers\ReportStatusController::class, 'edit'])->name('edit');
+        Route::post('/update/{reportStatus}', [App\Http\Controllers\ReportStatusController::class, 'update'])->name('update');
     });
 
     // Route::view('/pengguna', 'superadmin.pengguna');
-    Route::view('/pentadbir', 'superadmin.pentadbir');
 
     Route::prefix('pengguna')->as('user.')->group(function(){
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
@@ -87,15 +90,21 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/edit/{user}', [App\Http\Controllers\UserController::class, 'editUser'])->name('editUser');
         Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
         Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
+        Route::get('/restore/{user}', [App\Http\Controllers\UserController::class, 'restore'])->name('restore');
+        Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('index');
+        Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('index');
     });
-    Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'index'])->name('index');
+
 
     Route::prefix('laporan')->as('laporan.')->group(function () {
-        Route::view('/', 'laporan.index');
-        Route::view('/mengikut-status-tindakan', 'laporan.show_by_status');
-        Route::view('/mengikut-kategori', 'laporan.show_by_category');
-        Route::view('/mengikut-bahagian', 'laporan.show_by_user');
-        
+        Route::get('/', [App\Http\Controllers\LaporanController::class,'index']);
+        Route::get('/mengikut-status-tindakan', [App\Http\Controllers\LaporanController::class, 'viewByStatus'])->name('view-by-status');
+        Route::get('/mengikut-kategori', [App\Http\Controllers\LaporanController::class, 'viewByCategory'])->name('view-by-category');
+        Route::get('/soal-selidik', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-rating');
+        // Route::get('/mengikut-user', [App\Http\Controllers\LaporanController::class, 'viewByUser'])->name('view-by-user');
+        Route::get('/mengikut-bahagian', [App\Http\Controllers\LaporanController::class, 'viewByDepartment'])->name('view-by-department');
+        Route::get('/mengikut-peranan', [App\Http\Controllers\LaporanController::class, 'viewByRole'])->name('view-by-role');
+
     });
 
     Route::prefix('peranan')->as('role.')->group(function () {
@@ -108,13 +117,20 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/pengesahan', 'superadmin.selenggara');
     Route::view('/sijil', 'superadmin.selenggara');
     Route::view('/pengumuman', 'pengumuman');
-    Route::view('/backup', 'superadmin.backup');
+    // Route::view('/backup', 'superadmin.backup');
 
     Route::prefix('account')->group(function () {
         Route::get('profile/{user}', [App\Http\Controllers\UserController::class, 'edit'])->name('account.profile.show');
-        Route::get('profile/edit/{user}', [App\Http\Controllers\UserController::class, 'edit'])->name('account.profile.edit');
         Route::post('profile/edit/{user}', [App\Http\Controllers\UserController::class, 'update'])->name('account.profile.update');
-        Route::get('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordEdit'])->name('account.password.edit');
         Route::post('password/edit/{user}', [App\Http\Controllers\UserController::class, 'passwordUpdate'])->name('account.password.update');
+    });
+
+    Route::prefix('backup')->as('backup.')->middleware('can:manage.backup')->group(function () {
+        Route::get('/', [App\Http\Controllers\BackupContoller::class, 'index'])->name('index');
+        Route::get('/full', [App\Http\Controllers\BackupContoller::class, 'backupFull'])->name('full');
+        Route::get('/database', [App\Http\Controllers\BackupContoller::class, 'backupDB'])->name('database');
+        Route::get('/file', [App\Http\Controllers\BackupContoller::class, 'backupFile'])->name('file');
+        Route::get('/download/{filename}', [App\Http\Controllers\BackupContoller::class, 'download'])->name('download');
+        Route::get('/delete/{filename}', [App\Http\Controllers\BackupContoller::class, 'destroy'])->name('delete');
     });
 });

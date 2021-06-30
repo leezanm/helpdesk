@@ -83,162 +83,69 @@
     </div>
 </div>
 
-
 <div class="row">
-    <div class="col-sm-12 col-md-8">
-        <div class="card" style="max-height: 30rem;">
+    <div class="col-sm-12 col-md-12">
+        <div class="card">
             <div class="card-body">
 
-                @hasrole('helpdesk')
+                @can('aduan.assignTask')
                     <div class="d-flex flex-wrap">
-                        <h5 class="card-title me-2 mb-4">Aduan Baru</h5>
+                        <h5 class="card-title me-2 mb-4">Aduan Yang Belum Diproses</h5>
                     </div>
-
-                    <div class="table-responsive">
-                        <table class="table align-middle table-nowrap mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="align-middle">No</th>
-                                    <th class="align-middle">Ticket</th>
-                                    <th class="align-middle">Subject</th>
-                                    <th class="align-middle">Tarikh Aduan</th>
-                                    <th class="align-middle">Status</th>
-                                    <th class="align-middle">Tindakan</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">1</a> </td>
-                                    <td>97216-72612</td>
-                                    <td>
-                                        Komputer Riba Rosak
-                                    </td>
-                                    <td>3 June 2021</td>
-                                    <td>
-                                        <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
-                                    </td>
-                                    <td>
-                                        <a href="/aduan/show" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            Lihat
-                                        </a>
-                                    </td>
-                                </tr>    
-
-                                <tr>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">3</a> </td>
-                                    <td>51838-21235</td>
-                                    <td>
-                                        Internet Slow
-                                    </td>
-                                    <td>3 June 2021</td>
-                                    <td>
-                                        <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
-                                    </td>
-                                    <td>
-                                        <a href="/aduan/show" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            Lihat
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">4</a> </td>
-                                    <td>82718-82790</td>
-                                    <td>
-                                        Editor Word mempunyai masalah
-                                    </td>
-                                    <td>3 June 2021</td>
-                                    <td>
-                                        <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
-                                    </td>
-                                    <td>
-                                        <a href="/aduan/show" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">
-                                            Lihat
-                                        </a>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
+                @elsecan('aduan.updateTask')
+                    <div class="d-flex flex-wrap">
+                        <h5 class="card-title me-2 mb-4">Tugasan Saya</h5>
                     </div>
                 @else
                     <div class="d-flex flex-wrap">
-                        <h5 class="card-title me-2 mb-4">Aduan Hari ini</h5>
+                        <h5 class="card-title me-2 mb-4">Aduan Saya</h5>
                     </div>
+                @endcan
 
-                    <div class="table-responsive">
-                        <table class="table align-middle table-nowrap mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="align-middle">No</th>
-                                    <th class="align-middle">Ticket</th>
-                                    <th class="align-middle">Subject</th>
-                                    <th class="align-middle">Status</th>
-                                    <th class="align-middle">Tindakan</th>
+                <div class="table-responsive">
+                    <table class="table align-middle table-nowrap mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="align-middle">No</th>
+                                <th class="align-middle">Ticket</th>
+                                <th class="align-middle">Subject</th>
+                                <th class="align-middle">Tarikh Aduan</th>
+                                <th class="align-middle">Durasi</th>
+                                <th class="align-middle">Status</th>
+                                <th class="align-middle">Tindakan</th>
 
-                                </tr>
-                            </thead>
-                            <tbody>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($reports as $report)
                                 <tr>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">1</a> </td>
-                                    <td>97216-72612</td>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>{{$report->ticket_no}}</td>
+                                    <td>{{$report->subject}}</td>
+                                    <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                                    <td>{!! getDuration($report) !!}</td>
+                                    <td><span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span></td>
                                     <td>
-                                        Komputer Riba Rosak
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-pill badge-soft-info font-size-11">Dalam Tindakan</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#view_report_modal">
-                                            Lihat
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#user_feedback">
-                                            Selesai
-                                        </button>
-                                    </td>
-                                </tr>    
+                                        @can('aduan.assignTask')
+                                            <a href="{{route('aduan.show',$report->id)}}" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">Lihat</a>
+                                        @else
+                                            <a class="btn btn-primary btn-sm btn-rounded waves-effect waves-light viewReport" data-url="{{route('api.aduan.get-report', $report->id)}}"  data-bs-target="#view_report_modal" role="button">Lihat</a>
+                                        @endcan
 
-                                <tr>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">3</a> </td>
-                                    <td>51838-21235</td>
-                                    <td>
-                                        Internet Slow
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-pill badge-soft-info font-size-11">Dihantar (Ambil Maklum)</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#view_report_modal">
-                                            Lihat
-                                        </button>
+                                        @if ($report->report_status_id == 4 && $report->reportBy->is(\Auth::user()))
+                                            <a class="btn btn-success btn-sm btn-rounded waves-effect waves-light updateFeedback" data-action="{{route('api.aduan.update-feedback', $report->id)}}" data-bs-toggle="modal" data-bs-target="#user_feedback" role="button">Selesai</a>
+                                        @endif
                                     </td>
                                 </tr>
+                            @endforeach
 
-                                <tr>
-                                    <td><a href="javascript: void(0);" class="text-body fw-bold">4</a> </td>
-                                    <td>82718-82790</td>
-                                    <td>
-                                        Editor Word mempunyai masalah
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-pill badge-soft-info font-size-11">Dihantar</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#view_report_modal">
-                                            Lihat
-                                        </button>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
-                    </div>
-                @endhasrole
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-12 col-md-4">
+    {{-- <div class="col-sm-12 col-md-4">
         <div class="card" style="max-height: 30rem;">
             <div class="card-body">
                 <div class="d-flex">
@@ -276,22 +183,22 @@
                                     <h5 class="font-size-13 text-truncate mb-1"><a href="#" class="text-dark">Pegawai Teknologi</a></h5>
                                     <p class="text-muted mb-0">Dikemaskini :  24 Oct, 2020</p>
                                 </td>
-                                <td> 98</td>           
+                                <td> 98</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
-@hasrole('helpdesk')
+@can('dashboard.viewGraph')
     <div class="row">
         <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Jumlah Aduan Mengikut Kategori</h4>
+                    <h4 class="card-title mb-4">Jumlah Aduan Mengikut Kategori Minggu Ini</h4>
                     {{-- <div id="pie-chart" class="e-charts"></div>--}}
                     <div id="sektor" class="e-charts"></div>
                 </div>
@@ -300,7 +207,7 @@
         <div class="col-xl-8">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Jumlah Aduan Vs Aduan Selesai</h4>
+                    <h4 class="card-title mb-4">Jumlah Aduan Vs Aduan Selesai Minggu Ini</h4>
                     <div id="mix-line-bar" class="e-charts"></div>
                 </div>
             </div>
@@ -310,10 +217,10 @@
         <div class="col">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-3">Pecahan Aduan Mengikut Kategori Dan Status</h4>
+                    <h4 class="card-title mb-3">Pecahan Aduan Mengikut Kategori Dan Status Minggu Ini</h4>
                     <div class="table-responsive">
                         <table class="table align-middle mb-0 table-nowrap">
-                            <thead class="table-secondary">
+                            <thead class="table-secondary text-center">
                                 <tr>
                                     <th>Kategori</th>
                                     <th>Dihantar</th>
@@ -322,55 +229,7 @@
                                     <th>Selesai</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="media align-items-center">
-                                            <div class="me-3">
-                                                <img src="https://www.lenovo.com/medias/ThinkBook-Plus-XXTBXTM8021-725x515.png?context=bWFzdGVyfHJvb3R8Mjc3NjYwfGltYWdlL3BuZ3xoNjcvaDc0LzExNTc0NDA3NTk0MDE0LnBuZ3w5NjNlM2JmYjNiMmY0Njc0MTIyM2NhM2M5MDBiNmQ0OTc2MGY4NGIyYmUyMTc4YmQ1N2NhNzA2ZjJkZDczNTQz" alt=""title="" class="avatar-sm h-auto d-block rounded" />
-                                            </div>
-                                            <div class="media-body overflow-hidden">
-                                                <h5 class="font-size-13 text-truncate"> KOMPUTER RIBA (NOTEBOOK)</h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>4</td>
-                                    <td>24</td>
-                                    <td>13</td>
-                                    <td>62</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="media align-items-center">
-                                            <div class="me-3">
-                                                <img src="https://www.lenovo.com/medias/lenovo-tower-thinkstation-p620-slim-hero.png?context=bWFzdGVyfHJvb3R8MTM2MzA1fGltYWdlL3BuZ3xoNTQvaDE0LzEwOTYxOTAxMTI1NjYyLnBuZ3xlMDFiYTlmNTRlMTM5M2ZiMGRmMzBjYjMwNGExOWNmMTg4Y2RkOTQwMGQwYjhhNDcwYzU1YzJhNTg0ZmMxM2M5" alt=""title="" class="avatar-sm h-auto d-block rounded" />
-                                            </div>
-                                            <div class="media-body overflow-hidden">
-                                                <h5 class="font-size-13 text-truncate"> KOMPUTER MEJA (DESKTOP)</h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>5</td>
-                                    <td>10</td>
-                                    <td>11</td>
-                                    <td>40</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="media align-items-center">
-                                            <div class="me-3">
-                                                <img src="https://image.shutterstock.com/image-vector/computers-peripherals-vector-icons-realistic-260nw-263177087.jpg" alt=""title="" class="avatar-sm h-auto d-block rounded" />
-                                            </div>
-                                            <div class="media-body overflow-hidden">
-                                                <h5 class="font-size-13 text-truncate"> PERALATAN KOMPUTER</h5>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>5</td>
-                                    <td>7</td>
-                                    <td>3</td>
-                                    <td>12</td>
-                                </tr>
+                            <tbody id="tbody-category_by_status" class="text-center">
                             </tbody>
                         </table>
                     </div>
@@ -378,180 +237,275 @@
             </div>
         </div>
     </div>
-@endhasrole
+@endcan
 
-<!-- Modal -->
-<div class="modal fade transaction-detailModal" tabindex="-1" role="dialog" aria-labelledby="transaction-detailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="transaction-detailModalLabel">Maklumat Aduan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table align-middle table-nowrap">
-                        <tbody>
-                            <tr>
-                                <td>No. Tiket : </td>
-                                <td><span class="text-primary">97216-72612</span></td>
-                            </tr>
-                            <tr>
-                                <td>Nama pengadu : </td>
-                                <td><span class="text-primary">Malik Kunanlan</span></td>
-                            </tr>
-                            <tr>
-                                <td>Butiran Aduan : </td>
-                                <td>Aduan Komputer riba rosak yang tidak boleh dibuka akibat bateri yang sudah kembung dan mempunyai bateri hayat yang pendek</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- end modal -->
     @include('partials.modal.view_report')
     @include('partials.modal.feedback')
 @endsection
 
 @section('script')
-    <script type="text/javascript">
-        var dom = document.getElementById("sektor");
-        var myChart = echarts.init(dom);
-        var app = {};
-        var option;
-        option = {
-            // title: {
-            //     text: 'ss',
-            //     subtext: 'ss',
-            //     left: 'center'
-            // },
-            tooltip: {
-                trigger: 'item'
-            },
-            // legend: {
-            //     orient: 'vertical',
-            //     left: 'left',
-            // },
-            series: [
-                {
-                    // name: 'ss',
-                    type: 'pie',
-                    radius: '50%',
-                    data: [
-                        {value: 1048, name: 'Event'},
-                        {value: 735, name: 'Komputer Riba (Notebook)'},
-                        {value: 580, name: 'Komputer Meja (Desktop)'},
-                        {value: 484, name: 'Peralatan Komputer'},
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+    @can('dashboard.viewGraph')
+        <script type="text/javascript">
+
+            var dom = document.getElementById("sektor");
+            var pieChart = echarts.init(dom);
+            var app = {};
+            var option;
+            var pieData = [];
+            option = {
+
+                tooltip: {
+                    trigger: 'item'
+                },
+
+                series: [
+                    {
+                        // name: 'ss',
+                        type: 'pie',
+                        radius: '50%',
+                        data:pieData,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
                         }
                     }
-                }
-            ]
-        };
+                ]
+            };
 
-        if (option && typeof option === 'object') {
-            myChart.setOption(option);
-        }
+            if (option && typeof option === 'object') {
+                pieChart.setOption(option);
+            }
 
-    </script>
-    <script>
-        dom=document.getElementById("mix-line-bar"),
-        myChart = echarts.init(dom);
-        option = null, (app = {}).title = "Data view", option = {
-            grid: {
-                zlevel: 0,
-                x: 80,
-                x2: 50,
-                y: 30,
-                y2: 30,
-                borderWidth: 0,
-                backgroundColor: "rgba(0,0,0,0)",
-                borderColor: "rgba(0,0,0,0)"
-            },
-            tooltip: {
-                trigger: "axis",
-                axisPointer: {
-                    type: "cross",
-                    crossStyle: {
-                        color: "#999"
+            $.ajax({
+                url:'{{route("api.dashboard.pie-chart")}}',
+                type:'post',
+                success: function(response){
+                    if(response.success){
+                        pieData = response.data;
+                        pieChart.setOption({
+                            series:[
+                                {
+                        // name: 'ss',
+                                    type: 'pie',
+                                    radius: '50%',
+                                    data:pieData,
+                                    // data: [
+                                    //     {value: 1048, name: 'Event'},
+                                    //     {value: 735, name: 'Komputer Riba (Notebook)'},
+                                    //     {value: 580, name: 'Komputer Meja (Desktop)'},
+                                    //     {value: 484, name: 'Peralatan Komputer'},
+                                    // ],
+                                    emphasis: {
+                                        itemStyle: {
+                                            shadowBlur: 10,
+                                            shadowOffsetX: 0,
+                                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                        }
+                                    }
+                                }
+                            ]
+                        });
                     }
                 }
-            },
-            toolbox: {
-                orient: "center",
-                left: 0,
-                top: 20,
-                feature: {
-                    magicType: {
-                        type: ["line", "bar"],
-                        title: {
-                            line: "For line chart",
-                            bar: "For bar chart"
+            });
+
+        </script>
+        <script>
+            dom=document.getElementById("mix-line-bar"),
+            barChart = echarts.init(dom);
+            option = null, (app = {}).title = "Data view", option = {
+                grid: {
+                    zlevel: 0,
+                    x: 80,
+                    x2: 50,
+                    y: 30,
+                    y2: 30,
+                    borderWidth: 0,
+                    backgroundColor: "rgba(0,0,0,0)",
+                    borderColor: "rgba(0,0,0,0)"
+                },
+                tooltip: {
+                    trigger: "axis"
+                },
+                toolbox: {
+                    orient: "center",
+                    left: 0,
+                    top: 20,
+                    feature: {
+                        magicType: {
+                            type: ["line", "bar"],
+                            title: {
+                                line: "For line chart",
+                                bar: "For bar chart"
+                            }
+                        },
+                        saveAsImage: {
+                            title: "Download Image"
+                        }
+                    }
+                },
+                color: ["#34c38f", "#556ee6"],
+                legend: {
+                    data: ["Jumlah Aduan", "Aduan Selesai"],
+                    textStyle: {
+                        color: "#8791af"
+                    }
+                },
+                xAxis: [{
+                    type: "category",
+                    data: ["Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"],
+                    axisPointer: {
+                        type: "shadow"
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: "#8791af"
+                        }
+                    }
+                }],
+                yAxis: [{
+                    type: "value",
+                    name: "Bilangan Aduan",
+                    min: 0,
+                    interval: 50,
+                    axisLine: {
+                        lineStyle: {
+                            color: "#8791af"
                         }
                     },
-                    saveAsImage: {
-                        title: "Download Image"
+                    splitLine: {
+                        lineStyle: {
+                            color: "rgba(166, 176, 207, 0.1)"
+                        }
+                    },
+                    axisLabel: {
+                        formatter: "{value}"
+                    }
+                }],
+                series: [{
+                    name: "Jumlah Aduan",
+                    type: "bar",
+                    data: []
+                }, {
+                    name: "Aduan Selesai",
+                    type: "bar",
+                    data: []
+                }]
+            }, option && "object" == typeof option && barChart.setOption(option, !0);
+
+            $.ajax({
+                url:'{{route("api.dashboard.bar-chart")}}',
+                type:'post',
+                success: function(response){
+                    if(response.success){
+                        barChart.setOption({
+                                series: [{
+                                        name: "Jumlah Aduan",
+                                        type: "bar",
+                                        data: response.data.sent
+                                    }, {
+                                        name: "Aduan Selesai",
+                                        type: "bar",
+                                        data: response.data.completed
+                                    }]
+                            })
                     }
                 }
-            },
-            color: ["#34c38f", "#556ee6"],
-            legend: {
-                data: ["Jumlah Aduan", "Aduan Selesai"],
-                textStyle: {
-                    color: "#8791af"
+            });
+        </script>
+        <script>
+            $('#tbody-category_by_status').empty();
+            $.ajax({
+                url:'{{route("api.dashboard.category-table")}}',
+                type:'post',
+                success: function(response){
+                    if(response.success){
+                        var category_by_status = response.category_by_status;
+                        category_by_status.forEach(category => {
+                            row = '<tr>';
+                            row +=  '<td class="text-start">'+
+                                        '<div class="media align-items-center">'+
+                                            '<div class="me-3">'+
+                                                '<img src="'+category.image_path+'" alt=""title="" class="avatar-sm h-auto d-block rounded" />'+
+                                            '</div>'+
+                                            '<div class="media-body overflow-hidden">'+
+                                                '<h5 class="font-size-13 text-truncate"> '+category.desc+'</h5>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</td>';
+                            row += '<td>'+category.dihantar+'</td>';
+                            row += '<td>'+category.dihantar_ambil_maklum+'</td>';
+                            row += '<td>'+category.sedang_disemak+'</td>';
+                            row += '<td>'+category.selesai+'</td>';
+                            row += '</tr>';
+                            $('#tbody-category_by_status').append(row);
+                        });
+                    }
                 }
-            },
-            xAxis: [{
-                type: "category",
-                data: ["Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu", "Ahad"],
-                axisPointer: {
-                    type: "shadow"
+            });
+        </script>
+    @endcan
+    <script>
+        $('.viewReport').on('click', function(){
+            var modal = $( $(this).data('bs-target') );
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'post',
+                success:function(response){
+                    if(response.success){
+                        report = response.report;
+                        pengadu = response.pengadu;
+
+                        for (var attribute in report) {
+                            $('#report-'+attribute).html(report[attribute])
+                        }
+
+                        for (var attribute in pengadu) {
+                            $('#report-user-'+attribute).html(pengadu[attribute])
+                        }
+                        modal.modal('show');
+                    }
                 },
-                axisLine: {
-                    lineStyle: {
-                        color: "#8791af"
-                    }
+                error:function(error){
+                    console.log(error);
+                    swal.fire('Gagal', 'Gagal mendapatkan maklumat aduan. \n Sila lihat melalui modul senarai aduan', 'error');
                 }
-            }],
-            yAxis: [{
-                type: "value",
-                name: "Bilangan Aduan",
-                min: 0,
-                interval: 50,
-                axisLine: {
-                    lineStyle: {
-                        color: "#8791af"
+            })
+        });
+
+        $('.updateFeedback').on('click', function(){
+            var modal = $( $(this).data('bs-target') );
+            var form = modal.find('form');
+            var url = $(this).data('action');
+            form.attr('action', url);
+            console.log(form);
+        });
+
+        $('.submitFeedback').on('click', function(){
+            form = $(this).parents('form');
+            url = form.attr('action');
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    user_id:'{{Auth::user()->id}}',
+                    rating: form.find('input[name="rating"]').val(),
+                    feedback: form.find('textarea[name="feedback"]').val(),
+                },
+                success:function(response){
+                    if(response.success){
+                        window.location.reload();
                     }
                 },
-                splitLine: {
-                    lineStyle: {
-                        color: "rgba(166, 176, 207, 0.1)"
-                    }
-                },
-                axisLabel: {
-                    formatter: "{value}"
+                error:function(error){
+                    console.log(error);
                 }
-            }],
-            series: [{
-                name: "Jumlah Aduan",
-                type: "bar",
-                data: [10, 4, 7, 23, 25, 16, 15]
-            }, {
-                name: "Aduan Selesai",
-                type: "bar",
-                data: [8, 4, 5, 20, 21, 16, 14]
-            }]
-        }, option && "object" == typeof option && myChart.setOption(option, !0);
+            });
+        })
     </script>
 @endsection
