@@ -82,6 +82,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     });
 
     // Route::view('/pengguna', 'superadmin.pengguna');
+    Route::view('/pengguna-show', 'user.show');
 
     Route::prefix('pengguna')->as('user.')->group(function(){
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
