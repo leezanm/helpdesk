@@ -29,6 +29,8 @@ class CreateReportsTable extends Migration
             $table->foreignId('report_status_id')->constrained('_report_statuses');
             $table->foreignId('report_category_id')->constrained();
             $table->timestamp('submitted_at')->nullable();
+            $table->timestamp('kiv_start_at')->nullable();
+            $table->timestamp('kiv_end_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->integer('rating')->nullable();
             $table->string('feedback')->nullable();
