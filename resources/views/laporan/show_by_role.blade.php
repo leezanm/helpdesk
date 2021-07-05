@@ -122,12 +122,12 @@
                             <td>{{$report_trail->subject}}</td>
                             <td>{{convertDateFormat($report_trail->created_at, 'd F Y, g:i A')}}</td>
                             <td>
-                                <a href="#" class="userProfile" data-userId="{{$report_trail->assigned_to_id}}">{{$report_trail->assignedTo->name}}</a>
+                                <a class="userProfile" data-userId="{{$report_trail->assigned_to_id}}" role="button">{{$report_trail->assignedTo->name}}</a>
                                 <br>
                                 {{$report_trail->assignedTo->ldap_bahagian}}
                             </td>
                             <td>
-                                <span class="{{$report_trail->report->status->class}} font-size-11">{{$report_trail->report->status->desc}}</span>
+                                <span class="{{$report_trail->status->class}} font-size-11">{{$report_trail->status->desc}}</span>
                             </td>
                             <td class="text-center">
                                 <a href="{{route('aduan.show', $report_trail->report_id)}}" class="btn btn-primary waves-effect waves-light">

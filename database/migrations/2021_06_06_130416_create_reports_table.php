@@ -31,6 +31,7 @@ class CreateReportsTable extends Migration
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('kiv_start_at')->nullable();
             $table->timestamp('kiv_end_at')->nullable();
+            $table->text('kiv_reason')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->integer('rating')->nullable();
             $table->string('feedback')->nullable();

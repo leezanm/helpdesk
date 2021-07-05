@@ -128,7 +128,7 @@
 
                             <label class="col-md-2 col-form-label">Butiran Aduan <span class="text-danger">*</span></label>
                             <div class="col">
-                                <textarea id="elm1" name="remark">{!! old('remark', $report->remark) !!}</textarea>
+                                <textarea id="remark" name="remark">{!! old('remark', $report->remark) !!}</textarea>
                                 @error('remark')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
@@ -183,15 +183,6 @@
                             </div>
                         </div>
 
-                        {{-- <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="floatingCheck">
-                                <label class="form-check-label" for="floatingCheck">
-                                    Dengan ini saya mengaku dan mengesahkan semua kenyataan dan butir-butir yang dikemukakan di atas adalah benar
-                                </label>
-                            </div>
-                        </div> --}}
-
                         <div class="d-flex flex-wrap gap-2 float-end">
                             {{-- <a href="{{url('aduan')}}" class="btn btn-primary waves-effect waves-light">Simpan</a>
                             <a href="{{url('aduan')}}" class="btn btn-success waves-effect waves-light">Hantar</a> --}}
@@ -208,9 +199,17 @@
 @endsection
 
 @section('script')>
-{{-- <script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script> --}}
-<script src="{{ asset('assets/js/pages/form-editor.init.js') }}"></script>
+
 <script>
+    tinymce.init({
+        selector: "textarea#remark",
+        height: 300,
+        plugins: ["advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+            "save table contextmenu directionality emoticons template paste textcolor"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink | print fullpage | forecolor backcolor emoticons"
+    });
 
     const datatable_lampiran = $('#datatable-lampiran').DataTable();
 
@@ -321,7 +320,7 @@
         formData.append('attachment_names', JSON.stringify(uploadedDocumentMap));
         formData.append('attachment_paths', JSON.stringify(uploadedDocumentPath));
         formData.append('attachment_types', JSON.stringify(uploadedDocumentType));
-        formData.append('remark', tinymce.get('elm1').getContent());
+        formData.append('remark', tinymce.get('remark').getContent());
 
         clearError(form);
         $.ajax({

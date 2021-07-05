@@ -15,6 +15,13 @@ class CreateUserAssetsTable extends Migration
     {
         Schema::create('user_assets', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->string('type');
+            $table->string('brand');
+            $table->string('model');
+            $table->string('registration_serial_no');
+            $table->string('supplier_serial_no');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

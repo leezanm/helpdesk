@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\UserAsset;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReportAssignTaskRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class ReportAssignTaskRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,6 +25,11 @@ class ReportAssignTaskRequest extends FormRequest
     {
         return [
             //
+            'type' => 'required',
+            'brand' => 'required',
+            'model' => 'required',
+            'registration_serial_no' => 'required',
+            'supplier_serial_no' => 'required'
         ];
     }
 }

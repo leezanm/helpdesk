@@ -100,7 +100,7 @@ class ReportController extends Controller
         $this->notifySingle($user, $report_sent_notification);
 
         $report_received_admin_notification = new ReportDoneAdminNotification($report);
-        $users = User::permission('aduan.assignTask')->get();
+        $users = User::permission('aduan.adminTask')->get();
         $this->notifyGroup($users, $report_received_admin_notification);
 
         $datas = [

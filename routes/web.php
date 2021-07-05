@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserAssetController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\OrganizationController;
@@ -40,14 +41,14 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/create', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
         Route::get('/edit/{report}', [App\Http\Controllers\ReportController::class, 'edit'])->name('edit');
         Route::post('/edit/{report}', [App\Http\Controllers\ReportController::class, 'update'])->name('update');
-        Route::post('/update-task/{report}', [App\Http\Controllers\ReportController::class, 'assignTask'])->name('update-task');
+        Route::post('/tindakan-admin/{report}', [App\Http\Controllers\ReportController::class, 'adminTask'])->name('update-task');
         Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show')->middleware('update-aduan-status');
         Route::post('/feedback/{report}', [App\Http\Controllers\ReportController::class, 'updateFeedback'])->name('update-feedback');
 
         Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
         Route::post('/attachments/delete/{reportAttachment}', [App\Http\Controllers\ReportAttachmentController::class, 'destroy'])->name('attachments.delete');
 
-        Route::prefix('trail')->group(function () {
+        Route::prefix('trail')->as('trail.')->group(function () {
             Route::post('/update/{reportTrail}', [App\Http\Controllers\ReportTrailController::class, 'update'])->name('update');
         });
     });
@@ -88,12 +89,21 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
         Route::post('/create', [App\Http\Controllers\UserController::class, 'storeUser'])->name('store');
         Route::get('/show/{user}', [App\Http\Controllers\UserController::class, 'showUser'])->name('showUser');
+        Route::get('/show/full/{user}', [App\Http\Controllers\UserController::class, 'showFullUser'])->name('showFullUser');
         Route::get('/edit/{user}', [App\Http\Controllers\UserController::class, 'editUser'])->name('editUser');
         Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
         Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
         Route::get('/restore/{user}', [App\Http\Controllers\UserController::class, 'restore'])->name('restore');
         Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('index');
         Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('index');
+
+        Route::prefix('aset')->as('aset.')->group(function () {
+            Route::post('/create', [App\Http\Controllers\UserAssetController::class, 'store'])->name('store');
+            Route::get('/{userAsset}/edit', [App\Http\Controllers\UserAssetController::class, 'edit'])->name('edit');
+            Route::post('/{userAsset}/edit', [App\Http\Controllers\UserAssetController::class, 'update'])->name('update');
+            Route::get('/{userAsset}/show', [App\Http\Controllers\UserAssetController::class, 'show'])->name('show');
+            Route::post('/{userAsset}/destroy', [App\Http\Controllers\UserAssetController::class, 'destroy'])->name('destroy');
+        });
     });
 
 

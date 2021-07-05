@@ -46,6 +46,13 @@ class ReportStatusSeeder extends Seeder
         $report_status->class = 'badge bg-success';
         $report_status->save();
 
+        $report_status = new ReportStatus();
+        $report_status->desc = 'KIV';
+        $report_status->reference = 'Aduan di KIV';
+        $report_status->class = 'badge bg-warning';
+        $report_status->save();
+
+
         // $report_status = new ReportStatus();
         // $report_status->desc = 'Ditutup';
         // $report_status->reference = 'Aduan ditutup oleh admin';

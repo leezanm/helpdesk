@@ -39,7 +39,7 @@
                     <th>Subjek</th>
                     <th>Kategori Aduan</th>
 
-                    @can('aduan.assignTask')
+                    @can('aduan.adminTask')
                         <th>Pengadu</th>
                     @endcan
 
@@ -56,7 +56,7 @@
                             <td class="text-start">{{$report->subject}}</td>
                             <td>{{$report->category->desc}}</td>
 
-                            @can('aduan.assignTask')
+                            @can('aduan.adminTask')
                                <td>
                                     <a data-userId="{{$report->reportBy->id}}" class="userProfile" role="button">{{$report->reportBy->name}}</a>
                                     <br>

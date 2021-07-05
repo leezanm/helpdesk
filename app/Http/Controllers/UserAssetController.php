@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserAsset\StoreRequest;
 use App\Models\UserAsset;
 use Illuminate\Http\Request;
 
@@ -33,9 +34,19 @@ class UserAssetController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         //
+        $userAsset = new UserAsset();
+        $userAsset->fill($request->except('_token'));
+        $userAsset->save();
+
+        $datas = [
+            'success' =>true
+        ];
+
+        return response()->json($datas);
+
     }
 
     /**
@@ -58,6 +69,12 @@ class UserAssetController extends Controller
     public function edit(UserAsset $userAsset)
     {
         //
+        $datas = [
+            'success' =>true,
+            'data' => $userAsset
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -70,6 +87,14 @@ class UserAssetController extends Controller
     public function update(Request $request, UserAsset $userAsset)
     {
         //
+        $userAsset->fill($request->except('_token'));
+        $userAsset->save();
+
+        $datas = [
+            'success' =>true
+        ];
+
+        return response()->json($datas);
     }
 
     /**
@@ -81,5 +106,7 @@ class UserAssetController extends Controller
     public function destroy(UserAsset $userAsset)
     {
         //
+        $userAsset->delete();
+        return response()->json(['success' => true]);
     }
 }

@@ -68,7 +68,7 @@ class UserController extends Controller
             'password' => 'required|confirmed',
             'password_confirmation' => 'required',
         ]);
-        $user->update(['password' => Hash::make($request->new_password)]);
+        $user->update(['password' => Hash::make($request->password)]);
         Auth::logout();
 
         $datas = [
@@ -118,6 +118,12 @@ class UserController extends Controller
         ];
 
         return response()->json($datas);
+    }
+
+    public function showFullUser(User $user)
+    {
+        $user->load('assets');
+        return view('user.show', compact('user'));
     }
 
     public function editUser(User $user)

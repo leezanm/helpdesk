@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Report\AssignTaskRequest;
+use App\Http\Requests\Report\AdminTaskRequest;
 use App\Http\Requests\Report\StoreRequest;
 use App\Http\Requests\Report\UpdateRequest;
-use App\Models\Ref\ReportStatus;
-use App\Models\Ref\TaskStatus;
 use App\Models\Report;
 use App\Models\ReportAttachment;
 use App\Models\ReportCategory;
 use App\Models\ReportTrail;
-use App\Models\Task;
 use App\Models\User;
 use App\Notifications\ReportAssignedNotification;
 use App\Notifications\ReportDoneAdminNotification;
@@ -34,7 +31,7 @@ class ReportController extends Controller
     public function index()
     {
         //
-        $reports = Report::whereIn('report_status_id', [2,3,4,5])->orderBy('submitted_at')->get();
+        $reports = Report::whereIn('report_status_id', [2,3,4,5,6])->orderBy('submitted_at')->get();
         return view('aduan.index', compact('reports'));
     }
 
@@ -55,7 +52,7 @@ class ReportController extends Controller
     public function indexUntukTindakan()
     {
         //
-        $reports = Report::where('report_status_id', 4)
+        $reports = Report::whereIn('report_status_id', [4,6])
                     ->join('report_trails', 'reports.id', 'report_trails.report_id')
                     ->select('reports.*', 'report_trails.id as trail_id', 'assigned_to_id')
                     ->where('report_trails.id', \DB::raw('(select id from report_trails where report_id = reports.id order by id desc limit 1)'))
@@ -131,7 +128,7 @@ class ReportController extends Controller
             $this->notifySingle(Auth::user(), $report_sent_notification);
 
             $report_received_admin_notification = new ReportReceivedAdminNotification($report);
-            $users = User::permission('aduan.assignTask')->get();
+            $users = User::permission('aduan.adminTask')->get();
             $this->notifyGroup($users, $report_received_admin_notification);
         }
 
@@ -225,7 +222,7 @@ class ReportController extends Controller
             $this->notifySingle(Auth::user(), $report_sent_notification);
 
             $report_received_admin_notification = new ReportReceivedAdminNotification($report);
-            $users = User::permission('aduan.assignTask')->get();
+            $users = User::permission('aduan.adminTask')->get();
             $this->notifyGroup($users, $report_received_admin_notification);
         }
 
@@ -245,28 +242,46 @@ class ReportController extends Controller
         //
     }
 
-    public function assignTask(AssignTaskRequest $request, Report $report)
+    public function adminTask(AdminTaskRequest $request, Report $report)
     {
 
         $user = User::find($request->assigned_to_id);
         $role = Role::where('name', $request->peranan)->first();
-        $report->report_status_id = 4;
-
+        $trail = $report->currentTrail->replicate(['technical_remark', 'reassignment_remark']);
         switch ($request->tindakan){
             case 1 :
+                $report->report_status_id = 4;
                 $trail_status_id = 4;
+                $trail->assigned_to_id = $request->assigned_to_id;
+                $trail->assigned_to_role_id = $role->id;
                 $message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . ' ('.$role->desc.')' . '</a> untuk disemak';
                 break;
             case 2 :
+                $report->report_status_id = 4;
                 $trail_status_id = 6;
-                $message = 'Aduan telah ditugaskan semula kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . ' ('.$role->desc.')' . '</a> untuk disemak';
+                $trail->assigned_to_id = $request->assigned_to_id;
+                $trail->assigned_to_role_id = $role->id;
+                $message = 'Aduan telah ditugaskan semula kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . ' ('.$role->desc.')' . '</a> untuk disemak
+                            <br> <b>Sebab Penugasan</b> <br>
+                            '. $request->reassignment_remark;
+                break;
+            case 3 :
+                $report->report_status_id = 6;
+                $report->kiv_start_at = $request->kiv_start_at;
+                $report->kiv_reason = $request->kiv_reason;
+                $trail_status_id = 7;
+                $message = 'Aduan telah di KIV bermula pada <b>'. convertDateFormat($request->kiv_start_at, 'd F Y') .'</b>';
+                break;
+            case 4 :
+                $report->report_status_id = 4;
+                $report->kiv_end_at = $request->kiv_end_at;
+                $trail_status_id = 8;
+                $message = 'KIV berakhir pada <b>'. convertDateFormat($request->kiv_end_at, 'd F Y') .'</b>';
                 break;
         }
 
-        $trail = new ReportTrail();
+        // $trail = new ReportTrail();
         $trail->message = $message;
-        $trail->assigned_to_id = $request->assigned_to_id;
-        $trail->assigned_to_role_id = $role->id;
         $trail->updated_by_id = Auth::user()->id;
         $trail->reassignment_remark = $request->reassignment_remark;
         $trail->status_id = $trail_status_id;
@@ -319,7 +334,7 @@ class ReportController extends Controller
         $this->notifySingle(Auth::user(), $report_sent_notification);
 
         $report_received_admin_notification = new ReportDoneAdminNotification($report);
-        $users = User::permission('aduan.assignTask')->get();
+        $users = User::permission('aduan.adminTask')->get();
         $this->notifyGroup($users, $report_received_admin_notification);
 
 

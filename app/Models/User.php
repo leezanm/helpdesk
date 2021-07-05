@@ -50,6 +50,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function assets(){
+        return $this->hasMany(UserAsset::class);
+    }
+
     public function getProfilePictureAttribute()
     {
         return file_exists( public_path($this->profile_path) ) ? asset($this->profile_path) : asset('images/profile/default.png') ;

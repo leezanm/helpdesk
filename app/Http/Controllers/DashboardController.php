@@ -33,10 +33,10 @@ class DashboardController extends Controller
 
         $user = Auth::user();
 
-        if($user->hasPermissionTo('aduan.assignTask')){
+        if($user->hasPermissionTo('aduan.adminTask')){
             $reports_query->whereIn('report_status_id', [2,3]);
         } elseif($user->hasPermissionTo('aduan.updateTask')){
-            $reports_query->whereIn('report_status_id', [4])
+            $reports_query->whereIn('report_status_id', [4,6])
             ->join('report_trails', 'reports.id', 'report_trails.report_id')
             ->select('reports.*', 'report_trails.id as trail_id', 'assigned_to_id')
             ->where('report_trails.id', \DB::raw('(select id from report_trails where report_id = reports.id order by id desc limit 1)'))

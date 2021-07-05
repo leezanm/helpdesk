@@ -88,7 +88,7 @@
         <div class="card">
             <div class="card-body">
 
-                @can('aduan.assignTask')
+                @can('aduan.adminTask')
                     <div class="d-flex flex-wrap">
                         <h5 class="card-title me-2 mb-4">Aduan Yang Belum Diproses</h5>
                     </div>
@@ -126,7 +126,7 @@
                                     <td>{!! getDuration($report) !!}</td>
                                     <td><span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span></td>
                                     <td>
-                                        @can('aduan.assignTask')
+                                        @can('aduan.adminTask')
                                             <a href="{{route('aduan.show',$report->id)}}" class="btn btn-primary btn-sm btn-rounded waves-effect waves-light">Lihat</a>
                                         @else
                                             <a class="btn btn-primary btn-sm btn-rounded waves-effect waves-light viewReport" data-url="{{route('api.aduan.get-report', $report->id)}}"  data-bs-target="#view_report_modal" role="button">Lihat</a>

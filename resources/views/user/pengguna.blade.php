@@ -46,7 +46,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td class="p-0">
-                            <a href="#" class="list-group-item text-muted border-0">
+                            <a class="list-group-item text-muted border-0" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" role="button">
                                 <div class="media align-items-center">
                                     <div class="me-3">
                                         <img src="{{ $user->profile_picture }}" alt="" class="avatar-sm h-auto d-block rounded">
@@ -67,7 +67,7 @@
                             @endif
                         </th>
                         <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-info" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
+                            <a href="{{route('user.showFullUser', $user->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="mdi mdi-eye"></i></a>
                             <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('user.editUser', $user->id)}}" data-update="{{route('user.updateUser', $user->id)}}" data-modal="#edit_user_modal" > <i class="bx bxs-pen"></i></a>
                             @if ($user->is_active)
                                 <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('user.destroy', $user->id)}}" onclick="delRow(this)"> <i class="bx bx-lock"></i></a>

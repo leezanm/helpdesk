@@ -51,6 +51,46 @@
                             {{ $report->reportBy->email }}
                         </td>
                     </tr>
+
+                    <tr>
+                        <th width="20%">Aset Pengguna</th>
+                        <td>
+                            <table id="user_asset-datatable" class="table table-bordered">
+                                <thead class="text-center align-middle text-uppercase">
+                                    <th>#</th>
+                                    <th>Jenis</th>
+                                    <th>Jenama</th>
+                                    <th>Model</th>
+                                    <th>No. Siri Pendaftaran</th>
+                                    <th>No. Siri Pembuat</th>
+                                    <th>Status</th>
+                                </thead>
+                                <tbody class="text-center align-middle">
+                                    @forelse ($report->reportBy->assets as $asset)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$asset->type}}</td>
+                                            <td>{{$asset->brand}}</td>
+                                            <td>{{$asset->model}}</td>
+                                            <td>{{$asset->registration_serial_no}}</td>
+                                            <td>{{$asset->supplier_serial_no}}</td>
+                                            <td>
+                                                @if ($asset->is_active)
+                                                    <span class="badge bg-success">AKTIF</span>
+                                                @else
+                                                <span class="badge bg-danger">TIDAK AKTIF</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="7">Tiada Rekod</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -143,27 +183,17 @@
                 </tbody>
             </table>
 
-            <legend class="text-uppercase h5 mt-3">Tarikh KIV</legend><hr>
-            <div class="row mt-3">
-                <div class="col-md-3">
-                    <div class="form-floating">
-                        <input type="date" class="form-control" id="date_start_kiv">
-                        <label for="date_start_kiv">Tarikh Mula KIV</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-floating">
-                        <input type="date" class="form-control" id="date_end_kiv">
-                        <label for="date_end_kiv">Tarikh Tamat KIV</label>
-                    </div>
-                </div>
-            </div>
-
-            <br>
-            <hr>
-
-            @can('aduan.assignTask')
-                @if (in_array($report->report_status_id, [3, 4]))
+            @can('aduan.adminTask')
+                @if (in_array($report->report_status_id, [3, 4, 6]))
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('aduan.update-task', $report->id) }}" method="POST">
                         @csrf
                         <legend class="text-uppercase h5">Tindakan Admin</legend>
@@ -177,12 +207,12 @@
                                     <option value="">Sila Pilih</option>
                                     @if ($report->report_status_id == 3)
                                         <option value="1" @if (old('tindakan') == '1') selected @endif>Majukan Kepada</option>
-                                    @else
+                                    @elseif($report->report_status_id == 4)
                                         <option value="2" @if (old('tindakan') == '2') selected @endif>Penugasan Semula</option>
+                                        <option value="3" @if (old('tindakan') == '3') selected @endif>KIV</option>
+                                    @elseif($report->report_status_id == 6)
+                                        <option value="4" @if (old('tindakan') == '4') selected @endif>Tamat KIV</option>
                                     @endif
-                                    {{-- @if ($report->report_status_id == 4)
-                                    <option value="2">Selesai</option>
-                                @endif --}}
 
                                 </select>
                                 @error('tindakan') <p class="text-danger">{{ $message }}</p> @enderror
@@ -220,7 +250,7 @@
                         <div id="tindakan-penugasan-semula" class="collapse">
                             <div class="row mb-3">
                                 <div class="col-md-2">
-                                    <label class="col-form-label">Sebab</label>
+                                    <label class="col-form-label">Sebab Penugasan</label>
                                 </div>
                                 <div class="col-md-4">
                                     <textarea id="reassignment_remark" name="reassignment_remark" rows="5" class="form-control"
@@ -229,46 +259,38 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-success waves-effect waves-light">
-                                        <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                @endif
-            @endcan
-
-            {{-- @isset($current_task)
-            @can('aduan.updateTask')
-                @if (in_array($current_task->task_status_id, [1, 2]) && $current_task->assignedTo->is(\Auth::user()))
-                    <form action="{{route('aduan.task.update', $current_task->id)}}" method="POST">
-                        @csrf
-
-                        <div class="row mb-3">
-                            <div class="col-md-2">
-                                <label class="col-form-label">Status Aduan</label>
-                            </div>
-                            <div class="col-md-4">
-                                <select name="task_status_id" class="form-select">
-                                    @foreach ($task_statuses as $task_status)
-                                        <option value="{{$task_status->id}}" @if ($current_task->task_status_id == $task_status->id) selected @endif >{{$task_status->desc}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div id="sebabTakSelesai" class="collapse">
+                        <div id="tindakan-kiv-mula" class="collapse">
                             <div class="row mb-3">
                                 <div class="col-md-2">
-                                    <label class="col-form-label">Sebab</label>
+                                    <label>Tarikh Mula KIV <span class="text-danger">*</span></label>
                                 </div>
-                                <div class="col-md-4">
-                                    <textarea name="remark" class="form-control"></textarea>
-                                    <p>Sila kemukakan sebab bagi aduan yang tidak dapat diselesaikan</p>
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="date_start_kiv" name="kiv_start_at">
+                                        <label for="date_start_kiv">Tarikh Mula KIV</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label>Sebab KIV</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <textarea name="kiv_reason" rows="10" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tindakan-kiv-tamat" class="collapse">
+                            <div class="row mb-3">
+                                <div class="col-md-2">
+                                    <label >Tarikh Tamat KIV <span class="text-danger">*</span></label>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control" id="date_end_kiv" name="kiv_end_at">
+                                        <label for="date_end_kiv">Tarikh Tamat KIV</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -282,11 +304,34 @@
                                 </div>
                             </div>
                         </div>
-
                     </form>
                 @endif
             @endcan
-        @endisset --}}
+
+            @can('aduan.updateTask')
+                @if (in_array($report->report_status_id, [4]) && $report->currentTrail->assignedTo->is(Auth::user()))
+                    <hr>
+                    <form action="{{ route('aduan.trail.update', $report->currentTrail->id) }}" method="POST">
+                        @csrf
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="col-form-label">Catatan Peg. Teknikal</label>
+                                <textarea id="technical_remark" name="technical_remark" rows="10" class="form-control">{!!$report->currentTrail->technical_remark!!}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-success waves-effect waves-light submit">
+                                        <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                @endif
+            @endcan
 
             @if ($report->reportBy->is(\Auth::user()) && $report->report_status_id == 4)
                 <form action="{{ route('aduan.update-feedback', $report->id) }}" method="POST">
@@ -347,7 +392,9 @@
                                     <div>
                                         <span
                                             class="{{ $trail->status->class }} font-size-11">{{ $trail->status->desc }}</span>
-                                        <p class="text-muted">{!! $trail->message !!}</p>
+                                        <p class="text-muted">
+                                            {!! $trail->message !!}
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -361,7 +408,17 @@
 @endsection
 
 @section('script')
-    <script>
+        <script>
+        tinymce.init({
+            selector: "textarea#technical_remark",
+            height: 300,
+            plugins: ["advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+                "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+                "save table contextmenu directionality emoticons template paste textcolor"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink | print fullpage | forecolor backcolor emoticons"
+        });
+
         $('#datatable-lampiran').DataTable();
 
         $('select[name="task_status_id"').on('change', function() {
@@ -389,6 +446,22 @@
             } else {
                 $('#tindakan-penugasan-semula').addClass('collapse');
                 $('#reassignment_remark').attr('disabled', true);
+            }
+
+            if (this.value == 3) {
+                $('#tindakan-kiv-mula').removeClass('collapse');
+                $('#date_start_kiv').attr('disabled', false);
+            } else {
+                $('#tindakan-kiv-mula').addClass('collapse');
+                $('#date_start_kiv').attr('disabled', true);
+            }
+
+            if (this.value == 4) {
+                $('#tindakan-kiv-tamat').removeClass('collapse');
+                $('#date_end_kiv').attr('disabled', false);
+            } else {
+                $('#tindakan-kiv-tamat').addClass('collapse');
+                $('#date_end_kiv').attr('disabled', true);
             }
 
         })
@@ -423,5 +496,33 @@
         })
 
         $('#majukan_kepada_peranan').trigger('change');
+        $('select[name="tindakan"]').trigger('change');
+
+        $('.submit').on('click', function(e){
+            e.preventDefault();
+
+            form = this.form;
+            console.log($(form))
+            action = form.action;
+            method = form.attributes.method.nodeValue;
+
+            var formData = new FormData( form );
+            formData.append('_token', '{{csrf_token()}}');
+            $.ajax({
+                url: action,
+                type:method,
+                data:formData,
+                processData: false,
+                contentType: false,
+                success:function(response){
+                    if(response.success){
+                        swal.fire('Berjaya', 'Catatan berjaya di simpan', 'success');
+                    }
+                },
+                error:function(response){
+                    errorValidate(response, $(form));
+                }
+            });
+        });
     </script>
 @endsection

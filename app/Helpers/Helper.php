@@ -43,11 +43,29 @@ function getDuration($report)
 			$end_date = \Carbon\Carbon::now();
 		}
 
+        $kivDuration = 0;
+		if ($report->kiv_start_at) {
+			$kiv_start_date = \Carbon\Carbon::parse($report->kiv_start_at);
+
+            if ($report->kiv_end_at) {
+                $kiv_end_date = \Carbon\Carbon::parse($report->kiv_end_at);
+            } else {
+                $kiv_end_date = \Carbon\Carbon::now();
+            }
+
+
+			$kivDuration = $kiv_start_date->diffInDaysFiltered(function (\Carbon\Carbon $date) {
+				return !$date->isWeekend();
+			}, $kiv_end_date);
+
+		}
+
 		$diff = $start_date->diffInDaysFiltered(function (\Carbon\Carbon $date) {
 			return !$date->isWeekend();
 		}, $end_date);
 
-		$diff = $diff - 1;
+		// $diff = $diff - 1;
+		$diff = $diff - $kivDuration;
 
 		if ($diff < 0) {
 			$diff = 0;

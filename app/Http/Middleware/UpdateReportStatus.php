@@ -17,11 +17,11 @@ class UpdateReportStatus
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
-    {   
+    {
         $report = $request->report;
         $user = Auth::user();
 
-        if($report->report_status_id == 2 && $user->hasPermissionTo('aduan.assignTask')){
+        if($report->report_status_id == 2 && $user->hasPermissionTo('aduan.adminTask')){
             $report->report_status_id = 3;
             $report->save();
 

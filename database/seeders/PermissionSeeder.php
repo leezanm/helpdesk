@@ -17,7 +17,7 @@ class PermissionSeeder extends Seeder
         //
         Permission::create(['name' => 'aduan.create', 'desc' => 'Cipta aduan']);
         Permission::create(['name' => 'aduan.all', 'desc' => 'Lihat Semua aduan']);
-        Permission::create(['name' => 'aduan.assignTask', 'desc' => 'Beri tugasan kepada jtk,pptm,ptm']);
+        Permission::create(['name' => 'aduan.adminTask', 'desc' => 'Tindakan admin']);
         Permission::create(['name' => 'aduan.updateTask', 'desc' => 'Kemaskini status tugasan']);
 
         Permission::create(['name' => 'view.report', 'desc' => 'Jana dan lihat laporan']);
