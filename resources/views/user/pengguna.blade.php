@@ -21,7 +21,7 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
+    {{-- <div class="card-header">
         <div class="row">
             <div class="col text-end">
                 <div class="button-items">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <div class="card-body">
        <table id="audit" class="table table-bordered table-striped table-hover">
            <thead>

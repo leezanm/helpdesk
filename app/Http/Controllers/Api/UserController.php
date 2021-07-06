@@ -75,7 +75,7 @@ class UserController extends Controller
             }
 
             if(filled($ldap_user)){
-                $user = User::create([]);
+                // $user = User::create([]);
                 $success = true;
                 $bp_name = $ldap_user->cn;
                 $bp_bahagian = $ldap_user->physicaldeliveryofficename;
