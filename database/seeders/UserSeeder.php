@@ -17,105 +17,12 @@ class UserSeeder extends Seeder
     {
         //
         $user = User::create([
-            'name' => 'Asha',
-            'email' => 'asha@gmail.com',
-            'username' => 'asha',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Integriti'
-        ]);
-        $user->assignRole('pengguna');
-
-        $user = User::create([
-            'name' => 'Fatin',
-            'email' => 'fatin@gmail.com',
-            'username' => 'fatin',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
-        ]);
-        $user->assignRole('pengguna');
-
-        $user = User::create([
-            'name' => 'Farhan',
-            'email' => 'farhan@gmail.com',
-            'username' => 'farhan',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
-        ]);
-        $user->assignRole('helpdesk.admin');
-
-        $user = User::create([
-            'name' => 'Hazim',
-            'email' => 'hazim@gmail.com',
-            'username' => 'hazim',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
-        ]);
-        $user->assignRole('jtk');
-
-        $user = User::create([
-            'name' => 'Aina',
-            'email' => 'aina@gmail.com',
-            'username' => 'aina',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Integriti'
-        ]);
-        $user->assignRole('jtk');
-
-        $user = User::create([
-            'name' => 'Aishah',
-            'email' => 'aishah@gmail.com',
-            'username' => 'aishah',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Integriti'
-        ]);
-        $user->assignRole('jtk');
-
-        $user = User::create([
-            'name' => 'Syamil',
-            'email' => 'syamil@gmail.com',
-            'username' => 'syamil',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
-        ]);
-        $user->assignRole('pptm');
-
-        $user = User::create([
-            'name' => 'Nasirah',
-            'email' => 'nasirah@gmail.com',
-            'username' => 'nasirah',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Kewangan'
-        ]);
-        $user->assignRole('pptm');
-
-        $user = User::create([
-            'name' => 'Syahmi',
-            'email' => 'syahmi@gmail.com',
-            'username' => 'syahmi',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
-        ]);
-        $user->assignRole('ptm');
-
-        $user = User::create([
-            'name' => 'Danisha',
-            'email' => 'danisha@gmail.com',
-            'username' => 'danisha',
-            'password' => Hash::make('pass1234'),
-            'ldap_bahagian' => 'Bahagian Integriti'
-        ]);
-        $user->assignRole('ptm');
-
-        $user = User::create([
-            'name' => 'arham',
-            'email' => 'arham@gmail.com',
-            'username' => 'arham',
+            'name' => 'superadmin',
+            'email' => 'superadmin@gmail.com',
+            'username' => 'superadmin',
             'password' => Hash::make('pass1234'),
             'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('superadmin');
-
-
-
     }
 }
