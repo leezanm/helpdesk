@@ -14,7 +14,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::role('pengguna')->orderBy('name', 'asc')->get();
+        $users = User::orderBy('name', 'asc')->get();
         $roles = Role::where('name', '!=', 'superadmin')->get();
         return view('user.pengguna', compact('users', 'roles'));
     }

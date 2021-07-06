@@ -39,7 +39,7 @@ $user = Auth::user()->load('roles');
                                     <td><input type="text" name="email" class="form-control"
                                             value="{{ $user->email }}"></td>
                                     <th>Peranan:</th>
-                                    <td><span class="badge bg-success font-size-14 text-uppercase">{{$user->roles[0]->name}}</span></td>
+                                    <td><span class="badge bg-success font-size-14 text-uppercase">{{optional(Auth::user()->roles()->first())->desc}}</span></td>
                                 </tr>
                             </tbody>
                         </table>

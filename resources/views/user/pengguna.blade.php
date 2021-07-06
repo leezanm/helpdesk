@@ -33,7 +33,7 @@
         </div>
     </div> --}}
     <div class="card-body">
-       <table id="audit" class="table table-bordered table-striped table-hover">
+       <table id="user-datatable" class="table table-bordered table-striped table-hover">
            <thead>
                 <th>#</th>
                 <th>Nama Pegawai</th>
@@ -96,6 +96,7 @@
 </script>
 
 <script>
+    $('#user-datatable').DataTable();
     function clearError(){
         $('textarea').removeClass('is-invalid');
         $('input').removeClass('is-invalid');

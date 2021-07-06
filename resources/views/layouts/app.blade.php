@@ -61,7 +61,7 @@
                         </button>
 
                         <h5 class="app-search d-none d-lg-block m-3">
-                            Selamat Datang , {{Auth::user()->name}} ( {{Auth::user()->roles()->first()->desc}} )
+                            Selamat Datang , {{Auth::user()->name}} ( {{optional(Auth::user()->roles()->first())->desc}} )
                         </h5>
 
                     </div>
