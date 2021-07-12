@@ -502,12 +502,13 @@
             e.preventDefault();
 
             form = this.form;
-            console.log($(form))
-            action = form.action;
+
+            action = form.attributes.action.nodeValue;
             method = form.attributes.method.nodeValue;
 
             var formData = new FormData( form );
             formData.append('_token', '{{csrf_token()}}');
+            formData.append('technical_remark', tinymce.get('technical_remark').getContent());
             $.ajax({
                 url: action,
                 type:method,
