@@ -234,8 +234,9 @@
             }
 
         })
-    })
+    });
 
+    const auth_username = '{{Auth::user()->username}}';
     $('input[name="is_bp"]').on('change', function(){
 
         if(this.value == '1'){
