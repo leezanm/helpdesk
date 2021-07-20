@@ -266,7 +266,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-floating">
-                                        <input type="date" class="form-control" id="date_start_kiv" name="kiv_start_at">
+                                        <input type="date" class="form-control" id="date_start_kiv" name="kiv_start_at" min="{{\Carbon\Carbon::parse($report->submitted_at)->format('Y-m-d')}}">
                                         <label for="date_start_kiv">Tarikh Mula KIV</label>
                                     </div>
                                 </div>
@@ -288,7 +288,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-floating">
-                                        <input type="date" class="form-control" id="date_end_kiv" name="kiv_end_at">
+                                        <input type="date" class="form-control" id="date_end_kiv" name="kiv_end_at" min="{{\Carbon\Carbon::parse($report->kiv_start_at)->format('Y-m-d')}}">
                                         <label for="date_end_kiv">Tarikh Tamat KIV</label>
                                     </div>
                                 </div>
@@ -355,8 +355,8 @@
                             <label class="col-form-label">Komen</label>
                         </div>
                         <div class="col-md-4">
-                            <textarea name="feedback" class="form-control"></textarea>
-                            <p>Komen anda adalah amat dihargai</p>
+                            <textarea name="feedback" class="form-control" rows="5" maxlength="255"></textarea>
+                            <p>Komen anda adalah amat dihargai, maksimum 255 patah perkataan</p>
                         </div>
                     </div>
 

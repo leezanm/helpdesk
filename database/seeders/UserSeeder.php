@@ -61,5 +61,14 @@ class UserSeeder extends Seeder
             'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
         ]);
         $user->assignRole('helpdesk.admin');
+
+        $user = User::create([
+            'name' => 'farhan',
+            'email' => 'farhan@gmail.com',
+            'username' => 'farhan',
+            'password' => Hash::make('pass1234'),
+            'ldap_bahagian' => 'Bahagian Pengurusan Maklumat'
+        ]);
+        $user->assignRole('pengguna');
     }
 }
