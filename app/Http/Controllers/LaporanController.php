@@ -31,7 +31,7 @@ class LaporanController extends Controller
                         $query->where('desc', $status);
                     },
                     function($query){
-                        $query->whereIn('id', [2,3,4,5]);
+                        $query->whereIn('id', [2,3,4,5,6]);
                     })
                     ->orderBy('id')
                     ->get();
@@ -53,6 +53,7 @@ class LaporanController extends Controller
                                     $subQuery->where('desc', $status);
                                 });
                             })
+                            ->where('report_status_id', '<>', 1)
                             ->orderBy('submitted_at', 'desc')->get();
 
         return view('laporan.show_by_status', compact('laporans', 'reports' , 'from', 'to', 'title', 'achievement', 'status'));
@@ -66,7 +67,7 @@ class LaporanController extends Controller
 
         $laporans =  \DB::table('report_categories as category')
                     ->select('desc')
-                    ->selectRaw('ifnull((select count(*) from reports where report_category_id = category.id and report_status_id in (2,3,4,5) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_category_id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
+                    ->selectRaw('ifnull((select count(*) from reports where report_category_id = category.id and report_status_id <> 1 and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_category_id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
                     ->when(filled($category), function($query) use($category){
                         $query->where('desc', $category);
                     })
@@ -84,6 +85,7 @@ class LaporanController extends Controller
                                     $subQuery->where('desc', $category);
                                 });
                             })
+                            ->where('report_status_id', '<>', 1)
                             ->orderBy('submitted_at', 'desc')->get();
 
         return view('laporan.show_by_category', compact('laporans', 'reports' , 'from', 'to', 'title', 'category'));
@@ -133,7 +135,7 @@ class LaporanController extends Controller
 
         $laporans = \DB::table('roles')
                     ->select('name', 'desc')
-                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (2,3,4) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by roles.id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
+                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (4,6) and if(?,report_trails.created_at >= ?, true) and if(?,report_trails.created_at <= ?, true) group by roles.id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
                     ->orderBy('desc', 'asc')
                     // ->whereIn('id', [1,2,3])
                     ->when(filled($peranan), function($query) use ($peranan){
@@ -151,6 +153,13 @@ class LaporanController extends Controller
                                 $subQuery->where('name',$peranan);
                             });
                         })
+                        ->when(filled($from), function($query) use($from){
+                            $query->whereDate('report_trails.created_at', '>=', Carbon::parse($from));
+                        })
+                        ->when(filled($to), function($query) use($to){
+                            $query->whereDate('report_trails.created_at', '<=', Carbon::parse($to));
+                        })
+                        ->whereIn('status_id', [4,6])
                         ->whereNotNull('assigned_to_id')
                         ->orderBy('report_trails.id', 'desc')
                         ->get();
@@ -216,7 +225,7 @@ class LaporanController extends Controller
         $departments = \DB::table('users')->whereNotNull('ldap_bahagian')->distinct()->pluck('ldap_bahagian');
 
         $laporans = \DB::table('users')
-                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id in (2,3,4,5) ) as jumlah')
+                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id <> 1 ) as jumlah')
                     ->when(filled($department), function($query) use($department){
                         $query->where('ldap_bahagian', $department);
                     })
@@ -226,7 +235,15 @@ class LaporanController extends Controller
 
         $reports = Report::when(filled($department), function($query) use ($department){
                                 $query->where('bahagian_pengadu', $department);
-                            })->get();
+                            })
+                            ->when(filled($from), function($query) use($from){
+                                $query->whereDate('submitted_at', '>=', Carbon::parse($from));
+                            })
+                            ->when(filled($to), function($query) use($to){
+                                $query->whereDate('submitted_at', '<=', Carbon::parse($to));
+                            })
+                            ->where('report_status_id', '<>', 1)
+                            ->get();
 
         return view('laporan.show_by_department', compact('laporans', 'reports' , 'from', 'to', 'departments', 'department'));
     }
@@ -242,7 +259,7 @@ class LaporanController extends Controller
         $laporans =  \DB::table('_report_statuses as report_status')
                     ->select('id', 'desc')
                     ->selectRaw('ifnull((select count(*) from reports where report_status_id = report_status.id and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_status_id),0) as jumlah', [$from_check, $from, $to_check, $to])
-                    ->whereIn('id', [2,3,4,5])
+                    ->whereIn('id', [2,3,4,5,6])
                     ->orderBy('id')
                     ->get();
 
@@ -268,7 +285,7 @@ class LaporanController extends Controller
 
         $laporans =  \DB::table('report_categories as category')
                     ->select('desc')
-                    ->selectRaw('ifnull((select count(*) from reports where report_category_id = category.id and report_status_id in (2,3,4,5) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_category_id),0) as jumlah', [$from_check, $from, $to_check, $to])
+                    ->selectRaw('ifnull((select count(*) from reports where report_category_id = category.id and report_status_id <> 1 and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_category_id),0) as jumlah', [$from_check, $from, $to_check, $to])
                     ->orderBy('desc', 'asc')
                     ->get();
 
@@ -293,7 +310,7 @@ class LaporanController extends Controller
 
         $laporans = \DB::table('roles')
                     ->select('name','desc')
-                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (2,3,4) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by roles.id),0) as jumlah', [$from_check, $from, $to_check, $to])
+                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (2,3,4,6) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by roles.id),0) as jumlah', [$from_check, $from, $to_check, $to])
                     ->orderBy('desc', 'asc')
                     ->whereIn('id', [1,2,3])
                     ->get();
@@ -366,6 +383,7 @@ class LaporanController extends Controller
                     ->when($to_check, function($query) use($to){
                         $query->where('report_trails.created_at', '<=', $to);
                     })
+                    ->whereIn('status_id', [4,6])
                     ->groupBy('desc', 'username')
                     ->orderBy('desc', 'asc')
                     ->get();
@@ -391,7 +409,7 @@ class LaporanController extends Controller
 
         // return $role_ids;
         $laporans = \DB::table('users')
-                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id in (2,3,4,5) ) as jumlah')
+                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id <> 1 ) as jumlah')
                     ->groupBy('bahagian')
                     ->orderBy('bahagian', 'asc')
                     ->get();
