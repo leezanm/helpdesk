@@ -189,6 +189,7 @@
         ],
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink | print fullpage | forecolor backcolor emoticons"
     });
+
     const auth_username = '{{Auth::user()->username}}';
     $('input[name="is_bp"]').on('change', function(){
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Report\AdminTaskRequest;
 use App\Http\Requests\Report\StoreRequest;
+use App\Http\Requests\Report\UpdateFeedbackRequest;
 use App\Http\Requests\Report\UpdateRequest;
 use App\Models\Report;
 use App\Models\ReportAttachment;
@@ -19,6 +20,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
 class ReportController extends Controller
@@ -314,7 +316,7 @@ class ReportController extends Controller
         } catch(Exception $e){}
     }
 
-    public function updateFeedback(Request $request,Report $report){
+    public function updateFeedback(UpdateFeedbackRequest $request,Report $report){
 
         $report->report_status_id = 5;
         $report->completed_at = now();
@@ -346,7 +348,7 @@ class ReportController extends Controller
             try{
                 $user->notify($notification);
             } catch(Exception $e){
-
+                Log::error($e);
             }
         }
     }
@@ -356,7 +358,7 @@ class ReportController extends Controller
             try{
                 Notification::send($users, $notification );
             } catch(Exception $e){
-
+                Log::error($e);
             }
         }
     }

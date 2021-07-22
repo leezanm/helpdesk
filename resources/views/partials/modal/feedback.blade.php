@@ -25,8 +25,8 @@
                             <label class="col-form-label">Komen</label>
                         </div>
                         <div class="col-md-10">
-                            <textarea name="feedback" class="form-control" rows="5"></textarea>
-                            <p>Komen anda adalah amat dihargai</p>
+                            <textarea name="feedback" class="form-control" rows="5" maxlength="255"></textarea>
+                            <p>Komen anda adalah amat dihargai, maksimum 255 patah perkataan</p>
                         </div>
                     </div>
                 </div>

@@ -84,10 +84,10 @@ class UserController extends Controller
             'name' => 'required',
             'username' => 'required|unique:users,username',
             'email' => 'required|email',
-            'designation' => 'required',
-            'tel_no' => 'required',
-            'ic_no' => 'required',
-            'address' => 'required',
+            'designation' => 'nullable',
+            'tel_no' => 'nullable|numeric|digits_between:10,11',
+            'ic_no' => 'nullable|digits:12',
+            'address' => 'nullable',
             'roles' => 'required',
             'roles.*' => 'required|exists:roles,name'
         ]);
@@ -143,10 +143,10 @@ class UserController extends Controller
         $request->validate([
             'email' => 'required|email',
             'name' => 'required',
-            'designation' => 'required',
-            'tel_no' => 'required',
-            'ic_no' => 'nullable|unique:users,ic_no,'.$request->user_id,
-            'address' => 'required',
+            'designation' => 'nullable',
+            'tel_no' => 'nullable|numeric|digits_between:10,11',
+            'ic_no' => 'nullable|numeric|digits:12|unique:users,ic_no,'.$request->user_id,
+            'address' => 'nullable',
             'roles' => 'required',
             'roles.*' => 'required|exists:roles,name'
         ]);
