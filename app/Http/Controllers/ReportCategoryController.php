@@ -141,4 +141,13 @@ class ReportCategoryController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function restore(ReportCategory $reportCategory)
+    {
+        //
+        $reportCategory->is_active = true;
+        $reportCategory->save();
+
+        return response()->json(['success' => true]);
+    }
 }

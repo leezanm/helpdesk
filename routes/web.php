@@ -60,15 +60,6 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index'])->middleware('can:manage.audit-trail');
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
 
-    // Route::prefix('department')->as('department.')->group(function () {
-    //     Route::get('/', [App\Http\Controllers\DepartmentController::class, 'index'])->name('index');
-    //     Route::post('/create', [App\Http\Controllers\DepartmentController::class, 'store'])->name('store');
-    //     Route::get('/show/{department}', [App\Http\Controllers\DepartmentController::class, 'show'])->name('show');
-    //     Route::get('/edit/{department}', [App\Http\Controllers\DepartmentController::class, 'edit'])->name('edit');
-    //     Route::post('/update/{department}', [App\Http\Controllers\DepartmentController::class, 'update'])->name('update');
-    //     Route::post('/destroy/{department}', [App\Http\Controllers\DepartmentController::class, 'destroy'])->name('destroy');
-    // });
-
     Route::prefix('kategori')->as('category.')->group(function () {
         Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
         Route::post('/create', [App\Http\Controllers\ReportCategoryController::class, 'store'])->name('store');
@@ -76,6 +67,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/edit/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'edit'])->name('edit');
         Route::post('/update/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'update'])->name('update');
         Route::post('/destroy/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'destroy'])->name('destroy');
+        Route::post('/restore/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'restore'])->name('restore');
     });
 
     Route::prefix('status')->as('status.')->group(function () {
