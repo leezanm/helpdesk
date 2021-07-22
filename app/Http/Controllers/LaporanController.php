@@ -311,7 +311,7 @@ class LaporanController extends Controller
 
         $laporans = \DB::table('roles')
                     ->select('name','desc')
-                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (2,3,4,6) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by roles.id),0) as jumlah', [$from_check, $from, $to_check, $to])
+                    ->selectRaw('ifnull((select count(*) from report_trails where id = ( select max(id) from report_trails as rt where rt.report_id = report_trails.report_id and status_id in (4,6) ) and assigned_to_role_id = roles.id and status_id in (2,3,4,6) and if(?,created_at >= ?, true) and if(?,created_at <= ?, true) group by roles.id),0) as jumlah', [$from_check, $from, $to_check, $to])
                     ->orderBy('desc', 'asc')
                     ->whereIn('id', [1,2,3])
                     ->get();
