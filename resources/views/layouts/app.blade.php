@@ -48,10 +48,10 @@
 
                             <a href="{{url('/')}}" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{{asset('images/logo.png')}}" alt="" height="22">
+                                    <img src="{{asset('images/logo.png')}}" alt="" height="50">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{{asset('images/logo.png')}}" alt="" height="35">
+                                    <img src="{{asset('images/logo-long.png')}}" alt="" height="40">
                                 </span>
                             </a>
                         </div>
