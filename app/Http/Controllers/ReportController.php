@@ -156,7 +156,9 @@ class ReportController extends Controller
         $attachments = $report->attachments;
         $attachments->append('file_url');
 
-        return view('aduan.show', compact('report', 'roles', 'trails', 'attachments'));
+        $report_categories = ReportCategory::active()->orderBy('desc')->get();
+
+        return view('aduan.show', compact('report', 'roles', 'trails', 'attachments', 'report_categories'));
     }
 
     /**
@@ -272,13 +274,13 @@ class ReportController extends Controller
                 $report->kiv_start_at = $request->kiv_start_at;
                 $report->kiv_reason = $request->kiv_reason;
                 $trail_status_id = 7;
-                $message = 'Aduan telah di KIV bermula pada <b>'. convertDateFormat($request->kiv_start_at, 'd F Y') .'</b>';
+                $message = 'Aduan telah di KIV bermula pada <b>'. convertDateFormat($request->kiv_start_at, 'LL') .'</b>';
                 break;
             case 4 :
                 $report->report_status_id = 4;
                 $report->kiv_end_at = $request->kiv_end_at;
                 $trail_status_id = 8;
-                $message = 'KIV berakhir pada <b>'. convertDateFormat($request->kiv_end_at, 'd F Y') .'</b>';
+                $message = 'KIV berakhir pada <b>'. convertDateFormat($request->kiv_end_at, 'LL') .'</b>';
                 break;
         }
 
@@ -340,6 +342,16 @@ class ReportController extends Controller
         $this->notifyGroup($users, $report_received_admin_notification);
 
 
+        return redirect()->back();
+    }
+
+    public function setCategory(Request $request, Report $report){
+        $report->report_category_id = $request->report_category_id;
+        $report->save();
+
+        if($request->ajax()){
+            return response()->json(['success' => true]);
+        }
         return redirect()->back();
     }
 

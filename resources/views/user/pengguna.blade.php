@@ -126,13 +126,11 @@
             processData: false,
             contentType: false,
             success:function(response){
-                console.log(response);
                 if(response.success){
                     window.location.reload();
                 }
             },
             error:function(errorResponse){
-                console.log(errorResponse);
                 if(errorResponse.responseJSON.errors){
                     errors = errorResponse.responseJSON.errors;
                     $.each(errors, function (key, error){
@@ -177,9 +175,6 @@
                     }
                 }
                 $(modalId).modal('show');
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
@@ -219,9 +214,6 @@
 
                     $(modalId).modal('show');
                 }
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
@@ -250,9 +242,6 @@
                                 // Swal.fire('Berjaya', 'Maklumat berjaya dipadam', 'success');
                                 window.location.reload();
                             }
-                        },
-                        error: function(error){
-                            console.log(error);
                         }
                     })
                 }

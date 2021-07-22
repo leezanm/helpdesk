@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label class="col-md-2 col-form-label">Nama Pengadu</label>
+                            <label class="col-md-2 col-form-label">ID Pengadu <a role="button" class="align-middle"> <i class="bx bx-info-circle align-middle font-size-16" data-bs-toggle="tooltip" data-bs-placement="right" title="ID daftar masuk komputer"></i> </a> </label>
                             <div class="col-md-4">
                                 <input type="text" class="form-control" value="{{$report->reportBy->username}}" disabled>
                             </div>
@@ -67,7 +67,7 @@
 
                         <div id="bagi-pihak-detail" class="collapse">
                             <div class="row mb-3">
-                                <label class="col-md-2 col-form-label">Nama Akaun (AD) <span class="text-danger">*</span></label>
+                                <label class="col-md-2 col-form-label">ID Pengguna <a role="button" class="align-middle"> <i class="bx bx-info-circle align-middle font-size-16" data-bs-toggle="tooltip" data-bs-placement="right" title="ID daftar masuk komputer"></i> </a> <span class="text-danger">*</span></label>
                                 <div class="col-md-4">
                                     <input id="bp_username" name="bp_username" type="text" class="form-control" value="{{$report->bp_username}}">
                                     <input id="bp_username" name="bp_user_id" type="hidden" class="form-control" value="{{$report->bp_user_id}}">
@@ -99,11 +99,11 @@
                         </div>
 
                         <div class="mt-3 mb-3 row">
-                            <label for="example-text-input" class="col-md-2 col-form-label">Kategori Aduan</label>
+                            <label for="example-text-input" class="col-md-2 col-form-label">Kategori Aduan <span class="text-danger">*</span></label>
                             <div class="col-md-4">
                                 <select name="report_category_id" class="form-select">
                                     @foreach ($report_categories as $report_category)
-                                        <option value="{{$report_category->id}}" @if(old('report_category_id', $report->report_category_id)) selected @endif>{{$report_category->desc}}</option>
+                                        <option value="{{$report_category->id}}" @if(old('report_category_id', $report->report_category_id) == $report_category->id) selected @endif>{{$report_category->desc}}</option>
                                     @endforeach
                                 </select>
                                 @error('report_category_id')
@@ -126,9 +126,9 @@
 
                         <div class="row mb-3">
 
-                            <label class="col-md-2 col-form-label">Butiran Aduan <span class="text-danger">*</span></label>
+                            <label class="col-md-2 col-form-label">Ringkasan Aduan <span class="text-danger">*</span></label>
                             <div class="col">
-                                <textarea id="remark" name="remark">{!! old('remark', $report->remark) !!}</textarea>
+                                <textarea id="remark" name="remark" class="form-control" rows="5" maxlength="500">{!! old('remark', $report->remark) !!}</textarea>
                                 @error('remark')
                                     <p class="text-danger">{{$message}}</p>
                                 @enderror
@@ -201,15 +201,21 @@
 @section('script')>
 
 <script>
-    tinymce.init({
-        selector: "textarea#remark",
-        height: 300,
-        plugins: ["advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-            "save table contextmenu directionality emoticons template paste textcolor"
-        ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink | print fullpage | forecolor backcolor emoticons"
-    });
+    // tinymce.init({
+    //     selector: "textarea#remark",
+    //     height: 300,
+    //     plugins: ["advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+    //         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+    //         "save table contextmenu directionality emoticons template paste textcolor"
+    //     ],
+    //     toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink | print fullpage | forecolor backcolor emoticons"
+    // });
+
+    $('textarea#remark').maxlength({
+            alwaysShow: !0,
+            placement: "bottom",
+            warningClass: "badge bg-info",
+            limitReachedClass: "badge bg-warning"});
 
     const datatable_lampiran = $('#datatable-lampiran').DataTable();
 
@@ -267,13 +273,11 @@
                 bp_username : username
             },
             success: function(response){
-                console.log(response)
                 if(response.success){
                     $('#bp_name').val(response.bp_name);
                     $('#bp_bahagian').val(response.bp_bahagian);
                     $('#bp_email').val(response.bp_email);
                     $('#bp_user_id').val(response.bp_user_id);
-                    console.log($('#bp_user_id').val())
                 } else {
                     swal.fire('Gagal', response.message, 'error');
                 }
@@ -321,7 +325,7 @@
         formData.append('attachment_names', JSON.stringify(uploadedDocumentMap));
         formData.append('attachment_paths', JSON.stringify(uploadedDocumentPath));
         formData.append('attachment_types', JSON.stringify(uploadedDocumentType));
-        formData.append('remark', tinymce.get('remark').getContent());
+        // formData.append('remark', tinymce.get('remark').getContent());
 
         clearError(form);
         $.ajax({
@@ -330,14 +334,12 @@
             processData: false,
             contentType: false,
             success:function(response){
-                // console.log(JSON.parse(response));
                 if(response.success){
                     window.location.href = "{{route('aduan.index-user', Auth::user()->username)}}";
                 }
             //
             },
             error:function(error){
-                console.log(error);
                 errorValidate(error, form);
             }
         });

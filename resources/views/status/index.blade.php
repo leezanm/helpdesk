@@ -63,8 +63,6 @@
         var formData = new FormData( $(formId)[0] );
         formData.append('_token', '{{csrf_token()}}')
         clearError($(formId));
-        console.log(formData)
-        console.log(form.serialize());
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
@@ -72,13 +70,11 @@
             processData: false,
             contentType: false,
             success:function(response){
-                console.log(response);
                 if(response.success){
                     window.location.reload();
                 }
             },
             error:function(errorResponse){
-                console.log(errorResponse);
                 if(errorResponse.responseJSON.errors){
                     errors = errorResponse.responseJSON.errors;
                     $.each(errors, function (key, error){
@@ -99,7 +95,6 @@
         form = $(modalId + ' form');
         form.attr('action', currentRow.attr('data-update'));
         formId = '#' + form.attr('id');
-        console.log(modalId);
         clearError(form);
         $.ajax({
             url : currentRow.attr('data-edit'),
@@ -108,16 +103,11 @@
                 _token: '{{csrf_token()}}'
             },
             success : function(response){
-                console.log(formId);
                 if(response.success){
                     $(formId + ' input[name="desc"]').val(response.object['desc']);
                     $(formId + ' input[name="reference"]').val(response.object['reference']);
-                    // console.log(formId);
                     $(modalId).modal('show');
                 }
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
@@ -141,7 +131,6 @@
                             _token: '{{csrf_token()}}'
                         },
                         success: function(response){
-                            console.log(response)
                             if(response.success){
                                 // currentRow.closest('tr').remove();
                                 // Swal.fire('Berjaya', 'Maklumat berjaya dipadam', 'success');
@@ -149,9 +138,6 @@
                             } else {
                                 Swal.fire('Gagal', response.message, 'error');
                             }
-                        },
-                        error: function(error){
-                            console.log(error);
                         }
                     })
                 }

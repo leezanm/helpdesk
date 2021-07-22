@@ -147,7 +147,7 @@
                     <tr>
                         <th width="20%">Dihantar Pada</th>
                         <td>
-                            {{ convertDateFormat($report->submitted_at, 'd F Y') }}
+                            {{ convertDateFormat($report->submitted_at, 'LL') }}
                         </td>
                     </tr>
                     <tr>
@@ -305,7 +305,39 @@
                             </div>
                         </div>
                     </form>
+                    <hr>
                 @endif
+
+
+                <legend class="text-uppercase h5">Tukar Kategori Aduan</legend>
+                <form action="{{ route('aduan.set-category', $report->id) }}" method="POST">
+                    @csrf
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label class="col-form-label">Kategori</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select" name="report_category_id">
+                                @foreach ($report_categories as $report_category)
+                                    <option value="{{$report_category->id}}" @if($report_category->id == $report->report_category_id) selected @endif>{{$report_category->desc}}</option>
+                                @endforeach
+                            </select>
+                            @error('report_category_id') <p class="text-danger">{{ $message }}</p> @enderror
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-end">
+                                <button class="btn btn-success changeCategory" type="button">
+                                    <i class="bx bx-save me-2 align-middle"></i> Simpan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             @endcan
 
             @can('aduan.updateTask')
@@ -333,7 +365,7 @@
                 @endif
             @endcan
 
-            @if ($report->reportBy->is(\Auth::user()) && $report->report_status_id == 4)
+            @if ( ( $report->reportBy->is(\Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'admin.helpdesk']) ) && $report->report_status_id == 4)
                 <form action="{{ route('aduan.update-feedback', $report->id) }}" method="POST">
                     @csrf
 
@@ -347,6 +379,7 @@
                                 <input type="hidden" name="rating" class="rating" data-filled="mdi mdi-star text-warning"
                                     data-empty="mdi mdi-star-outline text-muted" />
                             </div>
+                            <p>1=Lemah, 2=Kurang berpuas hati, 3=Puas hati, 4=Baik, 5=Cemerlang</p>
                         </div>
                     </div>
 
@@ -355,8 +388,7 @@
                             <label class="col-form-label">Komen</label>
                         </div>
                         <div class="col-md-4">
-                            <textarea name="feedback" class="form-control" rows="5" maxlength="255"></textarea>
-                            <p>Komen anda adalah amat dihargai, maksimum 255 patah perkataan</p>
+                            <textarea id="feedback-textarea" name="feedback" class="form-control" rows="5" maxlength="255"></textarea>
                         </div>
                     </div>
 
@@ -385,7 +417,7 @@
                             </div>
                             <div class="media">
                                 <div class="me-5">
-                                    {{ convertDateFormat($trail->created_at, 'd F Y g:i A') }}
+                                    {{ convertDateFormat($trail->created_at, 'LL, h:mm A') }}
                                     {{-- <i class="bx bx-copy-alt h2 text-primary"></i> --}}
                                 </div>
                                 <div class="media-body">
@@ -420,6 +452,12 @@
         });
 
         $('#datatable-lampiran').DataTable();
+
+        $('#feedback-textarea').maxlength({
+            alwaysShow: !0,
+            placement: "bottom-right",
+            warningClass: "badge bg-info",
+            limitReachedClass: "badge bg-warning"});
 
         $('select[name="task_status_id"').on('change', function() {
             if (this.value === '4') {
@@ -518,6 +556,38 @@
                 success:function(response){
                     if(response.success){
                         swal.fire('Berjaya', 'Catatan berjaya di simpan', 'success');
+                        window.location.reload();
+                    }
+                },
+                error:function(response){
+                    errorValidate(response, $(form));
+                }
+            });
+        });
+
+        $('.changeCategory').on('click', function(e){
+            e.preventDefault();
+
+            form = this.form;
+
+            action = form.attributes.action.nodeValue;
+            method = form.attributes.method.nodeValue;
+            $.ajax({
+                url: action,
+                type:method,
+                data:$(form).serialize(),
+                success:function(response){
+                    if(response.success){
+                        // swal.fire('Berjaya', 'Maklumat berjaya di simpan', 'success');
+                        swal.fire({
+                            title: 'Berjaya',
+                            text: 'Maklumat Berjaya di simpan',
+                            icon:'success',
+                            timer: 1000
+                        }).then(function(){
+                            window.location.reload();
+                        });
+
                     }
                 },
                 error:function(response){

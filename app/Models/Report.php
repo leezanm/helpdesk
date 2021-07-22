@@ -48,8 +48,8 @@ class Report extends Model
         return $this->hasOne(ReportTrail::class)->latest();
     }
 
-    protected static function booted()
-    {
-        Report::observe(ReportObserver::class);
-    }
+    // protected static function booted()
+    // {
+    //     Report::observe(ReportObserver::class);
+    // }
 }

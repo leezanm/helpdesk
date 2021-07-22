@@ -94,8 +94,6 @@
         var formData = new FormData( $(formId)[0] );
         formData.append('_token', '{{csrf_token()}}')
         clearError(formId);
-        console.log(formData)
-        console.log(form.serialize());
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
@@ -103,13 +101,11 @@
             processData: false,
             contentType: false,
             success:function(response){
-                console.log(response);
                 if(response.success){
                     window.location.reload();
                 }
             },
             error:function(errorResponse){
-                console.log(errorResponse);
                 if(errorResponse.responseJSON.errors){
                     errors = errorResponse.responseJSON.errors;
                     $.each(errors, function (key, error){
@@ -125,14 +121,12 @@
     });
 
     function showItem(row){
-        console.log('helo');
         currentRow = $(row);
         modalId = currentRow.attr('data-modal');
         $.ajax({
             url : currentRow.attr('data-show'),
             method : 'get',
             success : function(response){
-                console.log(response.success);
                 if(response.success){
                     $('#show-desc').html(response.data.desc);
                     $('#show-status').html(response.data.status);
@@ -147,35 +141,25 @@
                     }
                 }
                 $(modalId).modal('show');
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
 
     function editForm(row){
-        console.log('helo');
         currentRow = $(row);
         modalId = currentRow.attr('data-modal');
         form = $(modalId + ' form');
         form.attr('action', currentRow.attr('data-update'));
         formId = '#' + form.attr('id');
-        console.log(modalId);
         clearError(form.attr('action'));
         $.ajax({
             url : currentRow.attr('data-edit'),
             method : 'get',
             success : function(response){
-                console.log(response);
                 if(response.success){
                     $(formId + ' input[name="desc"]').val(response.data['desc']);
-                    // console.log(formId);
                     $(modalId).modal('show');
                 }
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
@@ -199,7 +183,6 @@
                             _token: '{{csrf_token()}}'
                         },
                         success: function(response){
-                            console.log(response)
                             if(response.success){
                                 // currentRow.closest('tr').remove();
                                 // Swal.fire('Berjaya', 'Maklumat berjaya dipadam', 'success');
@@ -207,9 +190,6 @@
                             } else {
                                 Swal.fire('Gagal', response.message, 'error');
                             }
-                        },
-                        error: function(error){
-                            console.log(error);
                         }
                     })
                 }

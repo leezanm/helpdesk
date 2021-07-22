@@ -44,7 +44,7 @@ class ReportController extends Controller
     public function show(Report $report)
     {
         //
-        $report->submitted_at = convertDateFormat($report->submitted_at, 'd F Y, g:i A');
+        $report->submitted_at = convertDateFormat($report->submitted_at, 'LL, h:mm A');
         $report->setAttribute('report_category', $report->category->desc);
         $report->setAttribute('ticket_no', '<a href="'.route('aduan.show', $report->id).'">'.$report->ticket_no.'</a>');
 

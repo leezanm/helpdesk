@@ -82,7 +82,6 @@ function ajaxCall(form, formData, callback, failCallback = 'defaultFailCallback'
 }
 
 var defaultFailCallback = function (errorResponse) {
-    console.log(errorResponse);
     if (errorResponse.responseJSON.errors) {
         errorValidate(errorResponse, form);
     }

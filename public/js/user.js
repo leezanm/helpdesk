@@ -24,9 +24,6 @@ $(document).on('click', '.userProfile', function(){
 
                 $('#userProfile').modal('show');
             }
-        },
-        error: function(response){
-            console.log(response);
         }
     });
 });
