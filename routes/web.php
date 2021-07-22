@@ -88,8 +88,9 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
         Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
         Route::get('/restore/{user}', [App\Http\Controllers\UserController::class, 'restore'])->name('restore');
-        Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('index');
-        Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('index');
+        Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('indexPegTeknikal');
+        Route::get('/pengurusan', [App\Http\Controllers\UserController::class, 'indexPengurusan'])->name('indexPengurusan');
+        Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('indexPentadbir');
 
         Route::prefix('aset')->as('aset.')->group(function () {
             Route::post('/create', [App\Http\Controllers\UserAssetController::class, 'store'])->name('store');

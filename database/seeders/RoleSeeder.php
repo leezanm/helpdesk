@@ -16,25 +16,25 @@ class RoleSeeder extends Seeder
     public function run()
     {
         //
-        $role = Role::firstOrCreate(['name' => 'jtk', 'desc' => 'Juruteknik']);
+        $role = Role::firstOrCreate(['name' => 'jtk'],['desc' => 'Juruteknik']);
         $role->syncPermissions(['aduan.create' ,'aduan.all', 'aduan.updateTask']);
 
-        $role = Role::firstOrCreate(['name' => 'pptm', 'desc' => 'Penolong Pegawai Teknologi Maklumat']);
+        $role = Role::firstOrCreate(['name' => 'pptm'],['desc' => 'Penolong Pegawai Teknologi Maklumat']);
         $role->syncPermissions(['aduan.create', 'aduan.all', 'aduan.updateTask']);
 
-        $role = Role::firstOrCreate(['name' => 'ptm', 'desc' => 'Pegawai Teknologi Maklumat']);
+        $role = Role::firstOrCreate(['name' => 'ptm'],['desc' => 'Pegawai Teknologi Maklumat']);
         $role->syncPermissions(['aduan.create', 'aduan.all', 'aduan.updateTask']);
 
-        $role = Role::firstOrCreate(['name' => 'pengguna', 'desc' => 'Warga KPLB']);
+        $role = Role::firstOrCreate(['name' => 'pengguna'],['desc' => 'Warga KPLB']);
         $role->syncPermissions(['aduan.create']);
 
-        $role = Role::firstOrCreate(['name' => 'helpdesk.admin', 'desc' => 'Admin Sistem']);
+        $role = Role::firstOrCreate(['name' => 'helpdesk.admin'], ['desc' => 'Admin Sistem']);
         $role->syncPermissions(['manage.category', 'manage.user', 'aduan.all', 'aduan.create', 'aduan.adminTask', 'view.report', 'dashboard.viewGraph']);
 
-        $role = Role::firstOrCreate(['name' => 'superadmin', 'desc' => 'Jurutadbir Sistem']);
+        $role = Role::firstOrCreate(['name' => 'superadmin'], ['desc' => 'Superadmin']);
         $role->syncPermissions(Permission::pluck('name'));
 
-        $role = Role::firstOrCreate(['name' => 'pengurusan', 'desc' => 'Pengurusan']);
+        $role = Role::firstOrCreate(['name' => 'pengurusan'], ['desc' => 'Pengurusan']);
         $role->syncPermissions(['view.report', 'dashboard.viewGraph']);
     }
 }

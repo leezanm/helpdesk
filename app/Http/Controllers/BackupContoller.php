@@ -9,14 +9,17 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Str;
 class BackupContoller extends Controller
 {
     //
     public function index(Request $request)
 	{
-        $files = File::files(storage_path('app/Kplb-Helpdesk'));
-		// $files = Storage::files('myfex-backup');
+        if(!File::exists( storage_path('app/'. Str::slug( config('app.name') )))) {
+            FIle::makeDirectory(  storage_path('app/'. Str::slug( config('app.name') )) );
+        }
+
+        $files = File::files( storage_path('app/'. Str::slug( config('app.name') ))  );
 
 		$backups = array();
 
@@ -35,16 +38,16 @@ class BackupContoller extends Controller
 
 	public function download($filename)
 	{
-		return response()->download(storage_path("app/Kplb-Helpdesk/". $filename));
+        $file_path = storage_path('app/'. Str::slug( config('app.name') ). '/'. $filename);
+		return response()->download($file_path);
 	}
 
 	public function destroy($filename) {
-        // return storage_path("app/Kplb-Helpdesk/". $filename);S
 
-		Storage::disk('local')->delete( $filename);
+        File::delete( storage_path('app/'. Str::slug( config('app.name') ). '/'. $filename) );
 
 		Session::flash('successMessage', 'Backup Berjaya Dipadam');
-		// return redirect()->back();
+
         return redirect()->route('backup.index');
 	}
 
@@ -53,7 +56,7 @@ class BackupContoller extends Controller
 		$exitCode = Artisan::call('backup:run');
 
 		Session::flash('successMessage', 'Backup Berjaya Dicipta');
-		// return redirect('/pentadbiran/backup/list');
+
         return redirect()->route('backup.index');
 	}
 
@@ -73,7 +76,7 @@ class BackupContoller extends Controller
 		]);
 
 		Session::flash('successMessage', 'Backup Berjaya Dicipta');
-		// return redirect('/pentadbiran/backup/list');
+
         return redirect()->route('backup.index');
 	}
 }

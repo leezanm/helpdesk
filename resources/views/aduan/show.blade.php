@@ -365,7 +365,7 @@
                 @endif
             @endcan
 
-            @if ( ( $report->reportBy->is(\Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'admin.helpdesk']) ) && $report->report_status_id == 4)
+            @if ( ( $report->reportBy->is(\Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'helpdesk.admin']) ) && $report->report_status_id == 4)
                 <form action="{{ route('aduan.update-feedback', $report->id) }}" method="POST">
                     @csrf
 
