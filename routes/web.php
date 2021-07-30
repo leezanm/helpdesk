@@ -22,7 +22,6 @@ Route::get('/', function () {
 Route::view('/forgot-password-out', 'auth.forgot_password_out');
 
 Route::middleware(['auth', 'audit-trail'])->group(function () {
-    Route::view('/test', 'example');
 
     Route::prefix('notification')->as('notification.')->group(function () {
 
@@ -139,4 +138,6 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/download/{filename}', [App\Http\Controllers\BackupContoller::class, 'download'])->name('download');
         Route::get('/delete/{filename}', [App\Http\Controllers\BackupContoller::class, 'destroy'])->name('delete');
     });
+
+
 });

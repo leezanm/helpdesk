@@ -294,7 +294,7 @@ return [
         'email' => 'userprincipalname',
         'username' => 'samaccountname',
         'ldap_bahagian' => 'physicaldeliveryofficename',
-
+        'designation' => 'title',
         'name' => 'cn',
 
     ],
