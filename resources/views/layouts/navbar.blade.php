@@ -125,6 +125,45 @@
 
                 @endcanany
 
+                <li class="menu-title" key="t-pentadbiran">Manual</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
+                        <i class="bx bxs-book-content me-2"></i><span>Manual pengguna</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li>
+                            <a class="nav-link" href="{{asset('manual_pengguna/pengguna.pdf')}}" target="_blank" role="button">
+                                <span key="t-audit">Pengguna</span>
+                            </a>
+                        </li>
+                        @can('aduan.updateTask')
+                        <li>
+                            <a class="nav-link" href="{{asset('manual_pengguna/peg-teknikal.pdf')}}" target="_blank" role="button">
+                                <span key="t-audit">Peg. Teknikal</span>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @can('aduan.adminTask')
+                        <li>
+                            <a class="nav-link" href="{{asset('manual_pengguna/admin.pdf')}}" target="_blank" role="button">
+                                <span key="t-audit">Admin Helpdesk</span>
+                            </a>
+                        </li>
+                    @endcan
+
+                    @hasrole('superadmin')
+                    <li>
+                        <a class="nav-link" href="{{asset('manual_pengguna/superadmin.pdf')}}" target="_blank" role="button">
+                            <span key="t-audit">Superadmin</span>
+                        </a>
+                    </li>
+                    @endhasrole
+                    </ul>
+                </li>
+
+
             </ul>
 
         </div>
