@@ -87,8 +87,10 @@
                                 <li><a href="{{url('/pengguna/pentadbir')}}" key="t-pegawai">Pentadbir Helpdesk</a></li>
                             @endcan
                             @can('manage.user')
-                                <li><a href="{{url('/pengguna')}}" key="t-pengguna">Pengguna</a></li>
+
+                                <li><a href="{{url('/pengguna/pengurusan')}}" key="t-pengguna">Pengurusan</a></li>
                                 <li><a href="{{url('/pengguna/peg-teknikal')}}" key="t-pengguna">Peg. Teknikal</a></li>
+                                <li><a href="{{url('/pengguna')}}" key="t-pengguna">Pengguna</a></li>
                             @endcan
                         </ul>
                     </li>

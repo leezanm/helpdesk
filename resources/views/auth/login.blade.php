@@ -24,7 +24,7 @@
                     <form class="form-horizontal" method="POST" action="{{route('login')}}">
                         @csrf
                         <div class="mb-3">
-                            <label for="username" class="form-label @error('username') is-invalid @enderror">Nama Pengguna (AD)</label>
+                            <label for="username" class="form-label @error('username') is-invalid @enderror">ID Pengguna <a role="button" class="align-middle"> <i class="bx bx-info-circle align-middle font-size-16" data-bs-toggle="tooltip" data-bs-placement="right" title="Sila masukkan ID seperti daftar masuk komputer"></i> </a> </label>
                             <input type="text" class="form-control" id="username" name="username" placeholder="">
                             @error('username') <p class="text-danger">{{$message}}</p> @enderror
                         </div>

@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0 font-size-18">Tambah Pengguna</h4>
+                <h4 class="mb-sm-0 font-size-18">Senarai {{$title}}</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
@@ -34,38 +34,44 @@
     </div> --}}
     <div class="card-body">
        <table id="user-datatable" class="table table-bordered table-striped table-hover">
-           <thead>
+           <thead class="text-center align-middle">
                 <th>#</th>
                 <th>Nama Pegawai</th>
-                <th>E-mel</th>
+                <th>Peranan</th>
                 <th>Status</th>
                 <th>Tindakan</th>
            </thead>
-           <tbody class="align-middle">
+           <tbody class="text-center align-middle">
                @foreach ($users as $user)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td class="p-0">
+                        <td class="text-start p-0">
                             <a class="list-group-item text-muted border-0" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" role="button">
                                 <div class="media align-items-center">
                                     <div class="me-3">
                                         <img src="{{ $user->profile_picture }}" alt="" class="avatar-sm h-auto d-block rounded">
                                     </div>
-                                    <div class="media-body overflow-hidden">
-                                        <h5 class="font-size-13 text-truncate">{{ $user->name }}</h5>
-                                        <p class="mb-0 text-truncate">{{ $user->designation }}</p>
+                                    <div class="media-body">
+                                        <h5 class="font-size-13 ">{{ $user->name }}</h5>
+                                        <p class="mb-0 ">{{$user->username}} | {{$user->email}}</p>
                                     </div>
                                 </div>
                             </a>
                         </td>
-                        <th>{{ $user->email }}</th>
-                        <th>
+                        <td class="text-start">
+                            @forelse ($user->roles->sortBy('desc') as $userRole)
+                                <span class="badge bg-info font-size-12">{{$userRole->desc}}</span>
+                            @empty
+                                -
+                            @endforelse
+                        </td>
+                        <td>
                             @if ($user->is_active)
                                 <span class="badge bg-success">AKTIF</span>
                             @else
                                 <span class="badge bg-danger">TIDAK AKTIF</span>
                             @endif
-                        </th>
+                        </td>
                         <td class="text-center">
                             <a href="{{route('user.showFullUser', $user->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="mdi mdi-eye"></i></a>
                             <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('user.editUser', $user->id)}}" data-update="{{route('user.updateUser', $user->id)}}" data-modal="#edit_user_modal" > <i class="bx bxs-pen"></i></a>
@@ -126,13 +132,11 @@
             processData: false,
             contentType: false,
             success:function(response){
-                console.log(response);
                 if(response.success){
                     window.location.reload();
                 }
             },
             error:function(errorResponse){
-                console.log(errorResponse);
                 if(errorResponse.responseJSON.errors){
                     errors = errorResponse.responseJSON.errors;
                     $.each(errors, function (key, error){
@@ -177,9 +181,6 @@
                     }
                 }
                 $(modalId).modal('show');
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
@@ -219,9 +220,6 @@
 
                     $(modalId).modal('show');
                 }
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
@@ -250,9 +248,6 @@
                                 // Swal.fire('Berjaya', 'Maklumat berjaya dipadam', 'success');
                                 window.location.reload();
                             }
-                        },
-                        error: function(error){
-                            console.log(error);
                         }
                     })
                 }

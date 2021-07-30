@@ -122,7 +122,7 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$report->ticket_no}}</td>
                                     <td>{{$report->subject}}</td>
-                                    <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                                    <td>{{convertDateFormat($report->submitted_at, 'LL')}}</td>
                                     <td>{!! getDuration($report) !!}</td>
                                     <td><span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span></td>
                                     <td>
@@ -471,7 +471,6 @@
                     }
                 },
                 error:function(error){
-                    console.log(error);
                     swal.fire('Gagal', 'Gagal mendapatkan maklumat aduan. \n Sila lihat melalui modul senarai aduan', 'error');
                 }
             })
@@ -482,7 +481,6 @@
             var form = modal.find('form');
             var url = $(this).data('action');
             form.attr('action', url);
-            console.log(form);
         });
 
         $('.submitFeedback').on('click', function(){
@@ -501,9 +499,6 @@
                     if(response.success){
                         window.location.reload();
                     }
-                },
-                error:function(error){
-                    console.log(error);
                 }
             });
         })

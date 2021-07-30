@@ -45,6 +45,8 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show')->middleware('update-aduan-status');
         Route::post('/feedback/{report}', [App\Http\Controllers\ReportController::class, 'updateFeedback'])->name('update-feedback');
 
+        Route::post('/set-category/{report}', [App\Http\Controllers\ReportController::class, 'setCategory'])->name('set-category');
+
         Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
         Route::post('/attachments/delete/{reportAttachment}', [App\Http\Controllers\ReportAttachmentController::class, 'destroy'])->name('attachments.delete');
 
@@ -58,15 +60,6 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index'])->middleware('can:manage.audit-trail');
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
 
-    // Route::prefix('department')->as('department.')->group(function () {
-    //     Route::get('/', [App\Http\Controllers\DepartmentController::class, 'index'])->name('index');
-    //     Route::post('/create', [App\Http\Controllers\DepartmentController::class, 'store'])->name('store');
-    //     Route::get('/show/{department}', [App\Http\Controllers\DepartmentController::class, 'show'])->name('show');
-    //     Route::get('/edit/{department}', [App\Http\Controllers\DepartmentController::class, 'edit'])->name('edit');
-    //     Route::post('/update/{department}', [App\Http\Controllers\DepartmentController::class, 'update'])->name('update');
-    //     Route::post('/destroy/{department}', [App\Http\Controllers\DepartmentController::class, 'destroy'])->name('destroy');
-    // });
-
     Route::prefix('kategori')->as('category.')->group(function () {
         Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
         Route::post('/create', [App\Http\Controllers\ReportCategoryController::class, 'store'])->name('store');
@@ -74,6 +67,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/edit/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'edit'])->name('edit');
         Route::post('/update/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'update'])->name('update');
         Route::post('/destroy/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'destroy'])->name('destroy');
+        Route::post('/restore/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'restore'])->name('restore');
     });
 
     Route::prefix('status')->as('status.')->group(function () {
@@ -94,8 +88,9 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
         Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
         Route::get('/restore/{user}', [App\Http\Controllers\UserController::class, 'restore'])->name('restore');
-        Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('index');
-        Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('index');
+        Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('indexPegTeknikal');
+        Route::get('/pengurusan', [App\Http\Controllers\UserController::class, 'indexPengurusan'])->name('indexPengurusan');
+        Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('indexPentadbir');
 
         Route::prefix('aset')->as('aset.')->group(function () {
             Route::post('/create', [App\Http\Controllers\UserAssetController::class, 'store'])->name('store');

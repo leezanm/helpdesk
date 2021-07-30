@@ -119,7 +119,7 @@
                             <td>{{$loop->iteration}}</td>
                             <td>{{$report->ticket_no}}</td>
                             <td class="text-start">{{$report->subject}}</td>
-                            <td>{{convertDateFormat($report->submitted_at, 'd F Y, g:i A')}}</td>
+                            <td>{{convertDateFormat($report->submitted_at, 'LL, h:mm A')}}</td>
                             <td>
                                 {{$report->bahagian_pengadu}}
                             </td>

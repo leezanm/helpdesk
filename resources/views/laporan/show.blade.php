@@ -122,7 +122,7 @@
                             <td>{{$loop->iteration}}</td>
                             <td>{{$report->ticket_no}}</td>
                             <td>{{$report->subject}}</td>
-                            <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                            <td>{{convertDateFormat($report->submitted_at, 'LL')}}</td>
                             <td>
                                 <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
                                 @if ($report->report_status_id == 3)

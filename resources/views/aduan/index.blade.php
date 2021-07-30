@@ -64,7 +64,7 @@
                                </td>
                              @endcan
 
-                            <td>{{convertDateFormat($report->submitted_at, 'd F Y')}}</td>
+                            <td>{{convertDateFormat($report->submitted_at, 'LL')}}</td>
                             <td>
                                 {!! getDuration($report) !!}
                             </td>

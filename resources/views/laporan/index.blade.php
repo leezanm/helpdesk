@@ -154,9 +154,6 @@
                     modal.find('.laporanTbody').append(body);
                     modal.find('.laporanTotal').html(total);
                 }
-            },
-            error: function(error){
-                console.log(error)
             }
         })
     });
@@ -173,7 +170,6 @@
                 to: $('input[name="to"]').val()
             },
             success: function(response){
-                console.log(response)
                 if(response.success){
                     var ratings = response.ratings;
                     ratings.forEach(item => {
@@ -181,9 +177,6 @@
                     });
                     $('#rating-total-all').html(response.total);
                 }
-            },
-            error: function(error){
-                console.log(error)
             }
         })
     })

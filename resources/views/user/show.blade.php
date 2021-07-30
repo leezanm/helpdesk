@@ -181,7 +181,6 @@
             e.preventDefault();
 
             form = this.form;
-            console.log($(form))
             action = form.action;
             method = form.attributes.method.nodeValue;
 

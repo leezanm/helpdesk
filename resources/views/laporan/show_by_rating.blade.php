@@ -131,11 +131,11 @@
                             <td>{{$loop->iteration}}</td>
                             <td>{{$report->ticket_no}}</td>
                             <td>{{$report->subject}}</td>
-                            <td>{{convertDateFormat($report->submitted_at, 'd F Y, g:i A')}}</td>
+                            <td>{{convertDateFormat($report->submitted_at, 'LL, h:mm A')}}</td>
                             <td>
                                 <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
                                 <br>
-                                {{convertDateFormat($report->completed_at, 'd F Y, g:i A')}}
+                                {{convertDateFormat($report->completed_at, 'LL, h:mm A')}}
                             </td>
                             <td>
                                 @php

@@ -43,7 +43,7 @@ class ReportDoneReporterNotification extends Notification
     {
         $report = $this->report;
         return (new MailMessage)
-        ->subject('KPLB Helpdesk - Maklum Balas Aduan Berjaya Dihantar')
+        ->subject('Sistem Meja Bantuan KPLB - Maklum Balas Aduan Berjaya Dihantar')
         ->greeting('Salam Sejahtera,')
         ->line('Maklum balas bagi aduan bernombor '. $report->ticket_no. ' berjaya dihantar')
         ->action('Lihat', route('aduan.show', $report->id));

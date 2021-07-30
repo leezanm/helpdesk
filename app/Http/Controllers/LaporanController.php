@@ -135,7 +135,7 @@ class LaporanController extends Controller
 
         $laporans = \DB::table('roles')
                     ->select('name', 'desc')
-                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (4,6) and if(?,report_trails.created_at >= ?, true) and if(?,report_trails.created_at <= ?, true) group by roles.id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
+                    ->selectRaw('ifnull((select count(*) from report_trails  where id = ( select max(id) from report_trails as rt where rt.report_id = report_trails.report_id and status_id in (4,6) )  and assigned_to_role_id = roles.id and status_id in (4,6) and if(?,report_trails.created_at >= ?, true) and if(?,report_trails.created_at <= ?, true) group by roles.id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
                     ->orderBy('desc', 'asc')
                     // ->whereIn('id', [1,2,3])
                     ->when(filled($peranan), function($query) use ($peranan){
@@ -159,6 +159,7 @@ class LaporanController extends Controller
                         ->when(filled($to), function($query) use($to){
                             $query->whereDate('report_trails.created_at', '<=', Carbon::parse($to));
                         })
+                        ->whereRaw('report_trails.id = ( select max(id) from report_trails as rt where rt.report_id = report_trails.report_id and status_id in (4,6)  )')
                         ->whereIn('status_id', [4,6])
                         ->whereNotNull('assigned_to_id')
                         ->orderBy('report_trails.id', 'desc')
@@ -310,7 +311,7 @@ class LaporanController extends Controller
 
         $laporans = \DB::table('roles')
                     ->select('name','desc')
-                    ->selectRaw('ifnull((select count(*) from report_trails join reports on reports.id = report_id where assigned_to_role_id = roles.id and status_id in (2,3,4,6) and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by roles.id),0) as jumlah', [$from_check, $from, $to_check, $to])
+                    ->selectRaw('ifnull((select count(*) from report_trails where id = ( select max(id) from report_trails as rt where rt.report_id = report_trails.report_id and status_id in (4,6) ) and assigned_to_role_id = roles.id and status_id in (2,3,4,6) and if(?,created_at >= ?, true) and if(?,created_at <= ?, true) group by roles.id),0) as jumlah', [$from_check, $from, $to_check, $to])
                     ->orderBy('desc', 'asc')
                     ->whereIn('id', [1,2,3])
                     ->get();

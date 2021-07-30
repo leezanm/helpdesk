@@ -14,25 +14,67 @@ class UserController extends Controller
     public function index()
     {
         //
-        $users = User::orderBy('name', 'asc')->get();
-        $roles = Role::where('name', '!=', 'superadmin')->get();
-        return view('user.pengguna', compact('users', 'roles'));
+        $title = 'Pengguna';
+        $users = User::with('roles')->whereDoesntHave('roles', function($query){
+            $query->whereIn('name', ['jtk', 'pptm', 'ptm', 'helpdesk.admin', 'superadmin', 'pengurusan']);
+        })->orderBy('name', 'asc')->get();
+
+        if( auth()->user()->hasRole('superadmin')){
+            $roles = Role::orderBy('desc')->get();
+
+        } else {
+            $roles = Role::where('name', '!=', 'superadmin')->orderBy('desc')->get();
+        }
+
+        return view('user.pengguna', compact('users', 'roles', 'title'));
     }
 
     public function indexPegTeknikal()
     {
         //
-        $users = User::permission('aduan.updateTask')->orderBy('name', 'asc')->get();
-        $roles = Role::where('name', '!=', 'superadmin')->get();
-        return view('user.pengguna', compact('users', 'roles'));
+        $title = 'Pegawai Teknikal';
+        $users = User::permission('aduan.updateTask')->with('roles')->orderBy('name', 'asc')->get();
+
+        if( auth()->user()->hasRole('superadmin')){
+            $roles = Role::orderBy('desc')->get();
+
+        } else {
+            $roles = Role::where('name', '!=', 'superadmin')->orderBy('desc')->get();
+        }
+
+        return view('user.pengguna', compact('users', 'roles', 'title'));
     }
 
     public function indexPentadbir()
     {
         //
-        $users = User::permission('manage.user')->orderBy('name', 'asc')->get();
-        $roles = Role::where('name', '!=', 'superadmin')->get();
-        return view('user.pengguna', compact('users', 'roles'));
+        $title = 'Pentadbir Sistem';
+        $users = User::permission('manage.user')->with('roles')->orderBy('name', 'asc')->get();
+
+        if( auth()->user()->hasRole('superadmin')){
+            $roles = Role::orderBy('desc')->get();
+
+        } else {
+            $roles = Role::where('name', '!=', 'superadmin')->orderBy('desc')->get();
+        }
+
+        return view('user.pengguna', compact('users', 'roles', 'title'));
+    }
+
+    public function indexPengurusan()
+    {
+        //
+        $title = 'Pengurusan';
+        $users = User::role('pengurusan')->with('roles')->orderBy('name', 'asc')->get();
+
+        if( auth()->user()->hasRole('superadmin')){
+            $roles = Role::orderBy('desc')->get();
+
+        } else {
+            $roles = Role::where('name', '!=', 'superadmin')->orderBy('desc')->get();
+        }
+
+        return view('user.pengguna', compact('users', 'roles', 'title'));
     }
 
     public function edit(User $user){

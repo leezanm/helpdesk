@@ -1,4 +1,5 @@
 <?php
+use Illuminate\Support\Str;
 
 return [
 
@@ -8,7 +9,8 @@ return [
          * The name of this application. You can use this name to monitor
          * the backups.
          */
-        'name' => env('APP_NAME', 'Kplb-Helpdesk'),
+        // 'name' => env('APP_NAME', 'Kplb-Helpdesk'),
+        'name' => Str::slug( config('app.name') ),
 
         'source' => [
 
@@ -110,7 +112,7 @@ return [
             /*
              * The filename prefix used for the backup zip file.
              */
-            'filename_prefix' => 'Kplb-Helpdesk-',
+            'filename_prefix' => Str::slug( config('app.name') ) . '-',
 
             /*
              * The disk names on which the backups will be stored.

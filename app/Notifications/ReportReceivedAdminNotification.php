@@ -43,7 +43,7 @@ class ReportReceivedAdminNotification extends Notification
     {
         $report = $this->report;
         return (new MailMessage)
-        ->subject('KPLB Helpdesk - Aduan Baru Diterima')
+        ->subject('Sistem Meja Bantuan KPLB - Aduan Baru Diterima')
         ->greeting('Salam Sejahtera,')
         ->line('Aduan baru memerlukan perhatian')
         ->line('Maklumat Aduan')

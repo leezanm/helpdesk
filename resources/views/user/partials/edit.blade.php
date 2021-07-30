@@ -16,7 +16,7 @@
 
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <label class="col-form-label">Nama Penuh Pengguna</label>
+                            <label class="col-form-label">Nama</label>
                         </div>
                         <div class="col">
                             <input type="text" name="name" class="form-control">
@@ -26,7 +26,7 @@
 
                     <div class="row mb-3">
                         <div class="col-md-3">
-                            <label class="col-form-label">Nama Pengguna (AD)</label>
+                            <label class="col-form-label">ID Pengguna <a role="button" class="align-middle"> <i class="bx bx-info-circle align-middle font-size-16" data-bs-toggle="tooltip" data-bs-placement="right" title="ID daftar masuk komputer"></i> </a></label>
                         </div>
                         <div class="col">
                             <input type="text" name="username" class="form-control" disabled>
@@ -37,7 +37,7 @@
                             <label class="col-form-label">Email</label>
                         </div>
                         <div class="col">
-                           <input type="text" class="form-control" name="email">
+                           <input type="text" class="form-control" name="email" readonly>
                            <p class="text-danger error-email error collapse"></p>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-2 col-form-label"> <b>Peranan:</b> </div>
+                        <div class="col-3 col-form-label"> <b>Peranan:</b> </div>
                         <div class="col">
                             @foreach ($roles as $role)
                                 <div class="form-check">
@@ -101,7 +101,7 @@
                     <button type="reset" class="btn btn-secondary waves-effect waves-light"><i
                             class="bx bx-reset font-size-16 align-middle me-2"></i> Set Semula</button>
                     <a href="#" class="btn btn-success waves-effect waves-light btnSubmit">
-                        <i class="bx bx-save font-size-16 align-middle me-2"></i> Hantar
+                        <i class="bx bx-save font-size-16 align-middle me-2"></i> Simpan
                     </a>
                 </div>
             </form>

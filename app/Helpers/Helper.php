@@ -11,7 +11,8 @@ function convertDateFormat($date, $format)
 	if(blank($date)){
 		return '';
 	}
-    return Carbon::parse($date)->format($format);
+    // return Carbon::parse($date)->format($format);
+    return Carbon::parse($date)->locale('ms')->isoFormat($format);
 }
 
 function formatBytes($bytes, $precision = 2)

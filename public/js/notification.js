@@ -1,24 +1,20 @@
 
 var baseURL = window.location.origin;
 var userId = $('#bellBtn').val();
-console.log(userId);
 
 function checkNotification() {
-    console.log(userId);
-    // alert('hai');
     $('#notiList').empty();
     $('.notiCount').html();
     $.ajax({
         url: baseURL + '/listNotification',
         type: 'GET',
         success: function (response) {
-            console.log(response);
             notifications = response.notifications;
 
             if (response.success) {
                 notifications.forEach(notification => {
                     data = notification.data;
-                    console.log(notification.id);
+
                     row = '<a href="#" class="text-reset notification-item redirect" data-notificationId="' + notification.id + '">';
                     row += '<div class="media">';
                     row += '<div class="avatar-xs me-3">'
@@ -35,9 +31,6 @@ function checkNotification() {
 
                 });
             }
-        },
-        error: function (error) {
-            console.log(error);
         }
     })
 }
@@ -48,7 +41,6 @@ $(".refreshNoti").on('click', function () {
 
 $("#notiList").on('click', '.redirect', function () {
     var notificationId = $(this).attr('data-notificationId');
-    console.log(notificationId);
     window.location.href = baseURL + '/notification/read/' + notificationId;
 });
 
@@ -62,9 +54,6 @@ $("#notiList").on('click', '.markReadAll', function () {
         },
         success: function (response) {
             checkNotification();
-        },
-        error: function (error) {
-            console.log(error);
         }
     });
 });

@@ -120,7 +120,7 @@
                             <td>{{$loop->iteration}}</td>
                             <td>{{$report_trail->ticket_no}}</td>
                             <td>{{$report_trail->subject}}</td>
-                            <td>{{convertDateFormat($report_trail->created_at, 'd F Y, g:i A')}}</td>
+                            <td>{{convertDateFormat($report_trail->created_at, 'LL, h:mm A')}}</td>
                             <td>
                                 <a class="userProfile" data-userId="{{$report_trail->assigned_to_id}}" role="button">{{$report_trail->assignedTo->name}}</a>
                                 <br>

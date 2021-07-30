@@ -55,7 +55,9 @@
                             <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-info" data-modal="#show_type_modal" data-show="{{route('category.show', $report_category->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
                             @if ($report_category->is_active)
                                 <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('category.edit', $report_category->id)}}" data-update="{{route('category.update', $report_category->id)}}" data-modal="#edit_type_modal" > <i class="bx bxs-pen"></i></a>
-                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('category.destroy', $report_category->id)}}" onclick="delRow(this)"> <i class="bx bxs-trash"></i></a>
+                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('category.destroy', $report_category->id)}}" onclick="delRow(this)"> <i class="bx bx-lock"></i></a>
+                            @else
+                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-action="{{route('category.restore', $report_category->id)}}" onclick="restore(this)"> <i class="bx bx-lock-open"></i></a>
                             @endif
                         </td>
                    </tr>
@@ -94,8 +96,6 @@
         var formData = new FormData( $(formId)[0] );
         formData.append('_token', '{{csrf_token()}}')
         clearError(formId);
-        console.log(formData)
-        console.log(form.serialize());
         $.ajax({
             url: form.attr('action'),
             method: form.attr('method'),
@@ -103,13 +103,11 @@
             processData: false,
             contentType: false,
             success:function(response){
-                console.log(response);
                 if(response.success){
                     window.location.reload();
                 }
             },
             error:function(errorResponse){
-                console.log(errorResponse);
                 if(errorResponse.responseJSON.errors){
                     errors = errorResponse.responseJSON.errors;
                     $.each(errors, function (key, error){
@@ -125,14 +123,12 @@
     });
 
     function showItem(row){
-        console.log('helo');
         currentRow = $(row);
         modalId = currentRow.attr('data-modal');
         $.ajax({
             url : currentRow.attr('data-show'),
             method : 'get',
             success : function(response){
-                console.log(response.success);
                 if(response.success){
                     $('#show-desc').html(response.data.desc);
                     $('#show-status').html(response.data.status);
@@ -147,35 +143,25 @@
                     }
                 }
                 $(modalId).modal('show');
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
 
     function editForm(row){
-        console.log('helo');
         currentRow = $(row);
         modalId = currentRow.attr('data-modal');
         form = $(modalId + ' form');
         form.attr('action', currentRow.attr('data-update'));
         formId = '#' + form.attr('id');
-        console.log(modalId);
         clearError(form.attr('action'));
         $.ajax({
             url : currentRow.attr('data-edit'),
             method : 'get',
             success : function(response){
-                console.log(response);
                 if(response.success){
                     $(formId + ' input[name="desc"]').val(response.data['desc']);
-                    // console.log(formId);
                     $(modalId).modal('show');
                 }
-            },
-            error : function(error){
-                console.log(error);
             }
         });
     }
@@ -183,7 +169,7 @@
     function delRow(row){
         currentRow= $(row);
         Swal.fire({
-            title:"Anda pasti?",
+            title:"Anda pasti untuk menyahaktifkan kategori ini?",
             icon:"warning",
             showCancelButton:!0,
             confirmButtonColor:"#34c38f",
@@ -199,17 +185,42 @@
                             _token: '{{csrf_token()}}'
                         },
                         success: function(response){
-                            console.log(response)
                             if(response.success){
-                                // currentRow.closest('tr').remove();
-                                // Swal.fire('Berjaya', 'Maklumat berjaya dipadam', 'success');
                                 window.location.reload();
                             } else {
                                 Swal.fire('Gagal', response.message, 'error');
                             }
+                        }
+                    })
+                }
+            });
+    }
+
+
+    function restore(row){
+        currentRow= $(row);
+        Swal.fire({
+            title:"Anda pasti untuk mengaktifkan semula kategori ini?",
+            icon:"warning",
+            showCancelButton:!0,
+            confirmButtonColor:"#34c38f",
+            cancelButtonColor:"#f46a6a",
+            confirmButtonText:"Teruskan",
+            cancelButtonText:"Batal",
+        }).then(function(t){
+                if(t.value){
+                    $.ajax({
+                        url:currentRow.attr('data-action'),
+                        method: 'post',
+                        data: {
+                            _token: '{{csrf_token()}}'
                         },
-                        error: function(error){
-                            console.log(error);
+                        success: function(response){
+                            if(response.success){
+                                window.location.reload();
+                            } else {
+                                Swal.fire('Gagal', response.message, 'error');
+                            }
                         }
                     })
                 }
