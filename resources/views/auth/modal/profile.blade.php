@@ -4,7 +4,7 @@ $user = Auth::user()->load('roles');
 
 
 <div id="edit-profile" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary bg-soft">
                 <h5 class="text-primary">Maklumat profil</h5>
@@ -27,19 +27,31 @@ $user = Auth::user()->load('roles');
                         <table class="table table-borderless mb-0">
                             <tbody class="align-middle">
                                 <tr>
-                                    <th>Nama Penuh :</th>
-                                    <td><input type="text" name="name" class="form-control" value="{{ $user->name }}">
+                                    <th width="20%">Nama </th>
+                                    <td>
+                                        <input type="text" class="form-control" value="{{ $user->name }}" disabled>
                                     </td>
-                                    <th>No. Telefon :</th>
-                                    <td><input type="text" name="tel_no" class="form-control" value="{{ $user->tel_no }}">
+
+                                </tr>
+                                <tr>
+                                    <th>No. Telefon</th>
+                                    <td>
+                                        <input type="text" class="form-control" value="{{ $user->tel_no }}" disabled>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>E-mel :</th>
-                                    <td><input type="text" name="email" class="form-control"
-                                            value="{{ $user->email }}"></td>
-                                    <th>Peranan:</th>
-                                    <td><span class="badge bg-success font-size-14 text-uppercase">{{optional(Auth::user()->roles()->first())->desc}}</span></td>
+                                    <th>E-mel</th>
+                                    <td>
+                                        <input type="text" class="form-control" value="{{ $user->email }}" disabled>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Peranan</th>
+                                    <td>
+                                        @foreach (Auth::user()->roles as $role)
+                                            <span class="badge bg-dark text-uppercase">{{$role->desc}}</span>
+                                        @endforeach
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

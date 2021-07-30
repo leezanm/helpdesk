@@ -61,7 +61,8 @@
                         </button>
 
                         <h5 class="app-search d-none d-lg-block m-3">
-                            Selamat Datang , {{Auth::user()->name}} ( {{optional(Auth::user()->roles()->first())->desc}} )
+                           <!-- Selamat Datang , {{Auth::user()->name}} ( {{optional(Auth::user()->roles()->first())->desc}} ) -->
+                            Selamat Datang , {{Auth::user()->name}}
                         </h5>
 
                     </div>
@@ -134,10 +135,10 @@
                                 <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#edit-profile">
                                     <i class="bx bx-user font-size-16 align-middle me-1"></i> <span
                                         key="t-profile">Profil</span></a>
-                                <a class="dropdown-item d-block" href="#" data-bs-toggle="modal"
+                                {{-- <a class="dropdown-item d-block" href="#" data-bs-toggle="modal"
                                     data-bs-target="#password-reset"><i
                                         class="bx bxs-key font-size-16 align-middle me-1"></i> <span
-                                        key="t-settings">Tukar Kata Laluan</span></a>
+                                        key="t-settings">Tukar Kata Laluan</span></a> --}}
 
                                 {{-- <a class="dropdown-item" href="{{ route('account.profile.edit', Auth::user()->id) }}"> <i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profil</span></a>
                                 <a class="dropdown-item d-block" href="{{ route('account.password.edit', Auth::user()->id) }}"><i class="bx bxs-key font-size-16 align-middle me-1"></i> <span key="t-settings">Tukar Kata Laluan</span></a> --}}

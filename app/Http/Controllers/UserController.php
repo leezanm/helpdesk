@@ -83,10 +83,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user){
         $request->validate([
-            'name' => 'required',
-            // 'email' => 'required|unique:users,email,'.Auth::user()->id,
             'image' => 'nullable|image|max:256',
-            // 'address'=> 'required|max:255'
         ]);
 
         $attributes = $request->except('image', '_token');
@@ -94,7 +91,6 @@ class UserController extends Controller
             $fileName = 'profile_pic_'.$user->id.'.'.$request->file('image')->getClientOriginalExtension();
             $path = $request->file('image')->storeAs('public/images/users',$fileName);
             $attributes['profile_path'] = Str::of($path)->replace('public', 'storage');
-            // return $attributes['profile_path'];
         }
         $user->update($attributes);
         return redirect()->back()->with('success','Berjaya kemaskini profil');
