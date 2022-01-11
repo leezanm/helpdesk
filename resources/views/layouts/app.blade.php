@@ -56,12 +56,12 @@
                             </a>
                         </div>
 
-                        <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                        <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light" id="vertical-menu-btn"  data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
                             <i class="fa fa-fw fa-bars"></i>
                         </button>
+                    </button>
 
                         <h5 class="app-search d-none d-lg-block m-3">
-                           <!-- Selamat Datang , {{Auth::user()->name}} ( {{optional(Auth::user()->roles()->first())->desc}} ) -->
                             Selamat Datang , {{Auth::user()->name}}
                         </h5>
 

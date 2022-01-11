@@ -33,59 +33,61 @@
         </div>
     </div> --}}
     <div class="card-body">
-       <table id="user-datatable" class="table table-bordered table-striped table-hover">
-           <thead class="text-center align-middle">
-                <th>#</th>
-                <th>Nama Pegawai</th>
-                <th>Peranan</th>
-                <th>Status</th>
-                <th>Tindakan</th>
-           </thead>
-           <tbody class="text-center align-middle">
-               @foreach ($users as $user)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td class="text-start p-0">
-                            <a class="list-group-item text-muted border-0" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" role="button">
-                                <div class="media align-items-center">
-                                    <div class="me-3">
-                                        <img src="{{ $user->profile_picture }}" alt="" class="avatar-sm h-auto d-block rounded">
-                                    </div>
-                                    <div class="media-body">
-                                        <h5 class="font-size-13 ">{{ $user->name }}</h5>
-                                        <p class="mb-0 ">{{$user->username}} | {{$user->email}}</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </td>
-                        <td class="text-start">
-                            @forelse ($user->roles->sortBy('desc') as $userRole)
-                                <span class="badge bg-info font-size-12">{{$userRole->desc}}</span>
-                            @empty
-                                -
-                            @endforelse
-                        </td>
-                        <td>
-                            @if ($user->is_active)
-                                <span class="badge bg-success">AKTIF</span>
-                            @else
-                                <span class="badge bg-danger">TIDAK AKTIF</span>
-                            @endif
-                        </td>
-                        <td class="text-center">
-                            <a href="{{route('user.showFullUser', $user->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="mdi mdi-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('user.editUser', $user->id)}}" data-update="{{route('user.updateUser', $user->id)}}" data-modal="#edit_user_modal" > <i class="bx bxs-pen"></i></a>
-                            @if ($user->is_active)
-                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('user.destroy', $user->id)}}" onclick="delRow(this)"> <i class="bx bx-lock"></i></a>
-                            @else
-                                <a href="{{route('user.restore', $user->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-success"> <i class="bx bx-lock-open"></i></a>
-                            @endif
+        <div class="table-responsive">
+            <table id="user-datatable" class="table table-bordered table-striped table-hover">
+                <thead class="text-center align-middle">
+                     <th>#</th>
+                     <th>Nama Pegawai</th>
+                     <th>Peranan</th>
+                     <th>Status</th>
+                     <th>Tindakan</th>
+                </thead>
+                <tbody class="text-center align-middle">
+                    @foreach ($users as $user)
+                         <tr>
+                             <td>{{ $loop->iteration }}</td>
+                             <td class="text-start p-0">
+                                 <a class="list-group-item text-muted border-0" data-modal="#show_user_modal" data-show="{{route('user.showUser', $user->id)}}" onclick="showItem(this)" role="button">
+                                     <div class="media align-items-center">
+                                         <div class="me-3">
+                                             <img src="{{ $user->profile_picture }}" alt="" class="avatar-sm h-auto d-block rounded">
+                                         </div>
+                                         <div class="media-body">
+                                             <h5 class="font-size-13 ">{{ $user->name }}</h5>
+                                             <p class="mb-0 ">{{$user->username}} | {{$user->email}}</p>
+                                         </div>
+                                     </div>
+                                 </a>
+                             </td>
+                             <td class="text-start">
+                                 @forelse ($user->roles->sortBy('desc') as $userRole)
+                                     <span class="badge bg-info font-size-12">{{$userRole->desc}}</span>
+                                 @empty
+                                     -
+                                 @endforelse
+                             </td>
+                             <td>
+                                 @if ($user->is_active)
+                                     <span class="badge bg-success">AKTIF</span>
+                                 @else
+                                     <span class="badge bg-danger">TIDAK AKTIF</span>
+                                 @endif
+                             </td>
+                             <td class="text-center">
+                                 <a href="{{route('user.showFullUser', $user->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="mdi mdi-eye"></i></a>
+                                 <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('user.editUser', $user->id)}}" data-update="{{route('user.updateUser', $user->id)}}" data-modal="#edit_user_modal" > <i class="bx bxs-pen"></i></a>
+                                 @if ($user->is_active)
+                                     <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('user.destroy', $user->id)}}" onclick="delRow(this)"> <i class="bx bx-lock"></i></a>
+                                 @else
+                                     <a href="{{route('user.restore', $user->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-success"> <i class="bx bx-lock-open"></i></a>
+                                 @endif
 
-                        </td>
-                    </tr>
-               @endforeach
-           </tbody>
-       </table>
+                             </td>
+                         </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

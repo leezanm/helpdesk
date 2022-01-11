@@ -113,54 +113,56 @@
                 </div>
             </div>
 
-            <table id="datatable-buttons" class="table table-bordered">
-                <thead class="text-center align-middle">
-                    <tr>
-                        <th>No</th>
-                        <th>Tiket</th>
-                        <th>Subjek</th>
-                        <th>Tarikh Aduan</th>
-                        <th>Status</th>
-                        <th>Rating</th>
-                        <th class="text-center">Tindakan</th>
-                    </tr>
-                </thead>
-                <tbody class="text-center align-middle">
-                    @foreach ($reports as $report)
+            <div class="table-responsive">
+                <table id="datatable-buttons" class="table table-bordered">
+                    <thead class="text-center align-middle">
                         <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$report->ticket_no}}</td>
-                            <td>{{$report->subject}}</td>
-                            <td>{{convertDateFormat($report->submitted_at, 'LL, h:mm A')}}</td>
-                            <td>
-                                <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
-                                <br>
-                                {{convertDateFormat($report->completed_at, 'LL, h:mm A')}}
-                            </td>
-                            <td>
-                                @php
-                                    if($report->rating >= 4){
-                                        $rating_color = 'bg-success';
-                                    } elseif ($report->rating > 2) {
-                                        $rating_color = 'bg-warning';
-                                    } else{
-                                        $rating_color = 'bg-danger';
-                                    }
-                                @endphp
-                                <span class="badge {{$rating_color}} font-size-13">{{$report->rating}}</span>
-                                {{-- <div class="rating-star">
-                                    <input type="hidden" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted" value="{{$report->rating}}" disabled />
-                                </div> --}}
-                            </td>
-                            <td class="text-center">
-                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
-                                    <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                                </a>
-                            </td>
+                            <th>No</th>
+                            <th>Tiket</th>
+                            <th>Subjek</th>
+                            <th>Tarikh Aduan</th>
+                            <th>Status</th>
+                            <th>Rating</th>
+                            <th class="text-center">Tindakan</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="text-center align-middle">
+                        @foreach ($reports as $report)
+                            <tr>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$report->ticket_no}}</td>
+                                <td>{{$report->subject}}</td>
+                                <td>{{convertDateFormat($report->submitted_at, 'LL, h:mm A')}}</td>
+                                <td>
+                                    <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
+                                    <br>
+                                    {{convertDateFormat($report->completed_at, 'LL, h:mm A')}}
+                                </td>
+                                <td>
+                                    @php
+                                        if($report->rating >= 4){
+                                            $rating_color = 'bg-success';
+                                        } elseif ($report->rating > 2) {
+                                            $rating_color = 'bg-warning';
+                                        } else{
+                                            $rating_color = 'bg-danger';
+                                        }
+                                    @endphp
+                                    <span class="badge {{$rating_color}} font-size-13">{{$report->rating}}</span>
+                                    {{-- <div class="rating-star">
+                                        <input type="hidden" class="rating" data-filled="mdi mdi-star text-warning" data-empty="mdi mdi-star-outline text-muted" value="{{$report->rating}}" disabled />
+                                    </div> --}}
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
+                                        <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

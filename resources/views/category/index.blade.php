@@ -34,36 +34,38 @@
         </div>
     </div>
     <div class="card-body">
-       <table id="audit" class="table table-bordered table-striped table-hover">
-           <thead>
-                <th width="5">Bil</th>
-                <th>Nama</th>
-                <th>Imej</th>
-                <th>Status</th>
-                <th class="text-center" width="10%">Tindakan</th>
-           </thead>
-           <tbody class="align-middle">
-               @foreach ($report_categories as $report_category)
-                   <tr>
-                        <td>{{$loop->iteration}}</td>
-                        <td>{{$report_category->desc}}</td>
-                        <td>
-                            <img src="{{ $report_category->image }}" alt="" class="avatar-sm h-auto d-block rounded">
-                        </td>
-                        <td><span class="badge {{$report_category->is_active? 'bg-success' : 'bg-danger'}}">{{$report_category->is_active? 'Aktif' : 'Tidak Aktif'}}</span></td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-info" data-modal="#show_type_modal" data-show="{{route('category.show', $report_category->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
-                            @if ($report_category->is_active)
-                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('category.edit', $report_category->id)}}" data-update="{{route('category.update', $report_category->id)}}" data-modal="#edit_type_modal" > <i class="bx bxs-pen"></i></a>
-                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('category.destroy', $report_category->id)}}" onclick="delRow(this)"> <i class="bx bx-lock"></i></a>
-                            @else
-                                <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-action="{{route('category.restore', $report_category->id)}}" onclick="restore(this)"> <i class="bx bx-lock-open"></i></a>
-                            @endif
-                        </td>
-                   </tr>
-               @endforeach
-           </tbody>
-       </table>
+        <div class="table-responsive">
+            <table id="audit" class="table table-bordered table-striped table-hover">
+                <thead>
+                     <th width="5">Bil</th>
+                     <th>Nama</th>
+                     <th>Imej</th>
+                     <th>Status</th>
+                     <th class="text-center" width="10%">Tindakan</th>
+                </thead>
+                <tbody class="align-middle">
+                    @foreach ($report_categories as $report_category)
+                        <tr>
+                             <td>{{$loop->iteration}}</td>
+                             <td>{{$report_category->desc}}</td>
+                             <td>
+                                 <img src="{{ $report_category->image }}" alt="" class="avatar-sm h-auto d-block rounded">
+                             </td>
+                             <td><span class="badge {{$report_category->is_active? 'bg-success' : 'bg-danger'}}">{{$report_category->is_active? 'Aktif' : 'Tidak Aktif'}}</span></td>
+                             <td class="text-center">
+                                 <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-info" data-modal="#show_type_modal" data-show="{{route('category.show', $report_category->id)}}" onclick="showItem(this)" > <i class="mdi mdi-eye"></i></a>
+                                 @if ($report_category->is_active)
+                                     <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('category.edit', $report_category->id)}}" data-update="{{route('category.update', $report_category->id)}}" data-modal="#edit_type_modal" > <i class="bx bxs-pen"></i></a>
+                                     <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-danger" data-action="{{route('category.destroy', $report_category->id)}}" onclick="delRow(this)"> <i class="bx bx-lock"></i></a>
+                                 @else
+                                     <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-success" data-action="{{route('category.restore', $report_category->id)}}" onclick="restore(this)"> <i class="bx bx-lock-open"></i></a>
+                                 @endif
+                             </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
