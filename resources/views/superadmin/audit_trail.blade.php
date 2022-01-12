@@ -23,7 +23,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-       <table id="audit" class="table table-bordered table-striped table-hover">
+       <table id="audit" class="table table-bordered table-striped table-hover dt-responsive">
            <thead>
                 <th>#</th>
                 <th>Tarikh/Masa</th>

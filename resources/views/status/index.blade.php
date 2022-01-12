@@ -24,28 +24,30 @@
 <div class="card">
 
     <div class="card-body">
-       <table id="audit" class="table table-bordered table-striped table-hover">
-           <thead>
-                <th width="5">Bil</th>
-                <th>Keterangan</th>
-                <th>Nama Kegunaan Sistem</th>
-                <th>Badge Colour</th>
-                <th class="text-center" width="10%">Tindakan</th>
-           </thead>
-           <tbody class="align-middle">
-               @foreach ($report_statuses as $report_status)
-                   <tr>
-                        <td>{{$loop->iteration}}</td>
-                        <td>{{$report_status->reference}}</td>
-                        <td>{{$report_status->desc}}</td>
-                        <td><span class="{{$report_status->class}} font-size-11">{{$report_status->desc}}</span></td>
-                        <td class="text-center">
-                            <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('status.edit', $report_status->id)}}" data-update="{{route('status.update', $report_status->id)}}" data-modal="#edit_status_modal" > <i class="bx bxs-pen"></i></a>
-                        </td>
-                   </tr>
-               @endforeach
-           </tbody>
-       </table>
+        <div class="table-responsive">
+            <table id="audit" class="table table-bordered table-striped table-hover">
+                <thead>
+                     <th width="5">Bil</th>
+                     <th>Keterangan</th>
+                     <th>Nama Kegunaan Sistem</th>
+                     <th>Badge Colour</th>
+                     <th class="text-center" width="10%">Tindakan</th>
+                </thead>
+                <tbody class="align-middle">
+                    @foreach ($report_statuses as $report_status)
+                        <tr>
+                             <td>{{$loop->iteration}}</td>
+                             <td>{{$report_status->reference}}</td>
+                             <td>{{$report_status->desc}}</td>
+                             <td><span class="{{$report_status->class}} font-size-11">{{$report_status->desc}}</span></td>
+                             <td class="text-center">
+                                 <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary" onclick="editForm(this)" data-edit="{{route('status.edit', $report_status->id)}}" data-update="{{route('status.update', $report_status->id)}}" data-modal="#edit_status_modal" > <i class="bx bxs-pen"></i></a>
+                             </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

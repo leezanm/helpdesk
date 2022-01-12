@@ -53,7 +53,7 @@
                     </tr>
                 </tbody>
             </table>
-            <table id="datatable-role" class="table table-bordered">
+            <table id="datatable-role" class="table table-bordered dt-responsive">
                 <thead class="text-center align-middle">
                     <tr>
                         <th>No</th>

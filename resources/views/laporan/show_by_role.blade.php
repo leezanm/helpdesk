@@ -102,42 +102,44 @@
                 </div>
             </div>
 
-            <table id="datatable-buttons" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tiket</th>
-                        <th>Subjek</th>
-                        <th>Ditugaskan Pada</th>
-                        <th>Peg. Teknikal</th>
-                        <th>Status</th>
-                        <th class="text-center">Tindakan</th>
-                    </tr>
-                </thead>
-                <tbody class="align-middle">
-                    @foreach ($report_trails as $report_trail)
+            <div class="table-responsive">
+                <table id="datatable-buttons" class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$report_trail->ticket_no}}</td>
-                            <td>{{$report_trail->subject}}</td>
-                            <td>{{convertDateFormat($report_trail->created_at, 'LL, h:mm A')}}</td>
-                            <td>
-                                <a class="userProfile" data-userId="{{$report_trail->assigned_to_id}}" role="button">{{$report_trail->assignedTo->name}}</a>
-                                <br>
-                                {{$report_trail->assignedTo->ldap_bahagian}}
-                            </td>
-                            <td>
-                                <span class="{{$report_trail->status->class}} font-size-11">{{$report_trail->status->desc}}</span>
-                            </td>
-                            <td class="text-center">
-                                <a href="{{route('aduan.show', $report_trail->report_id)}}" class="btn btn-primary waves-effect waves-light">
-                                    <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                                </a>
-                            </td>
+                            <th>No</th>
+                            <th>Tiket</th>
+                            <th>Subjek</th>
+                            <th>Ditugaskan Pada</th>
+                            <th>Peg. Teknikal</th>
+                            <th>Status</th>
+                            <th class="text-center">Tindakan</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="align-middle">
+                        @foreach ($report_trails as $report_trail)
+                            <tr>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$report_trail->ticket_no}}</td>
+                                <td>{{$report_trail->subject}}</td>
+                                <td>{{convertDateFormat($report_trail->created_at, 'LL, h:mm A')}}</td>
+                                <td>
+                                    <a class="userProfile" data-userId="{{$report_trail->assigned_to_id}}" role="button">{{$report_trail->assignedTo->name}}</a>
+                                    <br>
+                                    {{$report_trail->assignedTo->ldap_bahagian}}
+                                </td>
+                                <td>
+                                    <span class="{{$report_trail->status->class}} font-size-11">{{$report_trail->status->desc}}</span>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{route('aduan.show', $report_trail->report_id)}}" class="btn btn-primary waves-effect waves-light">
+                                        <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

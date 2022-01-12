@@ -110,43 +110,45 @@
                 </div>
             </div>
 
-            <table id="datatable-buttons" class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Tiket</th>
-                        <th>Subjek</th>
-                        <th>Tarikh Aduan</th>
-                        <th>Status</th>
-                        <th class="text-center">Tindakan</th>
-                    </tr>
-                </thead>
-                <tbody class="align-middle">
-                    @foreach ($reports as $report)
+            <div class="table-responsive">
+                <table id="datatable-buttons" class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$report->ticket_no}}</td>
-                            <td>{{$report->subject}}</td>
-                            <td>{{convertDateFormat($report->submitted_at, 'LL')}}</td>
-                            <td>
-                                <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
-                                @if ($report->report_status_id == 3)
-                                    <br>
-                                    <a href="#" class="userProfile" data-userId="{{$report->currentTrail->updated_by_id}}">{{$report->currentTrail->updatedBy->name}}</a>
-                                @elseif($report->report_status_id == 4)
-                                    <br>
-                                    <a href="#" class="userProfile" data-userId="{{$report->currentTrail->assigned_to_id}}">{{$report->currentTrail->assignedTo->name}}</a>
-                                @endif
-                            </td>
-                            <td class="text-center">
-                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
-                                    <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
-                                </a>
-                            </td>
+                            <th>No</th>
+                            <th>Tiket</th>
+                            <th>Subjek</th>
+                            <th>Tarikh Aduan</th>
+                            <th>Status</th>
+                            <th class="text-center">Tindakan</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="align-middle">
+                        @foreach ($reports as $report)
+                            <tr>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$report->ticket_no}}</td>
+                                <td>{{$report->subject}}</td>
+                                <td>{{convertDateFormat($report->submitted_at, 'LL')}}</td>
+                                <td>
+                                    <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
+                                    @if ($report->report_status_id == 3)
+                                        <br>
+                                        <a href="#" class="userProfile" data-userId="{{$report->currentTrail->updated_by_id}}">{{$report->currentTrail->updatedBy->name}}</a>
+                                    @elseif($report->report_status_id == 4)
+                                        <br>
+                                        <a href="#" class="userProfile" data-userId="{{$report->currentTrail->assigned_to_id}}">{{$report->currentTrail->assignedTo->name}}</a>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
+                                        <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection
