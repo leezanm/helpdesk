@@ -32,54 +32,56 @@
             </div>
         </div>
         <div class="card-body">
-            <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                <thead class="text-center align-middle">
-                    <th>No</th>
-                    <th>Tiket</th>
-                    <th>Subjek</th>
-                    <th>Kategori Aduan</th>
+            <div class="table-responsive">
+                <table id="datatable-buttons" class="table table-bordered nowrap w-100">
+                    <thead class="text-center align-middle">
+                        <th>No</th>
+                        <th>Tiket</th>
+                        <th>Subjek</th>
+                        <th>Kategori Aduan</th>
 
-                    @can('aduan.adminTask')
-                        <th>Pengadu</th>
-                    @endcan
+                        @can('aduan.adminTask')
+                            <th>Pengadu</th>
+                        @endcan
 
-                    <th>Tarikh Aduan</th>
-                    <th>Durasi</th>
-                    <th>Status</th>
-                    <th class="text-center">Tindakan</th>
-                </thead>
-                <tbody class="text-center align-middle">
-                    @foreach ($reports as $report)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$report->ticket_no}}</td>
-                            <td class="text-start">{{$report->subject}}</td>
-                            <td>{{$report->category->desc}}</td>
+                        <th>Tarikh Aduan</th>
+                        <th>Durasi</th>
+                        <th>Status</th>
+                        <th class="text-center">Tindakan</th>
+                    </thead>
+                    <tbody class="text-center align-middle">
+                        @foreach ($reports as $report)
+                            <tr>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$report->ticket_no}}</td>
+                                <td class="text-start">{{$report->subject}}</td>
+                                <td>{{$report->category->desc}}</td>
 
-                            @can('aduan.adminTask')
-                               <td>
-                                    <a data-userId="{{$report->reportBy->id}}" class="userProfile" role="button">{{$report->reportBy->name}}</a>
-                                    <br>
-                                    {{$report->reportBy->ldap_bahagian}}
-                               </td>
-                             @endcan
+                                @can('aduan.adminTask')
+                                   <td>
+                                        <a data-userId="{{$report->reportBy->id}}" class="userProfile" role="button">{{$report->reportBy->name}}</a>
+                                        <br>
+                                        {{$report->reportBy->ldap_bahagian}}
+                                   </td>
+                                 @endcan
 
-                            <td>{{convertDateFormat($report->submitted_at, 'LL')}}</td>
-                            <td>
-                                {!! getDuration($report) !!}
-                            </td>
-                            <td><span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span></td>
-                            <td>
-                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bxs-show align-middle"></i></a>
-                                 @if ($report->report_status_id == 1)
-                                     <a href="{{route('aduan.edit', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bxs-pen align-middle"></i></a>
-                                 @endif
-                                {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bx-pen align-middle"></i></a> --}}
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                                <td>{{convertDateFormat($report->submitted_at, 'LL')}}</td>
+                                <td>
+                                    {!! getDuration($report) !!}
+                                </td>
+                                <td><span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span></td>
+                                <td>
+                                    <a href="{{route('aduan.show', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bxs-show align-middle"></i></a>
+                                     @if ($report->report_status_id == 1)
+                                         <a href="{{route('aduan.edit', $report->id)}}" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bxs-pen align-middle"></i></a>
+                                     @endif
+                                    {{-- <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bx-pen align-middle"></i></a> --}}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
