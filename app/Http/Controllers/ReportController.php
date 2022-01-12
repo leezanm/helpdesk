@@ -33,7 +33,7 @@ class ReportController extends Controller
     public function index()
     {
         //
-        $reports = Report::whereIn('report_status_id', [2,3,4,5,6])->orderBy('submitted_at')->get();
+        $reports = Report::whereIn('report_status_id', [2,3,4,5,6])->orderBy('submitted_at','desc')->get();
         return view('aduan.index', compact('reports'));
     }
 

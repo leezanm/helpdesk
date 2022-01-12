@@ -14,9 +14,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $newUser = \DB::table('reports')->count();
-        $mbiTotal = \DB::table('reports')->where('report_status_id', 5)->count();
-        $fbiTotal = \DB::table('reports')->where('report_status_id', 4)->count();
+ 	$newUser = \DB::table('reports')
+            ->when(!auth()->user()->hasRole('helpdesk.admin'), function ($query){
+                $query->where('report_by_id', auth()->id());
+            })
+            ->count();
+
+       	$mbiTotal = \DB::table('reports')
+		->when(!auth()->user()->hasRole('helpdesk.admin'),function($query){
+		$query->where('report_by_id', auth()->id());
+		})
+		->where('report_status_id', 5)->count();
+
+        $fbiTotal = \DB::table('reports')
+		->when(!auth()->user()->hasRole('helpdesk.admin'), function($query){
+		$query->where('report_by_id', auth()->id());
+		})
+		->whereIn('report_status_id', [6,4,2,3])->count();
 
         $currentDay = Carbon::today();
         $currentMonth = Carbon::today()->month;
