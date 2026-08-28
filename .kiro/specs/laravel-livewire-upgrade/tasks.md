@@ -82,12 +82,16 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - Confirmed `livewire/update` runs through `web` only (not `audit-trail`). Decision documented in sys-req/06: page loads stay audited; per-interaction Livewire updates are intentionally NOT audited (avoids audit spam); audit specific actions explicitly when needed. Staging server switched to `php artisan serve` so Livewire/Vite/static assets all route correctly.
     - _Requirements: 4.3_
 
-- [ ] 8. Convert reference-CRUD screens (establish reusable patterns)
-  - [ ] 8.1 Extract Category business logic into an Action/Service; build `Category\CategoryIndex` + `Category\CategoryForm` with server-side validation and pagination; replace inline-HTML badges with `App\Support\StatusBadge`
+- [x] 8. Convert reference-CRUD screens (establish reusable patterns)
+  - [x] 8.1 Extract Category business logic into an Action/Service; build `Category\CategoryIndex` + `Category\CategoryForm` with server-side validation and pagination; replace inline-HTML badges with `App\Support\StatusBadge`
+    - Added `App\Actions\Categories\SaveCategory` (image handling), `App\Support\StatusBadge`, and `CategoryIndex` (search+pagination+show+deactivate/restore) + `CategoryForm` (create/edit, WithFileUploads, server-side validation). Pattern established for later screens.
     - _Requirements: 5.1, 5.2, 5.3, 5.4_
-  - [ ] 8.2 Mount the components in the existing Blade wrapper; add Livewire feature tests; remove dead JSON methods and jQuery for Category
+  - [x] 8.2 Mount the components in the existing Blade wrapper; add Livewire feature tests; remove dead JSON methods and jQuery for Category
+    - `category/index.blade.php` is now a thin `@livewire('category.category-index')` wrapper. Trimmed ReportCategoryController to just index(); removed dead category CRUD routes + `_modal` partials. 9 Livewire tests added.
     - _Requirements: 5.7_
-  - [ ] 8.3 Repeat the established pattern for Status, Division, and Type
+  - [x] 8.3 Repeat the established pattern for Status, Division, and Type
+    - Status converted: `Status\StatusIndex` (edit-only, seeded reference data); wrapper + trimmed controller/routes; removed status `_modal` partials (incl. an orphan create modal that wrongly referenced category.store); 4 Livewire tests added.
+    - Division & Type: NOT converted — they are dead code (no routes registered; the `divisions` table migration is commented out so the table doesn't exist; Type has no routes/views). Converting them would be converting unreachable code. Flagged for removal in task 12 (cleanup).
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.7_
 
 - [ ] 9. Convert User and Role management

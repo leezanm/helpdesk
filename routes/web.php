@@ -60,19 +60,15 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
 
     Route::prefix('kategori')->as('category.')->group(function () {
+        // CRUD now handled by Livewire (App\Livewire\Category\*); only the
+        // page wrapper route remains.
         Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\ReportCategoryController::class, 'store'])->name('store');
-        Route::get('/show/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'show'])->name('show');
-        Route::get('/edit/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'edit'])->name('edit');
-        Route::post('/update/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'update'])->name('update');
-        Route::post('/destroy/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'destroy'])->name('destroy');
-        Route::post('/restore/{reportCategory}', [App\Http\Controllers\ReportCategoryController::class, 'restore'])->name('restore');
     });
 
     Route::prefix('status')->as('status.')->group(function () {
+        // Edit now handled by Livewire (App\Livewire\Status\StatusIndex);
+        // only the page wrapper route remains.
         Route::get('/', [App\Http\Controllers\ReportStatusController::class, 'index'])->name('index');
-        Route::post('/edit/{reportStatus}', [App\Http\Controllers\ReportStatusController::class, 'edit'])->name('edit');
-        Route::post('/update/{reportStatus}', [App\Http\Controllers\ReportStatusController::class, 'update'])->name('update');
     });
 
     // Route::view('/pengguna', 'superadmin.pengguna');
