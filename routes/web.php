@@ -75,25 +75,13 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::view('/pengguna-show', 'user.show');
 
     Route::prefix('pengguna')->as('user.')->group(function(){
+        // List + create/edit/deactivate handled by Livewire (App\Livewire\User\*).
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
-        Route::post('/create', [App\Http\Controllers\UserController::class, 'storeUser'])->name('store');
-        Route::get('/show/{user}', [App\Http\Controllers\UserController::class, 'showUser'])->name('showUser');
         Route::get('/show/full/{user}', [App\Http\Controllers\UserController::class, 'showFullUser'])->name('showFullUser');
-        Route::get('/edit/{user}', [App\Http\Controllers\UserController::class, 'editUser'])->name('editUser');
-        Route::post('/update/{user}', [App\Http\Controllers\UserController::class, 'updateUser'])->name('updateUser');
-        Route::post('/delete/{user}', [App\Http\Controllers\UserController::class, 'destroy'])->name('destroy');
-        Route::get('/restore/{user}', [App\Http\Controllers\UserController::class, 'restore'])->name('restore');
         Route::get('/peg-teknikal', [App\Http\Controllers\UserController::class, 'indexPegTeknikal'])->name('indexPegTeknikal');
         Route::get('/pengurusan', [App\Http\Controllers\UserController::class, 'indexPengurusan'])->name('indexPengurusan');
         Route::get('/pentadbir', [App\Http\Controllers\UserController::class, 'indexPentadbir'])->name('indexPentadbir');
-
-        Route::prefix('aset')->as('aset.')->group(function () {
-            Route::post('/create', [App\Http\Controllers\UserAssetController::class, 'store'])->name('store');
-            Route::get('/{userAsset}/edit', [App\Http\Controllers\UserAssetController::class, 'edit'])->name('edit');
-            Route::post('/{userAsset}/edit', [App\Http\Controllers\UserAssetController::class, 'update'])->name('update');
-            Route::get('/{userAsset}/show', [App\Http\Controllers\UserAssetController::class, 'show'])->name('show');
-            Route::post('/{userAsset}/destroy', [App\Http\Controllers\UserAssetController::class, 'destroy'])->name('destroy');
-        });
+        // Asset management handled by Livewire (App\Livewire\User\UserAssetManager).
     });
 
 
@@ -109,10 +97,10 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     });
 
     Route::prefix('peranan')->as('role.')->group(function () {
+        // Listing handled by Livewire (App\Livewire\Role\RoleIndex).
+        // The store/update endpoints were non-functional stubs and are removed.
         Route::get('/', [App\Http\Controllers\RoleManagementController::class, 'index'])->name('index');
         Route::get('/show/{role:name}', [App\Http\Controllers\RoleManagementController::class, 'show'])->name('show');
-        Route::post('/create', [App\Http\Controllers\RoleManagementController::class, 'store']);
-        Route::post('/edit/{role:name}', [App\Http\Controllers\RoleManagementController::class, 'update']);
     });
 
     Route::view('/pengesahan', 'superadmin.selenggara');

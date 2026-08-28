@@ -19,56 +19,5 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        {{-- <div class="card-header">
-            <div class="row">
-                <div class="col text-end">
-                    <div class="button-items">
-                        <a class="btn btn-primary btn waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#modal_create_role">
-                            <i class="bx bxs-plus-square font-size-16 align-middle me-2"></i> Cipta
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        <div class="card-body">
-            <table id="datatable-role" class="table table-bordered dt-responsive">
-                <thead class="text-center align-middle">
-                    <tr>
-                        <th>No</th>
-                        <th>Peranan</th>
-                        <th>Keterangan</th>
-                        <th>Permissions</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody class="text-center align-middle">
-                    @foreach ($roles as $role)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$role->name}}</td>
-                            <td>{{$role->desc}}</td>
-                            <td class="text-start">
-                                <ul >
-                                    @foreach ($role->permissions as $permission)
-                                        <li>{{$permission->desc}}</li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                            <th><a href="{{route('role.show', $role->name)}}">lihat</a></th>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-@endsection
-
-@section('script')
-
-<script>
-    $('#datatable-role').DataTable();
-</script>
-
+    @livewire('role.role-index')
 @endsection

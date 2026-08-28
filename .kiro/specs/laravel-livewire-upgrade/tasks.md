@@ -94,10 +94,12 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - Division & Type: NOT converted — they are dead code (no routes registered; the `divisions` table migration is commented out so the table doesn't exist; Type has no routes/views). Converting them would be converting unreachable code. Flagged for removal in task 12 (cleanup).
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.7_
 
-- [ ] 9. Convert User and Role management
-  - [ ] 9.1 Build `User\UserIndex`, `User\UserForm`, `User\UserAssetManager`; extract logic to Actions; add tests; remove dead controller/jQuery code
+- [x] 9. Convert User and Role management
+  - [x] 9.1 Build `User\UserIndex`, `User\UserForm`, `User\UserAssetManager`; extract logic to Actions; add tests; remove dead controller/jQuery code
+    - `App\Actions\Users\SaveUser` (profile-pic + role syncing). `UserIndex` covers all 4 legacy list variants via a `scope` param (pengguna/teknikal/pentadbir/pengurusan), search+pagination. `UserForm` create/edit (roles checkboxes, default password pass1234, WithFileUploads on create). `UserAssetManager` for the full-user page (CRUD, soft delete). Trimmed UserController to list-wrappers + showFullUser + account.* methods; removed dead JSON routes + `aset` routes + user partials. Fixed deprecated `password` validation rule -> `current_password`. 13 Livewire tests.
     - _Requirements: 5.1, 5.2, 5.3, 5.7_
-  - [ ] 9.2 Build `Role\RoleIndex`/`Role\RoleForm`; confirm spatie permissions still enforce correctly
+  - [x] 9.2 Build `Role\RoleIndex`/`Role\RoleForm`; confirm spatie permissions still enforce correctly
+    - `Role\RoleIndex` (search + list roles/permissions + link to show). No RoleForm built: the legacy create/edit were non-functional stubs (empty modal files + empty controller methods) and roles are managed via seeders — kept read-only to preserve behavior. Trimmed RoleManagementController to index-wrapper + show; removed dead store/update routes and empty modal stubs. Spatie enforcement confirmed via test (helpdesk.admin can manage.user/category but not manage.backup; pengguna can aduan.create only). 3 Livewire tests.
     - _Requirements: 5.1, 5.2, 5.7_
 
 - [ ] 10. Convert the Aduan (core) flow
