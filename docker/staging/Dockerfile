@@ -30,4 +30,7 @@ WORKDIR /var/www/html
 EXPOSE 8000
 
 # Serve the app via PHP's built-in server for staging validation.
+# PHP_CLI_SERVER_WORKERS lets the dev server handle concurrent/sub requests
+# (e.g. session-based login flows) without the single-worker deadlock.
+ENV PHP_CLI_SERVER_WORKERS=4
 CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]

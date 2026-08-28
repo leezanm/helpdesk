@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 
 class UserController extends Controller
 {
@@ -60,26 +61,20 @@ class UserController extends Controller
 
         } else{
 
-            $ad = new \Adldap\Adldap();
-            $ad->addProvider(config('ldap')['connections']['default']['settings']);
-
             try{
-                $provider = $ad->connect();
-                $connected = true;
+                $ldap_user = LdapUser::query()
+                    ->select(['cn', 'physicaldeliveryofficename', 'userprincipalname'])
+                    ->findBy('samaccountname', $request->bp_username);
             } catch(Exception $e){
                 return response()->json(['success' => false, 'message' => 'Tidak dapat connect ke AD. Sila hubungi admin']);
-            }
-
-            if($connected){
-                $ldap_user = $provider->search()->select(['cn', 'physicaldeliveryofficename', 'userprincipalname'])->findBy('samaccountname', $request->bp_username);
             }
 
             if(filled($ldap_user)){
                 // $user = User::create([]);
                 $success = true;
-                $bp_name = $ldap_user->cn;
-                $bp_bahagian = $ldap_user->physicaldeliveryofficename;
-                $bp_email = $ldap_user->userprincipalname;
+                $bp_name = $ldap_user->getFirstAttribute('cn');
+                $bp_bahagian = $ldap_user->getFirstAttribute('physicaldeliveryofficename');
+                $bp_email = $ldap_user->getFirstAttribute('userprincipalname');
             } else {
                 return response()->json(['success' => false, 'message' => 'Pengguna tidak dijumpai']);
             }

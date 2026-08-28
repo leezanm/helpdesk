@@ -32,16 +32,20 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - NOTE: `@vite()` is NOT added to the layout yet — the `@vite` Blade directive does not exist in Laravel 8. It will be wired in after the framework reaches 9.19+ (see task 7.1). The current UI is unaffected because it serves pre-built assets from `public/assets/`.
     - _Requirements: 2.4_
 
-- [ ] 3. Upgrade Laravel 8 → 9
-  - [ ] 3.1 Replace `fruitcake/laravel-cors` (built-in CORS) and `fideloper/proxy` (built-in TrustProxies); swap `facade/ignition` → `spatie/laravel-ignition`; apply Symfony Mailer changes
+- [x] 3. Upgrade Laravel 8 → 9
+  - [x] 3.1 Replace `fruitcake/laravel-cors` (built-in CORS) and `fideloper/proxy` (built-in TrustProxies); swap `facade/ignition` → `spatie/laravel-ignition`; apply Symfony Mailer changes
+    - Removed fruitcake/fideloper (Kernel now uses `Illuminate\Http\Middleware\HandleCors`; TrustProxies extends the built-in middleware). facade/ignition -> spatie/laravel-ignition. Bumped spatie/permission ^5.5, spatie/laravel-backup ^8.1, fortify ^1.16, collision ^6, laravel-lang ~9.
     - _Requirements: 3.2_
-  - [ ] 3.2 Bump `laravel/framework` to 9, resolve config/skeleton diffs, run the test suite green
+  - [x] 3.2 Bump `laravel/framework` to 9, resolve config/skeleton diffs, run the test suite green
+    - Now on Laravel 9.52.22. Fixed `config/auth.php` users provider driver `ldap` -> `eloquent` (leftover from adldap2) and removed adldap2 service providers from `config/app.php`. Baseline 20/20 green; verified on staging (login `Auth::attempt` PASS against real data, app serves).
     - _Requirements: 3.1_
+    - NOTE: also pulled forward the LDAP replacement (task 4.2) here, because abandoned adldap2 hard-blocks Laravel 9. See 4.2.
 
 - [ ] 4. Upgrade Laravel 9 → 10
   - [ ] 4.1 Enforce PHP 8.1+; bump `spatie/laravel-permission` → 6 and `spatie/laravel-backup`; add required type hints
     - _Requirements: 3.2, 3.5_
-  - [ ] 4.2 Decide LDAP: replace `adldap2` with `directorytree/ldaprecord-laravel` and re-implement AD auth, OR remove it and document the decision
+  - [x] 4.2 Decide LDAP: replace `adldap2` with `directorytree/ldaprecord-laravel` and re-implement AD auth, OR remove it and document the decision
+    - DONE EARLY (in task 3) — required to unblock Laravel 9. Decision: AD is genuinely used (report "bagi pihak" lookup), so replaced adldap2 with directorytree/ldaprecord-laravel ^3. Rewrote the AD lookup in `Api/UserController::show` to LdapRecord; migrated `config/ldap.php` to LdapRecord shape (same LDAP_* env vars); deleted obsolete `config/ldap_auth.php`. Verified LdapRecord classes resolve and adldap2 is gone. Real AD connectivity to test only from production (staging uses dummy LDAP values).
     - _Requirements: 3.3_
   - [ ] 4.3 Bump `laravel/framework` to 10; run the test suite green
     - _Requirements: 3.1_
