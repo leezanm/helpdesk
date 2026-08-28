@@ -41,13 +41,16 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - _Requirements: 3.1_
     - NOTE: also pulled forward the LDAP replacement (task 4.2) here, because abandoned adldap2 hard-blocks Laravel 9. See 4.2.
 
-- [ ] 4. Upgrade Laravel 9 → 10
-  - [ ] 4.1 Enforce PHP 8.1+; bump `spatie/laravel-permission` → 6 and `spatie/laravel-backup`; add required type hints
+- [x] 4. Upgrade Laravel 9 → 10
+  - [x] 4.1 Enforce PHP 8.1+; bump `spatie/laravel-permission` → 6 and `spatie/laravel-backup`; add required type hints
+    - spatie/laravel-permission ^6 (installed 6.25, existing config already v6-compatible: has column_names/model_morph_key), spatie/laravel-backup ^8.8, fortify ^1.19, laravel-lang ^12, collision ^7, phpunit ^10, spatie/laravel-ignition ^2. PHP already ^8.3. No type-hint changes needed for the skeleton files in use.
     - _Requirements: 3.2, 3.5_
   - [x] 4.2 Decide LDAP: replace `adldap2` with `directorytree/ldaprecord-laravel` and re-implement AD auth, OR remove it and document the decision
     - DONE EARLY (in task 3) — required to unblock Laravel 9. Decision: AD is genuinely used (report "bagi pihak" lookup), so replaced adldap2 with directorytree/ldaprecord-laravel ^3. Rewrote the AD lookup in `Api/UserController::show` to LdapRecord; migrated `config/ldap.php` to LdapRecord shape (same LDAP_* env vars); deleted obsolete `config/ldap_auth.php`. Verified LdapRecord classes resolve and adldap2 is gone. Real AD connectivity to test only from production (staging uses dummy LDAP values).
     - _Requirements: 3.3_
-  - [ ] 4.3 Bump `laravel/framework` to 10; run the test suite green
+  - [x] 4.3 Bump `laravel/framework` to 10; run the test suite green
+    - Now on Laravel 10.50.3. Migrated `phpunit.xml` to the PHPUnit 10 schema. Baseline 20/20 green. Verified on staging: app serves (/->302, /login->200), auth + spatie v6 permissions + LdapRecord all working on real data (2161 reports intact).
+    - NOTE: one remaining PHP deprecation (`PDO::MYSQL_ATTR_SSL_CA`, config/database.php:62) only fires on PHP 8.5, not our 8.3 target; left as Laravel ships it since the 8.4+ replacement would break on 8.3.
     - _Requirements: 3.1_
 
 - [ ] 5. Upgrade Laravel 10 → 11
