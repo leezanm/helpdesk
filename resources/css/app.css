@@ -1,0 +1,7 @@
+/*
+ * Application stylesheet entry (compiled by Vite).
+ *
+ * The main Bootstrap 5 admin theme is currently served as pre-built files from
+ * public/assets/. This file is the Vite entry point for app-level styles and
+ * will host Livewire/Alpine-related styling as screens are migrated.
+ */
