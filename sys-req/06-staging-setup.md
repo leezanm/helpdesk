@@ -67,3 +67,37 @@ GROUP BY. The MySQL-8 strict-mode risk flagged earlier does **not** materialize 
 laporan queries. Task 2.3 should still re-run the full laporan/dashboard suite after the framework
 upgrade (query builder behavior can shift between Laravel majors), but no rewrites appear necessary
 based on this baseline test.
+
+---
+
+## Task 7 — Livewire introduced (Laravel 12)
+
+Livewire 3.8.6 installed and wired into the existing Blade layout:
+- `@vite(['resources/css/app.css','resources/js/app.js'])` + `@livewireStyles` in `<head>`
+- `@livewireScripts` before `</body>` (after jQuery/theme scripts)
+
+Verified coexistence (rendered HTML of a real authenticated page contains all layers):
+Livewire component + `wire:snapshot` hydration, `@livewireScripts`, Vite `/build/` assets,
+Alpine (`x-data`), the Bootstrap theme CSS, and jQuery — all present together.
+
+A permanent minimal Livewire smoke test lives at `tests/Feature/Livewire/HealthCheckTest.php`
+(proves `wire:click` server reactivity). The throwaway route/page wrapper were removed.
+
+### Staging server change
+
+The app container now runs `php artisan serve` (was `php -S ... -t public`). The plain
+built-in server treated Livewire paths like `/livewire/livewire.js` as missing static files
+(404). `artisan serve` routes non-file paths through `index.php` while still serving real
+static assets, so Livewire endpoints, Vite `/build/` assets, and the theme's `/assets/**`
+all serve correctly.
+
+### Task 7.3 — audit-trail behavior under Livewire (documented decision)
+
+Livewire's `livewire/update` XHR endpoint runs through only the **`web`** middleware group,
+NOT the app's `audit-trail` route middleware. Consequence:
+- **Page loads** (GET, in the `auth`+`audit-trail` group) are still audited — unchanged.
+- **In-component interactions** (Livewire updates) are NOT audited — no audit row per click/keystroke.
+
+This is the intended default and is sensible (avoids flooding the audit trail). If a specific
+Livewire action needs auditing later (e.g. "report status changed"), log it explicitly inside
+that action/component rather than blanket-logging every update.

@@ -71,12 +71,15 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - MILESTONE: app now runs on Laravel 12 with the original Blade/jQuery UI. Framework upgrade phase complete.
     - _Requirements: 3.4, 3.5_
 
-- [ ] 7. Introduce Livewire alongside Blade
-  - [ ] 7.1 `composer require livewire/livewire` (^3); wire `@livewireStyles`/`@livewireScripts` via Vite into `layouts/app.blade.php`
+- [x] 7. Introduce Livewire alongside Blade
+  - [x] 7.1 `composer require livewire/livewire` (^3); wire `@livewireStyles`/`@livewireScripts` via Vite into `layouts/app.blade.php`
+    - livewire/livewire 3.8.6 installed. Added `@vite(...)` + `@livewireStyles` in `<head>`, `@livewireScripts` before `</body>`. Vite build connected (Laravel 12 has the `@vite` directive).
     - _Requirements: 4.1_
-  - [ ] 7.2 Build a throwaway "hello" component to confirm Livewire + Alpine + Bootstrap coexist
+  - [x] 7.2 Build a throwaway "hello" component to confirm Livewire + Alpine + Bootstrap coexist
+    - Built `HealthCheck` component; verified rendered HTML of a real authed page contains Livewire (wire:snapshot) + Alpine (x-data) + Vite /build + Bootstrap theme + jQuery all coexisting. Permanent smoke test kept at tests/Feature/Livewire/HealthCheckTest.php (wire:click reactivity 0->1->2). Throwaway route/wrapper removed.
     - _Requirements: 4.2_
-  - [ ] 7.3 Verify audit-trail and auth middleware behavior on Livewire XHR requests
+  - [x] 7.3 Verify audit-trail and auth middleware behavior on Livewire XHR requests
+    - Confirmed `livewire/update` runs through `web` only (not `audit-trail`). Decision documented in sys-req/06: page loads stay audited; per-interaction Livewire updates are intentionally NOT audited (avoids audit spam); audit specific actions explicitly when needed. Staging server switched to `php artisan serve` so Livewire/Vite/static assets all route correctly.
     - _Requirements: 4.3_
 
 - [ ] 8. Convert reference-CRUD screens (establish reusable patterns)

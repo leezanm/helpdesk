@@ -32,5 +32,9 @@ EXPOSE 8000
 # Serve the app via PHP's built-in server for staging validation.
 # PHP_CLI_SERVER_WORKERS lets the dev server handle concurrent/sub requests
 # (e.g. session-based login flows) without the single-worker deadlock.
+#
+# Use Laravel's server.php router so non-file paths (e.g. /livewire/livewire.js,
+# /livewire/update) are dispatched through index.php instead of being treated
+# as missing static files by the built-in server.
 ENV PHP_CLI_SERVER_WORKERS=4
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

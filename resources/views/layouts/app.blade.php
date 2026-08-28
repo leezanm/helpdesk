@@ -4,7 +4,7 @@
     <head>
 
         <meta charset="utf-8" />
-        <title>KPLB | KEMENTERIAN PEMBANGUNAN LUAR BANDAR</title>
+        <title>KKDW | KEMENTERIAN KEMAJUAN DESA DAN WILAYAH</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -25,6 +25,10 @@
         <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+
+        <!-- Vite (app entry) + Livewire styles -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @livewireStyles
     </head>
 
     <body data-sidebar="dark">
@@ -174,7 +178,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR
+                                <script>document.write(new Date().getFullYear())</script> © KKDW. KEMENTERIAN KEMAJUAN DESA DAN WILAYAH
                             </div>
                             {{-- <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">
@@ -223,5 +227,6 @@
                 });
             });
         </script>
+        @livewireScripts
     </body>
 </html>
