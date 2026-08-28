@@ -1,0 +1,58 @@
+# Staging environment for the Laravel + Livewire upgrade.
+#
+# This is intentionally SEPARATE from the existing Sail docker-compose.yml:
+#  - PHP 8.3 (upgrade target) instead of the current 7.4 runtime
+#  - MySQL 8.0 with its own database (helpdesk_staging) and its own volume
+#  - Non-default host ports so it never collides with production or Sail
+#
+# Nothing here touches the production `helpdesk` database. It is safe to
+# start, break, and reset (docker compose -f docker-compose.staging.yml down -v).
+#
+# Usage:
+#   docker compose -f docker-compose.staging.yml up -d --build
+#   (then load the DB dump — see scripts/staging-load-db.sh)
+
+services:
+  staging-app:
+    build:
+      context: ./docker/staging
+      dockerfile: Dockerfile
+    image: helpdesk-staging/app:php8.3
+    ports:
+      - '8088:8000'          # app at http://localhost:8088
+    volumes:
+      - '.:/var/www/html'
+    env_file:
+      - .env.staging
+    depends_on:
+      staging-mysql:
+        condition: service_healthy
+    networks:
+      - staging
+
+  staging-mysql:
+    image: 'mysql:8.0'
+    ports:
+      - '33061:3306'         # host port 33061 -> avoids clashing with prod 3306 / Sail
+    environment:
+      MYSQL_ROOT_PASSWORD: 'staging_root'
+      MYSQL_DATABASE: 'helpdesk_staging'
+      MYSQL_USER: 'helpdesk'
+      MYSQL_PASSWORD: 'staging_secret'
+    volumes:
+      - 'staging_mysql_data:/var/lib/mysql'
+    networks:
+      - staging
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pstaging_root"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+networks:
+  staging:
+    driver: bridge
+
+volumes:
+  staging_mysql_data:
+    driver: local
