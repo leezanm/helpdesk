@@ -53,10 +53,13 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - NOTE: one remaining PHP deprecation (`PDO::MYSQL_ATTR_SSL_CA`, config/database.php:62) only fires on PHP 8.5, not our 8.3 target; left as Laravel ships it since the 8.4+ replacement would break on 8.3.
     - _Requirements: 3.1_
 
-- [ ] 5. Upgrade Laravel 10 → 11
-  - [ ] 5.1 Keep classic `app/Http/Kernel.php` structure (skip optional slim skeleton); bump remaining packages (sail, collision, phpunit, faker, fortify)
+- [x] 5. Upgrade Laravel 10 → 11
+  - [x] 5.1 Keep classic `app/Http/Kernel.php` structure (skip optional slim skeleton); bump remaining packages (sail, collision, phpunit, faker, fortify)
+    - Classic structure preserved (no bootstrap/app.php rewrite; existing Kernel.php works on L11). collision ^8.1, phpunit ^11, tinker ^2.9. Removed spatie/laravel-ignition (merged into framework error handling in L11; resolver confirmed removal).
     - _Requirements: 3.1, 3.2_
-  - [ ] 5.2 Bump `laravel/framework` to 11; run the test suite green
+  - [x] 5.2 Bump `laravel/framework` to 11; run the test suite green
+    - Now on Laravel 11.56.1. Baseline 20/20 green (phpunit.xml already L11-compatible). Verified on staging: /->302, /login->200; auth + spatie v6 permissions + LdapRecord working on real data (2161 reports, 318 users).
+    - Only deprecation remains the PHP 8.5-only PDO::MYSQL_ATTR_SSL_CA (not our 8.3 target).
     - _Requirements: 3.1_
 
 - [ ] 6. Upgrade Laravel 11 → 12
