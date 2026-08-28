@@ -62,10 +62,13 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - Only deprecation remains the PHP 8.5-only PDO::MYSQL_ATTR_SSL_CA (not our 8.3 target).
     - _Requirements: 3.1_
 
-- [ ] 6. Upgrade Laravel 11 → 12
-  - [ ] 6.1 Bump `laravel/framework` to 12; resolve any remaining diffs
+- [x] 6. Upgrade Laravel 11 → 12
+  - [x] 6.1 Bump `laravel/framework` to 12; resolve any remaining diffs
+    - Now on Laravel 12.68.0. Bumped spatie/laravel-backup ^8 -> ^9 (v8 caps at L11). No other diffs needed.
     - _Requirements: 3.1, 3.4_
-  - [ ] 6.2 Verify login/2FA/LDAP and spatie `can:` gates still work; run the full suite green on Laravel 12 with the existing Blade UI
+  - [x] 6.2 Verify login/2FA/LDAP and spatie `can:` gates still work; run the full suite green on Laravel 12 with the existing Blade UI
+    - Baseline 20/20 green. Staging verified on L12: /->login, /login 200, /dashboard gated; Auth::attempt PASS; spatie can('aduan.all') & can('manage.backup') = yes; LdapRecord + laravel-backup 9 resolve; data intact (2161 reports, 318 users). Existing Blade UI unchanged and serving.
+    - MILESTONE: app now runs on Laravel 12 with the original Blade/jQuery UI. Framework upgrade phase complete.
     - _Requirements: 3.4, 3.5_
 
 - [ ] 7. Introduce Livewire alongside Blade
