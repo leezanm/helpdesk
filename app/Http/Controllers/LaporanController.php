@@ -16,6 +16,16 @@ class LaporanController extends Controller
         return view('laporan.index');
     }
 
+    /**
+     * Combined report with all filters (date range / bahagian / status /
+     * pegawai) on a single page. Rendering + filtering handled by the Livewire
+     * component App\Livewire\Laporan\ReportAll.
+     */
+    public function viewByAll(Request $request){
+
+        return view('laporan.show_by_all');
+    }
+
     public function viewByStatus(Request $request){
         $title = 'Mengikut Status';
         $from = $request->from;

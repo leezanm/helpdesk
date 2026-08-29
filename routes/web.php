@@ -79,6 +79,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         // Route::get('/mengikut-user', [App\Http\Controllers\LaporanController::class, 'viewByUser'])->name('view-by-user');
         Route::get('/mengikut-bahagian', [App\Http\Controllers\LaporanController::class, 'viewByDepartment'])->name('view-by-department');
         Route::get('/mengikut-peranan', [App\Http\Controllers\LaporanController::class, 'viewByRole'])->name('view-by-role');
+        Route::get('/keseluruhan', [App\Http\Controllers\LaporanController::class, 'viewByAll'])->name('view-by-all');
 
     });
 

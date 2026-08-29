@@ -58,6 +58,15 @@
                 </thead>
                 <tbody class="text-center align-middle">
                     <tr>
+                        <td>0</td>
+                        <td class="text-start"><a href="{{ route('laporan.view-by-all') }}">Laporan Keseluruhan (Semua Penapis)</a></td>
+                        <td class="text-center">
+                            <a href="{{ route('laporan.view-by-all') }}" class="btn btn-primary waves-effect waves-light">
+                                <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
                         <td>1</td>
                         <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-status')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_status">Laporan Mengikut Status Tindakan</a></td>
                         <td class="text-center">
