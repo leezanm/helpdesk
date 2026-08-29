@@ -61,7 +61,10 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     // Route::view('/pengguna', 'superadmin.pengguna');
     Route::view('/pengguna-show', 'user.show');
 
-    Route::prefix('pengguna')->as('user.')->group(function(){
+    // User management is admin-only (matches the navbar's manage.user/manage.admin
+    // gate). This also closes IDOR on /pengguna/show/full/{user}: a normal user
+    // can no longer view another user's full profile by altering the id.
+    Route::prefix('pengguna')->as('user.')->middleware('can:manage.user')->group(function(){
         // List + create/edit/deactivate handled by Livewire (App\Livewire\User\*).
         Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('index');
         Route::get('/show/full/{user}', [App\Http\Controllers\UserController::class, 'showFullUser'])->name('showFullUser');

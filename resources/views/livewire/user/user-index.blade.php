@@ -56,7 +56,7 @@
                                     @endif
                                 </td>
                                 <td class="text-end text-nowrap">
-                                    <a href="{{ route('user.showFullUser', $user->id) }}" class="btn btn-sm btn-outline-primary btn-icon" title="Lihat"><i class="bi bi-eye"></i></a>
+                                    <a href="{{ route('user.showFullUser', $user) }}" class="btn btn-sm btn-outline-primary btn-icon" title="Lihat"><i class="bi bi-eye"></i></a>
                                     <a href="#" class="btn btn-sm btn-outline-secondary btn-icon" title="Kemaskini" wire:click.prevent="edit({{ $user->id }})"><i class="bi bi-pencil"></i></a>
                                     @if ($user->is_active)
                                         <a href="#" class="btn btn-sm btn-outline-danger btn-icon" title="Nyahaktif" wire:click.prevent="deactivate({{ $user->id }})" wire:confirm="Anda pasti?"><i class="bi bi-lock"></i></a>

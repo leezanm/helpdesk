@@ -1,7 +1,7 @@
 <div id="password-reset" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
-            <form action="{{route('account.password.update', Auth::user()->id)}}" method="POST">
+            <form action="{{route('account.password.update', Auth::user())}}" method="POST">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="myExtraLargeModalLabel">Tukar Kata Laluan</h5>

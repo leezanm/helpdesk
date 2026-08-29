@@ -9,7 +9,7 @@ $user = Auth::user()->load('roles');
             <div class="modal-header bg-primary bg-soft">
                 <h5 class="text-primary">Maklumat profil</h5>
             </div>
-            <form action="{{route('account.profile.update', $user->id)}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('account.profile.update', $user)}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
