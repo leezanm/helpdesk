@@ -1,31 +1,22 @@
 <div>
     {{-- ===== Date range filter ===== --}}
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="row g-2 align-items-end">
-                <div class="col-6 col-md-3">
-                    <label class="form-label small mb-1">Dari Tarikh</label>
-                    <input type="date" wire:model.live="dateFrom" class="form-control">
-                </div>
-                <div class="col-6 col-md-3">
-                    <label class="form-label small mb-1">Hingga Tarikh</label>
-                    <input type="date" wire:model.live="dateTo" class="form-control">
-                </div>
-                <div class="col-12 col-md-auto">
-                    <button class="btn btn-outline-secondary" wire:click="resetFilter">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i> Set Semula
-                    </button>
-                </div>
-                <div class="col-12 col-md text-md-end">
-                    <span class="text-muted small">
-                        <i class="bi bi-funnel me-1"></i>
-                        {{ \Illuminate\Support\Carbon::parse($dateFrom)->isoFormat('LL') }}
-                        &ndash; {{ \Illuminate\Support\Carbon::parse($dateTo)->isoFormat('LL') }}
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-filter-bar title="Penapis Tempoh" :show-reset="true" reset-action="resetFilter">
+        <x-filter-field label="Dari Tarikh" col="col-6 col-md-3">
+            <input type="date" wire:model.live="dateFrom" class="form-control">
+        </x-filter-field>
+
+        <x-filter-field label="Hingga Tarikh" col="col-6 col-md-3">
+            <input type="date" wire:model.live="dateTo" class="form-control">
+        </x-filter-field>
+
+        <x-filter-field col="col-12 col-md text-md-end">
+            <span class="text-muted small">
+                <i class="bi bi-calendar-range me-1"></i>
+                {{ \Illuminate\Support\Carbon::parse($dateFrom)->isoFormat('LL') }}
+                &ndash; {{ \Illuminate\Support\Carbon::parse($dateTo)->isoFormat('LL') }}
+            </span>
+        </x-filter-field>
+    </x-filter-bar>
 
     {{-- ===== Stat cards ===== --}}
     <div class="row g-3 mb-3">

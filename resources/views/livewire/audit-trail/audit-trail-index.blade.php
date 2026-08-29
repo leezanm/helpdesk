@@ -1,39 +1,42 @@
 <div>
-    <div class="list-toolbar flex-wrap gap-2">
-        <div class="list-search">
-            <i class="bi bi-search"></i>
-            <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
-                   placeholder="Cari URL, IP, atau nama pengguna...">
-        </div>
+    <x-filter-bar title="Carian & Penapis Log"
+                  :show-reset="$search !== '' || $userId !== '' || $dateFrom !== '' || $dateTo !== '' || $method !== ''">
+        <x-filter-field label="Carian" col="col-12 col-md-4">
+            <div class="filter-search">
+                <i class="bi bi-search"></i>
+                <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
+                       placeholder="Cari URL, IP, atau nama pengguna...">
+            </div>
+        </x-filter-field>
 
-        <select wire:model.live="userId" class="form-select" style="max-width:200px">
-            <option value="">Semua Pelaku</option>
-            @foreach ($users as $u)
-                <option value="{{ $u->id }}">{{ $u->name }}</option>
-            @endforeach
-        </select>
+        <x-filter-field label="Pelaku" col="col-12 col-md-4">
+            <select wire:model.live="userId" class="form-select">
+                <option value="">Semua Pelaku</option>
+                @foreach ($users as $u)
+                    <option value="{{ $u->id }}">{{ $u->name }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
 
-        <div class="d-flex align-items-center gap-1">
-            <input type="date" wire:model.live="dateFrom" class="form-control" style="max-width:160px" aria-label="Dari tarikh">
-            <span class="text-muted small">hingga</span>
-            <input type="date" wire:model.live="dateTo" class="form-control" style="max-width:160px" aria-label="Hingga tarikh">
-        </div>
+        <x-filter-field label="Method" col="col-12 col-md-4">
+            <select wire:model.live="method" class="form-select">
+                <option value="">Semua Method</option>
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="PATCH">PATCH</option>
+                <option value="DELETE">DELETE</option>
+            </select>
+        </x-filter-field>
 
-        <select wire:model.live="method" class="form-select" style="max-width:150px">
-            <option value="">Semua Method</option>
-            <option value="GET">GET</option>
-            <option value="POST">POST</option>
-            <option value="PUT">PUT</option>
-            <option value="PATCH">PATCH</option>
-            <option value="DELETE">DELETE</option>
-        </select>
+        <x-filter-field label="Dari Tarikh" col="col-6 col-md-3">
+            <input type="date" wire:model.live="dateFrom" class="form-control">
+        </x-filter-field>
 
-        @if ($search !== '' || $userId !== '' || $dateFrom !== '' || $dateTo !== '' || $method !== '')
-            <button type="button" wire:click="resetFilters" class="btn btn-outline-secondary">
-                <i class="bi bi-x-circle"></i> Reset
-            </button>
-        @endif
-    </div>
+        <x-filter-field label="Hingga Tarikh" col="col-6 col-md-3">
+            <input type="date" wire:model.live="dateTo" class="form-control">
+        </x-filter-field>
+    </x-filter-bar>
 
     <div class="card data-card">
         <div class="card-body">

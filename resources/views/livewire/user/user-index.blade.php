@@ -1,13 +1,19 @@
 <div>
-    <div class="list-toolbar">
-        <div class="list-search">
-            <i class="bi bi-search"></i>
-            <input type="text" wire:model.live.debounce.300ms="search" class="form-control" placeholder="Cari nama, username atau emel...">
-        </div>
-        <a class="btn btn-primary" wire:click="create" role="button">
-            <i class="bi bi-plus-lg me-1"></i> Pengguna Baru
-        </a>
-    </div>
+    <x-filter-bar title="Carian Pengguna" icon="bi-search"
+                  :show-reset="$search !== ''" reset-action="$set('search','')">
+        <x-slot:action>
+            <a class="btn btn-sm btn-primary" wire:click="create" role="button">
+                <i class="bi bi-plus-lg me-1"></i> Pengguna Baru
+            </a>
+        </x-slot:action>
+
+        <x-filter-field label="Carian" col="col-12 col-md-6">
+            <div class="filter-search">
+                <i class="bi bi-search"></i>
+                <input type="text" wire:model.live.debounce.300ms="search" class="form-control" placeholder="Cari nama, username atau emel...">
+            </div>
+        </x-filter-field>
+    </x-filter-bar>
 
     <div class="card data-card">
         <div class="card-body">

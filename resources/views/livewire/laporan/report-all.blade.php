@@ -1,63 +1,52 @@
 <div>
     {{-- ===== Filters (all on one page) ===== --}}
-    <div class="card mb-3">
-        <div class="card-header d-flex align-items-center justify-content-between">
-            <h6 class="mb-0"><i class="bi bi-funnel me-1"></i> Penapis Laporan</h6>
-            <button class="btn btn-sm btn-outline-secondary" wire:click="resetFilters">
-                <i class="bi bi-arrow-counterclockwise me-1"></i> Set Semula
-            </button>
-        </div>
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-6 col-md-3">
-                    <label class="form-label small">Dari Tarikh</label>
-                    <input type="date" wire:model.live="dateFrom" class="form-control">
-                </div>
-                <div class="col-6 col-md-3">
-                    <label class="form-label small">Hingga Tarikh</label>
-                    <input type="date" wire:model.live="dateTo" class="form-control">
-                </div>
-                <div class="col-12 col-md-3">
-                    <label class="form-label small">Bahagian</label>
-                    <select wire:model.live="bahagian" class="form-select">
-                        <option value="">Semua Bahagian</option>
-                        @foreach ($bahagianOptions as $b)
-                            <option value="{{ $b }}">{{ $b }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-6 col-md-3">
-                    <label class="form-label small">Status Tindakan</label>
-                    <select wire:model.live="status" class="form-select">
-                        <option value="">Semua Status</option>
-                        @foreach ($statusOptions as $s)
-                            <option value="{{ $s->id }}">{{ $s->desc }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-12 col-md-4">
-                    <label class="form-label small">Pegawai Bertanggungjawab</label>
-                    <select wire:model.live="pegawai" class="form-select">
-                        <option value="">Semua Pegawai</option>
-                        @foreach ($pegawaiOptions as $p)
-                            <option value="{{ $p->id }}">{{ $p->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-6 col-md-2">
-                    <label class="form-label small">Rating / Maklum Balas</label>
-                    <select wire:model.live="rating" class="form-select">
-                        <option value="">Semua Rating</option>
-                        <option value="5">⭐⭐⭐⭐⭐ — Cemerlang</option>
-                        <option value="4">⭐⭐⭐⭐ — Baik</option>
-                        <option value="3">⭐⭐⭐ — Puas Hati</option>
-                        <option value="2">⭐⭐ — Kurang Berpuas Hati</option>
-                        <option value="1">⭐ — Lemah</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-filter-bar title="Penapis Laporan" :show-reset="true">
+        <x-filter-field label="Dari Tarikh" col="col-6 col-md-3">
+            <input type="date" wire:model.live="dateFrom" class="form-control">
+        </x-filter-field>
+
+        <x-filter-field label="Hingga Tarikh" col="col-6 col-md-3">
+            <input type="date" wire:model.live="dateTo" class="form-control">
+        </x-filter-field>
+
+        <x-filter-field label="Bahagian" col="col-12 col-md-3">
+            <select wire:model.live="bahagian" class="form-select">
+                <option value="">Semua Bahagian</option>
+                @foreach ($bahagianOptions as $b)
+                    <option value="{{ $b }}">{{ $b }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
+        <x-filter-field label="Status Tindakan" col="col-6 col-md-3">
+            <select wire:model.live="status" class="form-select">
+                <option value="">Semua Status</option>
+                @foreach ($statusOptions as $s)
+                    <option value="{{ $s->id }}">{{ $s->desc }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
+        <x-filter-field label="Pegawai Bertanggungjawab" col="col-12 col-md-5">
+            <select wire:model.live="pegawai" class="form-select">
+                <option value="">Semua Pegawai</option>
+                @foreach ($pegawaiOptions as $p)
+                    <option value="{{ $p->id }}">{{ $p->name }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
+        <x-filter-field label="Rating / Maklum Balas" col="col-12 col-md-4">
+            <select wire:model.live="rating" class="form-select">
+                <option value="">Semua Rating</option>
+                <option value="5">⭐⭐⭐⭐⭐ — Cemerlang</option>
+                <option value="4">⭐⭐⭐⭐ — Baik</option>
+                <option value="3">⭐⭐⭐ — Puas Hati</option>
+                <option value="2">⭐⭐ — Kurang Berpuas Hati</option>
+                <option value="1">⭐ — Lemah</option>
+            </select>
+        </x-filter-field>
+    </x-filter-bar>
 
     {{-- ===== Status summary strip ===== --}}
     <div class="row g-2 mb-3">

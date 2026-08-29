@@ -1,58 +1,56 @@
 <div>
-    {{-- Toolbar: search + primary action --}}
-    <div class="list-toolbar">
-        <div class="list-search">
-            <i class="bi bi-search"></i>
-            <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
-                placeholder="Cari tiket atau subjek...">
-        </div>
-        <a class="btn btn-primary" href="{{ url('/aduan/create') }}">
-            <i class="bi bi-plus-lg me-1"></i> Aduan Baru
-        </a>
-    </div>
+    <x-filter-bar title="Carian & Penapis Aduan"
+                  :show-reset="$search !== '' || $bahagian !== '' || $categoryId !== '' || $officerId !== '' || $statusId !== ''">
+        <x-slot:action>
+            <a class="btn btn-sm btn-primary" href="{{ url('/aduan/create') }}">
+                <i class="bi bi-plus-lg me-1"></i> Aduan Baru
+            </a>
+        </x-slot:action>
 
-    {{-- Filters --}}
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="row g-2 align-items-end">
-                <div class="list-toolbar flex-wrap gap-2 mt-2">
-                    <select wire:model.live="bahagian" class="form-select" style="max-width:220px">
-                        <option value="">Semua Bahagian</option>
-                        @foreach ($bahagianOptions as $b)
-                            <option value="{{ $b }}">{{ $b }}</option>
-                        @endforeach
-                    </select>
-
-                    <select wire:model.live="categoryId" class="form-select" style="max-width:200px">
-                        <option value="">Semua Kategori</option>
-                        @foreach ($categoryOptions as $c)
-                            <option value="{{ $c->id }}">{{ $c->desc }}</option>
-                        @endforeach
-                    </select>
-
-                    <select wire:model.live="officerId" class="form-select" style="max-width:220px">
-                        <option value="">Semua Pegawai Bertanggungjawab</option>
-                        @foreach ($officerOptions as $o)
-                            <option value="{{ $o->id }}">{{ $o->name }}</option>
-                        @endforeach
-                    </select>
-
-                    <select wire:model.live="statusId" class="form-select" style="max-width:190px">
-                        <option value="">Semua Status</option>
-                        @foreach ($statusOptions as $s)
-                            <option value="{{ $s->id }}">{{ $s->desc }}</option>
-                        @endforeach
-                    </select>
-
-                    @if ($bahagian !== '' || $categoryId !== '' || $officerId !== '' || $statusId !== '')
-                        <button type="button" wire:click="resetFilters" class="btn btn-outline-secondary">
-                            <i class="bi bi-x-circle"></i> Reset
-                        </button>
-                    @endif
-                </div>
+        <x-filter-field label="Carian" col="col-12 col-md-4">
+            <div class="filter-search">
+                <i class="bi bi-search"></i>
+                <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
+                       placeholder="Cari tiket atau subjek...">
             </div>
-        </div>
-    </div>
+        </x-filter-field>
+
+        <x-filter-field label="Bahagian" col="col-6 col-md-4">
+            <select wire:model.live="bahagian" class="form-select">
+                <option value="">Semua Bahagian</option>
+                @foreach ($bahagianOptions as $b)
+                    <option value="{{ $b }}">{{ $b }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
+        <x-filter-field label="Kategori" col="col-6 col-md-4">
+            <select wire:model.live="categoryId" class="form-select">
+                <option value="">Semua Kategori</option>
+                @foreach ($categoryOptions as $c)
+                    <option value="{{ $c->id }}">{{ $c->desc }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
+        <x-filter-field label="Pegawai Bertanggungjawab" col="col-12 col-md-6">
+            <select wire:model.live="officerId" class="form-select">
+                <option value="">Semua Pegawai Bertanggungjawab</option>
+                @foreach ($officerOptions as $o)
+                    <option value="{{ $o->id }}">{{ $o->name }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
+        <x-filter-field label="Status" col="col-12 col-md-6">
+            <select wire:model.live="statusId" class="form-select">
+                <option value="">Semua Status</option>
+                @foreach ($statusOptions as $s)
+                    <option value="{{ $s->id }}">{{ $s->desc }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+    </x-filter-bar>
 
     {{-- Data card --}}
     <div class="card data-card">

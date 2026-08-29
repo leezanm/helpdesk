@@ -1,18 +1,23 @@
 <div>
-    {{-- Toolbar --}}
-    <div class="list-toolbar">
-        <div class="list-search">
-            <i class="bi bi-search"></i>
-            <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
-                   placeholder="Cari punca, penyelesaian, subjek...">
-        </div>
-        <select wire:model.live="category" class="form-select" style="max-width:260px">
-            <option value="">Semua Kategori</option>
-            @foreach ($categories as $c)
-                <option value="{{ $c->id }}">{{ $c->desc }}</option>
-            @endforeach
-        </select>
-    </div>
+    <x-filter-bar title="Carian & Penapis Lesson Learn"
+                  :show-reset="$search !== '' || $category !== ''">
+        <x-filter-field label="Carian" col="col-12 col-md-7">
+            <div class="filter-search">
+                <i class="bi bi-search"></i>
+                <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
+                       placeholder="Cari punca, penyelesaian, subjek...">
+            </div>
+        </x-filter-field>
+
+        <x-filter-field label="Kategori" col="col-12 col-md-5">
+            <select wire:model.live="category" class="form-select">
+                <option value="">Semua Kategori</option>
+                @foreach ($categories as $c)
+                    <option value="{{ $c->id }}">{{ $c->desc }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+    </x-filter-bar>
 
     @forelse ($entries as $entry)
         <div class="card mb-3" wire:key="ll-{{ $entry->id }}">

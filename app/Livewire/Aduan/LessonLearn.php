@@ -38,6 +38,12 @@ class LessonLearn extends Component
         $this->resetPage();
     }
 
+    public function resetFilters(): void
+    {
+        $this->reset(['search', 'category']);
+        $this->resetPage();
+    }
+
     public function render()
     {
         $entries = ReportTrail::query()
