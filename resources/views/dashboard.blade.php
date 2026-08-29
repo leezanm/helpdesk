@@ -31,9 +31,45 @@
         return { primary: primary, list: [primary, success, '#38bdf8', '#f59e0b', '#a78bfa', '#f472b6', '#fb7185', '#34d399'] };
     }
 
-    function renderCharts(statusData, categoryData) {
+    function renderOfficerBar(officers) {
+        if (typeof echarts === 'undefined') return;
+        var el = document.getElementById('officer-workload-bar');
+        if (!el || !officers || !officers.names) return;
+        var p = palette();
+        var chart = echarts.getInstanceByDom(el) || echarts.init(el);
+        chart.setOption({
+            tooltip: {
+                trigger: 'axis', axisPointer: { type: 'shadow' },
+                formatter: function (params) {
+                    if (!params.length) return '';
+                    var idx = params[0].dataIndex;
+                    var total = (officers.diterima && officers.diterima[idx]) || 0;
+                    var s = '<strong>' + params[0].name + '</strong><br>Diterima: ' + total;
+                    params.forEach(function (pi) {
+                        s += '<br>' + pi.marker + ' ' + pi.seriesName + ': ' + pi.value;
+                    });
+                    return s;
+                }
+            },
+            legend: { bottom: 0, icon: 'circle' },
+            grid: { left: 8, right: 16, top: 16, bottom: 36, containLabel: true },
+            xAxis: { type: 'value', minInterval: 1 },
+            yAxis: { type: 'category', inverse: true, data: officers.names },
+            series: [
+                { name: 'Dalam Tindakan', type: 'bar', stack: 'beban', color: '#f59e0b',
+                  barMaxWidth: 22, itemStyle: { borderRadius: [6, 0, 0, 6] }, data: officers.dalamTindakan },
+                { name: 'Selesai', type: 'bar', stack: 'beban', color: (palette().list[1] || '#10b981'),
+                  barMaxWidth: 22, itemStyle: { borderRadius: [0, 6, 6, 0] }, data: officers.selesai }
+            ]
+        }, true);
+        chart.resize();
+    }
+
+    function renderCharts(statusData, categoryData, officersData) {
         if (typeof echarts === 'undefined') return;
         var p = palette();
+
+        if (officersData) renderOfficerBar(officersData);
 
         var donutEl = document.getElementById('status-donut');
         if (donutEl) {
@@ -66,7 +102,11 @@
         var el = document.getElementById('dashboard-chart-data');
         if (!el) return;
         try {
-            renderCharts(JSON.parse(el.dataset.status || '[]'), JSON.parse(el.dataset.category || '[]'));
+            renderCharts(
+                JSON.parse(el.dataset.status || '[]'),
+                JSON.parse(el.dataset.category || '[]'),
+                JSON.parse(el.dataset.officers || 'null')
+            );
         } catch (e) { /* ignore malformed */ }
     }
 
@@ -79,12 +119,12 @@
     document.addEventListener('livewire:init', function () {
         Livewire.on('dashboard-charts', function (e) {
             var d = Array.isArray(e) ? e[0] : e;
-            renderCharts(d.status, d.category);
+            renderCharts(d.status, d.category, d.officers);
         });
     });
 
     window.addEventListener('resize', function () {
-        ['status-donut', 'category-bar'].forEach(function (id) {
+        ['status-donut', 'category-bar', 'officer-workload-bar'].forEach(function (id) {
             var el = document.getElementById(id);
             if (el && typeof echarts !== 'undefined' && echarts.getInstanceByDom(el)) {
                 echarts.getInstanceByDom(el).resize();

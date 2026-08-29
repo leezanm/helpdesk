@@ -176,10 +176,25 @@ class Dashboard extends Component
 
         $statusBreakdown = $this->statusBreakdown();
         $categoryBreakdown = $this->categoryBreakdown();
+        $officerWorkload = $this->officerWorkload();
 
-        // Push fresh chart data to the browser so charts update when the date
-        // filter changes (inline <script> does not re-run on Livewire updates).
-        $this->dispatch('dashboard-charts', status: $statusBreakdown, category: $categoryBreakdown);
+        // Shape officer workload for a stacked bar chart:
+        //   names + two stacked series (Dalam Tindakan, Selesai), with the
+        //   "Diterima" total carried along for the tooltip.
+        $officerWorkloadChart = [
+            'names' => $officerWorkload->pluck('name')->all(),
+            'diterima' => $officerWorkload->pluck('diterima')->map(fn ($v) => (int) $v)->all(),
+            'dalamTindakan' => $officerWorkload->pluck('dalam_tindakan')->map(fn ($v) => (int) $v)->all(),
+            'selesai' => $officerWorkload->pluck('selesai')->map(fn ($v) => (int) $v)->all(),
+        ];
+
+        // Push fresh chart data to the browser so charts update when any
+        // filter changes (the chart script re-draws on this event).
+        $this->dispatch('dashboard-charts',
+            status: $statusBreakdown,
+            category: $categoryBreakdown,
+            officers: $officerWorkloadChart,
+        );
 
         $total = (clone $this->reportCountQuery())->whereIn('report_status_id', [2, 3, 4, 5, 6])->count();
         $resolved = (clone $this->reportCountQuery())->where('report_status_id', 5)->count();
@@ -195,7 +210,8 @@ class Dashboard extends Component
             'resolutionRate' => $resolutionRate,
             'statusBreakdown' => $statusBreakdown,
             'categoryBreakdown' => $categoryBreakdown,
-            'officerWorkload' => $this->officerWorkload(),
+            'officerWorkload' => $officerWorkload,
+            'officerWorkloadChart' => $officerWorkloadChart,
             'bahagianOptions' => $this->bahagianOptions(),
             'reports' => $this->reportsForRole()->limit(10)->get(),
             'listTitle' => $listTitle,

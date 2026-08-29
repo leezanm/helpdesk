@@ -123,39 +123,17 @@
         </div>
     </div>
 
-    {{-- ===== Officer workload: assigned reports (received / in-action / resolved) ===== --}}
+    {{-- ===== Officer workload: stacked bar (Dalam Tindakan + Selesai per officer) ===== --}}
     <div class="row g-3">
         <div class="col-12">
             <div class="card">
                 <div class="card-header"><h6 class="mb-0">Beban Tugas Pegawai (Aduan Diterima untuk Tindakan)</h6></div>
-                <div class="card-body pt-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Pegawai</th>
-                                    <th class="text-center">Diterima</th>
-                                    <th class="text-center">Dalam Tindakan</th>
-                                    <th class="text-center">Selesai</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($officerWorkload as $officer)
-                                    <tr wire:key="officer-{{ $loop->index }}">
-                                        <td>
-                                            <div class="fw-medium">{{ $officer->name }}</div>
-                                            @if ($officer->ldap_bahagian)<small class="text-muted">{{ $officer->ldap_bahagian }}</small>@endif
-                                        </td>
-                                        <td class="text-center"><span class="badge bg-primary">{{ $officer->diterima }}</span></td>
-                                        <td class="text-center"><span class="badge bg-warning">{{ $officer->dalam_tindakan }}</span></td>
-                                        <td class="text-center"><span class="badge bg-success">{{ $officer->selesai }}</span></td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="4"><div class="empty-state"><i class="bi bi-person-x"></i> Tiada pegawai menerima aduan dalam tempoh ini.</div></td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="card-body">
+                    @if (count($officerWorkload) > 0)
+                        <div id="officer-workload-bar" style="height: {{ max(300, count($officerWorkload) * 38 + 60) }}px;"></div>
+                    @else
+                        <div class="empty-state"><i class="bi bi-person-x"></i> Tiada pegawai menerima aduan dalam tempoh ini.</div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -167,5 +145,6 @@
     <div id="dashboard-chart-data"
          data-status='@json($statusBreakdown)'
          data-category='@json($categoryBreakdown)'
+         data-officers='@json($officerWorkloadChart)'
          hidden></div>
 </div>
