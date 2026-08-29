@@ -17,6 +17,9 @@
         <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+
+        {{-- Fresh theme tokens (loads after the base theme so it overrides) --}}
+        @vite(['resources/css/app.css'])
         <style>
 
         </style>

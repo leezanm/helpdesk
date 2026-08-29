@@ -1,7 +1,201 @@
 /*
- * Application stylesheet entry (compiled by Vite).
+ * KKDW Helpdesk — application theme (Vite entry, layered over Bootstrap 5).
  *
- * The main Bootstrap 5 admin theme is currently served as pre-built files from
- * public/assets/. This file is the Vite entry point for app-level styles and
- * will host Livewire/Alpine-related styling as screens are migrated.
+ * Token-driven refresh: a professional teal-blue palette, Inter typography, and
+ * modern surfaces/spacing. Tokens override Bootstrap's CSS variables (--bs-*)
+ * and add an app layer (--app-*). Light theme now; a [data-theme="dark"] block
+ * is reserved for a future toggle without markup changes.
+ *
+ * Spec: .kiro/specs/ui-refresh
  */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   Design tokens
+   ============================================================ */
+:root {
+    /* Brand palette (government / ministry tone: trust + clarity) */
+    --app-primary: #0f6e8c;          /* deep teal-blue */
+    --app-primary-600: #0c5b74;
+    --app-primary-700: #094757;
+    --app-primary-100: #e2f1f6;
+    --app-primary-contrast: #ffffff;
+
+    --app-accent: #f0a400;           /* warm amber, used sparingly for CTAs/highlights */
+    --app-accent-contrast: #1c1600;
+
+    /* Neutrals / surfaces */
+    --app-bg: #f6f8fb;               /* app background */
+    --app-surface: #ffffff;          /* cards, panels */
+    --app-surface-2: #f1f4f8;        /* subtle raised/hover surfaces */
+    --app-border: #e4e9f0;
+    --app-text: #1f2a37;
+    --app-text-muted: #6b7688;
+
+    /* Status (kept semantically aligned with report status badges) */
+    --app-success: #17976a;
+    --app-warning: #e6a200;
+    --app-danger: #d6455a;
+    --app-info: #0f6e8c;
+
+    /* Shape & depth */
+    --app-radius: 0.65rem;
+    --app-radius-sm: 0.4rem;
+    --app-shadow-sm: 0 1px 2px rgba(16, 40, 63, 0.06), 0 1px 3px rgba(16, 40, 63, 0.05);
+    --app-shadow-md: 0 4px 12px rgba(16, 40, 63, 0.08);
+
+    /* Sidebar */
+    --app-sidebar-bg: #0d2c3a;       /* deep teal, professional */
+    --app-sidebar-fg: #c7d6dd;
+    --app-sidebar-fg-active: #ffffff;
+    --app-sidebar-active-bg: rgba(255, 255, 255, 0.08);
+    --app-sidebar-accent: var(--app-accent);
+
+    /* Font */
+    --app-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+    /* --- Map onto Bootstrap 5 CSS variables so components inherit the theme --- */
+    --bs-primary: var(--app-primary);
+    --bs-primary-rgb: 15, 110, 140;
+    --bs-body-bg: var(--app-bg);
+    --bs-body-color: var(--app-text);
+    --bs-border-color: var(--app-border);
+    --bs-body-font-family: var(--app-font);
+    --bs-border-radius: var(--app-radius);
+    --bs-border-radius-sm: var(--app-radius-sm);
+    --bs-link-color: var(--app-primary);
+    --bs-link-hover-color: var(--app-primary-700);
+}
+
+/* Reserved for a future dark mode (no markup change needed to switch). */
+[data-theme="dark"] {
+    --app-bg: #0b1620;
+    --app-surface: #10202b;
+    --app-surface-2: #162a37;
+    --app-border: #1e3341;
+    --app-text: #e7eef3;
+    --app-text-muted: #93a4b1;
+    --bs-body-bg: var(--app-bg);
+    --bs-body-color: var(--app-text);
+    --bs-border-color: var(--app-border);
+}
+
+/* ============================================================
+   Base elements
+   ============================================================ */
+body {
+    font-family: var(--app-font);
+    background-color: var(--app-bg);
+    color: var(--app-text);
+    letter-spacing: 0.1px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--app-text);
+    font-weight: 600;
+}
+
+a {
+    color: var(--app-primary);
+}
+a:hover {
+    color: var(--app-primary-700);
+}
+
+/* ============================================================
+   Cards / surfaces
+   ============================================================ */
+.card {
+    background-color: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius);
+    box-shadow: var(--app-shadow-sm);
+}
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--app-border);
+    font-weight: 600;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+    border-radius: var(--app-radius-sm);
+    font-weight: 500;
+}
+.btn-primary {
+    --bs-btn-bg: var(--app-primary);
+    --bs-btn-border-color: var(--app-primary);
+    --bs-btn-hover-bg: var(--app-primary-600);
+    --bs-btn-hover-border-color: var(--app-primary-600);
+    --bs-btn-active-bg: var(--app-primary-700);
+    --bs-btn-active-border-color: var(--app-primary-700);
+    --bs-btn-color: var(--app-primary-contrast);
+    --bs-btn-hover-color: var(--app-primary-contrast);
+}
+.btn-outline-primary {
+    --bs-btn-color: var(--app-primary);
+    --bs-btn-border-color: var(--app-primary);
+    --bs-btn-hover-bg: var(--app-primary);
+    --bs-btn-hover-border-color: var(--app-primary);
+}
+
+/* ============================================================
+   Forms
+   ============================================================ */
+.form-control,
+.form-select {
+    border-radius: var(--app-radius-sm);
+    border-color: var(--app-border);
+    color: var(--app-text);
+}
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+}
+.form-label,
+.col-form-label {
+    font-weight: 500;
+    color: var(--app-text);
+}
+
+/* ============================================================
+   Tables
+   ============================================================ */
+.table {
+    --bs-table-bg: var(--app-surface);
+    color: var(--app-text);
+}
+.table > thead {
+    background-color: var(--app-surface-2);
+    color: var(--app-text-muted);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.4px;
+}
+.table > thead th {
+    border-bottom: 1px solid var(--app-border);
+    font-weight: 600;
+}
+
+/* ============================================================
+   Badges (status)
+   ============================================================ */
+.badge.bg-success { background-color: var(--app-success) !important; }
+.badge.bg-warning { background-color: var(--app-warning) !important; }
+.badge.bg-danger  { background-color: var(--app-danger) !important; }
+.badge.bg-info    { background-color: var(--app-info) !important; }
+.badge.bg-primary { background-color: var(--app-primary) !important; }
+
+/* ============================================================
+   Pagination (Livewire tables)
+   ============================================================ */
+.pagination {
+    --bs-pagination-color: var(--app-primary);
+    --bs-pagination-active-bg: var(--app-primary);
+    --bs-pagination-active-border-color: var(--app-primary);
+    --bs-pagination-border-radius: var(--app-radius-sm);
+}
