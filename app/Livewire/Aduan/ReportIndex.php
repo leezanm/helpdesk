@@ -112,7 +112,9 @@ class ReportIndex extends Component
     public function render()
     {
         $reports = $this->baseQuery()
-            ->with(['category', 'status', 'reportBy'])
+            // Load pengadu contact fields so the list can show email/phone on
+            // hover for officers to reach the complainant quickly.
+            ->with(['category', 'status', 'reportBy:id,name,email,tel_no,ldap_bahagian'])
             ->when($this->search !== '', function ($q) {
                 $q->where(function ($sub) {
                     $sub->where('subject', 'like', '%'.$this->search.'%')
@@ -135,9 +137,14 @@ class ReportIndex extends Component
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate(15);
 
+        $canAdmin = Auth::user()?->can('aduan.adminTask') ?? false;
+
         return view('livewire.aduan.report-index', [
             'reports' => $reports,
-            'canAdmin' => Auth::user()?->can('aduan.adminTask') ?? false,
+            'canAdmin' => $canAdmin,
+            // Show the pengadu (complainant) column — with hover contact — for
+            // admins and for officers viewing their "dalam tindakan" list.
+            'showPengadu' => $canAdmin || $this->scope === 'tindakan',
             'bahagianOptions' => $this->bahagianOptions(),
             'categoryOptions' => ReportCategory::orderBy('desc')->get(['id', 'desc']),
             'statusOptions' => ReportStatus::whereIn('id', $this->scopeStatusIds())->orderBy('id')->get(['id', 'desc']),
