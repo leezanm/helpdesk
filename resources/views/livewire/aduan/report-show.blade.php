@@ -1,233 +1,237 @@
 <div>
-    <div class="card">
-        <div class="card-body">
+    @if (session('report-message'))
+        <div class="alert alert-success d-flex align-items-center gap-2"><i class="bi bi-check-circle-fill"></i> {{ session('report-message') }}</div>
+    @endif
 
-            @if (session('report-message'))
-                <div class="alert alert-success">{{ session('report-message') }}</div>
-            @endif
+    <div class="row g-3">
+        {{-- ============ LEFT: details, attachments, timeline ============ --}}
+        <div class="col-12 col-lg-7">
 
-            <legend class="text-uppercase h5">MAKLUMAT PEMOHON</legend>
-            <table class="table table-striped">
-                <tbody>
-                    <tr><th width="20%">Pemohon</th><td>{{ $report->reportBy->name ?? '-' }}</td></tr>
-                    <tr><th>Jabatan</th><td>{{ $report->reportBy->ldap_bahagian ?? '-' }}</td></tr>
-                    <tr><th>Username</th><td>{{ $report->reportBy->username ?? '-' }}</td></tr>
-                    <tr><th>Email</th><td>{{ $report->reportBy->email ?? '-' }}</td></tr>
-                </tbody>
-            </table>
+            {{-- Header card: ticket + status --}}
+            <div class="card mb-3">
+                <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div>
+                        <div class="text-muted small">No. Tiket</div>
+                        <h4 class="mb-0 fw-bold">{{ $report->ticket_no ?? '—' }}</h4>
+                    </div>
+                    <span class="{{ $report->status->class }} fs-6">{{ $report->status->desc }}</span>
+                </div>
+            </div>
 
-            <legend class="text-uppercase h5">MAKLUMAT ADUAN</legend>
-            <table class="table table-striped">
-                <tbody>
+            {{-- Complaint info --}}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="section-title">Maklumat Aduan</p>
+                    <div class="info-row"><div class="info-row__label">Subjek</div><div class="info-row__value fw-medium">{{ $report->subject }}</div></div>
+                    <div class="info-row"><div class="info-row__label">Kategori</div><div class="info-row__value">{{ $report->category->desc ?? '-' }}</div></div>
+                    <div class="info-row"><div class="info-row__label">Dihantar Pada</div><div class="info-row__value">{{ convertDateFormat($report->submitted_at, 'LL') }}</div></div>
+                    <div class="info-row"><div class="info-row__label">Aduan</div><div class="info-row__value">{!! $report->remark !!}</div></div>
+                </div>
+            </div>
+
+            {{-- Applicant --}}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="section-title">Maklumat Pemohon</p>
+                    <div class="info-row"><div class="info-row__label">Pemohon</div><div class="info-row__value fw-medium">{{ $report->reportBy->name ?? '-' }}</div></div>
+                    <div class="info-row"><div class="info-row__label">Jabatan</div><div class="info-row__value">{{ $report->reportBy->ldap_bahagian ?? '-' }}</div></div>
+                    <div class="info-row"><div class="info-row__label">Username</div><div class="info-row__value">{{ $report->reportBy->username ?? '-' }}</div></div>
+                    <div class="info-row"><div class="info-row__label">Emel</div><div class="info-row__value">{{ $report->reportBy->email ?? '-' }}</div></div>
                     @if ($report->is_bp)
-                        <tr><th width="20%"></th><th>Bagi Pihak</th></tr>
-                        <tr><th>Nama Penuh Pengguna</th><td>{{ $report->bp_name }}</td></tr>
-                        <tr><th>Nama Pengguna (AD)</th><td>{{ $report->bp_username }}</td></tr>
-                        <tr><th>Email Pengguna</th><td>{{ $report->bp_email }}</td></tr>
+                        <div class="info-row"><div class="info-row__label">Bagi Pihak</div><div class="info-row__value">{{ $report->bp_name }} <small class="text-muted">({{ $report->bp_username }})</small></div></div>
                     @endif
-                    <tr><th width="20%">No Tiket</th><td>{{ $report->ticket_no }}</td></tr>
-                    <tr><th>Subjek</th><td>{{ $report->subject }}</td></tr>
-                    <tr><th>Status</th><td><span class="{{ $report->status->class }} font-size-12">{{ $report->status->desc }}</span></td></tr>
-                    <tr><th>Dihantar Pada</th><td>{{ convertDateFormat($report->submitted_at, 'LL') }}</td></tr>
-                    <tr><th>Kategori Kerosakan</th><td>{{ $report->category->desc ?? '-' }}</td></tr>
-                    <tr><th width="30%">Aduan</th><td>{!! $report->remark !!}</td></tr>
-                </tbody>
-            </table>
+                </div>
+            </div>
 
-            <h6>Lampiran</h6>
-            <table class="table table-bordered">
-                <thead><th>#</th><th>Fail</th><th width="20%">Jenis</th></thead>
-                <tbody>
+            {{-- Attachments --}}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="section-title">Lampiran</p>
                     @forelse ($attachments as $attachment)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td><a href="{{ $attachment->file_url }}" target="_blank">{{ $attachment->name }}</a></td>
-                            <td>{{ $attachment->type }}</td>
-                        </tr>
+                        <a href="{{ $attachment->file_url }}" target="_blank" class="d-flex align-items-center gap-2 py-2 {{ !$loop->last ? 'border-bottom' : '' }}" style="border-color:var(--c-border)!important">
+                            <i class="bi bi-paperclip"></i>
+                            <span class="flex-fill text-truncate">{{ $attachment->name }}</span>
+                            <span class="badge bg-secondary">{{ $attachment->type }}</span>
+                        </a>
                     @empty
-                        <tr><td colspan="3" class="text-muted">Tiada lampiran.</td></tr>
+                        <p class="text-muted mb-0">Tiada lampiran.</p>
                     @endforelse
-                </tbody>
-            </table>
+                </div>
+            </div>
 
-            {{-- ===== Admin Task ===== --}}
+            {{-- Timeline --}}
+            <div class="card">
+                <div class="card-body">
+                    <p class="section-title">Kronologi Aduan</p>
+                    <ul class="timeline">
+                        @foreach ($trails as $trail)
+                            <li class="timeline__item">
+                                <span class="timeline__dot"></span>
+                                <div class="timeline__time mb-1">{{ convertDateFormat($trail->created_at, 'LL, h:mm A') }}</div>
+                                <span class="{{ $trail->status->class ?? '' }} mb-1 d-inline-block">{{ $trail->status->desc ?? '' }}</span>
+                                <div class="timeline__body">{!! $trail->message !!}</div>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        {{-- ============ RIGHT: action panels ============ --}}
+        <div class="col-12 col-lg-5">
+
+            {{-- Admin Task --}}
             @if ($canAdmin)
                 @if (in_array($report->report_status_id, [3, 4, 6]))
-                    <form wire:submit.prevent="saveAdminTask">
-                        <legend class="text-uppercase h5">Tindakan Admin</legend>
-
-                        <div class="row mb-3">
-                            <div class="col-md-2"><label class="col-form-label">Tindakan</label></div>
-                            <div class="col-md-4">
-                                <select wire:model.live="tindakan" class="form-select @error('tindakan') is-invalid @enderror">
-                                    <option value="">Sila Pilih</option>
-                                    @if ($report->report_status_id == 3)
-                                        <option value="1">Majukan Kepada</option>
-                                    @elseif ($report->report_status_id == 4)
-                                        <option value="2">Penugasan Semula</option>
-                                        <option value="3">KIV</option>
-                                    @elseif ($report->report_status_id == 6)
-                                        <option value="4">Tamat KIV</option>
-                                    @endif
-                                </select>
-                                @error('tindakan') <p class="text-danger">{{ $message }}</p> @enderror
-                            </div>
-                        </div>
-
-                        @if (in_array($tindakan, ['1', '2']))
-                            <div class="row mb-3">
-                                <div class="col-md-2"><label class="col-form-label">Peranan Pengguna</label></div>
-                                <div class="col-md-4">
-                                    <select wire:model.live="peranan" class="form-select">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p class="section-title">Tindakan Admin</p>
+                            <form wire:submit.prevent="saveAdminTask">
+                                <div class="mb-3">
+                                    <label class="form-label">Tindakan</label>
+                                    <select wire:model.live="tindakan" class="form-select @error('tindakan') is-invalid @enderror">
                                         <option value="">Sila Pilih</option>
-                                        @foreach ($roles as $role)
-                                            <option value="{{ $role->name }}">{{ $role->desc }}</option>
-                                        @endforeach
+                                        @if ($report->report_status_id == 3)
+                                            <option value="1">Majukan Kepada</option>
+                                        @elseif ($report->report_status_id == 4)
+                                            <option value="2">Penugasan Semula</option>
+                                            <option value="3">KIV</option>
+                                        @elseif ($report->report_status_id == 6)
+                                            <option value="4">Tamat KIV</option>
+                                        @endif
                                     </select>
+                                    @error('tindakan') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
                                 </div>
-                            </div>
-                            @if ($peranan)
-                                <div class="row mb-3">
-                                    <div class="col-md-2"><label class="col-form-label">Kepada</label></div>
-                                    <div class="col-md-4">
-                                        <select wire:model="assigned_to_id" class="form-select @error('assigned_to_id') is-invalid @enderror">
+
+                                @if (in_array($tindakan, ['1', '2']))
+                                    <div class="mb-3">
+                                        <label class="form-label">Peranan Pengguna</label>
+                                        <select wire:model.live="peranan" class="form-select">
                                             <option value="">Sila Pilih</option>
-                                            @foreach ($officers as $officer)
-                                                <option value="{{ $officer->id }}">{{ $officer->name }} ({{ $officer->ldap_bahagian }})</option>
+                                            @foreach ($roles as $role)
+                                                <option value="{{ $role->name }}">{{ $role->desc }}</option>
                                             @endforeach
                                         </select>
-                                        @error('assigned_to_id') <p class="text-danger">{{ $message }}</p> @enderror
                                     </div>
+                                    @if ($peranan)
+                                        <div class="mb-3">
+                                            <label class="form-label">Kepada</label>
+                                            <select wire:model="assigned_to_id" class="form-select @error('assigned_to_id') is-invalid @enderror">
+                                                <option value="">Sila Pilih</option>
+                                                @foreach ($officers as $officer)
+                                                    <option value="{{ $officer->id }}">{{ $officer->name }} ({{ $officer->ldap_bahagian }})</option>
+                                                @endforeach
+                                            </select>
+                                            @error('assigned_to_id') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                        </div>
+                                    @endif
+                                @endif
+
+                                @if ($tindakan === '2')
+                                    <div class="mb-3">
+                                        <label class="form-label">Sebab Penugasan</label>
+                                        <textarea wire:model="reassignment_remark" rows="3" class="form-control"></textarea>
+                                    </div>
+                                @endif
+
+                                @if ($tindakan === '3')
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarikh Mula KIV <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control @error('kiv_start_at') is-invalid @enderror" wire:model="kiv_start_at"
+                                               min="{{ \Carbon\Carbon::parse($report->submitted_at)->format('Y-m-d') }}">
+                                        @error('kiv_start_at') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Sebab KIV</label>
+                                        <textarea wire:model="kiv_reason" rows="3" class="form-control"></textarea>
+                                    </div>
+                                @endif
+
+                                @if ($tindakan === '4')
+                                    <div class="mb-3">
+                                        <label class="form-label">Tarikh Tamat KIV <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control @error('kiv_end_at') is-invalid @enderror" wire:model="kiv_end_at"
+                                               min="{{ \Carbon\Carbon::parse($report->kiv_start_at)->format('Y-m-d') }}">
+                                        @error('kiv_end_at') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                    </div>
+                                @endif
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-success" wire:loading.attr="disabled"><i class="bi bi-save me-1"></i>Simpan</button>
                                 </div>
-                            @endif
-                        @endif
-
-                        @if ($tindakan === '2')
-                            <div class="row mb-3">
-                                <div class="col-md-2"><label class="col-form-label">Sebab Penugasan</label></div>
-                                <div class="col-md-4"><textarea wire:model="reassignment_remark" rows="5" class="form-control"></textarea></div>
-                            </div>
-                        @endif
-
-                        @if ($tindakan === '3')
-                            <div class="row mb-3">
-                                <div class="col-md-2"><label>Tarikh Mula KIV <span class="text-danger">*</span></label></div>
-                                <div class="col-md-3">
-                                    <input type="date" class="form-control @error('kiv_start_at') is-invalid @enderror" wire:model="kiv_start_at"
-                                           min="{{ \Carbon\Carbon::parse($report->submitted_at)->format('Y-m-d') }}">
-                                    @error('kiv_start_at') <p class="text-danger">{{ $message }}</p> @enderror
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-2"><label>Sebab KIV</label></div>
-                                <div class="col-md-3"><textarea wire:model="kiv_reason" rows="4" class="form-control"></textarea></div>
-                            </div>
-                        @endif
-
-                        @if ($tindakan === '4')
-                            <div class="row mb-3">
-                                <div class="col-md-2"><label>Tarikh Tamat KIV <span class="text-danger">*</span></label></div>
-                                <div class="col-md-3">
-                                    <input type="date" class="form-control @error('kiv_end_at') is-invalid @enderror" wire:model="kiv_end_at"
-                                           min="{{ \Carbon\Carbon::parse($report->kiv_start_at)->format('Y-m-d') }}">
-                                    @error('kiv_end_at') <p class="text-danger">{{ $message }}</p> @enderror
-                                </div>
-                            </div>
-                        @endif
-
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled">
-                                <i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan
-                            </button>
+                            </form>
                         </div>
-                    </form>
-                    <hr>
+                    </div>
                 @endif
 
-                <legend class="text-uppercase h5">Tukar Kategori Aduan</legend>
-                <form wire:submit.prevent="setCategory">
-                    <div class="row mb-3">
-                        <div class="col-md-2"><label class="col-form-label">Kategori</label></div>
-                        <div class="col-md-4">
-                            <select wire:model="report_category_id" class="form-select">
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->desc }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-success"><i class="bx bx-save me-2 align-middle"></i> Simpan</button>
-                    </div>
-                </form>
-            @endif
-
-            {{-- ===== Technical remark ===== --}}
-            @if ($canUpdateTask && $report->report_status_id == 4 && optional($report->currentTrail)->assigned_to_id === auth()->id())
-                <hr>
-                <form wire:submit.prevent="saveTechnicalRemark">
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label class="col-form-label">Catatan Peg. Teknikal</label>
-                            <textarea wire:model="technical_remark" rows="6" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-success"><i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan</button>
-                    </div>
-                </form>
-            @endif
-
-            {{-- ===== Feedback ===== --}}
-            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'helpdesk.admin'])) && $report->report_status_id == 4)
-                <hr>
-                <form wire:submit.prevent="saveFeedback">
-                    <legend class="text-uppercase h5">Soal Selidik</legend>
-                    <div class="row mb-3">
-                        <div class="col-md-2"><label class="col-form-label">Rating</label></div>
-                        <div class="col-md-4">
-                            <select wire:model="rating" class="form-select @error('rating') is-invalid @enderror">
-                                <option value="">Sila Pilih</option>
-                                <option value="1">1 - Lemah</option>
-                                <option value="2">2 - Kurang berpuas hati</option>
-                                <option value="3">3 - Puas hati</option>
-                                <option value="4">4 - Baik</option>
-                                <option value="5">5 - Cemerlang</option>
-                            </select>
-                            @error('rating') <p class="text-danger">{{ $message }}</p> @enderror
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-2"><label class="col-form-label">Komen</label></div>
-                        <div class="col-md-4">
-                            <textarea wire:model="feedback" class="form-control @error('feedback') is-invalid @enderror" rows="5" maxlength="255"></textarea>
-                            @error('feedback') <p class="text-danger">{{ $message }}</p> @enderror
-                        </div>
-                    </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-success"><i class="bx bx-save font-size-16 align-middle me-2"></i>Simpan</button>
-                    </div>
-                </form>
-            @endif
-
-            {{-- ===== Trail timeline ===== --}}
-            <legend class="text-uppercase h5 mb-3">Kronologi Aduan</legend>
-            <div class="mt-5">
-                <ul class="verti-timeline list-unstyled">
-                    @foreach ($trails as $trail)
-                        <li class="event-list">
-                            <div class="event-timeline-dot"><i class="bx bx-right-arrow-circle"></i></div>
-                            <div class="media">
-                                <div class="me-5">{{ convertDateFormat($trail->created_at, 'LL, h:mm A') }}</div>
-                                <div class="media-body">
-                                    <span class="{{ $trail->status->class ?? '' }} font-size-11">{{ $trail->status->desc ?? '' }}</span>
-                                    <p class="text-muted">{!! $trail->message !!}</p>
-                                </div>
+                {{-- Change category --}}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="section-title">Tukar Kategori Aduan</p>
+                        <form wire:submit.prevent="setCategory">
+                            <div class="mb-3">
+                                <label class="form-label">Kategori</label>
+                                <select wire:model="report_category_id" class="form-select">
+                                    @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->desc }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Technical remark --}}
+            @if ($canUpdateTask && $report->report_status_id == 4 && optional($report->currentTrail)->assigned_to_id === auth()->id())
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="section-title">Catatan Peg. Teknikal</p>
+                        <form wire:submit.prevent="saveTechnicalRemark">
+                            <div class="mb-3">
+                                <textarea wire:model="technical_remark" rows="5" class="form-control"></textarea>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Feedback --}}
+            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'helpdesk.admin'])) && $report->report_status_id == 4)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="section-title">Soal Selidik</p>
+                        <form wire:submit.prevent="saveFeedback">
+                            <div class="mb-3">
+                                <label class="form-label">Rating</label>
+                                <select wire:model="rating" class="form-select @error('rating') is-invalid @enderror">
+                                    <option value="">Sila Pilih</option>
+                                    <option value="1">1 - Lemah</option>
+                                    <option value="2">2 - Kurang berpuas hati</option>
+                                    <option value="3">3 - Puas hati</option>
+                                    <option value="4">4 - Baik</option>
+                                    <option value="5">5 - Cemerlang</option>
+                                </select>
+                                @error('rating') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Komen</label>
+                                <textarea wire:model="feedback" class="form-control @error('feedback') is-invalid @enderror" rows="4" maxlength="255"></textarea>
+                                @error('feedback') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
 
         </div>
     </div>
