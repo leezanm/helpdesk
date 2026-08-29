@@ -116,18 +116,31 @@ class Dashboard extends Component
     }
 
     /**
-     * Per-officer log counts within the date range — officers WITH logs only.
-     * "Log" = a report_trail authored by the user (updated_by_id).
+     * Per-officer workload within the date range — officers who have been
+     * assigned at least one report for action. For each officer:
+     *   - diterima      : distinct reports assigned to them (trail assigned_to_id)
+     *   - selesai       : those reports now Selesai (status 5)
+     *   - dalamTindakan : those reports now In Action / KIV (status 4, 6)
+     *
+     * The date range filters when the report was assigned (trail created_at).
      */
-    protected function officerLogs()
+    protected function officerWorkload()
     {
-        return DB::table('report_trails')
-            ->join('users', 'report_trails.updated_by_id', '=', 'users.id')
-            ->whereBetween('report_trails.created_at', [$this->fromDate(), $this->toDate()])
-            ->select('users.name', 'users.ldap_bahagian', DB::raw('count(*) as total'))
+        return DB::table('report_trails as t')
+            ->join('users', 'users.id', '=', 't.assigned_to_id')
+            ->join('reports as r', 'r.id', '=', 't.report_id')
+            ->whereNotNull('t.assigned_to_id')
+            ->whereBetween('t.created_at', [$this->fromDate(), $this->toDate()])
+            ->select(
+                'users.name',
+                'users.ldap_bahagian',
+                DB::raw('count(distinct t.report_id) as diterima'),
+                DB::raw('count(distinct case when r.report_status_id = 5 then r.id end) as selesai'),
+                DB::raw('count(distinct case when r.report_status_id in (4,6) then r.id end) as dalam_tindakan')
+            )
             ->groupBy('users.id', 'users.name', 'users.ldap_bahagian')
-            ->having('total', '>', 0)
-            ->orderByDesc('total')
+            ->having('diterima', '>', 0)
+            ->orderByDesc('diterima')
             ->get();
     }
 
@@ -162,7 +175,7 @@ class Dashboard extends Component
             'resolutionRate' => $resolutionRate,
             'statusBreakdown' => $statusBreakdown,
             'categoryBreakdown' => $categoryBreakdown,
-            'officerLogs' => $this->officerLogs(),
+            'officerWorkload' => $this->officerWorkload(),
             'reports' => $this->reportsForRole()->limit(10)->get(),
             'listTitle' => $listTitle,
             'canGraph' => $user->can('dashboard.viewGraph'),

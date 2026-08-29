@@ -99,17 +99,33 @@ class DashboardTest extends FeatureTestCase
             });
     }
 
-    public function test_officer_logs_lists_only_officers_with_logs()
+    public function test_officer_workload_counts_assigned_reports()
     {
         $admin = User::factory()->create();
         $admin->syncRoles(['helpdesk.admin']);
-        // Creating a report generates a trail authored by the acting user,
-        // so that user should appear in officer logs.
-        $this->makeReport($admin, 2);
+        $officer = User::factory()->create(['name' => 'Pegawai Teknikal Satu']);
+        $officer->syncRoles(['jtk']);
+
+        // Create a report and assign it to the officer via a trail, then mark
+        // it resolved — the officer should show diterima=1, selesai=1.
+        $report = $this->makeReport(User::factory()->create(), 4);
+        $trail = new \App\Models\ReportTrail();
+        $trail->report_id = $report->id;
+        $trail->message = 'assigned';
+        $trail->updated_by_id = $admin->id;
+        $trail->assigned_to_id = $officer->id;
+        $trail->status_id = 4;
+        $trail->save();
+
+        $report->report_status_id = 5; // now Selesai
+        $report->save();
 
         Livewire::actingAs($admin)
             ->test(Dashboard::class)
-            ->assertViewHas('officerLogs', fn ($logs) => count($logs) >= 1)
-            ->assertSee('Jumlah Log Pegawai');
+            ->assertViewHas('officerWorkload', function ($rows) use ($officer) {
+                $row = collect($rows)->firstWhere('name', $officer->name);
+                return $row && (int) $row->diterima === 1 && (int) $row->selesai === 1;
+            })
+            ->assertSee('Beban Tugas Pegawai');
     }
 }

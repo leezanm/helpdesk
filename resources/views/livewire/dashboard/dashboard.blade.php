@@ -94,10 +94,10 @@
         </div>
     </div>
 
-    {{-- ===== Recent activity + officer logs ===== --}}
-    <div class="row g-3">
-        <div class="col-12 col-xl-7">
-            <div class="card h-100">
+    {{-- ===== Recent activity ===== --}}
+    <div class="row g-3 mb-3">
+        <div class="col-12">
+            <div class="card">
                 <div class="card-header"><h6 class="mb-0">{{ $listTitle }}</h6></div>
                 <div class="card-body pt-0">
                     <div class="table-responsive">
@@ -107,7 +107,7 @@
                                 @forelse ($reports as $report)
                                     <tr wire:key="dash-report-{{ $report->id }}">
                                         <td class="fw-semibold">{{ $report->ticket_no }}</td>
-                                        <td>{{ Str::limit($report->subject, 36) }}</td>
+                                        <td>{{ Str::limit($report->subject, 40) }}</td>
                                         <td class="text-nowrap">{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
                                         <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>
                                         <td class="text-end"><a href="{{ route('aduan.show', $report->id) }}" class="btn btn-sm btn-outline-primary btn-icon"><i class="bi bi-eye"></i></a></td>
@@ -121,26 +121,37 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        {{-- Officer log listing (officers with logs only) --}}
-        <div class="col-12 col-xl-5">
-            <div class="card h-100">
-                <div class="card-header"><h6 class="mb-0">Jumlah Log Pegawai</h6></div>
+    {{-- ===== Officer workload: assigned reports (received / in-action / resolved) ===== --}}
+    <div class="row g-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header"><h6 class="mb-0">Beban Tugas Pegawai (Aduan Diterima untuk Tindakan)</h6></div>
                 <div class="card-body pt-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
-                            <thead><tr><th>Pegawai</th><th class="text-end">Jumlah Log</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Pegawai</th>
+                                    <th class="text-center">Diterima</th>
+                                    <th class="text-center">Dalam Tindakan</th>
+                                    <th class="text-center">Selesai</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                @forelse ($officerLogs as $officer)
+                                @forelse ($officerWorkload as $officer)
                                     <tr wire:key="officer-{{ $loop->index }}">
                                         <td>
                                             <div class="fw-medium">{{ $officer->name }}</div>
                                             @if ($officer->ldap_bahagian)<small class="text-muted">{{ $officer->ldap_bahagian }}</small>@endif
                                         </td>
-                                        <td class="text-end"><span class="badge bg-primary">{{ $officer->total }}</span></td>
+                                        <td class="text-center"><span class="badge bg-primary">{{ $officer->diterima }}</span></td>
+                                        <td class="text-center"><span class="badge bg-warning">{{ $officer->dalam_tindakan }}</span></td>
+                                        <td class="text-center"><span class="badge bg-success">{{ $officer->selesai }}</span></td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="2"><div class="empty-state"><i class="bi bi-person-x"></i> Tiada log pegawai dalam tempoh ini.</div></td></tr>
+                                    <tr><td colspan="4"><div class="empty-state"><i class="bi bi-person-x"></i> Tiada pegawai menerima aduan dalam tempoh ini.</div></td></tr>
                                 @endforelse
                             </tbody>
                         </table>
