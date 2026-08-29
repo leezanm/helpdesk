@@ -1,11 +1,25 @@
 <div>
-    <div class="list-toolbar">
+    <div class="list-toolbar flex-wrap gap-2">
         <div class="list-search">
             <i class="bi bi-search"></i>
             <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
                    placeholder="Cari URL, IP, atau nama pengguna...">
         </div>
-        <select wire:model.live="method" class="form-select" style="max-width:180px">
+
+        <select wire:model.live="userId" class="form-select" style="max-width:200px">
+            <option value="">Semua Pelaku</option>
+            @foreach ($users as $u)
+                <option value="{{ $u->id }}">{{ $u->name }}</option>
+            @endforeach
+        </select>
+
+        <div class="d-flex align-items-center gap-1">
+            <input type="date" wire:model.live="dateFrom" class="form-control" style="max-width:160px" aria-label="Dari tarikh">
+            <span class="text-muted small">hingga</span>
+            <input type="date" wire:model.live="dateTo" class="form-control" style="max-width:160px" aria-label="Hingga tarikh">
+        </div>
+
+        <select wire:model.live="method" class="form-select" style="max-width:150px">
             <option value="">Semua Method</option>
             <option value="GET">GET</option>
             <option value="POST">POST</option>
@@ -13,6 +27,12 @@
             <option value="PATCH">PATCH</option>
             <option value="DELETE">DELETE</option>
         </select>
+
+        @if ($search !== '' || $userId !== '' || $dateFrom !== '' || $dateTo !== '' || $method !== '')
+            <button type="button" wire:click="resetFilters" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Reset
+            </button>
+        @endif
     </div>
 
     <div class="card data-card">
