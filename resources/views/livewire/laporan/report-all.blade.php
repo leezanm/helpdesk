@@ -113,7 +113,7 @@
                                     @endif
                                 </td>
                                 <td class="text-end">
-                                    <a href="{{ route('aduan.show', $report->id) }}" class="btn btn-sm btn-outline-primary btn-icon" title="Lihat"><i class="bi bi-eye"></i></a>
+                                    <a href="{{ route('aduan.show', $report) }}" class="btn btn-sm btn-outline-primary btn-icon" title="Lihat"><i class="bi bi-eye"></i></a>
                                 </td>
                             </tr>
                         @empty

@@ -46,7 +46,7 @@ class ReportDoneReporterNotification extends Notification
         ->subject('Sistem Meja Bantuan KKDW - Maklum Balas Aduan Berjaya Dihantar')
         ->greeting('Salam Sejahtera,')
         ->line('Maklum balas bagi aduan bernombor '. $report->ticket_no. ' berjaya dihantar')
-        ->action('Lihat', route('aduan.show', $report->id));
+        ->action('Lihat', route('aduan.show', $report));
     }
 
     /**

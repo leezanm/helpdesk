@@ -64,7 +64,7 @@
                         @if ($entry->report)· Tiket {{ $entry->report->ticket_no }}@endif
                     </small>
                     @if ($entry->report)
-                        <a href="{{ route('aduan.show', $entry->report->id) }}" class="btn btn-sm btn-outline-primary">
+                        <a href="{{ route('aduan.show', $entry->report) }}" class="btn btn-sm btn-outline-primary">
                             <i class="bi bi-eye me-1"></i>Lihat Aduan
                         </a>
                     @endif

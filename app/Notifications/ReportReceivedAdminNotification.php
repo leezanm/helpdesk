@@ -48,7 +48,7 @@ class ReportReceivedAdminNotification extends Notification
         ->line('Aduan baru memerlukan perhatian')
         ->line('Maklumat Aduan')
         ->line('No Tiket : '. $report->ticket_no)
-        ->action('Lihat', route('aduan.show', $report->id));
+        ->action('Lihat', route('aduan.show', $report));
     }
 
     /**
@@ -64,7 +64,7 @@ class ReportReceivedAdminNotification extends Notification
             //
             'title' => 'Aduan Baru Diterima',
             'message' => 'Aduan baru memerlukan perhatian. No tiket aduan : '. $report->ticket_no,
-            'url' => route('aduan.show', $report->id),
+            'url' => route('aduan.show', $report),
             'icon' => 'bx bx-mail-send',
             'color' => 'bg-info'
         ];

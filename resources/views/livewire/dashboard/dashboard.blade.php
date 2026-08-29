@@ -151,7 +151,7 @@
                                         <td>{{ Str::limit($report->subject, 40) }}</td>
                                         <td class="text-nowrap">{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
                                         <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>
-                                        <td class="text-end"><a href="{{ route('aduan.show', $report->id) }}" class="btn btn-sm btn-outline-primary btn-icon"><i class="bi bi-eye"></i></a></td>
+                                        <td class="text-end"><a href="{{ route('aduan.show', $report) }}" class="btn btn-sm btn-outline-primary btn-icon"><i class="bi bi-eye"></i></a></td>
                                     </tr>
                                 @empty
                                     <tr><td colspan="5"><div class="empty-state"><i class="bi bi-inbox"></i> Tiada aduan buat masa ini.</div></td></tr>

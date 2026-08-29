@@ -105,11 +105,11 @@
                                 <td>{!! getDuration($report) !!}</td>
                                 <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>
                                 <td class="text-end text-nowrap">
-                                    <a href="{{ route('aduan.show', $report->id) }}"
+                                    <a href="{{ route('aduan.show', $report) }}"
                                         class="btn btn-sm btn-outline-primary btn-icon" title="Lihat"><i
                                             class="bi bi-eye"></i></a>
                                     @if ($report->report_status_id == 1)
-                                        <a href="{{ route('aduan.edit', $report->id) }}"
+                                        <a href="{{ route('aduan.edit', $report) }}"
                                             class="btn btn-sm btn-outline-secondary btn-icon" title="Kemaskini"><i
                                                 class="bi bi-pencil"></i></a>
                                     @endif

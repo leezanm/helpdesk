@@ -42,11 +42,15 @@ class ReportController extends Controller
 
     public function edit(Report $report)
     {
+        $this->authorize('update', $report);
+
         return view('aduan.edit', compact('report'));
     }
 
     public function show(Report $report)
     {
+        $this->authorize('view', $report);
+
         return view('aduan.show', compact('report'));
     }
 

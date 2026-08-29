@@ -49,7 +49,7 @@ class ReportDoneAdminNotification extends Notification
         ->line('Klik padu butang \'Lihat\' untuk lihat maklum balas pengadu')
         ->line('Maklumat Aduan')
         ->line('No Tiket : '. $report->ticket_no)
-        ->action('Lihat', route('aduan.show', $report->id));
+        ->action('Lihat', route('aduan.show', $report));
     }
 
     /**

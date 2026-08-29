@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasHashedRouteKey;
 use App\Models\Ref\ReportStatus;
 use App\Observers\ReportObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class Report extends Model
 {
     use HasFactory;
+    use HasHashedRouteKey;
 
     protected $fillable = ['bp_username', 'bp_name', 'bp_bahagian', 'bp_email', 'bp_user_id'];
 

@@ -134,7 +134,7 @@
                                 @endif
                             </td>
                             <td class="text-center">
-                                <a href="{{route('aduan.show', $report->id)}}" class="btn btn-primary waves-effect waves-light">
+                                <a href="{{route('aduan.show', $report)}}" class="btn btn-primary waves-effect waves-light">
                                     <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
                                 </a>
                             </td>

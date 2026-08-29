@@ -50,6 +50,46 @@ class ReportShowTest extends FeatureTestCase
         return $report->fresh();
     }
 
+    public function test_owner_can_view_own_report()
+    {
+        Notification::fake();
+        $owner = User::factory()->create();
+        $report = $this->makeReport($owner, 3);
+
+        Livewire::actingAs($owner)->test(ReportShow::class, ['report' => $report])->assertOk();
+    }
+
+    public function test_stranger_cannot_view_report()
+    {
+        Notification::fake();
+        $report = $this->makeReport(User::factory()->create(), 3);
+        $stranger = User::factory()->create(); // unrelated, no assignment, no admin
+
+        Livewire::actingAs($stranger)->test(ReportShow::class, ['report' => $report])->assertForbidden();
+    }
+
+    public function test_wakil_can_view_report_filed_on_behalf()
+    {
+        Notification::fake();
+        $owner = User::factory()->create();
+        $report = $this->makeReport($owner, 3);
+        $wakil = User::factory()->create();
+        $report->bp_user_id = $wakil->id;
+        $report->save();
+
+        Livewire::actingAs($wakil)->test(ReportShow::class, ['report' => $report])->assertOk();
+    }
+
+    public function test_assigned_officer_can_view_report()
+    {
+        Notification::fake();
+        $owner = User::factory()->create();
+        $officer = User::factory()->create();
+        $report = $this->makeReport($owner, 4, $officer); // assignment trail to officer
+
+        Livewire::actingAs($officer)->test(ReportShow::class, ['report' => $report])->assertOk();
+    }
+
     public function test_helpdesk_viewing_new_report_auto_marks_reviewed()
     {
         Notification::fake();

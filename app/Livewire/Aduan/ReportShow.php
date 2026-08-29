@@ -52,6 +52,11 @@ class ReportShow extends Component
 
     public function mount(Report $report): void
     {
+        // Access control: only legitimate viewers (owner, wakil, assigned
+        // officer, helpdesk, superadmin) may open this aduan. Prevents IDOR
+        // via guessing/altering the id in the URL.
+        $this->authorize('view', $report);
+
         // Admin viewing a "Baru" (2) report auto-advances it to "Aduan
         // Disemak" (3), once, with a trail.
         if ($report->report_status_id == 2 && Auth::user()->can('aduan.adminTask')) {

@@ -131,7 +131,7 @@
                                     <span class="{{$report_trail->status->class}} font-size-11">{{$report_trail->status->desc}}</span>
                                 </td>
                                 <td class="text-center">
-                                    <a href="{{route('aduan.show', $report_trail->report_id)}}" class="btn btn-primary waves-effect waves-light">
+                                    <a href="{{route('aduan.show', $report_trail->report)}}" class="btn btn-primary waves-effect waves-light">
                                         <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
                                     </a>
                                 </td>
