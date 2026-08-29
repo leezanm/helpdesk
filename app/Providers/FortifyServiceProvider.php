@@ -19,7 +19,6 @@ use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use Laravel\Fortify\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -96,20 +95,15 @@ class FortifyServiceProvider extends ServiceProvider
         // single IP hammering many usernames is still limited. (Previous code
         // keyed on $request->email, which is always empty here since the login
         // field is 'username' — so it effectively only throttled by IP.)
+        // Lockout: 3 failed attempts from an IP -> that IP is blocked for 5
+        // minutes, REGARDLESS of which username is tried. Keying on IP alone
+        // means an attacker cannot bypass the block by rotating usernames.
         RateLimiter::for('login', function (Request $request) {
-            $key = Str::lower((string) $request->input('username')).'|'.$request->ip();
-
-            return Limit::perMinutes(5, 3)->by($key)->response(function () {
+            return Limit::perMinutes(5, 3)->by('login|'.$request->ip())->response(function () {
                 return redirect()->route('login')->withErrors([
-                    'username' => 'Terlalu banyak percubaan log masuk. Sila cuba semula selepas 5 minit.',
+                    'username' => 'Terlalu banyak percubaan log masuk dari peranti ini. Sila cuba semula selepas 5 minit.',
                 ]);
             });
-        });
-
-        // Secondary throttle per-IP so an attacker rotating usernames from one
-        // IP is still capped (defence against credential stuffing).
-        RateLimiter::for('login-ip', function (Request $request) {
-            return Limit::perMinute(20)->by($request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {
