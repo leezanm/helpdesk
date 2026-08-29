@@ -5,6 +5,7 @@ namespace Tests\Feature\Livewire\Aduan;
 use App\Livewire\Aduan\ReportShow;
 use App\Models\Report;
 use App\Models\ReportCategory;
+use App\Models\ReportTrail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -13,14 +14,16 @@ use Tests\FeatureTestCase;
 
 class ReportShowTest extends FeatureTestCase
 {
-    private function makeReport(User $owner, int $status = 2): Report
+    /**
+     * Create a report at the given status. Created as "Baru" (2) first so the
+     * observer stamps ticket + first trail, then advanced. If $officer given,
+     * an assignment trail is added so it becomes the current assigned officer.
+     */
+    private function makeReport(User $owner, int $status = 2, ?User $officer = null): Report
     {
         $category = ReportCategory::firstOrCreate(['desc' => 'Rangkaian'], ['is_active' => true]);
         Auth::login($owner);
 
-        // Create as Dihantar (2) so the observer generates the first trail
-        // (mirrors the real flow), then advance to the requested status with
-        // a trail so currentTrail is always present.
         $report = new Report();
         $report->subject = 'Ujian';
         $report->remark = 'x';
@@ -32,10 +35,13 @@ class ReportShowTest extends FeatureTestCase
         if ($status !== 2) {
             $report->report_status_id = $status;
             $report->save();
-            $trail = new \App\Models\ReportTrail();
+            $trail = new ReportTrail();
             $trail->message = 'setup';
             $trail->updated_by_id = $owner->id;
-            $trail->status_id = min($status, 6);
+            $trail->status_id = 3;
+            if ($officer) {
+                $trail->assigned_to_id = $officer->id;
+            }
             $report->trails()->save($trail);
         }
 
@@ -44,35 +50,28 @@ class ReportShowTest extends FeatureTestCase
         return $report->fresh();
     }
 
-    public function test_admin_viewing_dihantar_report_auto_acknowledges()
+    public function test_helpdesk_viewing_new_report_auto_marks_reviewed()
     {
         Notification::fake();
-        $reporter = User::factory()->create();
-        $report = $this->makeReport($reporter, 2);
-
+        $report = $this->makeReport(User::factory()->create(), 2); // Baru
         $admin = User::factory()->create();
-        $admin->syncRoles(['helpdesk.admin']); // has aduan.adminTask
+        $admin->syncRoles(['helpdesk.admin']);
 
-        Livewire::actingAs($admin)
-            ->test(ReportShow::class, ['report' => $report])
-            ->assertOk();
+        Livewire::actingAs($admin)->test(ReportShow::class, ['report' => $report])->assertOk();
 
-        // status 2 -> 3 (AmbilMaklum) with a trail
+        // Baru (2) -> Aduan Disemak (3)
         $this->assertEquals(3, $report->fresh()->report_status_id);
         $this->assertDatabaseHas('report_trails', ['report_id' => $report->id, 'status_id' => 3]);
     }
 
-    public function test_admin_can_forward_report_to_officer()
+    public function test_helpdesk_forwards_to_officer()
     {
         Notification::fake();
-        $reporter = User::factory()->create();
-        $report = $this->makeReport($reporter, 3); // AmbilMaklum
-
+        $report = $this->makeReport(User::factory()->create(), 3);
         $admin = User::factory()->create();
         $admin->syncRoles(['helpdesk.admin']);
-
         $officer = User::factory()->create();
-        $officer->syncRoles(['jtk']); // has aduan.updateTask
+        $officer->syncRoles(['jtk']);
 
         Livewire::actingAs($admin)
             ->test(ReportShow::class, ['report' => $report])
@@ -82,50 +81,113 @@ class ReportShowTest extends FeatureTestCase
             ->call('saveAdminTask')
             ->assertHasNoErrors();
 
-        $report->refresh();
-        $this->assertEquals(4, $report->report_status_id); // Dalam Tindakan
-        $this->assertDatabaseHas('report_trails', ['report_id' => $report->id, 'status_id' => 4, 'assigned_to_id' => $officer->id]);
+        $this->assertEquals(4, $report->fresh()->report_status_id); // Dalam Tindakan
     }
 
-    public function test_forward_requires_assigned_officer()
+    public function test_officer_completes_action_with_lesson_learn()
+    {
+        Notification::fake();
+        $officer = User::factory()->create();
+        $officer->syncRoles(['jtk']);
+        $report = $this->makeReport(User::factory()->create(), 4, $officer); // Dalam Tindakan, assigned
+
+        Livewire::actingAs($officer)
+            ->test(ReportShow::class, ['report' => $report])
+            ->set('outcome', 'selesai')
+            ->set('punca_masalah', 'Kabel rangkaian longgar')
+            ->set('langkah_tindakan', 'Kabel diganti dan diuji semula')
+            ->call('saveOfficerAction')
+            ->assertHasNoErrors();
+
+        $report->refresh();
+        $this->assertEquals(7, $report->report_status_id); // Selesai Tindakan
+        $this->assertDatabaseHas('report_trails', [
+            'report_id' => $report->id,
+            'status_id' => 9,
+            'punca_masalah' => 'Kabel rangkaian longgar',
+            'langkah_tindakan' => 'Kabel diganti dan diuji semula',
+        ]);
+    }
+
+    public function test_officer_completion_requires_punca_and_langkah()
+    {
+        Notification::fake();
+        $officer = User::factory()->create();
+        $officer->syncRoles(['jtk']);
+        $report = $this->makeReport(User::factory()->create(), 4, $officer);
+
+        Livewire::actingAs($officer)
+            ->test(ReportShow::class, ['report' => $report])
+            ->set('outcome', 'selesai')
+            ->call('saveOfficerAction')
+            ->assertHasErrors(['punca_masalah', 'langkah_tindakan']);
+    }
+
+    public function test_officer_escalates_needs_further_action()
+    {
+        Notification::fake();
+        $officer = User::factory()->create();
+        $officer->syncRoles(['jtk']);
+        $report = $this->makeReport(User::factory()->create(), 4, $officer);
+
+        Livewire::actingAs($officer)
+            ->test(ReportShow::class, ['report' => $report])
+            ->set('outcome', 'lanjut')
+            ->set('punca_masalah', 'Kerosakan perkakasan pelayan')
+            ->set('kenapa_lanjut', 'Perlu ganti pelayan, di luar bidang kuasa')
+            ->call('saveOfficerAction')
+            ->assertHasNoErrors();
+
+        $report->refresh();
+        $this->assertEquals(8, $report->report_status_id); // Tindakan Lanjut Diperlukan
+        $this->assertDatabaseHas('report_trails', [
+            'report_id' => $report->id,
+            'status_id' => 10,
+            'kenapa_lanjut' => 'Perlu ganti pelayan, di luar bidang kuasa',
+        ]);
+    }
+
+    public function test_close_from_selesai_tindakan_sets_selesai_with_default_rating()
     {
         Notification::fake();
         $reporter = User::factory()->create();
-        $report = $this->makeReport($reporter, 3);
+        $report = $this->makeReport($reporter, 7); // Selesai Tindakan
+
+        Livewire::actingAs($reporter)
+            ->test(ReportShow::class, ['report' => $report])
+            ->assertSet('rating', 5) // default 5 stars
+            ->set('feedback', 'Terima kasih')
+            ->call('closeReport')
+            ->assertHasNoErrors();
+
+        $report->refresh();
+        $this->assertEquals(5, $report->report_status_id); // Selesai
+        $this->assertEquals(5, $report->rating);
+        $this->assertNotNull($report->completed_at);
+    }
+
+    public function test_helpdesk_can_kiv_from_needs_further_action()
+    {
+        Notification::fake();
+        $report = $this->makeReport(User::factory()->create(), 8); // Tindakan Lanjut
         $admin = User::factory()->create();
         $admin->syncRoles(['helpdesk.admin']);
 
         Livewire::actingAs($admin)
             ->test(ReportShow::class, ['report' => $report])
-            ->set('tindakan', '1')
+            ->set('tindakan', '3')
+            ->set('kiv_start_at', now()->format('Y-m-d'))
+            ->set('kiv_reason', 'Menunggu bekalan')
             ->call('saveAdminTask')
-            ->assertHasErrors(['assigned_to_id']);
-    }
-
-    public function test_reporter_feedback_marks_selesai()
-    {
-        Notification::fake();
-        $reporter = User::factory()->create();
-        $report = $this->makeReport($reporter, 4); // Dalam Tindakan
-
-        Livewire::actingAs($reporter)
-            ->test(ReportShow::class, ['report' => $report])
-            ->set('rating', 5)
-            ->set('feedback', 'Selesai dengan pantas')
-            ->call('saveFeedback')
             ->assertHasNoErrors();
 
-        $report->refresh();
-        $this->assertEquals(5, $report->report_status_id);
-        $this->assertEquals(5, $report->rating);
-        $this->assertNotNull($report->completed_at);
+        $this->assertEquals(6, $report->fresh()->report_status_id); // KIV
     }
 
     public function test_admin_can_change_category()
     {
         Notification::fake();
-        $reporter = User::factory()->create();
-        $report = $this->makeReport($reporter, 4);
+        $report = $this->makeReport(User::factory()->create(), 4);
         $newCategory = ReportCategory::create(['desc' => 'Perkakasan', 'is_active' => true]);
         $admin = User::factory()->create();
         $admin->syncRoles(['helpdesk.admin']);

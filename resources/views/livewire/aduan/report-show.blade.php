@@ -80,97 +80,186 @@
         {{-- ============ RIGHT: action panels ============ --}}
         <div class="col-12 col-lg-5">
 
-            {{-- Admin Task --}}
-            @if ($canAdmin)
-                @if (in_array($report->report_status_id, [3, 4, 6]))
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <p class="section-title">Tindakan Admin</p>
-                            <form wire:submit.prevent="saveAdminTask">
-                                <div class="mb-3">
-                                    <label class="form-label">Tindakan</label>
-                                    <select wire:model.live="tindakan" class="form-select @error('tindakan') is-invalid @enderror">
-                                        <option value="">Sila Pilih</option>
-                                        @if ($report->report_status_id == 3)
-                                            <option value="1">Majukan Kepada</option>
-                                        @elseif ($report->report_status_id == 4)
-                                            <option value="2">Penugasan Semula</option>
-                                            <option value="3">KIV</option>
-                                        @elseif ($report->report_status_id == 6)
-                                            <option value="4">Tamat KIV</option>
-                                        @endif
-                                    </select>
-                                    @error('tindakan') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
-                                </div>
+            {{-- ===== Tindakan Admin / Helpdesk ===== --}}
+            {{-- Aduan Disemak(3): majukan; Dalam Tindakan(4): tugas semula/KIV;
+                 Tindakan Lanjut(8): KIV atau tugas semula; KIV(6): tamat KIV --}}
+            @if ($canAdmin && in_array($report->report_status_id, [3, 4, 6, 8]))
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="section-title">Tindakan Helpdesk</p>
+                        <form wire:submit.prevent="saveAdminTask">
+                            <div class="mb-3">
+                                <label class="form-label">Tindakan</label>
+                                <select wire:model.live="tindakan" class="form-select @error('tindakan') is-invalid @enderror">
+                                    <option value="">Sila Pilih</option>
+                                    @if ($report->report_status_id == 3)
+                                        <option value="1">Majukan Kepada Pegawai</option>
+                                    @elseif ($report->report_status_id == 4)
+                                        <option value="2">Penugasan Semula</option>
+                                        <option value="3">KIV</option>
+                                    @elseif ($report->report_status_id == 8)
+                                        <option value="2">Penugasan Semula (Pegawai Lain)</option>
+                                        <option value="3">KIV</option>
+                                    @elseif ($report->report_status_id == 6)
+                                        <option value="4">Tamat KIV</option>
+                                    @endif
+                                </select>
+                                @error('tindakan') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
 
-                                @if (in_array($tindakan, ['1', '2']))
+                            @if (in_array($tindakan, ['1', '2']))
+                                <div class="mb-3">
+                                    <label class="form-label">Peranan Pegawai</label>
+                                    <select wire:model.live="peranan" class="form-select">
+                                        <option value="">Sila Pilih</option>
+                                        @foreach ($roles as $role)
+                                            <option value="{{ $role->name }}">{{ $role->desc }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @if ($peranan)
                                     <div class="mb-3">
-                                        <label class="form-label">Peranan Pengguna</label>
-                                        <select wire:model.live="peranan" class="form-select">
+                                        <label class="form-label">Tugaskan Kepada</label>
+                                        <select wire:model="assigned_to_id" class="form-select @error('assigned_to_id') is-invalid @enderror">
                                             <option value="">Sila Pilih</option>
-                                            @foreach ($roles as $role)
-                                                <option value="{{ $role->name }}">{{ $role->desc }}</option>
+                                            @foreach ($officers as $officer)
+                                                <option value="{{ $officer->id }}">{{ $officer->name }} ({{ $officer->ldap_bahagian }})</option>
                                             @endforeach
                                         </select>
-                                    </div>
-                                    @if ($peranan)
-                                        <div class="mb-3">
-                                            <label class="form-label">Kepada</label>
-                                            <select wire:model="assigned_to_id" class="form-select @error('assigned_to_id') is-invalid @enderror">
-                                                <option value="">Sila Pilih</option>
-                                                @foreach ($officers as $officer)
-                                                    <option value="{{ $officer->id }}">{{ $officer->name }} ({{ $officer->ldap_bahagian }})</option>
-                                                @endforeach
-                                            </select>
-                                            @error('assigned_to_id') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
-                                        </div>
-                                    @endif
-                                @endif
-
-                                @if ($tindakan === '2')
-                                    <div class="mb-3">
-                                        <label class="form-label">Sebab Penugasan</label>
-                                        <textarea wire:model="reassignment_remark" rows="3" class="form-control"></textarea>
+                                        @error('assigned_to_id') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
                                     </div>
                                 @endif
+                            @endif
 
-                                @if ($tindakan === '3')
-                                    <div class="mb-3">
-                                        <label class="form-label">Tarikh Mula KIV <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control @error('kiv_start_at') is-invalid @enderror" wire:model="kiv_start_at"
-                                               min="{{ \Carbon\Carbon::parse($report->submitted_at)->format('Y-m-d') }}">
-                                        @error('kiv_start_at') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Sebab KIV</label>
-                                        <textarea wire:model="kiv_reason" rows="3" class="form-control"></textarea>
-                                    </div>
-                                @endif
-
-                                @if ($tindakan === '4')
-                                    <div class="mb-3">
-                                        <label class="form-label">Tarikh Tamat KIV <span class="text-danger">*</span></label>
-                                        <input type="date" class="form-control @error('kiv_end_at') is-invalid @enderror" wire:model="kiv_end_at"
-                                               min="{{ \Carbon\Carbon::parse($report->kiv_start_at)->format('Y-m-d') }}">
-                                        @error('kiv_end_at') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
-                                    </div>
-                                @endif
-
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-success" wire:loading.attr="disabled"><i class="bi bi-save me-1"></i>Simpan</button>
+                            @if ($tindakan === '2')
+                                <div class="mb-3">
+                                    <label class="form-label">Sebab Penugasan Semula</label>
+                                    <textarea wire:model="reassignment_remark" rows="3" class="form-control"></textarea>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                @endif
+                            @endif
 
-                {{-- Change category --}}
+                            @if ($tindakan === '3')
+                                <div class="mb-3">
+                                    <label class="form-label">Tarikh Mula KIV <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control @error('kiv_start_at') is-invalid @enderror" wire:model="kiv_start_at"
+                                           min="{{ \Carbon\Carbon::parse($report->submitted_at)->format('Y-m-d') }}">
+                                    @error('kiv_start_at') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Sebab KIV</label>
+                                    <textarea wire:model="kiv_reason" rows="3" class="form-control"></textarea>
+                                </div>
+                            @endif
+
+                            @if ($tindakan === '4')
+                                <div class="mb-3">
+                                    <label class="form-label">Tarikh Tamat KIV <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control @error('kiv_end_at') is-invalid @enderror" wire:model="kiv_end_at"
+                                           min="{{ \Carbon\Carbon::parse($report->kiv_start_at)->format('Y-m-d') }}">
+                                    @error('kiv_end_at') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                </div>
+                            @endif
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"><i class="bi bi-save me-1"></i>Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- ===== Tindakan Pegawai Bertanggungjawab (Dalam Tindakan = 4) ===== --}}
+            @if ($canUpdateTask && $report->report_status_id == 4 && $this->isAssignedOfficer)
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <p class="section-title">Tindakan Pegawai</p>
+                        <form wire:submit.prevent="saveOfficerAction">
+                            <div class="mb-3">
+                                <label class="form-label">Hasil Tindakan <span class="text-danger">*</span></label>
+                                <select wire:model.live="outcome" class="form-select @error('outcome') is-invalid @enderror">
+                                    <option value="">Sila Pilih</option>
+                                    <option value="selesai">Tindakan Selesai</option>
+                                    <option value="lanjut">Tindakan Lanjut Diperlukan</option>
+                                </select>
+                                @error('outcome') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            @if ($outcome)
+                                <div class="mb-3">
+                                    <label class="form-label">Punca Masalah <span class="text-danger">*</span></label>
+                                    <textarea wire:model="punca_masalah" rows="3" class="form-control @error('punca_masalah') is-invalid @enderror"
+                                              placeholder="Apakah punca sebenar masalah ini?"></textarea>
+                                    @error('punca_masalah') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                </div>
+                            @endif
+
+                            @if ($outcome === 'selesai')
+                                <div class="mb-3">
+                                    <label class="form-label">Langkah Penyelesaian <span class="text-danger">*</span></label>
+                                    <textarea wire:model="langkah_tindakan" rows="3" class="form-control @error('langkah_tindakan') is-invalid @enderror"
+                                              placeholder="Apakah langkah/tindakan yang diambil untuk selesaikan?"></textarea>
+                                    @error('langkah_tindakan') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Catatan Teknikal Tambahan</label>
+                                    <textarea wire:model="catatan_teknikal" rows="2" class="form-control"
+                                              placeholder="Rujukan / konteks tambahan (pilihan)"></textarea>
+                                </div>
+                            @elseif ($outcome === 'lanjut')
+                                <div class="mb-3">
+                                    <label class="form-label">Sebab Perlu Tindakan Lanjut <span class="text-danger">*</span></label>
+                                    <textarea wire:model="kenapa_lanjut" rows="3" class="form-control @error('kenapa_lanjut') is-invalid @enderror"
+                                              placeholder="Kenapa aduan ini tidak dapat diselesaikan?"></textarea>
+                                    @error('kenapa_lanjut') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                                </div>
+                            @endif
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"><i class="bi bi-save me-1"></i>Rekod Tindakan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- ===== Tutup Aduan (Selesai Tindakan = 7) — helpdesk atau pengguna ===== --}}
+            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'helpdesk.admin'])) && $report->report_status_id == 7)
+                <div class="card mb-3" style="border:1px solid var(--c-success)">
+                    <div class="card-body">
+                        <p class="section-title" style="color:var(--c-success)">Tutup Aduan (Selesai)</p>
+                        <p class="text-muted small">Pegawai telah menyelesaikan tindakan. Sila sahkan untuk menutup aduan dan beri penilaian.</p>
+                        <form wire:submit.prevent="closeReport">
+                            <div class="mb-3">
+                                <label class="form-label">Rating <span class="text-danger">*</span></label>
+                                {{-- Interactive star picker (default 5) --}}
+                                <div class="fs-4" x-data="{ r: @entangle('rating') }">
+                                    <template x-for="i in 5" :key="i">
+                                        <i class="bi" :class="i <= r ? 'bi-star-fill' : 'bi-star'"
+                                           style="color:#f59e0b;cursor:pointer" x-on:click="r = i"></i>
+                                    </template>
+                                </div>
+                                @error('rating') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Komen / Maklum Balas</label>
+                                <textarea wire:model="feedback" class="form-control @error('feedback') is-invalid @enderror" rows="3" maxlength="255"></textarea>
+                                @error('feedback') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-success" wire:loading.attr="disabled"><i class="bi bi-check2-circle me-1"></i>Tutup & Tanda Selesai</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
+
+            {{-- ===== Tukar kategori (helpdesk) ===== --}}
+            @if ($canAdmin)
                 <div class="card mb-3">
                     <div class="card-body">
                         <p class="section-title">Tukar Kategori Aduan</p>
                         <form wire:submit.prevent="setCategory">
                             <div class="mb-3">
-                                <label class="form-label">Kategori</label>
                                 <select wire:model="report_category_id" class="form-select">
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->desc }}</option>
@@ -178,55 +267,7 @@
                                 </select>
                             </div>
                             <div class="text-end">
-                                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Simpan</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            @endif
-
-            {{-- Technical remark --}}
-            @if ($canUpdateTask && $report->report_status_id == 4 && optional($report->currentTrail)->assigned_to_id === auth()->id())
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <p class="section-title">Catatan Peg. Teknikal</p>
-                        <form wire:submit.prevent="saveTechnicalRemark">
-                            <div class="mb-3">
-                                <textarea wire:model="technical_remark" rows="5" class="form-control"></textarea>
-                            </div>
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Simpan</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            @endif
-
-            {{-- Feedback --}}
-            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'helpdesk.admin'])) && $report->report_status_id == 4)
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <p class="section-title">Soal Selidik</p>
-                        <form wire:submit.prevent="saveFeedback">
-                            <div class="mb-3">
-                                <label class="form-label">Rating</label>
-                                <select wire:model="rating" class="form-select @error('rating') is-invalid @enderror">
-                                    <option value="">Sila Pilih</option>
-                                    <option value="1">1 - Lemah</option>
-                                    <option value="2">2 - Kurang berpuas hati</option>
-                                    <option value="3">3 - Puas hati</option>
-                                    <option value="4">4 - Baik</option>
-                                    <option value="5">5 - Cemerlang</option>
-                                </select>
-                                @error('rating') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Komen</label>
-                                <textarea wire:model="feedback" class="form-control @error('feedback') is-invalid @enderror" rows="4" maxlength="255"></textarea>
-                                @error('feedback') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
-                            </div>
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Simpan</button>
+                                <button type="submit" class="btn btn-outline-primary btn-sm"><i class="bi bi-save me-1"></i>Simpan</button>
                             </div>
                         </form>
                     </div>

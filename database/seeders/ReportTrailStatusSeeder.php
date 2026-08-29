@@ -54,5 +54,17 @@ class ReportTrailStatusSeeder extends Seeder
         $status->desc = 'KIV Tamat';
         $status->class = 'badge bg-warning';
         $status->save();
+
+        // 9 — peg. bertanggungjawab selesai tindakan (+ lesson learn)
+        $status = new ReportTrailStatus();
+        $status->desc = 'Selesai Tindakan';
+        $status->class = 'badge bg-success';
+        $status->save();
+
+        // 10 — peg. bertanggungjawab tidak dapat selesaikan
+        $status = new ReportTrailStatus();
+        $status->desc = 'Tindakan Lanjut Diperlukan';
+        $status->class = 'badge bg-danger';
+        $status->save();
     }
 }

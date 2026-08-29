@@ -8,61 +8,30 @@ use Illuminate\Database\Seeder;
 class ReportStatusSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
-     *
-     * @return void
+     * Report statuses for the aduan flow (see flow baru.md).
+     * IDs are significant and referenced throughout the code:
+     *   1 Draf, 2 Baru, 3 Aduan Disemak, 4 Dalam Tindakan, 5 Selesai,
+     *   6 KIV, 7 Selesai Tindakan, 8 Tindakan Lanjut Diperlukan.
      */
     public function run()
     {
-        //
-        $report_status = new ReportStatus();
-        $report_status->desc = 'Draf';
-        $report_status->reference = 'Aduan belum dihantar';
-        $report_status->class = 'badge bg-secondary';
-        $report_status->save();
+        $statuses = [
+            ['desc' => 'Draf', 'reference' => 'Aduan belum dihantar', 'class' => 'badge bg-secondary'],
+            ['desc' => 'Baru', 'reference' => 'Aduan baru dihantar oleh pengadu', 'class' => 'badge bg-info'],
+            ['desc' => 'Aduan Disemak', 'reference' => 'Aduan telah disemak oleh peg. helpdesk', 'class' => 'badge bg-primary'],
+            ['desc' => 'Dalam Tindakan', 'reference' => 'Aduan dimajukan kepada peg. teknikal', 'class' => 'badge bg-warning'],
+            ['desc' => 'Selesai', 'reference' => 'Aduan ditanda selesai', 'class' => 'badge bg-success'],
+            ['desc' => 'KIV', 'reference' => 'Aduan di KIV', 'class' => 'badge bg-warning'],
+            ['desc' => 'Selesai Tindakan', 'reference' => 'Peg. bertanggungjawab telah membuat tindakan', 'class' => 'badge bg-success'],
+            ['desc' => 'Tindakan Lanjut Diperlukan', 'reference' => 'Aduan tidak dapat diselesaikan, perlu tindakan lanjut', 'class' => 'badge bg-danger'],
+        ];
 
-        $report_status = new ReportStatus();
-        $report_status->desc = 'Dihantar';
-        $report_status->reference = 'Aduan dimajukan oleh pengadu';
-        $report_status->class = 'badge bg-info';
-        $report_status->save();
-
-        $report_status = new ReportStatus();
-        $report_status->desc = 'Dihantar (Ambil Maklum)';
-        $report_status->reference = 'Aduan dilihat oleh oleh admin';
-        // $report_status->class = 'badge bg-info';
-        $report_status->class = 'badge bg-primary';
-        $report_status->save();
-
-        $report_status = new ReportStatus();
-        $report_status->desc = 'Sedang Disemak';
-        $report_status->reference = 'Aduan dimajukan kepada peg. teknikal';
-        $report_status->class = 'badge bg-warning';
-        $report_status->save();
-
-        $report_status = new ReportStatus();
-        $report_status->desc = 'Selesai';
-        $report_status->reference = 'Aduan ditanda selesai oleh pengadu';
-        $report_status->class = 'badge bg-success';
-        $report_status->save();
-
-        $report_status = new ReportStatus();
-        $report_status->desc = 'KIV';
-        $report_status->reference = 'Aduan di KIV';
-        $report_status->class = 'badge bg-warning';
-        $report_status->save();
-
-
-        // $report_status = new ReportStatus();
-        // $report_status->desc = 'Ditutup';
-        // $report_status->reference = 'Aduan ditutup oleh admin';
-        // $report_status->class = 'badge bg-dark';
-        // $report_status->save();
-
-        // $report_status = new ReportStatus();
-        // $report_status->desc = 'Dibatalkan';
-        // $report_status->reference = 'Aduan dibatalkan';
-        // $report_status->class = 'badge bg-danger';
-        // $report_status->save();
+        foreach ($statuses as $status) {
+            $report_status = new ReportStatus();
+            $report_status->desc = $status['desc'];
+            $report_status->reference = $status['reference'];
+            $report_status->class = $status['class'];
+            $report_status->save();
+        }
     }
 }

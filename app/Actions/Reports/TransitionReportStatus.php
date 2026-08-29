@@ -79,4 +79,44 @@ class TransitionReportStatus
 
         return $report;
     }
+
+    /**
+     * Peg. bertanggungjawab records their outcome (lesson-learn capture):
+     *   'selesai' -> status 7 (Selesai Tindakan), trail 9  + punca + langkah
+     *   'lanjut'  -> status 8 (Tindakan Lanjut),   trail 10 + punca + kenapa
+     *
+     * @param array{outcome:string,punca_masalah?:string,langkah_tindakan?:string,catatan_teknikal?:string,kenapa_lanjut?:string} $data
+     */
+    public function officerAction(Report $report, array $data): Report
+    {
+        $trail = new ReportTrail();
+        $trail->updated_by_id = Auth::id();
+        $trail->punca_masalah = $data['punca_masalah'] ?? null;
+        $trail->catatan_teknikal = $data['catatan_teknikal'] ?? null;
+
+        if ($data['outcome'] === 'selesai') {
+            $report->report_status_id = 7; // Selesai Tindakan
+            $trail->status_id = 9;
+            $trail->langkah_tindakan = $data['langkah_tindakan'] ?? null;
+            $trail->message = 'Pegawai bertanggungjawab telah menyelesaikan tindakan.'
+                .'<br><b>Punca Masalah:</b><br>'.e($data['punca_masalah'] ?? '-')
+                .'<br><b>Langkah Penyelesaian:</b><br>'.e($data['langkah_tindakan'] ?? '-');
+        } else { // 'lanjut'
+            $report->report_status_id = 8; // Tindakan Lanjut Diperlukan
+            $trail->status_id = 10;
+            $trail->kenapa_lanjut = $data['kenapa_lanjut'] ?? null;
+            $trail->message = 'Aduan memerlukan tindakan lanjut.'
+                .'<br><b>Punca Masalah:</b><br>'.e($data['punca_masalah'] ?? '-')
+                .'<br><b>Sebab Perlu Tindakan Lanjut:</b><br>'.e($data['kenapa_lanjut'] ?? '-');
+        }
+
+        $report->save();
+        $report->trails()->save($trail);
+
+        // Notify helpdesk admins that the report needs their attention.
+        $admins = User::permission('aduan.adminTask')->get();
+        $this->notifyGroup($admins, new ReportAssignedNotification($report));
+
+        return $report;
+    }
 }

@@ -11,11 +11,12 @@ class StatusIndexTest extends FeatureTestCase
 {
     public function test_lists_statuses()
     {
-        // The base test case already seeds ReportStatusSeeder (6 statuses).
+        // The base test case seeds ReportStatusSeeder (new flow statuses).
         Livewire::test(StatusIndex::class)
             ->assertOk()
-            ->assertSee('Dihantar')
-            ->assertSee('Selesai');
+            ->assertSee('Baru')
+            ->assertSee('Aduan Disemak')
+            ->assertSee('Selesai Tindakan');
     }
 
     public function test_edit_loads_status()

@@ -13,18 +13,21 @@ use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
 /**
- * Report (aduan) detail page: applicant info, complaint info, attachments,
- * admin-task transitions (tindakan 1-4), technical remark, feedback, category
- * change, and the trail timeline. Replaces aduan/show.blade.php + its jQuery.
+ * Report (aduan) detail page + full flow actions. See flow baru.md.
  *
- * Replicates the UpdateReportStatus middleware side effect: viewing a Dihantar
- * (2) report as an admin auto-transitions it to AmbilMaklum (3) with a trail.
+ * Status flow (IDs): 2 Baru -> 3 Aduan Disemak -> 4 Dalam Tindakan
+ *   officer: 7 Selesai Tindakan (+lesson learn)  OR  8 Tindakan Lanjut Diperlukan
+ *   helpdesk from 8: 6 KIV  or  reassign -> 4
+ *   close from 7: 5 Selesai (+rating default 5)
+ *
+ * mount(): admin viewing a "Baru" (2) report auto-advances it to
+ * "Aduan Disemak" (3).
  */
 class ReportShow extends Component
 {
     public Report $report;
 
-    // Admin task form
+    // Admin (helpdesk) task form
     public string $tindakan = '';
     public ?string $peranan = null;
     public ?int $assigned_to_id = null;
@@ -33,26 +36,30 @@ class ReportShow extends Component
     public string $kiv_reason = '';
     public string $kiv_end_at = '';
 
-    // Feedback form
-    public ?int $rating = null;
-    public string $feedback = '';
+    // Officer (peg. bertanggungjawab) outcome + lesson learn
+    public string $outcome = '';            // 'selesai' | 'lanjut'
+    public string $punca_masalah = '';
+    public string $langkah_tindakan = '';
+    public string $catatan_teknikal = '';
+    public string $kenapa_lanjut = '';
 
-    // Technical remark
-    public string $technical_remark = '';
+    // Close (feedback) form
+    public ?int $rating = 5;                // default 5 stars
+    public string $feedback = '';
 
     // Category change
     public ?int $report_category_id = null;
 
     public function mount(Report $report): void
     {
-        // Replicate UpdateReportStatus middleware: admin viewing a Dihantar
-        // report auto-acknowledges it (status 2 -> 3) once.
+        // Admin viewing a "Baru" (2) report auto-advances it to "Aduan
+        // Disemak" (3), once, with a trail.
         if ($report->report_status_id == 2 && Auth::user()->can('aduan.adminTask')) {
             $report->report_status_id = 3;
             $report->save();
 
             $trail = new ReportTrail();
-            $trail->message = 'Aduan telah di ambil maklum oleh admin Sistem Meja Bantuan KKDW';
+            $trail->message = 'Aduan telah disemak oleh peg. helpdesk Sistem Meja Bantuan KKDW';
             $trail->updated_by_id = Auth::id();
             $trail->status_id = 3;
             $report->trails()->save($trail);
@@ -60,8 +67,23 @@ class ReportShow extends Component
 
         $this->report = $report;
         $this->report_category_id = $report->report_category_id;
-        $this->technical_remark = (string) optional($report->currentTrail)->technical_remark;
     }
+
+    // ---- Helpers to decide which panels show ----
+
+    public function getIsAssignedOfficerProperty(): bool
+    {
+        // The currently-assigned officer = the latest trail that carries an
+        // assigned_to_id (ordered by id for deterministic "latest").
+        $assignedTo = $this->report->trails()
+            ->whereNotNull('assigned_to_id')
+            ->orderByDesc('id')
+            ->value('assigned_to_id');
+
+        return $assignedTo !== null && (int) $assignedTo === Auth::id();
+    }
+
+    // ================= Admin (helpdesk) task =================
 
     protected function adminTaskRules(): array
     {
@@ -78,7 +100,7 @@ class ReportShow extends Component
     {
         $this->authorize('aduan.adminTask');
 
-        $data = $this->validate($this->adminTaskRules(), [
+        $this->validate($this->adminTaskRules(), [
             'assigned_to_id.required_if' => 'Ruangan kepada diperlukan.',
             'kiv_start_at.required_if' => 'Ruangan tarikh mula KIV diperlukan.',
             'kiv_end_at.required_if' => 'Ruangan tarikh tamat KIV diperlukan.',
@@ -99,6 +121,73 @@ class ReportShow extends Component
         session()->flash('report-message', 'Tindakan berjaya disimpan.');
     }
 
+    // ================= Officer outcome (lesson learn) =================
+
+    public function saveOfficerAction(TransitionReportStatus $transition): void
+    {
+        // Only the currently-assigned officer, while report is In Action (4).
+        abort_unless(
+            Auth::user()->can('aduan.updateTask')
+                && $this->report->report_status_id == 4
+                && $this->isAssignedOfficer,
+            403
+        );
+
+        $rules = [
+            'outcome' => 'required|in:selesai,lanjut',
+            'punca_masalah' => 'required|string',
+        ];
+        if ($this->outcome === 'selesai') {
+            $rules['langkah_tindakan'] = 'required|string';
+        } elseif ($this->outcome === 'lanjut') {
+            $rules['kenapa_lanjut'] = 'required|string';
+        }
+
+        $this->validate($rules, [
+            'outcome.required' => 'Sila pilih hasil tindakan.',
+            'punca_masalah.required' => 'Punca masalah wajib diisi.',
+            'langkah_tindakan.required' => 'Langkah penyelesaian wajib diisi.',
+            'kenapa_lanjut.required' => 'Sebab perlu tindakan lanjut wajib diisi.',
+        ]);
+
+        $transition->officerAction($this->report, [
+            'outcome' => $this->outcome,
+            'punca_masalah' => $this->punca_masalah,
+            'langkah_tindakan' => $this->langkah_tindakan,
+            'catatan_teknikal' => $this->catatan_teknikal,
+            'kenapa_lanjut' => $this->kenapa_lanjut,
+        ]);
+
+        $this->reset(['outcome', 'punca_masalah', 'langkah_tindakan', 'catatan_teknikal', 'kenapa_lanjut']);
+        $this->report->refresh();
+        session()->flash('report-message', 'Tindakan pegawai berjaya direkodkan.');
+    }
+
+    // ================= Close aduan (Selesai + rating) =================
+
+    public function closeReport(SubmitFeedback $submitFeedback): void
+    {
+        // From "Selesai Tindakan" (7): reporter or helpdesk closes with rating.
+        abort_unless(
+            ($this->report->reportBy?->is(Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'helpdesk.admin']))
+                && $this->report->report_status_id == 7,
+            403
+        );
+
+        $this->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'feedback' => 'nullable|max:255',
+        ], [
+            'rating.required' => 'Sila beri rating.',
+        ]);
+
+        $submitFeedback->handle($this->report, (int) $this->rating, $this->feedback);
+        $this->report->refresh();
+        session()->flash('report-message', 'Aduan telah ditutup sebagai Selesai.');
+    }
+
+    // ================= Category change =================
+
     public function setCategory(): void
     {
         $this->authorize('aduan.adminTask');
@@ -106,34 +195,6 @@ class ReportShow extends Component
         $this->report->save();
         $this->report->refresh();
         session()->flash('report-message', 'Kategori berjaya dikemaskini.');
-    }
-
-    public function saveTechnicalRemark(): void
-    {
-        $trail = $this->report->currentTrail;
-        abort_unless($trail && $trail->assigned_to_id === Auth::id(), 403);
-
-        $trail->technical_remark = $this->technical_remark;
-        $trail->save();
-        session()->flash('report-message', 'Catatan berjaya disimpan.');
-    }
-
-    public function saveFeedback(SubmitFeedback $submitFeedback): void
-    {
-        abort_unless(
-            ($this->report->reportBy?->is(Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'helpdesk.admin']))
-                && $this->report->report_status_id == 4,
-            403
-        );
-
-        $data = $this->validate([
-            'rating' => 'required',
-            'feedback' => 'required|max:255',
-        ]);
-
-        $submitFeedback->handle($this->report, (int) $this->rating, $this->feedback);
-        $this->report->refresh();
-        session()->flash('report-message', 'Maklum balas berjaya dihantar.');
     }
 
     public function render()
