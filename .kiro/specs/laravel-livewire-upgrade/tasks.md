@@ -120,10 +120,12 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - NOTE: ReportAttachmentController, ReportTrailController, the Report request classes, and the now-unused `update-aduan-status` middleware are dead but left for task 12 cleanup.
     - _Requirements: 5.7_
 
-- [ ] 11. Convert notifications and (optionally) Laporan/dashboard
-  - [ ] 11.1 Build `Shared\NotificationBell` (`wire:poll`) rendering unread database notifications with mark-as-read, no full reload
+- [x] 11. Convert notifications and (optionally) Laporan/dashboard
+  - [x] 11.1 Build `Shared\NotificationBell` (`wire:poll`) rendering unread database notifications with mark-as-read, no full reload
+    - `Shared\NotificationBell` with `wire:poll.30s`; renders unread DB notifications (icon/color/title/message + BM relative time), `open()` marks read and redirects to the stored url. Replaced the inline `@php` block + dropdown in layouts/app.blade.php. 3 Livewire tests. Verified mounted across authed pages via the shared layout on staging.
     - _Requirements: 5.6_
-  - [ ] 11.2 (Optional) Convert Laporan/dashboard screens, or leave charts on the existing API + ApexCharts
+  - [x] 11.2 (Optional) Convert Laporan/dashboard screens, or leave charts on the existing API + ApexCharts
+    - DECISION: NOT converted (spec-endorsed optional skip). Laporan/dashboard are chart-heavy, fed by ~10 read-only ApexCharts/ECharts API endpoints; charts are inherently client-side so Livewire adds no value and would add round-trips. There are no jQuery-form/modal anti-patterns here to replace (unlike the other screens). Leaving them on the existing API also keeps the validated aggregate queries untouched. Charts remain functional as-is.
     - _Requirements: 5.1, 5.3_
 
 - [ ] 12. Cleanup and hardening
