@@ -15,41 +15,41 @@
    Tokens
    ============================================================ */
 :root {
-    /* New signature palette: indigo -> violet */
-    --c-primary: #5b5bd6;          /* indigo */
-    --c-primary-600: #4f46e5;
-    --c-primary-700: #4338ca;
-    --c-primary-050: #eef0fd;
-    --c-violet: #7c3aed;
-    --c-accent: #f59e0b;           /* amber accent, used sparingly */
+    /* Calm, fresh signature palette: teal + sky */
+    --c-primary: #0ea5a4;          /* teal */
+    --c-primary-600: #0d9488;
+    --c-primary-700: #0f766e;
+    --c-primary-050: #e6f7f6;
+    --c-violet: #38bdf8;           /* sky (secondary accent) */
+    --c-accent: #f59e0b;           /* warm accent, used very sparingly */
 
-    /* Surfaces / neutrals */
-    --c-bg: #f4f5fb;               /* tinted app background */
+    /* Surfaces / neutrals — soft, airy */
+    --c-bg: #f3f7f8;               /* soft off-white with a hint of teal */
     --c-surface: #ffffff;
-    --c-surface-2: #f7f8fc;
-    --c-border: #e9eaf3;
-    --c-text: #1e2138;
-    --c-text-muted: #767c9a;
+    --c-surface-2: #f4f8f9;
+    --c-border: #e7edee;
+    --c-text: #16323a;
+    --c-text-muted: #6b8088;
 
     /* Status */
     --c-success: #10b981;
     --c-warning: #f59e0b;
     --c-danger: #ef4444;
-    --c-info: #3b82f6;
+    --c-info: #38bdf8;
 
-    /* Shape & depth (rounded, soft) */
-    --radius: 16px;
-    --radius-sm: 10px;
+    /* Shape & depth (rounded, soft, airy) */
+    --radius: 18px;
+    --radius-sm: 12px;
     --radius-pill: 999px;
-    --shadow-sm: 0 1px 2px rgba(30, 33, 56, 0.05);
-    --shadow: 0 6px 24px rgba(30, 33, 56, 0.08);
-    --shadow-lg: 0 12px 40px rgba(30, 33, 56, 0.12);
+    --shadow-sm: 0 1px 2px rgba(16, 50, 58, 0.04);
+    --shadow: 0 8px 28px rgba(16, 50, 58, 0.07);
+    --shadow-lg: 0 16px 48px rgba(16, 50, 58, 0.10);
 
-    /* Sidebar */
-    --sidebar-w: 264px;
-    --sidebar-grad: linear-gradient(180deg, #4f46e5 0%, #6d28d9 55%, #5b21b6 100%);
-    --sidebar-fg: rgba(255, 255, 255, 0.78);
-    --sidebar-fg-active: #ffffff;
+    /* Sidebar — LIGHT/white for a fresh, calm, airy feel */
+    --sidebar-w: 268px;
+    --sidebar-bg: #ffffff;
+    --sidebar-fg: #5c7178;
+    --sidebar-fg-active: var(--c-primary-700);
 
     --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
@@ -91,8 +91,9 @@ a:hover { color: var(--c-primary-700); }
 .app-sidebar {
     width: var(--sidebar-w);
     flex-shrink: 0;
-    background: var(--sidebar-grad);
+    background: var(--sidebar-bg);
     color: var(--sidebar-fg);
+    border-right: 1px solid var(--c-border);
     position: fixed;
     inset: 0 auto 0 0;
     z-index: 1040;
@@ -103,49 +104,49 @@ a:hover { color: var(--c-primary-700); }
 .app-sidebar__brand {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    padding: 1.35rem 1.35rem;
-    margin: 0.5rem 0.75rem;
-    color: #fff;
+    gap: 0.65rem;
+    padding: 1.25rem 1.35rem;
+    color: var(--c-text);
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     letter-spacing: 0.2px;
-    background: rgba(255,255,255,0.10);
-    border-radius: var(--radius);
+    border-bottom: 1px solid var(--c-border);
 }
 .app-sidebar__brand img {
-    height: 36px; width: 36px; object-fit: contain;
-    background: #fff; border-radius: 10px; padding: 4px;
+    height: 38px; width: 38px; object-fit: contain;
+    background: var(--c-primary-050); border-radius: 11px; padding: 5px;
 }
-.app-sidebar__nav { overflow-y: auto; padding: 0.5rem 0.75rem 1.5rem; flex: 1; }
+.app-sidebar__nav { overflow-y: auto; padding: 0.75rem 0.85rem 1.5rem; flex: 1; }
 .app-sidebar__title {
-    color: rgba(255,255,255,0.5);
+    color: var(--c-text-muted);
     font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 1rem 0.85rem 0.4rem;
+    padding: 1.1rem 0.85rem 0.4rem;
+    list-style: none;
 }
 .app-nav-link {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
-    padding: 0.62rem 0.85rem;
-    margin: 0.12rem 0;
+    gap: 0.75rem;
+    padding: 0.66rem 0.85rem;
+    margin: 0.15rem 0;
     border-radius: var(--radius-sm);
     color: var(--sidebar-fg);
-    font-weight: 500;
-    font-size: 0.92rem;
+    font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
 }
-.app-nav-link i { font-size: 1.15rem; }
-.app-nav-link:hover { background: rgba(255,255,255,0.10); color: #fff; }
+.app-nav-link i { font-size: 1.2rem; color: var(--c-text-muted); transition: color 0.15s ease; }
+.app-nav-link:hover { background: var(--c-surface-2); color: var(--c-text); }
+.app-nav-link:hover i { color: var(--c-primary); }
 .app-nav-link.active {
-    background: rgba(255,255,255,0.16);
-    color: #fff;
-    box-shadow: inset 3px 0 0 var(--c-accent);
+    background: var(--c-primary-050);
+    color: var(--c-primary-700);
 }
+.app-nav-link.active i { color: var(--c-primary); }
 .app-nav-sub { list-style: none; padding: 0 0 0 0.5rem; margin: 0; }
 .app-nav-sub .app-nav-link { font-size: 0.86rem; padding-left: 2.3rem; }
 
@@ -332,3 +333,50 @@ a:hover { color: var(--c-primary-700); }
 /* Notification dropdown + profile (topbar) */
 .dropdown-menu { border: 1px solid var(--c-border); border-radius: var(--radius-sm); box-shadow: var(--shadow); }
 .noti-icon { position: relative; background: var(--c-surface-2); border: 0; width: 42px; height: 42px; border-radius: var(--radius-sm); color: var(--c-text); }
+
+/* ============================================================
+   Auth / login (split-screen)
+   ============================================================ */
+.auth-split {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+}
+.auth-brand {
+    position: relative;
+    color: #fff;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(150deg, #0ea5a4 0%, #0d9488 45%, #0369a1 100%);
+    overflow: hidden;
+}
+.auth-brand::before {
+    content: ""; position: absolute; width: 520px; height: 520px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); top: -160px; right: -160px;
+}
+.auth-brand::after {
+    content: ""; position: absolute; width: 360px; height: 360px; border-radius: 50%;
+    background: rgba(255,255,255,0.06); bottom: -120px; left: -80px;
+}
+.auth-brand__logo {
+    width: 64px; height: 64px; border-radius: 16px; background: #fff; padding: 10px;
+    object-fit: contain; position: relative; z-index: 1;
+}
+.auth-brand__title { font-size: 1.9rem; font-weight: 800; line-height: 1.2; position: relative; z-index: 1; }
+.auth-brand__sub { color: rgba(255,255,255,0.85); position: relative; z-index: 1; max-width: 420px; }
+.auth-brand__foot { color: rgba(255,255,255,0.7); font-size: 0.82rem; position: relative; z-index: 1; }
+
+.auth-form-wrap {
+    display: flex; align-items: center; justify-content: center; padding: 2rem;
+    background: var(--c-bg);
+}
+.auth-form-card { width: 100%; max-width: 400px; }
+.auth-form-card h4 { font-weight: 800; }
+.auth-input-lg { padding: 0.7rem 0.95rem; font-size: 0.98rem; }
+
+@media (max-width: 991.98px) {
+    .auth-split { grid-template-columns: 1fr; }
+    .auth-brand { display: none; }
+}

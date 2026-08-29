@@ -23,17 +23,8 @@
         </style>
     </head>
 
-    <body   style="
-                background: url(/images/backgrrund.jpg) !important;
-                background: aliceblue;
-                background-size: cover !important;
-    ">
-        <div class="account-pages my-5 pt-sm-5">
-            <div class="container">
-                @yield('content')
-            </div>
-        </div>
-        <!-- end account-pages -->
+    <body>
+        @yield('content')
         @include('layouts.script')
         @yield('script')
     </body>
