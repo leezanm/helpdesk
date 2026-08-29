@@ -38,6 +38,7 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
         Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
         Route::get('/edit/{report}', [App\Http\Controllers\ReportController::class, 'edit'])->name('edit');
         Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show');
+        Route::get('/lesson-learn', [App\Http\Controllers\ReportController::class, 'lessonLearn'])->name('lesson-learn')->middleware('can:aduan.updateTask');
     });
 
 

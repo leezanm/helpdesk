@@ -49,4 +49,12 @@ class ReportController extends Controller
     {
         return view('aduan.show', compact('report'));
     }
+
+    /**
+     * Lesson-learn knowledge base (mounts the Livewire component).
+     */
+    public function lessonLearn()
+    {
+        return view('aduan.lesson_learn');
+    }
 }

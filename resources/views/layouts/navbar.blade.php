@@ -19,11 +19,12 @@
             @can('aduan.updateTask')
                 <li class="app-sidebar__title">Peg Teknikal</li>
                 <li><a class="app-nav-link" href="{{ url('/aduan/untuk-tindakan') }}"><span>Untuk Tindakan</span></a></li>
+                <li><a class="app-nav-link {{ str_contains($path, 'lesson-learn') ? 'active' : '' }}" href="{{ route('aduan.lesson-learn') }}"><span>Lesson Learn</span></a></li>
             @endcan
 
             @can('aduan.adminTask')
                 <li class="app-sidebar__title">Pentadbir Helpdesk</li>
-                <li><a class="app-nav-link" href="{{ url('/aduan/dihantar') }}"><span>Aduan Dihantar</span></a></li>
+                <li><a class="app-nav-link" href="{{ url('/aduan/dihantar') }}"><span>Aduan Baru</span></a></li>
             @endcan
 
             @canany(['aduan.adminTask','aduan.updateTask'])
@@ -33,9 +34,17 @@
     </div>
 
     @can('view.report')
-        <a class="app-nav-link {{ str_starts_with($path, 'laporan') ? 'active' : '' }}" href="{{ url('/laporan') }}">
+      <div x-data="{ o: {{ str_starts_with($path, 'report') ? 'true' : 'false' }} }">
+        <a class="app-nav-link" x-on:click="o = !o" role="button">
             <i class="bx bxs-report"></i><span>Laporan</span>
+            <i class="bx bx-chevron-down ms-auto" x-bind:style="o && 'transform:rotate(180deg)'"></i>
         </a>
+        <ul class="app-nav-sub" x-show="o" x-collapse>
+            <li><a class="app-nav-link" href="{{ url('/laporan/keseluruhan') }}"><span>Laporan Aduan   </span></a></li>
+        </ul>
+        {{-- <a class="app-nav-link {{ str_starts_with($path, 'laporan') ? 'active' : '' }}" href="{{ url('/laporan') }}">
+            <i class="bx bxs-report"></i><span>Laporan</span>
+        </a> --}}
     @endcan
 
     {{-- Pentadbiran --}}
