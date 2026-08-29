@@ -38,11 +38,20 @@ class NotificationController extends Controller
     public function read(Request $request, $notificationId)
     {
         $user = Auth::user();
-        $notification = $user->notifications->find($notificationId);
+        // Query the single notification directly instead of loading the whole
+        // relation into memory, and guard against a missing record.
+        $notification = $user->notifications()->whereKey($notificationId)->first();
+
+        if (! $notification) {
+            return redirect()->back()->with('errorMessage', 'Notifikasi tidak dijumpai');
+        }
+
         $notification->markAsRead();
-        if (filled($notification->data['url'])) {
+
+        if (filled($notification->data['url'] ?? null)) {
             return redirect($notification->data['url']);
         }
+
         return redirect()->back()->with('errorMessage', 'Url tidak wujud');
     }
 
