@@ -161,64 +161,65 @@
         </div>
     </div>
 
-    {{-- ===== Charts (server-fed; update live on date filter via Livewire event) ===== --}}
+    {{-- ===== Charts (server-fed; update live whenever any filter changes) ===== --}}
+    @script
     <script>
-        (function () {
-            function palette() {
-                var css = getComputedStyle(document.documentElement);
-                var primary = (css.getPropertyValue('--c-primary') || '#0ea5a4').trim();
-                var success = (css.getPropertyValue('--c-success') || '#10b981').trim();
-                return { primary: primary, list: [primary, success, '#38bdf8', '#f59e0b', '#a78bfa', '#f472b6', '#fb7185', '#34d399'] };
+        // Runs once when the component initialises, and Livewire keeps the
+        // listeners alive across re-renders. Charts are updated purely via the
+        // `dashboard-charts` event the component dispatches on every render, so
+        // they react to ANY filter (date range AND bahagian).
+        function dashPalette() {
+            var css = getComputedStyle(document.documentElement);
+            var primary = (css.getPropertyValue('--c-primary') || '#0ea5a4').trim();
+            var success = (css.getPropertyValue('--c-success') || '#10b981').trim();
+            return { primary: primary, list: [primary, success, '#38bdf8', '#f59e0b', '#a78bfa', '#f472b6', '#fb7185', '#34d399'] };
+        }
+
+        function dashRenderCharts(statusData, categoryData) {
+            if (typeof echarts === 'undefined') return;
+            var p = dashPalette();
+
+            var donutEl = document.getElementById('status-donut');
+            if (donutEl) {
+                var donut = echarts.getInstanceByDom(donutEl) || echarts.init(donutEl);
+                donut.setOption({
+                    color: p.list, tooltip: { trigger: 'item' }, legend: { bottom: 0, icon: 'circle' },
+                    series: [{ type: 'pie', radius: ['50%', '72%'], center: ['50%', '42%'], label: { show: false },
+                        data: (statusData || []).map(function (s) { return { name: s.label, value: s.value }; }) }]
+                }, true);
             }
 
-            function renderCharts(statusData, categoryData) {
-                if (typeof echarts === 'undefined') return;
-                var p = palette();
-
-                var donutEl = document.getElementById('status-donut');
-                if (donutEl) {
-                    var donut = echarts.getInstanceByDom(donutEl) || echarts.init(donutEl);
-                    donut.setOption({
-                        color: p.list, tooltip: { trigger: 'item' }, legend: { bottom: 0, icon: 'circle' },
-                        series: [{ type: 'pie', radius: ['50%', '72%'], center: ['50%', '42%'], label: { show: false },
-                            data: (statusData || []).map(function (s) { return { name: s.label, value: s.value }; }) }]
-                    }, true);
-                }
-
-                var barEl = document.getElementById('category-bar');
-                if (barEl) {
-                    var bar = echarts.getInstanceByDom(barEl) || echarts.init(barEl);
-                    bar.setOption({
-                        color: [p.primary], tooltip: { trigger: 'axis' },
-                        grid: { left: 8, right: 16, top: 20, bottom: 8, containLabel: true },
-                        xAxis: { type: 'value', minInterval: 1 },
-                        yAxis: { type: 'category', inverse: true, data: (categoryData || []).map(function (c) { return c.label; }) },
-                        series: [{ type: 'bar', barMaxWidth: 22, itemStyle: { borderRadius: [0, 6, 6, 0] },
-                            data: (categoryData || []).map(function (c) { return c.value; }) }]
-                    }, true);
-                }
+            var barEl = document.getElementById('category-bar');
+            if (barEl) {
+                var bar = echarts.getInstanceByDom(barEl) || echarts.init(barEl);
+                bar.setOption({
+                    color: [p.primary], tooltip: { trigger: 'axis' },
+                    grid: { left: 8, right: 16, top: 20, bottom: 8, containLabel: true },
+                    xAxis: { type: 'value', minInterval: 1 },
+                    yAxis: { type: 'category', inverse: true, data: (categoryData || []).map(function (c) { return c.label; }) },
+                    series: [{ type: 'bar', barMaxWidth: 22, itemStyle: { borderRadius: [0, 6, 6, 0] },
+                        data: (categoryData || []).map(function (c) { return c.value; }) }]
+                }, true);
             }
+        }
 
-            // Initial render from server data.
-            function initial() { renderCharts(@json($statusBreakdown), @json($categoryBreakdown)); }
-            document.addEventListener('DOMContentLoaded', initial);
-            document.addEventListener('livewire:navigated', initial);
-            initial();
+        // Initial paint from the current server data.
+        dashRenderCharts(@js($statusBreakdown), @js($categoryBreakdown));
 
-            // Live updates when the date filter changes (component re-renders + dispatches).
-            document.addEventListener('livewire:init', function () {
-                Livewire.on('dashboard-charts', function (e) {
-                    var d = Array.isArray(e) ? e[0] : e;
-                    renderCharts(d.status, d.category);
-                });
+        // Live updates on every re-render (date range OR bahagian filter).
+        $wire.on('dashboard-charts', function (e) {
+            var d = Array.isArray(e) ? e[0] : e;
+            dashRenderCharts(d.status, d.category);
+        });
+
+        window.addEventListener('resize', function () {
+            ['status-donut', 'category-bar'].forEach(function (id) {
+                var el = document.getElementById(id);
+                if (el && typeof echarts !== 'undefined' && echarts.getInstanceByDom(el)) {
+                    echarts.getInstanceByDom(el).resize();
+                }
             });
-
-            window.addEventListener('resize', function () {
-                ['status-donut', 'category-bar'].forEach(function (id) {
-                    var el = document.getElementById(id);
-                    if (el && echarts.getInstanceByDom(el)) echarts.getInstanceByDom(el).resize();
-                });
-            });
-        })();
+        });
     </script>
+    @endscript
 </div>
