@@ -75,7 +75,10 @@ class Dashboard extends Component
             ->whereBetween('submitted_at', [$this->fromDate(), $this->toDate()])
             ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
             ->when(
-                ! Auth::user()->hasRole('helpdesk.admin'),
+                // Admins / helpdesk see all reports; everyone else only their own.
+                // Use the permission (aduan.adminTask) the rest of the app uses,
+                // not a single role name, so superadmin is covered too.
+                ! Auth::user()->can('aduan.adminTask'),
                 fn ($q) => $q->where('report_by_id', Auth::id())
             );
     }
