@@ -14,9 +14,10 @@ class AuditTrailController extends Controller
      */
     public function index()
     {
-        //
-        $audit_trails = AuditTrail::latest()->get();
-        return view('superadmin.audit_trail', compact('audit_trails'));
+        // Listing (paginated + searchable) is handled by the Livewire component
+        // App\Livewire\AuditTrail\AuditTrailIndex. Loading all rows here caused
+        // an HTTP 500 (memory exhaustion) on the large audit_trails table.
+        return view('superadmin.audit_trail');
     }
 
     /**
