@@ -464,3 +464,16 @@ th.sortable .bi { font-size: 0.7rem; opacity: 0.6; }
 .timeline__body { color: var(--c-text); }
 
 /* Chart card body height helper already used inline */
+
+/* ============================================================
+   Safety: constrain stray inline SVG icons (e.g. paginator arrows)
+   ============================================================ */
+.pagination svg,
+.page-link svg,
+.btn svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+}
+/* Livewire's default paginator sometimes ships oversized svg arrows */
+.pagination svg[aria-hidden="true"] { max-width: 1.1rem; max-height: 1.1rem; }
