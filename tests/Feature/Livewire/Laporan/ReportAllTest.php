@@ -112,4 +112,20 @@ class ReportAllTest extends FeatureTestCase
             ->set('dateTo', now()->subMonths(2)->format('Y-m-d'))
             ->assertDontSee($r->ticket_no);
     }
+
+    public function test_filter_by_rating()
+    {
+        $admin = User::factory()->create();
+        $admin->syncRoles(['helpdesk.admin']);
+        $r1 = $this->makeReport(User::factory()->create(), 5);
+        $r1->rating = 5; $r1->feedback = 'Cemerlang'; $r1->save();
+        $r2 = $this->makeReport(User::factory()->create(), 5);
+        $r2->rating = 3; $r2->save();
+
+        Livewire::actingAs($admin)
+            ->test(ReportAll::class)
+            ->set('rating', '5')
+            ->assertSee($r1->ticket_no)
+            ->assertDontSee($r2->ticket_no);
+    }
 }

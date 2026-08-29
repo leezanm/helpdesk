@@ -34,6 +34,8 @@ class ReportAll extends Component
     public string $status = '';        // report_status_id
     #[Url]
     public string $pegawai = '';       // users.id (assigned officer)
+    #[Url]
+    public string $rating = '';        // 1-5 (reports.rating)
 
     public function mount(): void
     {
@@ -47,7 +49,7 @@ class ReportAll extends Component
 
     public function resetFilters(): void
     {
-        $this->reset(['bahagian', 'status', 'pegawai']);
+        $this->reset(['bahagian', 'status', 'pegawai', 'rating']);
         $this->dateFrom = now()->startOfMonth()->format('Y-m-d');
         $this->dateTo = now()->format('Y-m-d');
         $this->resetPage();
@@ -56,7 +58,7 @@ class ReportAll extends Component
     public function updated($name): void
     {
         // Any filter change returns to page 1.
-        if (in_array($name, ['dateFrom', 'dateTo', 'bahagian', 'status', 'pegawai'])) {
+        if (in_array($name, ['dateFrom', 'dateTo', 'bahagian', 'status', 'pegawai', 'rating'])) {
             $this->resetPage();
         }
     }
@@ -71,6 +73,7 @@ class ReportAll extends Component
             ->whereBetween('submitted_at', [$from, $to])
             ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
             ->when($this->status !== '', fn ($q) => $q->where('report_status_id', (int) $this->status))
+            ->when($this->rating !== '', fn ($q) => $q->where('rating', (int) $this->rating))
             ->when($this->pegawai !== '', function ($q) {
                 // Reports whose latest assigned trail belongs to this officer.
                 $q->whereExists(function ($sub) {

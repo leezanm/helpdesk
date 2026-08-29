@@ -44,6 +44,17 @@
                         @endforeach
                     </select>
                 </div>
+                <div class="col-6 col-md-2">
+                    <label class="form-label small">Rating / Maklum Balas</label>
+                    <select wire:model.live="rating" class="form-select">
+                        <option value="">Semua Rating</option>
+                        <option value="5">⭐⭐⭐⭐⭐ — Cemerlang</option>
+                        <option value="4">⭐⭐⭐⭐ — Baik</option>
+                        <option value="3">⭐⭐⭐ — Puas Hati</option>
+                        <option value="2">⭐⭐ — Kurang Berpuas Hati</option>
+                        <option value="1">⭐ — Lemah</option>
+                    </select>
+                </div>
             </div>
         </div>
     </div>
@@ -84,6 +95,7 @@
                             <th>Kategori</th>
                             <th>Tarikh</th>
                             <th>Status</th>
+                            <th>Rating</th>
                             <th class="text-end">Tindakan</th>
                         </tr>
                     </thead>
@@ -97,12 +109,26 @@
                                 <td>{{ $report->category->desc ?? '-' }}</td>
                                 <td class="text-nowrap">{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
                                 <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>
+                                <td class="text-nowrap">
+                                    @if ($report->rating)
+                                        <span title="{{ $report->feedback ?? '' }}">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <i class="bi bi-star{{ $i <= $report->rating ? '-fill' : '' }}" style="color:#f59e0b;font-size:.8rem;"></i>
+                                            @endfor
+                                        </span>
+                                        @if ($report->feedback)
+                                            <br><small class="text-muted">{{ Str::limit($report->feedback, 30) }}</small>
+                                        @endif
+                                    @else
+                                        <span class="text-muted">—</span>
+                                    @endif
+                                </td>
                                 <td class="text-end">
                                     <a href="{{ route('aduan.show', $report->id) }}" class="btn btn-sm btn-outline-primary btn-icon" title="Lihat"><i class="bi bi-eye"></i></a>
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="8"><div class="empty-state"><i class="bi bi-search"></i> Tiada aduan sepadan dengan penapis.</div></td></tr>
+                            <tr><td colspan="9"><div class="empty-state"><i class="bi bi-search"></i> Tiada aduan sepadan dengan penapis.</div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
