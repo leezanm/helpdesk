@@ -1,173 +1,122 @@
-<div class="vertical-menu">
-    <div data-simplebar class="h-100">
-        <div id="sidebar-menu">
-            <ul class="metismenu list-unstyled" id="side-menu">
-                <li class="menu-title" key="t-menu">Laman Utama</li>
-                <li>
-                    <a class="nav-link" href="{{url('/dashboard')}}" id="topnav-dashboard" role="button">
-                        <i class="bx bx-home-circle me-2"></i><span key="t-dashboards">Utama</span>
-                    </a>
-                </li>
+@php $path = request()->path(); @endphp
+<nav class="app-sidebar__nav">
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bx-file-blank me-2"></i><span key="t-aduan">Aduan</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
+    <div class="app-sidebar__title">Laman Utama</div>
+    <a class="app-nav-link {{ $path === 'dashboard' ? 'active' : '' }}" href="{{ url('/dashboard') }}">
+        <i class="bx bx-home-circle"></i><span>Utama</span>
+    </a>
 
-                        {{-- @hasrole('pengguna')
-                            <x-sidebar-divider :title="'PENGGUNA'"></x-sidebar-divider> --}}
+    {{-- Aduan --}}
+    <div x-data="{ o: {{ str_starts_with($path, 'aduan') ? 'true' : 'false' }} }">
+        <a class="app-nav-link" x-on:click="o = !o" role="button">
+            <i class="bx bx-file-blank"></i><span>Aduan</span>
+            <i class="bx bx-chevron-down ms-auto" x-bind:style="o && 'transform:rotate(180deg)'"></i>
+        </a>
+        <ul class="app-nav-sub" x-show="o" x-collapse>
+            <li><a class="app-nav-link" href="{{ url('/aduan/create') }}"><span>Cipta Aduan</span></a></li>
+            <li><a class="app-nav-link" href="{{ url('/aduan/user') }}/{{ Auth::user()->username }}"><span>Aduan Saya</span></a></li>
 
-                            <li><a href="{{url('/aduan/create')}}" key="t-aduan-create">Cipta Aduan</a></li>
-                            <li><a href="{{url('/aduan/user')}}/{{Auth::user()->username}}" key="t-aduan-list">Aduan Saya</a></li>
-                        {{-- @endhasrole --}}
+            @can('aduan.updateTask')
+                <li class="app-sidebar__title">Peg Teknikal</li>
+                <li><a class="app-nav-link" href="{{ url('/aduan/untuk-tindakan') }}"><span>Untuk Tindakan</span></a></li>
+            @endcan
 
-                        @can('aduan.updateTask')
-                            <x-sidebar-divider :title="'PEG TEKNIKAL'"></x-sidebar-divider>
+            @can('aduan.adminTask')
+                <li class="app-sidebar__title">Pentadbir Helpdesk</li>
+                <li><a class="app-nav-link" href="{{ url('/aduan/dihantar') }}"><span>Aduan Dihantar</span></a></li>
+            @endcan
 
-                            {{-- <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li> --}}
-                            <li><a href="{{url('/aduan/untuk-tindakan')}}" key="t-aduan-list">Untuk Tindakan</a></li>
-                        @endcan
-
-                        @can('aduan.adminTask')
-                            <x-sidebar-divider :title="'PENTADBIR HELPDESK'"></x-sidebar-divider>
-
-                            {{-- <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li> --}}
-                            <li><a href="{{url('/aduan/dihantar')}}" key="t-aduan-list">Aduan Dihantar</a></li>
-                        @endcan
-
-                        @canany(['aduan.adminTask','aduan.updateTask'])
-                            <li><a href="{{url('/aduan')}}" key="t-aduan-create">Senarai Aduan</a></li>
-                        @endcanany
-
-
-                    </ul>
-                </li>
-
-                @can('view.report')
-                    <li>
-                        <a class="nav-link" href="{{url('/laporan')}}" id="topnav-laporan" role="button">
-                            <i class="bx bxs-report me-2"></i><span key="t-laporan">Laporan</span>
-                        </a>
-                    </li>
-                @endcan
-
-                {{-- <li>
-                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#search" id="topnav-search" role="button">
-                        <i class="bx bx-search-alt-2 me-2"></i><span key="t-search">Carian Rekod</span>
-                    </a>
-                </li> --}}
-
-                @canany(['manage.division','manage.category', 'manage.admin', 'manage.role'])
-                    <li class="menu-title" key="t-pentadbir">Pentadbiran</li>
-                @endcanany
-
-
-                @canany(['manage.division','manage.category'])
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bx-cog me-2"></i><span>Selenggaraan</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        @can('manage.category')
-                            <li><a href="{{route('category.index')}}" key="t-category">Kategori Aduan</a></li>
-                            <li><a href="{{route('status.index')}}" key="t-category">Status Aduan</a></li>
-                        @endcan
-                    </ul>
-                </li>
-                @endcanany
-
-                @canany(['manage.user','manage.admin'])
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                            <i class="bx bxs-group me-2"></i><span>Pengurusan pengguna</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="true">
-                            @can('manage.admin')
-                                <li><a href="{{url('/pengguna/pentadbir')}}" key="t-pegawai">Pentadbir Helpdesk</a></li>
-                            @endcan
-                            @can('manage.user')
-
-                                <li><a href="{{url('/pengguna/pengurusan')}}" key="t-pengguna">Pengurusan</a></li>
-                                <li><a href="{{url('/pengguna/peg-teknikal')}}" key="t-pengguna">Peg. Teknikal</a></li>
-                                <li><a href="{{url('/pengguna')}}" key="t-pengguna">Pengguna</a></li>
-                            @endcan
-                        </ul>
-                    </li>
-                @endcanany
-
-                @can('manage.role')
-                    <li>
-                        <a class="nav-link" href="{{url('/peranan')}}" id="topnav-role-management" role="button">
-                            <i class="bx bxs-user-badge me-2"></i><span key="t-role-management">Pengurusan Peranan</span>
-                        </a>
-                    </li>
-                @endcan
-
-                @canany(['manage.audit-trail', 'manage.backup'])
-                    <li class="menu-title" key="t-pentadbiran">Tetapan</li>
-
-                    @can('manage.audit-trail')
-                        <li>
-                            <a class="nav-link" href="{{url('/audit-trail')}}" id="topnav-log-sistem" role="button">
-                                <i class="bx bx-code-alt me-2"></i><span key="t-audit">Log Sistem</span>
-                            </a>
-                        </li>
-                    @endcan
-
-                    @can('manage.backup')
-                        <li>
-                            <a class="nav-link" href="{{url('/backup')}}" id="topnav-backup" role="button">
-                                <i class="bx bx-data me-2"></i><span key="t-backup">Backup</span>
-                            </a>
-                        </li>
-                    @endcan
-
-                @endcanany
-
-                <li class="menu-title" key="t-pentadbiran">Manual</li>
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow" key="t-vertical">
-                        <i class="bx bxs-book-content me-2"></i><span>Manual pengguna</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li>
-                            <a class="nav-link" href="{{asset('manual_pengguna/pengguna.pdf')}}" target="_blank" role="button">
-                                <span key="t-audit">Pengguna</span>
-                            </a>
-                        </li>
-                        @can('aduan.updateTask')
-                        <li>
-                            <a class="nav-link" href="{{asset('manual_pengguna/peg-teknikal.pdf')}}" target="_blank" role="button">
-                                <span key="t-audit">Peg. Teknikal</span>
-                            </a>
-                        </li>
-                    @endcan
-
-                    @can('aduan.adminTask')
-                        <li>
-                            <a class="nav-link" href="{{asset('manual_pengguna/admin.pdf')}}" target="_blank" role="button">
-                                <span key="t-audit">Admin Helpdesk</span>
-                            </a>
-                        </li>
-                    @endcan
-
-                    @hasrole('superadmin')
-                    <li>
-                        <a class="nav-link" href="{{asset('manual_pengguna/superadmin.pdf')}}" target="_blank" role="button">
-                            <span key="t-audit">Superadmin</span>
-                        </a>
-                    </li>
-                    @endhasrole
-                    </ul>
-                </li>
-
-
-            </ul>
-
-        </div>
+            @canany(['aduan.adminTask','aduan.updateTask'])
+                <li><a class="app-nav-link" href="{{ url('/aduan') }}"><span>Senarai Aduan</span></a></li>
+            @endcanany
+        </ul>
     </div>
-</div>
 
+    @can('view.report')
+        <a class="app-nav-link {{ str_starts_with($path, 'laporan') ? 'active' : '' }}" href="{{ url('/laporan') }}">
+            <i class="bx bxs-report"></i><span>Laporan</span>
+        </a>
+    @endcan
 
+    {{-- Pentadbiran --}}
+    @canany(['manage.division','manage.category', 'manage.admin', 'manage.role'])
+        <div class="app-sidebar__title">Pentadbiran</div>
+    @endcanany
+
+    @canany(['manage.division','manage.category'])
+        <div x-data="{ o: {{ (str_starts_with($path, 'kategori') || str_starts_with($path, 'status')) ? 'true' : 'false' }} }">
+            <a class="app-nav-link" x-on:click="o = !o" role="button">
+                <i class="bx bx-cog"></i><span>Selenggaraan</span>
+                <i class="bx bx-chevron-down ms-auto" x-bind:style="o && 'transform:rotate(180deg)'"></i>
+            </a>
+            <ul class="app-nav-sub" x-show="o" x-collapse>
+                @can('manage.category')
+                    <li><a class="app-nav-link {{ str_starts_with($path, 'kategori') ? 'active' : '' }}" href="{{ route('category.index') }}"><span>Kategori Aduan</span></a></li>
+                    <li><a class="app-nav-link {{ str_starts_with($path, 'status') ? 'active' : '' }}" href="{{ route('status.index') }}"><span>Status Aduan</span></a></li>
+                @endcan
+            </ul>
+        </div>
+    @endcanany
+
+    @canany(['manage.user','manage.admin'])
+        <div x-data="{ o: {{ str_starts_with($path, 'pengguna') ? 'true' : 'false' }} }">
+            <a class="app-nav-link" x-on:click="o = !o" role="button">
+                <i class="bx bxs-group"></i><span>Pengurusan Pengguna</span>
+                <i class="bx bx-chevron-down ms-auto" x-bind:style="o && 'transform:rotate(180deg)'"></i>
+            </a>
+            <ul class="app-nav-sub" x-show="o" x-collapse>
+                @can('manage.admin')
+                    <li><a class="app-nav-link" href="{{ url('/pengguna/pentadbir') }}"><span>Pentadbir Helpdesk</span></a></li>
+                @endcan
+                @can('manage.user')
+                    <li><a class="app-nav-link" href="{{ url('/pengguna/pengurusan') }}"><span>Pengurusan</span></a></li>
+                    <li><a class="app-nav-link" href="{{ url('/pengguna/peg-teknikal') }}"><span>Peg. Teknikal</span></a></li>
+                    <li><a class="app-nav-link" href="{{ url('/pengguna') }}"><span>Pengguna</span></a></li>
+                @endcan
+            </ul>
+        </div>
+    @endcanany
+
+    @can('manage.role')
+        <a class="app-nav-link {{ str_starts_with($path, 'peranan') ? 'active' : '' }}" href="{{ url('/peranan') }}">
+            <i class="bx bxs-user-badge"></i><span>Pengurusan Peranan</span>
+        </a>
+    @endcan
+
+    {{-- Tetapan --}}
+    @canany(['manage.audit-trail', 'manage.backup'])
+        <div class="app-sidebar__title">Tetapan</div>
+        @can('manage.audit-trail')
+            <a class="app-nav-link {{ str_starts_with($path, 'audit-trail') ? 'active' : '' }}" href="{{ url('/audit-trail') }}">
+                <i class="bx bx-code-alt"></i><span>Log Sistem</span>
+            </a>
+        @endcan
+        @can('manage.backup')
+            <a class="app-nav-link {{ str_starts_with($path, 'backup') ? 'active' : '' }}" href="{{ url('/backup') }}">
+                <i class="bx bx-data"></i><span>Backup</span>
+            </a>
+        @endcan
+    @endcanany
+
+    {{-- Manual --}}
+    <div class="app-sidebar__title">Manual</div>
+    <div x-data="{ o: false }">
+        <a class="app-nav-link" x-on:click="o = !o" role="button">
+            <i class="bx bxs-book-content"></i><span>Manual Pengguna</span>
+            <i class="bx bx-chevron-down ms-auto" x-bind:style="o && 'transform:rotate(180deg)'"></i>
+        </a>
+        <ul class="app-nav-sub" x-show="o" x-collapse>
+            <li><a class="app-nav-link" href="{{ asset('manual_pengguna/pengguna.pdf') }}" target="_blank"><span>Pengguna</span></a></li>
+            @can('aduan.updateTask')
+                <li><a class="app-nav-link" href="{{ asset('manual_pengguna/peg-teknikal.pdf') }}" target="_blank"><span>Peg. Teknikal</span></a></li>
+            @endcan
+            @can('aduan.adminTask')
+                <li><a class="app-nav-link" href="{{ asset('manual_pengguna/admin.pdf') }}" target="_blank"><span>Admin Helpdesk</span></a></li>
+            @endcan
+            @hasrole('superadmin')
+                <li><a class="app-nav-link" href="{{ asset('manual_pengguna/superadmin.pdf') }}" target="_blank"><span>Superadmin</span></a></li>
+            @endhasrole
+        </ul>
+    </div>
+
+</nav>

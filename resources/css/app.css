@@ -1,226 +1,318 @@
 /*
- * KKDW Helpdesk — application theme (Vite entry, layered over Bootstrap 5).
+ * KKDW Helpdesk — custom theme (full shell, replaces the old Skote app.min.css).
  *
- * Token-driven refresh: a professional teal-blue palette, Inter typography, and
- * modern surfaces/spacing. Tokens override Bootstrap's CSS variables (--bs-*)
- * and add an app layer (--app-*). Light theme now; a [data-theme="dark"] block
- * is reserved for a future toggle without markup changes.
+ * A distinct modern admin identity: deep indigo->violet gradient sidebar,
+ * light airy content, Plus Jakarta Sans typography, rounded card-forward
+ * surfaces. Built on the Bootstrap 5 grid/components (kept) but NOT the old
+ * theme CSS. Mobile: off-canvas sidebar drawer.
  *
  * Spec: .kiro/specs/ui-refresh
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 /* ============================================================
-   Design tokens
+   Tokens
    ============================================================ */
 :root {
-    /* Brand palette (government / ministry tone: trust + clarity) */
-    --app-primary: #0f6e8c;          /* deep teal-blue */
-    --app-primary-600: #0c5b74;
-    --app-primary-700: #094757;
-    --app-primary-100: #e2f1f6;
-    --app-primary-contrast: #ffffff;
+    /* New signature palette: indigo -> violet */
+    --c-primary: #5b5bd6;          /* indigo */
+    --c-primary-600: #4f46e5;
+    --c-primary-700: #4338ca;
+    --c-primary-050: #eef0fd;
+    --c-violet: #7c3aed;
+    --c-accent: #f59e0b;           /* amber accent, used sparingly */
 
-    --app-accent: #f0a400;           /* warm amber, used sparingly for CTAs/highlights */
-    --app-accent-contrast: #1c1600;
+    /* Surfaces / neutrals */
+    --c-bg: #f4f5fb;               /* tinted app background */
+    --c-surface: #ffffff;
+    --c-surface-2: #f7f8fc;
+    --c-border: #e9eaf3;
+    --c-text: #1e2138;
+    --c-text-muted: #767c9a;
 
-    /* Neutrals / surfaces */
-    --app-bg: #f6f8fb;               /* app background */
-    --app-surface: #ffffff;          /* cards, panels */
-    --app-surface-2: #f1f4f8;        /* subtle raised/hover surfaces */
-    --app-border: #e4e9f0;
-    --app-text: #1f2a37;
-    --app-text-muted: #6b7688;
+    /* Status */
+    --c-success: #10b981;
+    --c-warning: #f59e0b;
+    --c-danger: #ef4444;
+    --c-info: #3b82f6;
 
-    /* Status (kept semantically aligned with report status badges) */
-    --app-success: #17976a;
-    --app-warning: #e6a200;
-    --app-danger: #d6455a;
-    --app-info: #0f6e8c;
-
-    /* Shape & depth */
-    --app-radius: 0.65rem;
-    --app-radius-sm: 0.4rem;
-    --app-shadow-sm: 0 1px 2px rgba(16, 40, 63, 0.06), 0 1px 3px rgba(16, 40, 63, 0.05);
-    --app-shadow-md: 0 4px 12px rgba(16, 40, 63, 0.08);
+    /* Shape & depth (rounded, soft) */
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(30, 33, 56, 0.05);
+    --shadow: 0 6px 24px rgba(30, 33, 56, 0.08);
+    --shadow-lg: 0 12px 40px rgba(30, 33, 56, 0.12);
 
     /* Sidebar */
-    --app-sidebar-bg: #0d2c3a;       /* deep teal, professional */
-    --app-sidebar-fg: #c7d6dd;
-    --app-sidebar-fg-active: #ffffff;
-    --app-sidebar-active-bg: rgba(255, 255, 255, 0.08);
-    --app-sidebar-accent: var(--app-accent);
+    --sidebar-w: 264px;
+    --sidebar-grad: linear-gradient(180deg, #4f46e5 0%, #6d28d9 55%, #5b21b6 100%);
+    --sidebar-fg: rgba(255, 255, 255, 0.78);
+    --sidebar-fg-active: #ffffff;
 
-    /* Font */
-    --app-font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
-    /* --- Map onto Bootstrap 5 CSS variables so components inherit the theme --- */
-    --bs-primary: var(--app-primary);
-    --bs-primary-rgb: 15, 110, 140;
-    --bs-body-bg: var(--app-bg);
-    --bs-body-color: var(--app-text);
-    --bs-border-color: var(--app-border);
-    --bs-body-font-family: var(--app-font);
-    --bs-border-radius: var(--app-radius);
-    --bs-border-radius-sm: var(--app-radius-sm);
-    --bs-link-color: var(--app-primary);
-    --bs-link-hover-color: var(--app-primary-700);
+    /* Feed Bootstrap component vars */
+    --bs-primary: var(--c-primary);
+    --bs-primary-rgb: 91, 91, 214;
+    --bs-body-bg: var(--c-bg);
+    --bs-body-color: var(--c-text);
+    --bs-border-color: var(--c-border);
+    --bs-body-font-family: var(--font);
+    --bs-link-color: var(--c-primary);
+    --bs-link-hover-color: var(--c-primary-700);
+    --bs-border-radius: var(--radius-sm);
 }
 
-/* Reserved for a future dark mode (no markup change needed to switch). */
-[data-theme="dark"] {
-    --app-bg: #0b1620;
-    --app-surface: #10202b;
-    --app-surface-2: #162a37;
-    --app-border: #1e3341;
-    --app-text: #e7eef3;
-    --app-text-muted: #93a4b1;
-    --bs-body-bg: var(--app-bg);
-    --bs-body-color: var(--app-text);
-    --bs-border-color: var(--app-border);
+* { -webkit-font-smoothing: antialiased; }
+
+body {
+    font-family: var(--font);
+    background: var(--c-bg);
+    color: var(--c-text);
+    margin: 0;
 }
+
+h1,h2,h3,h4,h5,h6 { font-weight: 700; color: var(--c-text); }
+a { color: var(--c-primary); text-decoration: none; }
+a:hover { color: var(--c-primary-700); }
 
 /* ============================================================
-   Base elements
+   App shell layout
    ============================================================ */
-body {
-    font-family: var(--app-font);
-    background-color: var(--app-bg);
-    color: var(--app-text);
-    letter-spacing: 0.1px;
+.app-shell { display: flex; min-height: 100vh; }
+
+.app-sidebar {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    background: var(--sidebar-grad);
+    color: var(--sidebar-fg);
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease;
+}
+.app-sidebar__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1.15rem 1.25rem;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.2px;
+}
+.app-sidebar__brand img { height: 34px; width: auto; }
+.app-sidebar__nav { overflow-y: auto; padding: 0.5rem 0.75rem 1.5rem; flex: 1; }
+.app-sidebar__title {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 1rem 0.85rem 0.4rem;
+}
+.app-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.62rem 0.85rem;
+    margin: 0.12rem 0;
+    border-radius: var(--radius-sm);
+    color: var(--sidebar-fg);
+    font-weight: 500;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.app-nav-link i { font-size: 1.15rem; }
+.app-nav-link:hover { background: rgba(255,255,255,0.10); color: #fff; }
+.app-nav-link.active {
+    background: rgba(255,255,255,0.16);
+    color: #fff;
+    box-shadow: inset 3px 0 0 var(--c-accent);
+}
+.app-nav-sub { list-style: none; padding: 0 0 0 0.5rem; margin: 0; }
+.app-nav-sub .app-nav-link { font-size: 0.86rem; padding-left: 2.3rem; }
+
+.app-main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-h1, h2, h3, h4, h5, h6 {
-    color: var(--app-text);
-    font-weight: 600;
+/* Topbar */
+.app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    height: 68px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--c-border);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1.25rem;
+}
+.app-topbar__greeting { font-weight: 600; color: var(--c-text); }
+.app-topbar__spacer { flex: 1; }
+.app-hamburger {
+    display: none;
+    border: 0;
+    background: var(--c-surface-2);
+    width: 40px; height: 40px;
+    border-radius: var(--radius-sm);
+    color: var(--c-text);
+    font-size: 1.25rem;
 }
 
-a {
-    color: var(--app-primary);
+.app-content { padding: 1.5rem 1.5rem 2rem; flex: 1; }
+.app-footer { padding: 1rem 1.5rem; color: var(--c-text-muted); font-size: 0.85rem; border-top: 1px solid var(--c-border); }
+
+/* Mobile off-canvas */
+.app-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(20,20,40,0.45);
+    z-index: 1039;
 }
-a:hover {
-    color: var(--app-primary-700);
+@media (max-width: 991.98px) {
+    .app-sidebar { transform: translateX(-100%); }
+    .app-shell.sidebar-open .app-sidebar { transform: translateX(0); }
+    .app-shell.sidebar-open .app-backdrop { display: block; }
+    .app-main { margin-left: 0; }
+    .app-hamburger { display: inline-flex; align-items: center; justify-content: center; }
 }
 
 /* ============================================================
    Cards / surfaces
    ============================================================ */
 .card {
-    background-color: var(--app-surface);
-    border: 1px solid var(--app-border);
-    border-radius: var(--app-radius);
-    box-shadow: var(--app-shadow-sm);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
 }
+.card:hover { box-shadow: var(--shadow); }
 .card-header {
-    background-color: transparent;
-    border-bottom: 1px solid var(--app-border);
-    font-weight: 600;
+    background: transparent;
+    border-bottom: 1px solid var(--c-border);
+    font-weight: 700;
+    padding: 1.1rem 1.35rem;
 }
+.card-body { padding: 1.35rem; }
+
+/* Page title */
+.page-title-box h4 { font-weight: 800; }
+.breadcrumb { background: transparent; padding: 0; margin: 0; font-size: 0.85rem; }
 
 /* ============================================================
    Buttons
    ============================================================ */
-.btn {
-    border-radius: var(--app-radius-sm);
-    font-weight: 500;
-}
+.btn { border-radius: var(--radius-sm); font-weight: 600; padding: 0.5rem 1rem; }
+.btn-sm { border-radius: 8px; }
 .btn-primary {
-    --bs-btn-bg: var(--app-primary);
-    --bs-btn-border-color: var(--app-primary);
-    --bs-btn-hover-bg: var(--app-primary-600);
-    --bs-btn-hover-border-color: var(--app-primary-600);
-    --bs-btn-active-bg: var(--app-primary-700);
-    --bs-btn-active-border-color: var(--app-primary-700);
-    --bs-btn-color: var(--app-primary-contrast);
-    --bs-btn-hover-color: var(--app-primary-contrast);
+    --bs-btn-bg: var(--c-primary);
+    --bs-btn-border-color: var(--c-primary);
+    --bs-btn-hover-bg: var(--c-primary-600);
+    --bs-btn-hover-border-color: var(--c-primary-600);
+    --bs-btn-active-bg: var(--c-primary-700);
+    background: linear-gradient(135deg, var(--c-primary), var(--c-violet));
+    border: none;
+    color: #fff;
 }
+.btn-primary:hover { filter: brightness(1.05); color: #fff; }
 .btn-outline-primary {
-    --bs-btn-color: var(--app-primary);
-    --bs-btn-border-color: var(--app-primary);
-    --bs-btn-hover-bg: var(--app-primary);
-    --bs-btn-hover-border-color: var(--app-primary);
+    --bs-btn-color: var(--c-primary);
+    --bs-btn-border-color: var(--c-primary);
+    --bs-btn-hover-bg: var(--c-primary);
+    --bs-btn-hover-border-color: var(--c-primary);
 }
+.btn-success { --bs-btn-bg: var(--c-success); --bs-btn-border-color: var(--c-success); }
+.btn-secondary { --bs-btn-bg: #eceef6; --bs-btn-border-color: #eceef6; --bs-btn-color: var(--c-text); }
+
+/* Rounded circle icon buttons (used across tables) */
+.btn-rounded { border-radius: var(--radius-pill); }
 
 /* ============================================================
    Forms
    ============================================================ */
-.form-control,
-.form-select {
-    border-radius: var(--app-radius-sm);
-    border-color: var(--app-border);
-    color: var(--app-text);
+.form-control, .form-select {
+    border-radius: var(--radius-sm);
+    border-color: var(--c-border);
+    color: var(--c-text);
+    padding: 0.55rem 0.85rem;
 }
-.form-control:focus,
-.form-select:focus {
-    border-color: var(--app-primary);
-    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.15);
+.form-control:focus, .form-select:focus {
+    border-color: var(--c-primary);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.15);
 }
-.form-label,
-.col-form-label {
-    font-weight: 500;
-    color: var(--app-text);
-}
+.form-label, .col-form-label { font-weight: 600; }
 
 /* ============================================================
    Tables
    ============================================================ */
-.table {
-    --bs-table-bg: var(--app-surface);
-    color: var(--app-text);
-}
+.table { --bs-table-bg: transparent; color: var(--c-text); margin: 0; }
 .table > thead {
-    background-color: var(--app-surface-2);
-    color: var(--app-text-muted);
+    background: var(--c-surface-2);
+    color: var(--c-text-muted);
     text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.4px;
+    font-size: 0.72rem;
+    letter-spacing: 0.6px;
 }
-.table > thead th {
-    border-bottom: 1px solid var(--app-border);
-    font-weight: 600;
-}
+.table > thead th { border-bottom: 1px solid var(--c-border); font-weight: 700; padding: 0.85rem 1rem; }
+.table > tbody td { padding: 0.85rem 1rem; border-color: var(--c-border); vertical-align: middle; }
+.table-hover > tbody > tr:hover > * { background: var(--c-surface-2); }
 
 /* ============================================================
    Badges (status)
    ============================================================ */
-.badge.bg-success { background-color: var(--app-success) !important; }
-.badge.bg-warning { background-color: var(--app-warning) !important; }
-.badge.bg-danger  { background-color: var(--app-danger) !important; }
-.badge.bg-info    { background-color: var(--app-info) !important; }
-.badge.bg-primary { background-color: var(--app-primary) !important; }
+.badge { font-weight: 600; padding: 0.4em 0.7em; border-radius: var(--radius-pill); }
+.badge.bg-success { background: var(--c-success) !important; }
+.badge.bg-warning { background: var(--c-warning) !important; color: #3a2a00 !important; }
+.badge.bg-danger  { background: var(--c-danger) !important; }
+.badge.bg-info    { background: var(--c-info) !important; }
+.badge.bg-primary { background: var(--c-primary) !important; }
+.badge.bg-secondary { background: #8a90ad !important; }
 
 /* ============================================================
-   Pagination (Livewire tables)
+   Pagination
    ============================================================ */
 .pagination {
-    --bs-pagination-color: var(--app-primary);
-    --bs-pagination-active-bg: var(--app-primary);
-    --bs-pagination-active-border-color: var(--app-primary);
-    --bs-pagination-border-radius: var(--app-radius-sm);
+    --bs-pagination-color: var(--c-primary);
+    --bs-pagination-active-bg: var(--c-primary);
+    --bs-pagination-active-border-color: var(--c-primary);
+    --bs-pagination-border-radius: 8px;
+    gap: 4px;
 }
+.page-link { border-radius: 8px !important; border-color: var(--c-border); }
 
 /* ============================================================
    Dashboard
    ============================================================ */
-.stat-card {
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--app-shadow-md);
-}
+.stat-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
 .stat-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: var(--app-radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.6rem;
-    flex-shrink: 0;
+    width: 56px; height: 56px;
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.7rem; flex-shrink: 0;
 }
-.stat-icon--primary { background: var(--app-primary-100); color: var(--app-primary); }
-.stat-icon--success { background: rgba(23, 151, 106, 0.12); color: var(--app-success); }
-.stat-icon--warning { background: rgba(230, 162, 0, 0.14); color: var(--app-warning); }
-.stat-icon--danger  { background: rgba(214, 69, 90, 0.12); color: var(--app-danger); }
+.stat-icon--primary { background: var(--c-primary-050); color: var(--c-primary); }
+.stat-icon--success { background: rgba(16,185,129,0.12); color: var(--c-success); }
+.stat-icon--warning { background: rgba(245,158,11,0.14); color: var(--c-warning); }
+.stat-icon--danger  { background: rgba(239,68,68,0.12); color: var(--c-danger); }
+
+/* Modals get the rounded treatment too */
+.modal-content { border: 0; border-radius: var(--radius); box-shadow: var(--shadow-lg); }
+.modal-header, .modal-footer { border-color: var(--c-border); }
+
+/* Notification dropdown + profile (topbar) */
+.dropdown-menu { border: 1px solid var(--c-border); border-radius: var(--radius-sm); box-shadow: var(--shadow); }
+.noti-icon { position: relative; background: var(--c-surface-2); border: 0; width: 42px; height: 42px; border-radius: var(--radius-sm); color: var(--c-text); }
