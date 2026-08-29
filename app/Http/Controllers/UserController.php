@@ -57,16 +57,23 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        // Only phone and address are user-editable; everything else (name,
+        // email, designation, bahagian) is sourced from AD. Whitelist the
+        // fields server-side so a crafted request cannot change AD-owned data.
+        $attributes = $request->validate([
+            'tel_no' => 'nullable|string|max:30',
+            'address' => 'nullable|string|max:500',
             'image' => 'nullable|image|max:256',
         ]);
 
-        $attributes = $request->except('image', '_token');
+        unset($attributes['image']);
+
         if ($request->hasFile('image')) {
             $fileName = 'profile_pic_'.$user->id.'.'.$request->file('image')->getClientOriginalExtension();
             $path = $request->file('image')->storeAs('public/images/users', $fileName);
             $attributes['profile_path'] = Str::of($path)->replace('public', 'storage');
         }
+
         $user->update($attributes);
 
         return redirect()->back()->with('success', 'Berjaya kemaskini profil');

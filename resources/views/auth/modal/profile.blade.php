@@ -1,66 +1,85 @@
 @php
-$user = Auth::user()->load('roles');
+    $user = Auth::user()->load('roles');
 @endphp
 
-
-<div id="edit-profile" class="modal fade" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div id="edit-profile" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-primary bg-soft">
-                <h5 class="text-primary">Maklumat profil</h5>
-            </div>
-            <form action="{{route('account.profile.update', $user)}}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('account.profile.update', $user) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col-lg-4 text-center mb-3">
-                            <img class="img-thumbnail rounded-circle mb-3" alt=""
-                                src="{{ asset($user->profile_picture) }}" height="100" width="100">
-                            <input type="file" name="image" class="form-control text-center">
-                            {{-- <small class="text-muted">
-                            </small> --}}
-                        </div>
-                        <div class="col"></div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-borderless mb-0">
-                            <tbody class="align-middle">
-                                <tr>
-                                    <th width="20%">Nama </th>
-                                    <td>
-                                        <input type="text" class="form-control" value="{{ $user->name }}" disabled>
-                                    </td>
 
-                                </tr>
-                                <tr>
-                                    <th>No. Telefon</th>
-                                    <td>
-                                        <input type="text" class="form-control" value="{{ $user->tel_no }}" disabled>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>E-mel</th>
-                                    <td>
-                                        <input type="text" class="form-control" value="{{ $user->email }}" disabled>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Peranan</th>
-                                    <td>
-                                        @foreach (Auth::user()->roles as $role)
-                                            <span class="badge bg-dark text-uppercase">{{$role->desc}}</span>
-                                        @endforeach
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProfileLabel"><i class="bi bi-person-gear me-1"></i> Kemaskini Profil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="alert alert-light border small d-flex align-items-center gap-2 mb-4">
+                        <i class="bi bi-info-circle text-primary"></i>
+                        <span>Hanya <strong>No. Telefon</strong> dan <strong>Alamat</strong> boleh dikemaskini. Maklumat lain diselaraskan secara automatik daripada Active Directory (AD).</span>
                     </div>
-                    <div class="text-end">
-                        <button type="submit" class="btn btn-primary m-2">Kemaskini <i class="bx bx-send"></i></button>
+
+                    {{-- Avatar --}}
+                    <div class="text-center mb-4">
+                        <img class="rounded-circle mb-2" alt="{{ $user->name }}"
+                             src="{{ $user->profile_picture }}" height="96" width="96"
+                             style="object-fit:cover;border:3px solid var(--c-border)">
+                        <div class="mx-auto" style="max-width:320px">
+                            <input type="file" name="image" accept="image/*" class="form-control form-control-sm">
+                            <small class="text-muted">Gambar profil (pilihan) — maks 256KB.</small>
+                        </div>
                     </div>
+
+                    <div class="row g-3">
+                        {{-- Read-only (from AD) --}}
+                        <div class="col-md-6">
+                            <label class="form-label">Nama <span class="badge bg-light text-muted ms-1">AD</span></label>
+                            <input type="text" class="form-control" value="{{ $user->name }}" readonly disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">E-mel <span class="badge bg-light text-muted ms-1">AD</span></label>
+                            <input type="text" class="form-control" value="{{ $user->email }}" readonly disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Jawatan <span class="badge bg-light text-muted ms-1">AD</span></label>
+                            <input type="text" class="form-control" value="{{ $user->designation ?: '-' }}" readonly disabled>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Bahagian <span class="badge bg-light text-muted ms-1">AD</span></label>
+                            <input type="text" class="form-control" value="{{ $user->ldap_bahagian ?: '-' }}" readonly disabled>
+                        </div>
+
+                        {{-- Editable --}}
+                        <div class="col-md-6">
+                            <label class="form-label">No. Telefon</label>
+                            <input type="text" name="tel_no" class="form-control @error('tel_no') is-invalid @enderror"
+                                   value="{{ old('tel_no', $user->tel_no) }}" placeholder="Cth: 03-8000 0000">
+                            @error('tel_no') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Peranan</label>
+                            <div class="d-flex flex-wrap gap-1 align-items-center" style="min-height:38px">
+                                @forelse ($user->roles as $role)
+                                    <span class="badge rounded-pill" style="background:var(--c-primary-050);color:var(--c-primary-700)">{{ $role->desc }}</span>
+                                @empty
+                                    <span class="text-muted">-</span>
+                                @endforelse
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Alamat</label>
+                            <textarea name="address" rows="3" class="form-control @error('address') is-invalid @enderror"
+                                      placeholder="Alamat pejabat / surat-menyurat">{{ old('address', $user->address) }}</textarea>
+                            @error('address') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-check2 me-1"></i>Kemaskini</button>
+                </div>
             </form>
         </div>
-    </div><!-- /.modal-content -->
-</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+</div>
