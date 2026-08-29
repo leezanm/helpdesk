@@ -52,6 +52,20 @@
                     @error('password') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
                 </div>
 
+                @if (!empty($captchaQuestion))
+                    <div class="mb-3">
+                        <label class="form-label">Pengesahan Keselamatan</label>
+                        <div class="input-group">
+                            <span class="input-group-text">{{ $captchaQuestion }} =</span>
+                            <input type="text" inputmode="numeric" autocomplete="off"
+                                   class="form-control auth-input-lg @error('captcha') is-invalid @enderror"
+                                   name="captcha" placeholder="Jawapan">
+                        </div>
+                        <small class="text-muted">Sila selesaikan operasi matematik di atas untuk mengesahkan anda bukan robot.</small>
+                        @error('captcha') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                    </div>
+                @endif
+
                 <div class="form-check mb-4">
                     <input class="form-check-input" type="checkbox" id="remember-check" name="remember">
                     <label class="form-check-label" for="remember-check">Kekal sesi log masuk</label>

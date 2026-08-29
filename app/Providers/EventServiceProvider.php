@@ -6,8 +6,10 @@ use App\Models\Report;
 use App\Models\User;
 use App\Observers\ReportObserver;
 use App\Observers\UserObserver;
+use App\Support\LoginCaptcha;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -46,6 +48,14 @@ class EventServiceProvider extends ServiceProvider
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
+
+            // Track failures so the login CAPTCHA kicks in after a few tries.
+            LoginCaptcha::incrementFailures(request());
+        });
+
+        // On successful login, clear the failure counter + CAPTCHA state.
+        Event::listen(Login::class, function () {
+            LoginCaptcha::reset(request());
         });
 
         Event::listen(Lockout::class, function (Lockout $event) {

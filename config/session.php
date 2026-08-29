@@ -168,7 +168,10 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    // Default to secure (HTTPS-only) cookies. Production runs over HTTPS
+    // (helpdesk.rurallink.gov.my); set SESSION_SECURE_COOKIE=false only for
+    // local HTTP development.
+    'secure' => env('SESSION_SECURE_COOKIE', true),
 
     /*
     |--------------------------------------------------------------------------

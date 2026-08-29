@@ -33,10 +33,16 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
+            // AuthenticateSession intentionally left disabled: it conflicts with
+            // Livewire component tests ("Session store not set on request") and
+            // its benefit (invalidating other sessions on password change) is
+            // marginal here. Session integrity is covered by secure/HttpOnly/
+            // SameSite cookies + session regeneration on login (Fortify).
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ],
 
         'api' => [
