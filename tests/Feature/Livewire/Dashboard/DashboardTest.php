@@ -71,4 +71,45 @@ class DashboardTest extends FeatureTestCase
             ->assertViewHas('inProgress', 1)
             ->assertViewHas('total', 2);
     }
+
+    public function test_date_filter_excludes_reports_outside_range()
+    {
+        $admin = User::factory()->create();
+        $admin->syncRoles(['helpdesk.admin']);
+        $this->makeReport(User::factory()->create(), 2); // submitted today
+
+        // Filter to a past range that excludes today's report.
+        Livewire::actingAs($admin)
+            ->test(Dashboard::class)
+            ->set('dateFrom', now()->subMonths(3)->format('Y-m-d'))
+            ->set('dateTo', now()->subMonths(2)->format('Y-m-d'))
+            ->assertViewHas('total', 0);
+    }
+
+    public function test_category_breakdown_present()
+    {
+        $admin = User::factory()->create();
+        $admin->syncRoles(['helpdesk.admin']);
+        $this->makeReport(User::factory()->create(), 2);
+
+        Livewire::actingAs($admin)
+            ->test(Dashboard::class)
+            ->assertViewHas('categoryBreakdown', function ($breakdown) {
+                return collect($breakdown)->contains(fn ($c) => $c['label'] === 'Rangkaian' && $c['value'] >= 1);
+            });
+    }
+
+    public function test_officer_logs_lists_only_officers_with_logs()
+    {
+        $admin = User::factory()->create();
+        $admin->syncRoles(['helpdesk.admin']);
+        // Creating a report generates a trail authored by the acting user,
+        // so that user should appear in officer logs.
+        $this->makeReport($admin, 2);
+
+        Livewire::actingAs($admin)
+            ->test(Dashboard::class)
+            ->assertViewHas('officerLogs', fn ($logs) => count($logs) >= 1)
+            ->assertSee('Jumlah Log Pegawai');
+    }
 }
