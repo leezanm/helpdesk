@@ -61,6 +61,18 @@
                     <button class="btn btn-primary auth-input-lg" type="submit">Log Masuk</button>
                 </div>
             </form>
+
+            {{-- QR to the live system, for logging in from a mobile device --}}
+            @php($loginQr = qrCodeDataUri('https://helpdesk.rurallink.gov.my', 150))
+            @if ($loginQr)
+                <div class="auth-qr text-center mt-4 pt-4 border-top" style="border-color:var(--c-border)!important">
+                    <img src="{{ $loginQr }}" alt="QR ke helpdesk.rurallink.gov.my"
+                         width="130" height="130" class="mb-2">
+                    <p class="text-muted small mb-0">
+                        <i class="bi bi-phone me-1"></i>Imbas untuk log masuk melalui telefon
+                    </p>
+                </div>
+            @endif
         </div>
     </div>
 

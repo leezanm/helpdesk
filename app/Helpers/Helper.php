@@ -15,6 +15,28 @@ function convertDateFormat($date, $format)
     return Carbon::parse($date)->locale('ms')->isoFormat($format);
 }
 
+/**
+ * Generate a QR code (SVG) for the given URL/text as a base64 data-URI, so it
+ * can be dropped straight into an <img src="...">. Uses BaconQrCode's SVG
+ * backend (no imagick dependency). Returns '' on failure so the caller can
+ * simply hide the element.
+ */
+function qrCodeDataUri($text, $size = 160)
+{
+    try {
+        $writer = new \BaconQrCode\Writer(
+            new \BaconQrCode\Renderer\ImageRenderer(
+                new \BaconQrCode\Renderer\RendererStyle\RendererStyle((int) $size, 1),
+                new \BaconQrCode\Renderer\Image\SvgImageBackEnd()
+            )
+        );
+
+        return 'data:image/svg+xml;base64,'.base64_encode($writer->writeString($text));
+    } catch (\Throwable $e) {
+        return '';
+    }
+}
+
 function formatBytes($bytes, $precision = 2)
 {
 

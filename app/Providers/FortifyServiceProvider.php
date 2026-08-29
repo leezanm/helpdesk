@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -65,8 +66,25 @@ class FortifyServiceProvider extends ServiceProvider
         //     }
         // });
 
+        // Lockout: 3 failed attempts, then blocked for 5 minutes. Keyed on the
+        // username + IP so one attacker cannot lock out a whole office, and a
+        // single IP hammering many usernames is still limited. (Previous code
+        // keyed on $request->email, which is always empty here since the login
+        // field is 'username' — so it effectively only throttled by IP.)
         RateLimiter::for('login', function (Request $request) {
-            return Limit::perMinute(5)->by($request->email . $request->ip());
+            $key = Str::lower((string) $request->input('username')).'|'.$request->ip();
+
+            return Limit::perMinutes(5, 3)->by($key)->response(function () {
+                return redirect()->route('login')->withErrors([
+                    'username' => 'Terlalu banyak percubaan log masuk. Sila cuba semula selepas 5 minit.',
+                ]);
+            });
+        });
+
+        // Secondary throttle per-IP so an attacker rotating usernames from one
+        // IP is still capped (defence against credential stuffing).
+        RateLimiter::for('login-ip', function (Request $request) {
+            return Limit::perMinute(20)->by($request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {
