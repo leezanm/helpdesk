@@ -18,6 +18,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
         <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
 
+        {{-- ECharts loaded in <head> so it is ready before Livewire runs chart scripts --}}
+        <script src="{{ asset('assets/libs/echarts/echarts.min.js') }}"></script>
+
         {{-- Custom theme (loads last so it fully owns the look) --}}
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles

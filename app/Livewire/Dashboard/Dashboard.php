@@ -46,6 +46,26 @@ class Dashboard extends Component
         return $query->with(['status', 'category'])->orderBy('submitted_at', 'desc');
     }
 
+    /**
+     * Status breakdown for the reporting donut: [{label, value, class}].
+     * Uses the ref status descriptions/classes so it stays meaningful & themed.
+     */
+    protected function statusBreakdown(): array
+    {
+        $counts = (clone $this->reportCountQuery())
+            ->whereIn('report_status_id', [2, 3, 4, 5, 6])
+            ->select('report_status_id', DB::raw('count(*) as total'))
+            ->groupBy('report_status_id')
+            ->pluck('total', 'report_status_id');
+
+        $statuses = \App\Models\Ref\ReportStatus::whereIn('id', [2, 3, 4, 5, 6])->get();
+
+        return $statuses->map(fn ($s) => [
+            'label' => $s->desc,
+            'value' => (int) ($counts[$s->id] ?? 0),
+        ])->values()->all();
+    }
+
     public function render()
     {
         $user = Auth::user();
@@ -56,10 +76,22 @@ class Dashboard extends Component
             default => 'Aduan Saya',
         };
 
+        $total = (clone $this->reportCountQuery())->whereIn('report_status_id', [2, 3, 4, 5, 6])->count();
+        $resolved = (clone $this->reportCountQuery())->where('report_status_id', 5)->count();
+        $inProgress = (clone $this->reportCountQuery())->whereIn('report_status_id', [6, 4, 2, 3])->count();
+        $kiv = (clone $this->reportCountQuery())->where('report_status_id', 6)->count();
+        $thisWeek = (clone $this->reportCountQuery())
+            ->where('submitted_at', '>=', now()->startOfWeek())->count();
+        $resolutionRate = $total > 0 ? round($resolved / $total * 100) : 0;
+
         return view('livewire.dashboard.dashboard', [
-            'total' => (clone $this->reportCountQuery())->count(),
-            'resolved' => (clone $this->reportCountQuery())->where('report_status_id', 5)->count(),
-            'inProgress' => (clone $this->reportCountQuery())->whereIn('report_status_id', [6, 4, 2, 3])->count(),
+            'total' => $total,
+            'resolved' => $resolved,
+            'inProgress' => $inProgress,
+            'kiv' => $kiv,
+            'thisWeek' => $thisWeek,
+            'resolutionRate' => $resolutionRate,
+            'statusBreakdown' => $this->statusBreakdown(),
             'reports' => $this->reportsForRole()->limit(10)->get(),
             'listTitle' => $listTitle,
             'canGraph' => $user->can('dashboard.viewGraph'),
