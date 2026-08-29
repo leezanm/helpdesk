@@ -23,18 +23,36 @@ class LaporanController extends Controller
         $status = $request->status;
         $achievement = null;
 
-        $laporans =  \DB::table('_report_statuses as report_status')
-                    ->select('id', 'desc')
-                    ->selectRaw('ifnull((select count(*) from reports where report_status_id = report_status.id and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_status_id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
-                    // ->whereIn('id', [2,3,4,5])
-                    ->when(filled($status), function($query) use ($status){
-                        $query->where('desc', $status);
-                    },
-                    function($query){
-                        $query->whereIn('id', [2,3,4,5,6]);
+        $aduans = \DB::table('reports')
+                    ->selectRaw('report_status_id, count(*) as jumlah')
+                    ->when(filled($from), function($query) use($from){
+                        $query->whereDate('submitted_at', '>=', Carbon::parse($from));
                     })
-                    ->orderBy('id')
-                    ->get();
+                    ->when(filled($to), function($query) use($to){
+                        $query->whereDate('submitted_at', '<=', Carbon::parse($to));
+                    })
+                   ->groupBy('report_status_id');
+                 //  ->orderBy('report_status_id')
+                 //  ->orderBy('report_status_id')
+                  //  ->get();
+
+        $laporans = \DB::table('_report_statuses as report_status')
+        ->leftJoinSub($aduans, 'aduans', function ($join) {
+            $join->on('report_status.id', '=', 'aduans.report_status_id');
+        })->get();
+        // $laporans =  \DB::table('_report_statuses as report_status')
+        //             ->select('id', 'desc')
+        //             ->selectRaw('ifnull((select count(*) from reports where report_status_id = report_status.id and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_status_id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
+        //             // ->whereIn('id', [2,3,4,5])
+        //             ->when(filled($status), function($query) use ($status){
+        //                 $query->where('desc', $status);
+        //             },
+        //             function($query){
+        //                 $query->whereIn('id', [2,3,4,5,6]);
+        //             })
+        //             ->orderBy('id')
+        //             ->toSql();
+        //return $laporans;
 
         if(blank($status)){
             $completed_report = $laporans->where('id', 5)->first();

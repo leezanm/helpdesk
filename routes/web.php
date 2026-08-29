@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserAssetController;
-use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\OrganizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,12 +101,12 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     });
 
     Route::prefix('backup')->as('backup.')->middleware('can:manage.backup')->group(function () {
-        Route::get('/', [App\Http\Controllers\BackupContoller::class, 'index'])->name('index');
-        Route::get('/full', [App\Http\Controllers\BackupContoller::class, 'backupFull'])->name('full');
-        Route::get('/database', [App\Http\Controllers\BackupContoller::class, 'backupDB'])->name('database');
-        Route::get('/file', [App\Http\Controllers\BackupContoller::class, 'backupFile'])->name('file');
-        Route::get('/download/{filename}', [App\Http\Controllers\BackupContoller::class, 'download'])->name('download');
-        Route::get('/delete/{filename}', [App\Http\Controllers\BackupContoller::class, 'destroy'])->name('delete');
+        Route::get('/', [App\Http\Controllers\BackupController::class, 'index'])->name('index');
+        Route::get('/full', [App\Http\Controllers\BackupController::class, 'backupFull'])->name('full');
+        Route::get('/database', [App\Http\Controllers\BackupController::class, 'backupDB'])->name('database');
+        Route::get('/file', [App\Http\Controllers\BackupController::class, 'backupFile'])->name('file');
+        Route::get('/download/{filename}', [App\Http\Controllers\BackupController::class, 'download'])->name('download');
+        Route::get('/delete/{filename}', [App\Http\Controllers\BackupController::class, 'destroy'])->name('delete');
     });
 
 

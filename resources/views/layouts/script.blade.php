@@ -24,7 +24,6 @@
         <script src="{{asset('assets/libs/sweetalert2/sweetalert2.min.js')}}"></script>
         <script src="{{asset('assets/libs/select2/js/select2.min.js')}}"></script>
         <script src="{{asset('assets/libs/inputmask/min/jquery.inputmask.bundle.min.js')}}"></script>
-        <script src="{{asset('assets/libs/dropzone/min/dropzone.min.js')}}"></script>
         <script src="{{asset('assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
         <script src="{{asset('assets/libs/jquery-steps/build/jquery.steps.min.js')}}"></script>
         <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>

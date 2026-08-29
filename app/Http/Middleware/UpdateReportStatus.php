@@ -26,7 +26,7 @@ class UpdateReportStatus
             $report->save();
 
             $trail = new ReportTrail();
-            $trail->message = 'Aduan telah di ambil maklum oleh admin Sistem Meja Bantuan KPLB';
+            $trail->message = 'Aduan telah di ambil maklum oleh admin Sistem Meja Bantuan KKDW';
             $trail->updated_by_id = Auth::user()->id;
             $trail->status_id = 3;
 

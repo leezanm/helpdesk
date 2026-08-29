@@ -43,7 +43,7 @@ class ReportSendNotification extends Notification
     {
         $report =$this->report;
         return (new MailMessage)
-                    ->subject('Sistem Meja Bantuan KPLB - Aduan Berjaya Dihantar')
+                    ->subject('Sistem Meja Bantuan KKDW - Aduan Berjaya Dihantar')
                     ->greeting('Salam Sejahtera,')
                     ->line('Aduan anda berjaya dihantar')
                     ->line('Maklumat Aduan')

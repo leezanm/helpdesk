@@ -53,7 +53,7 @@
                 <div class="mt-5 text-center">
                     <div class="card" style="opacity: 80%;">
                         <div class="card-body">
-                            © <script>document.write(new Date().getFullYear())</script> KPLB. KEMENTERIAN PEMBANGUNAN LUAR BANDAR
+                            © <script>document.write(new Date().getFullYear())</script> KKDW. KEMENTERIAN KEMAJUAN DESA DAN WILAYAH
                         </div>
                     </div>
                 </div>

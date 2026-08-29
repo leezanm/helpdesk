@@ -90,7 +90,7 @@
                             @foreach ($laporans as $laporan)
                                 <tr>
                                     <td><a href="{{route('laporan.view-by-status', ['status' => $laporan->desc, 'from' => $from, 'to' => $to])}}">{{$laporan->desc}}</a></td>
-                                    <td>{{$laporan->jumlah}}</td>
+                                    <td>{{$laporan->jumlah ? $laporan->jumlah :0}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

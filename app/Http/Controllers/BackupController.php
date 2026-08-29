@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-class BackupContoller extends Controller
+class BackupController extends Controller
 {
     //
     public function index(Request $request)
