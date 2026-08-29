@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 Route::view('/forgot-password-out', 'auth.forgot_password_out');
 
-Route::middleware(['auth', 'audit-trail'])->group(function () {
+Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
 
     Route::prefix('notification')->as('notification.')->group(function () {
 

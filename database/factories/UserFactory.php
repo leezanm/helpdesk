@@ -27,6 +27,10 @@ class UserFactory extends Factory
             'username' => $this->faker->unique()->userName,
             'email' => $this->faker->unique()->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            // Default a phone so factory users are "profile-complete" and the
+            // EnsurePhoneFilled middleware doesn't redirect them in tests. Use
+            // the ->state(['tel_no' => null]) explicitly to test the enforcement.
+            'tel_no' => '0312345678',
             'remember_token' => Str::random(10),
         ];
     }

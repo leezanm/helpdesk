@@ -25,6 +25,7 @@ class UserIndex extends Component
     public string $scope = 'pengguna';
     public string $title = 'Pengguna';
     public string $search = '';
+    public string $bahagian = '';
 
     public function mount(string $scope = 'pengguna'): void
     {
@@ -39,6 +40,17 @@ class UserIndex extends Component
 
     public function updatingSearch(): void
     {
+        $this->resetPage();
+    }
+
+    public function updatingBahagian(): void
+    {
+        $this->resetPage();
+    }
+
+    public function resetFilters(): void
+    {
+        $this->reset(['search', 'bahagian']);
         $this->resetPage();
     }
 
@@ -95,11 +107,15 @@ class UserIndex extends Component
                         ->orWhere('email', 'like', '%'.$this->search.'%');
                 });
             })
+            ->when($this->bahagian !== '', fn ($q) => $q->where('ldap_bahagian', $this->bahagian))
             ->orderBy('name')
             ->paginate(15);
 
         return view('livewire.user.user-index', [
             'users' => $users,
+            'bahagianOptions' => User::query()
+                ->whereNotNull('ldap_bahagian')->where('ldap_bahagian', '<>', '')
+                ->distinct()->orderBy('ldap_bahagian')->pluck('ldap_bahagian'),
         ]);
     }
 }

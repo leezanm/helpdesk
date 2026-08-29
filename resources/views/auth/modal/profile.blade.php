@@ -2,7 +2,11 @@
     $user = Auth::user()->load('roles');
 @endphp
 
-<div id="edit-profile" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel" aria-hidden="true">
+@php($forceProfileUpdate = $forceProfileUpdate ?? false)
+
+<div id="edit-profile" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="editProfileLabel"
+     aria-hidden="true"
+     @if($forceProfileUpdate) data-bs-backdrop="static" data-bs-keyboard="false" @endif>
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <form action="{{ route('account.profile.update', $user) }}" method="POST" enctype="multipart/form-data">
@@ -10,14 +14,23 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="editProfileLabel"><i class="bi bi-person-gear me-1"></i> Kemaskini Profil</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    @unless($forceProfileUpdate)
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    @endunless
                 </div>
 
                 <div class="modal-body">
-                    <div class="alert alert-light border small d-flex align-items-center gap-2 mb-4">
-                        <i class="bi bi-info-circle text-primary"></i>
-                        <span>Hanya <strong>No. Telefon</strong> dan <strong>Alamat</strong> boleh dikemaskini. Maklumat lain diselaraskan secara automatik daripada Active Directory (AD).</span>
-                    </div>
+                    @if($forceProfileUpdate)
+                        <div class="alert alert-warning border small d-flex align-items-center gap-2 mb-4">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <span>Sila kemaskini <strong>No. Telefon</strong> anda untuk meneruskan penggunaan sistem. Ruangan ini wajib diisi.</span>
+                        </div>
+                    @else
+                        <div class="alert alert-light border small d-flex align-items-center gap-2 mb-4">
+                            <i class="bi bi-info-circle text-primary"></i>
+                            <span>Hanya <strong>No. Telefon</strong> dan <strong>Alamat</strong> boleh dikemaskini. Maklumat lain diselaraskan secara automatik daripada Active Directory (AD).</span>
+                        </div>
+                    @endif
 
                     {{-- Avatar --}}
                     <div class="text-center mb-4">
@@ -51,8 +64,9 @@
 
                         {{-- Editable --}}
                         <div class="col-md-6">
-                            <label class="form-label">No. Telefon</label>
-                            <input type="text" name="tel_no" class="form-control @error('tel_no') is-invalid @enderror"
+                            <label class="form-label">No. Telefon <span class="text-danger">*</span></label>
+                            <input type="text" name="tel_no" required
+                                   class="form-control @error('tel_no') is-invalid @enderror"
                                    value="{{ old('tel_no', $user->tel_no) }}" placeholder="Cth: 03-8000 0000">
                             @error('tel_no') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
@@ -76,10 +90,31 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    @unless($forceProfileUpdate)
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    @endunless
                     <button type="submit" class="btn btn-primary"><i class="bi bi-check2 me-1"></i>Kemaskini</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+@if($forceProfileUpdate)
+    {{-- Force the profile modal open on load and keep it locked until the
+         mandatory phone number is submitted. --}}
+    <script>
+        (function () {
+            function openForcedProfile() {
+                var el = document.getElementById('edit-profile');
+                if (!el || typeof bootstrap === 'undefined') return;
+                var m = bootstrap.Modal.getOrCreateInstance(el, { backdrop: 'static', keyboard: false });
+                m.show();
+                var tel = el.querySelector('[name="tel_no"]');
+                if (tel) tel.focus();
+            }
+            if (document.readyState !== 'loading') openForcedProfile();
+            else document.addEventListener('DOMContentLoaded', openForcedProfile);
+        })();
+    </script>
+@endif

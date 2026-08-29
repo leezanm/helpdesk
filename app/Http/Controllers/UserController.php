@@ -61,9 +61,11 @@ class UserController extends Controller
         // email, designation, bahagian) is sourced from AD. Whitelist the
         // fields server-side so a crafted request cannot change AD-owned data.
         $attributes = $request->validate([
-            'tel_no' => 'nullable|string|max:30',
+            'tel_no' => 'required|string|max:30',
             'address' => 'nullable|string|max:500',
             'image' => 'nullable|image|max:256',
+        ], [
+            'tel_no.required' => 'No. Telefon wajib diisi.',
         ]);
 
         unset($attributes['image']);

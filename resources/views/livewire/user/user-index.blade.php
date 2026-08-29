@@ -1,6 +1,6 @@
 <div>
     <x-filter-bar title="Carian Pengguna" icon="bi-search"
-                  :show-reset="$search !== ''" reset-action="$set('search','')">
+                  :show-reset="$search !== '' || $bahagian !== ''" reset-action="resetFilters">
         <x-slot:action>
             <a class="btn btn-sm btn-primary" wire:click="create" role="button">
                 <i class="bi bi-plus-lg me-1"></i> Pengguna Baru
@@ -12,6 +12,15 @@
                 <i class="bi bi-search"></i>
                 <input type="text" wire:model.live.debounce.300ms="search" class="form-control" placeholder="Cari nama, username atau emel...">
             </div>
+        </x-filter-field>
+
+        <x-filter-field label="Bahagian" col="col-6 col-md-4">
+            <select wire:model.live="bahagian" class="form-select">
+                <option value="">Semua Bahagian</option>
+                @foreach ($bahagianOptions as $b)
+                    <option value="{{ $b }}">{{ $b }}</option>
+                @endforeach
+            </select>
         </x-filter-field>
     </x-filter-bar>
 
