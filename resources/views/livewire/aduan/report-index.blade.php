@@ -1,68 +1,83 @@
 <div>
-    <div class="card">
-        <div class="card-header">
-            <div class="row align-items-center">
-                <div class="col-md-4">
-                    <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
-                           placeholder="Cari tiket / subjek...">
-                </div>
-                <div class="col text-end">
-                    <a class="btn btn-primary btn waves-effect waves-light" href="{{ url('/aduan/create') }}">
-                        <i class="bx bxs-plus-square font-size-16 align-middle me-2"></i> Tambah
-                    </a>
-                </div>
-            </div>
+    {{-- Toolbar: search + primary action --}}
+    <div class="list-toolbar">
+        <div class="list-search">
+            <i class="bi bi-search"></i>
+            <input type="text" wire:model.live.debounce.300ms="search" class="form-control"
+                   placeholder="Cari tiket atau subjek...">
         </div>
+        <a class="btn btn-primary" href="{{ url('/aduan/create') }}">
+            <i class="bi bi-plus-lg me-1"></i> Aduan Baru
+        </a>
+    </div>
+
+    {{-- Data card --}}
+    <div class="card data-card">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered nowrap w-100">
-                    <thead class="text-center align-middle">
-                        <th>No</th>
-                        <th style="cursor:pointer" wire:click="sortBy('ticket_no')">Tiket</th>
-                        <th style="cursor:pointer" wire:click="sortBy('subject')">Subjek</th>
-                        <th>Kategori Aduan</th>
-                        @if ($canAdmin)
-                            <th>Pengadu</th>
-                        @endif
-                        <th style="cursor:pointer" wire:click="sortBy('submitted_at')">Tarikh Aduan</th>
-                        <th>Durasi</th>
-                        <th>Status</th>
-                        <th class="text-center">Tindakan</th>
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width:48px">#</th>
+                            <th class="sortable" wire:click="sortBy('ticket_no')">
+                                Tiket
+                                @if ($sortField === 'ticket_no') <i class="bi bi-caret-{{ $sortDirection === 'asc' ? 'up' : 'down' }}-fill"></i> @endif
+                            </th>
+                            <th class="sortable" wire:click="sortBy('subject')">
+                                Subjek
+                                @if ($sortField === 'subject') <i class="bi bi-caret-{{ $sortDirection === 'asc' ? 'up' : 'down' }}-fill"></i> @endif
+                            </th>
+                            <th>Kategori</th>
+                            @if ($canAdmin) <th>Pengadu</th> @endif
+                            <th class="sortable" wire:click="sortBy('submitted_at')">
+                                Tarikh
+                                @if ($sortField === 'submitted_at') <i class="bi bi-caret-{{ $sortDirection === 'asc' ? 'up' : 'down' }}-fill"></i> @endif
+                            </th>
+                            <th>Durasi</th>
+                            <th>Status</th>
+                            <th class="text-end">Tindakan</th>
+                        </tr>
                     </thead>
-                    <tbody class="text-center align-middle">
+                    <tbody>
                         @forelse ($reports as $report)
                             <tr wire:key="report-{{ $report->id }}">
-                                <td>{{ $loop->iteration + ($reports->currentPage() - 1) * $reports->perPage() }}</td>
-                                <td>{{ $report->ticket_no }}</td>
-                                <td class="text-start">{{ $report->subject }}</td>
+                                <td class="text-muted">{{ $loop->iteration + ($reports->currentPage() - 1) * $reports->perPage() }}</td>
+                                <td><span class="fw-semibold">{{ $report->ticket_no }}</span></td>
+                                <td>{{ $report->subject }}</td>
                                 <td>{{ $report->category->desc ?? '-' }}</td>
                                 @if ($canAdmin)
                                     <td>
-                                        <a data-userId="{{ $report->reportBy->id ?? '' }}" class="userProfile" role="button">{{ $report->reportBy->name ?? '-' }}</a>
-                                        <br>
-                                        {{ $report->reportBy->ldap_bahagian ?? '' }}
+                                        <div class="fw-medium">{{ $report->reportBy->name ?? '-' }}</div>
+                                        <small class="text-muted">{{ $report->reportBy->ldap_bahagian ?? '' }}</small>
                                     </td>
                                 @endif
-                                <td>{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
+                                <td class="text-nowrap">{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
                                 <td>{!! getDuration($report) !!}</td>
-                                <td><span class="{{ $report->status->class }} font-size-11">{{ $report->status->desc }}</span></td>
-                                <td>
-                                    <a href="{{ route('aduan.show', $report->id) }}" class="btn btn-sm btn-rounded rounded-circle btn-outline-info"> <i class="bx bxs-show align-middle"></i></a>
+                                <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>
+                                <td class="text-end text-nowrap">
+                                    <a href="{{ route('aduan.show', $report->id) }}" class="btn btn-sm btn-outline-primary btn-icon" title="Lihat"><i class="bi bi-eye"></i></a>
                                     @if ($report->report_status_id == 1)
-                                        <a href="{{ route('aduan.edit', $report->id) }}" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"> <i class="bx bxs-pen align-middle"></i></a>
+                                        <a href="{{ route('aduan.edit', $report->id) }}" class="btn btn-sm btn-outline-secondary btn-icon" title="Kemaskini"><i class="bi bi-pencil"></i></a>
                                     @endif
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="{{ $canAdmin ? 9 : 8 }}" class="text-center text-muted">Tiada aduan dijumpai.</td></tr>
+                            <tr>
+                                <td colspan="{{ $canAdmin ? 9 : 8 }}">
+                                    <div class="empty-state">
+                                        <i class="bi bi-inbox"></i>
+                                        Tiada aduan dijumpai.
+                                    </div>
+                                </td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
 
-            <div class="mt-3">
-                {{ $reports->links() }}
-            </div>
+            @if ($reports->hasPages())
+                <div class="px-2 pt-3">{{ $reports->links() }}</div>
+            @endif
         </div>
     </div>
 </div>
