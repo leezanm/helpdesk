@@ -46,4 +46,4 @@
         <script src="{{asset('js/notification.js') }}"></script>
         <script src="{{asset('js/form.js') }}"></script>
 
-        <script src="{{asset('assets/js/app.js')}}"></script>
+        {{-- Old Skote theme JS (assets/js/app.js) intentionally NOT loaded — the new shell uses Alpine. --}}

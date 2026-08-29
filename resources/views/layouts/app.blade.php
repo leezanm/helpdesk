@@ -8,12 +8,17 @@
         <meta content="Sistem Meja Bantuan KKDW" name="description" />
         <link rel="shortcut icon" href="{{ asset('images/logo.png') }}">
 
-        {{-- Base framework + icon fonts kept; the old Skote theme (app.min.css) is intentionally dropped. --}}
-        <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        {{--
+            Stock Bootstrap 5 + Bootstrap Icons from CDN. We deliberately do NOT
+            load the old Skote theme's customized bootstrap.min.css / app.min.css
+            (they hardcode the old #556ee6 / Poppins identity). We keep the old
+            boxicons/mdi icon font only, for existing `bx`/`mdi` icon classes.
+        --}}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
         <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-        @include('layouts.css')
 
-        {{-- Custom theme (loads last so it owns the look) --}}
+        {{-- Custom theme (loads last so it fully owns the look) --}}
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>

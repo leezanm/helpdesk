@@ -11,14 +11,12 @@
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{asset('images/logo.png')}}">
 
-        <!-- Bootstrap Css -->
-        <link href="{{asset('assets/css/bootstrap.min.css')}}" id="bootstrap-style" rel="stylesheet" type="text/css" />
-        <!-- Icons Css -->
-        <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
-        <!-- App Css-->
-        <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
+        {{-- Stock Bootstrap 5 + icons (old Skote theme CSS dropped) --}}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+        <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
 
-        {{-- Fresh theme tokens (loads after the base theme so it overrides) --}}
+        {{-- Custom theme (loads last so it owns the look) --}}
         @vite(['resources/css/app.css'])
         <style>
 
