@@ -8,7 +8,7 @@ use App\Models\ReportTrail;
 use Illuminate\Support\Facades\Auth;
 
 class ReportObserver
-{   
+{
     public function creating(Report $report)
     {
         //
@@ -21,7 +21,7 @@ class ReportObserver
         if($report->report_status_id == 2 && blank($report->ticket_no)){
             $report->ticket_no = RefNo::ticketNo();
         }
-        
+
     }
 
     /**
@@ -43,6 +43,10 @@ class ReportObserver
                 $message = 'Aduan dihantar';
                 $status_id = 2;
                 break;
+            default:
+                // Reports are only ever created as Draf (1) or Dihantar (2);
+                // any other initial status has no first-trail message.
+                return;
         }
 
         $trail = new ReportTrail();

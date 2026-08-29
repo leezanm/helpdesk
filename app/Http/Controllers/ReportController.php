@@ -2,377 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Report\AdminTaskRequest;
-use App\Http\Requests\Report\StoreRequest;
-use App\Http\Requests\Report\UpdateFeedbackRequest;
-use App\Http\Requests\Report\UpdateRequest;
 use App\Models\Report;
-use App\Models\ReportAttachment;
-use App\Models\ReportCategory;
-use App\Models\ReportTrail;
-use App\Models\User;
-use App\Notifications\ReportAssignedNotification;
-use App\Notifications\ReportDoneAdminNotification;
-use App\Notifications\ReportDoneReporterNotification;
-use App\Notifications\ReportReceivedAdminNotification;
-use App\Notifications\ReportSendNotification;
-use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Spatie\Permission\Models\Role;
 
+/**
+ * Report (aduan) management.
+ *
+ * The interactive CRUD/flow is handled by Livewire components
+ * (App\Livewire\Aduan\ReportIndex / ReportForm / ReportShow). This controller
+ * renders the page wrappers that mount those components and supplies the
+ * listing scope for each index variant.
+ */
 class ReportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
-        $reports = Report::whereIn('report_status_id', [2,3,4,5,6])->orderBy('submitted_at','desc')->get();
-        return view('aduan.index', compact('reports'));
+        return view('aduan.index', ['scope' => 'all', 'username' => null]);
     }
 
     public function indexUser()
     {
-        //
-        $reports = Report::where('report_by_id', Auth::user()->id)->orWhere('bp_user_id', Auth::user()->id)->orderBy('submitted_at', 'desc')->get();
-        return view('aduan.index', compact('reports'));
+        return view('aduan.index', ['scope' => 'user', 'username' => Auth::user()->username]);
     }
 
     public function indexDihantar()
     {
-        //
-        $reports = Report::whereIn('report_status_id', [2,3])->orderBy('submitted_at', 'desc')->get();
-        return view('aduan.index', compact('reports'));
+        return view('aduan.index', ['scope' => 'dihantar', 'username' => null]);
     }
 
     public function indexUntukTindakan()
     {
-        //
-        $reports = Report::whereIn('report_status_id', [4,6])
-                    ->join('report_trails', 'reports.id', 'report_trails.report_id')
-                    ->select('reports.*', 'report_trails.id as trail_id', 'assigned_to_id')
-                    ->where('report_trails.id', \DB::raw('(select id from report_trails where report_id = reports.id order by id desc limit 1)'))
-                    ->where('assigned_to_id', Auth::user()->id)
-                    ->orderBy('submitted_at', 'desc')
-                    ->get();
-
-        return view('aduan.index', compact('reports'));
+        return view('aduan.index', ['scope' => 'tindakan', 'username' => null]);
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
-        $report_categories = ReportCategory::active()->orderBy('desc')->get();
-        return view('aduan.create', compact('report_categories'));
+        return view('aduan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreRequest $request)
-    {
-        //
-        // return $request->attachment_names['4f8d661-9c5c-41ac-8668-25cfd209c090'];
-        // return (array)json_decode($request->attachment_names)['4f8d661-9c5c-41ac-8668-25cfd209c090'];
-
-        $attachment_uuids = json_decode($request->attachment_uuids,true);
-        $attachment_names = json_decode($request->attachment_names,true);
-        $attachment_paths = json_decode($request->attachment_paths,true);
-        $attachment_types = json_decode($request->attachment_types,true);
-
-        $report = new Report();
-        $report->is_bp = $request->is_bp ;
-        $report->report_by_id = Auth::user()->id;
-        $report->bahagian_pengadu = Auth::user()->ldap_bahagian;
-        $report->remark = $request->remark;
-        $report->subject = $request->subject;
-        $report->report_status_id = $request->report_status_id;
-        $report->report_category_id = $request->report_category_id;
-        $report->submitted_at = $request->report_status_id == 2 ? now() : null;
-
-        if($report->is_bp){
-            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email', 'bp_user_id'));
-        }
-
-        $report->save();
-
-        if(filled($attachment_uuids)){
-            $report_attachments = [];
-            foreach($attachment_uuids as $uuid => $item){
-
-                $report_attachment = new ReportAttachment();
-                $report_attachment->name = $attachment_names[$uuid];
-                $report_attachment->path = $attachment_paths[$uuid];
-                $report_attachment->type = $attachment_types[$uuid];
-
-                array_push($report_attachments, $report_attachment);
-            }
-            $report->attachments()->saveMany($report_attachments);
-        }
-
-        if( $report->report_status_id == 2){
-            $report_sent_notification = new ReportSendNotification($report);
-            $this->notifySingle(Auth::user(), $report_sent_notification);
-
-            $report_received_admin_notification = new ReportReceivedAdminNotification($report);
-            $users = User::permission('aduan.adminTask')->get();
-            $this->notifyGroup($users, $report_received_admin_notification);
-        }
-
-        return response()->json(['success' => true]);
-        // return redirect()->route('aduan.index-user', Auth::user()->id);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Report  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Report $report)
-    {
-        //
-
-        $roles = Role::whereHas('permissions', function($query){
-            $query->where('name', 'aduan.updateTask');
-        })->where('name', '!=', 'superadmin')->get();
-
-        $trails = $report->trails;
-        $attachments = $report->attachments;
-        $attachments->append('file_url');
-
-        $report_categories = ReportCategory::active()->orderBy('desc')->get();
-
-        return view('aduan.show', compact('report', 'roles', 'trails', 'attachments', 'report_categories'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Report  $report
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Report $report)
     {
-        //
-        $report_categories = ReportCategory::active()->orderBy('desc')->get();
-        $attachments = $report->attachments;
-        $attachments->append('file_url');
-
-        return view('aduan.edit', compact('report', 'report_categories', 'attachments'));
+        return view('aduan.edit', compact('report'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Report  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateRequest $request, Report $report)
+    public function show(Report $report)
     {
-        //
-        $attachment_uuids = json_decode($request->attachment_uuids,true);
-        $attachment_names = json_decode($request->attachment_names,true);
-        $attachment_paths = json_decode($request->attachment_paths,true);
-        $attachment_types = json_decode($request->attachment_types,true);
-
-        $report->is_bp = $request->is_bp ;
-        $report->report_by_id = Auth::user()->id;
-        $report->bahagian_pengadu = Auth::user()->ldap_bahagian;
-        $report->remark = $request->remark;
-        $report->subject = $request->subject;
-        $report->report_status_id = $request->report_status_id;
-        $report->report_category_id = $request->report_category_id;
-        $report->submitted_at = $request->report_status_id == 2 ? now() : null;
-
-        if($report->is_bp){
-            $report->fill($request->only('bp_username', 'bp_name', 'bp_bahagian', 'bp_email', 'bp_user_id'));
-        }
-
-        $report->save();
-
-        if(filled($attachment_uuids)){
-            $report_attachments = [];
-            foreach($attachment_uuids as $uuid => $item){
-
-                $report_attachment = new ReportAttachment();
-                $report_attachment->name = $attachment_names[$uuid];
-                $report_attachment->path = $attachment_paths[$uuid];
-                $report_attachment->type = $attachment_types[$uuid];
-
-                array_push($report_attachments, $report_attachment);
-            }
-            $report->attachments()->saveMany($report_attachments);
-        }
-
-        if( $report->report_status_id == 2){
-            $report_sent_notification = new ReportSendNotification($report);
-            $this->notifySingle(Auth::user(), $report_sent_notification);
-
-            $report_received_admin_notification = new ReportReceivedAdminNotification($report);
-            $users = User::permission('aduan.adminTask')->get();
-            $this->notifyGroup($users, $report_received_admin_notification);
-        }
-
-        return response()->json(['success' => true]);
-        // return redirect()->route('aduan.index-user', Auth::user()->id);
-
+        return view('aduan.show', compact('report'));
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Report  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Report $report)
-    {
-        //
-    }
-
-    public function adminTask(AdminTaskRequest $request, Report $report)
-    {
-
-        $user = User::find($request->assigned_to_id);
-        $role = Role::where('name', $request->peranan)->first();
-        $trail = $report->currentTrail->replicate(['technical_remark', 'reassignment_remark']);
-        switch ($request->tindakan){
-            case 1 :
-                $report->report_status_id = 4;
-                $trail_status_id = 4;
-                $trail->assigned_to_id = $request->assigned_to_id;
-                $trail->assigned_to_role_id = $role->id;
-                $message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . ' ('.$role->desc.')' . '</a> untuk disemak';
-                break;
-            case 2 :
-                $report->report_status_id = 4;
-                $trail_status_id = 6;
-                $trail->assigned_to_id = $request->assigned_to_id;
-                $trail->assigned_to_role_id = $role->id;
-                $message = 'Aduan telah ditugaskan semula kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . ' ('.$role->desc.')' . '</a> untuk disemak
-                            <br> <b>Sebab Penugasan</b> <br>
-                            '. $request->reassignment_remark;
-                break;
-            case 3 :
-                $report->report_status_id = 6;
-                $report->kiv_start_at = $request->kiv_start_at;
-                $report->kiv_reason = $request->kiv_reason;
-                $trail_status_id = 7;
-                $message = 'Aduan telah di KIV bermula pada <b>'. convertDateFormat($request->kiv_start_at, 'LL') .'</b>';
-                break;
-            case 4 :
-                $report->report_status_id = 4;
-                $report->kiv_end_at = $request->kiv_end_at;
-                $trail_status_id = 8;
-                $message = 'KIV berakhir pada <b>'. convertDateFormat($request->kiv_end_at, 'LL') .'</b>';
-                break;
-        }
-
-        // $trail = new ReportTrail();
-        $trail->message = $message;
-        $trail->updated_by_id = Auth::user()->id;
-        $trail->reassignment_remark = $request->reassignment_remark;
-        $trail->status_id = $trail_status_id;
-
-        $report->save();
-        $report->trails()->save($trail);
-
-        $notification = new ReportAssignedNotification($report);
-        $this->notifySingle($user,$notification);
-
-        return redirect()->back();
-
-    }
-
-    public function assignOfficer(Request $request,Report $report, User $user) : void{
-
-        $report->report_status_id = 4;
-
-        $trail = new ReportTrail();
-        $trail->message = 'Aduan telah dihantar kepada <a class="userProfile" data-userId="'. $user->id .'" role="button">'. $user->name . '</a> untuk disemak';
-        $trail->assigned_to_id = $request->assigned_to_id;
-        $trail->updated_by_id = Auth::user()->id;
-        $trail->status_id = 4;
-
-        $report->save();
-        $report->trails()->save($trail);
-
-        try{
-
-        } catch(Exception $e){}
-    }
-
-    public function updateFeedback(UpdateFeedbackRequest $request,Report $report){
-
-        $report->report_status_id = 5;
-        $report->completed_at = now();
-        $report->rating = $request->rating;
-        $report->feedback = $request->feedback;
-
-        $trail = new ReportTrail();
-        $trail->message = 'Aduan telah ditanda selesai dengan <br> <b>Rating</b> <br> '. $request->rating. ' <br> <b>Komen</b> <br> '. $request->feedback;
-        $trail->updated_by_id = Auth::user()->id;
-        $trail->status_id = 5;
-
-        $report->save();
-        $report->trails()->save($trail);
-
-
-        $report_sent_notification = new ReportDoneReporterNotification($report);
-        $this->notifySingle(Auth::user(), $report_sent_notification);
-
-        $report_received_admin_notification = new ReportDoneAdminNotification($report);
-        $users = User::permission('aduan.adminTask')->get();
-        $this->notifyGroup($users, $report_received_admin_notification);
-
-
-        return redirect()->back();
-    }
-
-    public function setCategory(Request $request, Report $report){
-        $report->report_category_id = $request->report_category_id;
-        $report->save();
-
-        if($request->ajax()){
-            return response()->json(['success' => true]);
-        }
-        return redirect()->back();
-    }
-
-    public function notifySingle($user, $notification){
-        if(filled($user)){
-            try{
-                $user->notify($notification);
-            } catch(Exception $e){
-                Log::error($e);
-            }
-        }
-    }
-
-    public function notifyGroup($users, $notification){
-        if(filled($users)){
-            try{
-                Notification::send($users, $notification );
-            } catch(Exception $e){
-                Log::error($e);
-            }
-        }
-    }
-
 }

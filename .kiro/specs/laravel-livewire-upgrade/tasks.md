@@ -102,16 +102,22 @@ Do not combine the framework upgrade with the Livewire rewrite.
     - `Role\RoleIndex` (search + list roles/permissions + link to show). No RoleForm built: the legacy create/edit were non-functional stubs (empty modal files + empty controller methods) and roles are managed via seeders — kept read-only to preserve behavior. Trimmed RoleManagementController to index-wrapper + show; removed dead store/update routes and empty modal stubs. Spatie enforcement confirmed via test (helpdesk.admin can manage.user/category but not manage.backup; pengguna can aduan.create only). 3 Livewire tests.
     - _Requirements: 5.1, 5.2, 5.7_
 
-- [ ] 10. Convert the Aduan (core) flow
-  - [ ] 10.1 Extract report logic into Actions (CreateReport, TransitionReportStatus, StoreAttachment)
+- [x] 10. Convert the Aduan (core) flow
+  - [x] 10.1 Extract report logic into Actions (CreateReport, TransitionReportStatus, StoreAttachment)
+    - `App\Actions\Reports\SaveReport` (create/update + attachment storage + submit notifications), `TransitionReportStatus` (adminTask tindakan 1-4), `SubmitFeedback` (updateFeedback), and a `NotifiesReport` trait. Attachment storage folded into SaveReport (WithFileUploads).
     - _Requirements: 5.1_
-  - [ ] 10.2 Build `Aduan\ReportIndex` (search/filter/sort/pagination) with `can:aduan.all` authorization
+  - [x] 10.2 Build `Aduan\ReportIndex` (search/filter/sort/pagination) with `can:aduan.all` authorization
+    - `ReportIndex` covers all 4 legacy variants via a `scope` param (all/user/dihantar/tindakan), with search, sortable headers, pagination. `can:aduan.all` stays on the index route; admin-only "Pengadu" column gated by `aduan.adminTask`.
     - _Requirements: 5.3_
-  - [ ] 10.3 Build `Aduan\ReportForm` with `WithFileUploads` attachments and server-side validation
+  - [x] 10.3 Build `Aduan\ReportForm` with `WithFileUploads` attachments and server-side validation
+    - `ReportForm` (create/edit): WithFileUploads (replaces Dropzone + hidden-JSON mechanism), bagi-pihak user lookup via a wire action (local users then LdapRecord AD), existing-attachment delete, Draf(1)/Hantar(2) submit. Server-side validation.
     - _Requirements: 5.2, 5.5_
-  - [ ] 10.4 Build `Aduan\ReportShow` + trail panel, status transitions, and feedback; preserve existing behavior
+  - [x] 10.4 Build `Aduan\ReportShow` + trail panel, status transitions, and feedback; preserve existing behavior
+    - `ReportShow`: applicant/complaint info, attachments, admin-task form (dynamic tindakan 1-4 fields via wire:model.live), technical-remark, feedback (rating+comment), category change, and the trail timeline. Replicates the UpdateReportStatus middleware side-effect (status 2->3 auto-acknowledge for admins) in mount(). Uses $this->authorize() for admin actions.
     - _Requirements: 5.4, 5.5_
-  - [ ] 10.5 Add Livewire feature tests for the Aduan flow; remove dead JSON endpoints and jQuery
+  - [x] 10.5 Add Livewire feature tests for the Aduan flow; remove dead JSON endpoints and jQuery
+    - 14 Livewire tests (index/form/show incl. forward-to-officer, feedback->selesai, auto-acknowledge, category change). Removed dead POST routes (store/update/update-task/update-feedback/set-category/attachments/trail) and dropped the show route's `update-aduan-status` middleware. Trimmed ReportController to page wrappers. Removed superseded task-1 baseline HTTP tests (tests/Feature/Aduan/*). Fixed a latent ReportObserver bug (undefined $message when a report is created at status !=1,2).
+    - NOTE: ReportAttachmentController, ReportTrailController, the Report request classes, and the now-unused `update-aduan-status` middleware are dead but left for task 12 cleanup.
     - _Requirements: 5.7_
 
 - [ ] 11. Convert notifications and (optionally) Laporan/dashboard

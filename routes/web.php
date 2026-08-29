@@ -32,26 +32,15 @@ Route::middleware(['auth', 'audit-trail'])->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::prefix('aduan')->as('aduan.')->group(function () {
+        // Interactive CRUD/flow handled by Livewire (App\Livewire\Aduan\*).
+        // Controllers render page wrappers that mount the components.
         Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index')->middleware('can:aduan.all');
         Route::get('/user/{user:username}', [App\Http\Controllers\ReportController::class, 'indexUser'])->name('index-user');
         Route::get('/untuk-tindakan', [App\Http\Controllers\ReportController::class, 'indexUntukTindakan'])->name('index-untuk-tindakan')->middleware('can:aduan.updateTask');
         Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar');
         Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
-        Route::post('/create', [App\Http\Controllers\ReportController::class, 'store'])->name('store');
         Route::get('/edit/{report}', [App\Http\Controllers\ReportController::class, 'edit'])->name('edit');
-        Route::post('/edit/{report}', [App\Http\Controllers\ReportController::class, 'update'])->name('update');
-        Route::post('/tindakan-admin/{report}', [App\Http\Controllers\ReportController::class, 'adminTask'])->name('update-task');
-        Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show')->middleware('update-aduan-status');
-        Route::post('/feedback/{report}', [App\Http\Controllers\ReportController::class, 'updateFeedback'])->name('update-feedback');
-
-        Route::post('/set-category/{report}', [App\Http\Controllers\ReportController::class, 'setCategory'])->name('set-category');
-
-        Route::post('/attachments/store', [App\Http\Controllers\ReportAttachmentController::class, 'store'])->name('attachments.store');
-        Route::post('/attachments/delete/{reportAttachment}', [App\Http\Controllers\ReportAttachmentController::class, 'destroy'])->name('attachments.delete');
-
-        Route::prefix('trail')->as('trail.')->group(function () {
-            Route::post('/update/{reportTrail}', [App\Http\Controllers\ReportTrailController::class, 'update'])->name('update');
-        });
+        Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show');
     });
 
 
