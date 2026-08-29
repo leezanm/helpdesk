@@ -38,7 +38,7 @@
                     <div class="info-row"><div class="info-row__label">Username</div><div class="info-row__value">{{ $report->reportBy->username ?? '-' }}</div></div>
                     <div class="info-row"><div class="info-row__label">Emel</div><div class="info-row__value">{{ $report->reportBy->email ?? '-' }}</div></div>
                     @if ($report->is_bp)
-                        <div class="info-row"><div class="info-row__label">Bagi Pihak</div><div class="info-row__value">{{ $report->bp_name }} <small class="text-muted">({{ $report->bp_username }})</small></div></div>
+                        <div class="info-row"><div class="info-row__label">Direkod Oleh (Wakil)</div><div class="info-row__value">{{ $report->bp_name }} <small class="text-muted">({{ $report->bp_username }})</small></div></div>
                     @endif
                 </div>
             </div>

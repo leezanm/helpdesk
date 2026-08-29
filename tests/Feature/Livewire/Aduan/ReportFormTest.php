@@ -84,6 +84,68 @@ class ReportFormTest extends FeatureTestCase
             ->assertHasErrors(['bp_username', 'bp_name', 'bp_email', 'bp_bahagian']);
     }
 
+    public function test_bagi_pihak_records_report_under_represented_person_with_their_bahagian()
+    {
+        Notification::fake();
+        // Helpdesk officer (can represent any bahagian).
+        $officer = User::factory()->create(['ldap_bahagian' => 'Bahagian A']);
+        $officer->givePermissionTo('aduan.adminTask');
+        // Represented person from a DIFFERENT bahagian.
+        $represented = User::factory()->create(['ldap_bahagian' => 'Bahagian B']);
+        $category = ReportCategory::create(['desc' => 'Rangkaian', 'is_active' => true]);
+
+        Livewire::actingAs($officer)
+            ->test(ReportForm::class)
+            ->set('is_bp', true)
+            ->set('bp_username', $represented->username)
+            ->call('lookupBpUser')
+            ->assertSet('bpLookupError', null)
+            ->assertSet('bp_user_id', $represented->id)
+            ->set('subject', 'Aduan bagi pihak')
+            ->set('remark', 'kerosakan di Bahagian B')
+            ->set('report_category_id', $category->id)
+            ->call('save', 2)
+            ->assertHasNoErrors();
+
+        $report = Report::firstWhere('subject', 'Aduan bagi pihak');
+        $this->assertNotNull($report);
+        // Recorded UNDER the represented person, with THEIR bahagian.
+        $this->assertEquals($represented->id, $report->report_by_id);
+        $this->assertEquals('Bahagian B', $report->bahagian_pengadu);
+        // Acting officer kept as the wakil, so they retain visibility.
+        $this->assertEquals($officer->id, $report->bp_user_id);
+        $this->assertTrue((bool) $report->is_bp);
+    }
+
+    public function test_normal_user_cannot_represent_someone_from_another_bahagian()
+    {
+        // Normal user without aduan.adminTask.
+        $user = User::factory()->create(['ldap_bahagian' => 'Bahagian A']);
+        $other = User::factory()->create(['ldap_bahagian' => 'Bahagian B']);
+
+        Livewire::actingAs($user)
+            ->test(ReportForm::class)
+            ->set('is_bp', true)
+            ->set('bp_username', $other->username)
+            ->call('lookupBpUser')
+            ->assertSet('bp_user_id', null)
+            ->assertSet('bpLookupError', 'Anda hanya boleh mewakili pengguna dari bahagian anda sahaja.');
+    }
+
+    public function test_normal_user_can_represent_someone_from_own_bahagian()
+    {
+        $user = User::factory()->create(['ldap_bahagian' => 'Bahagian A']);
+        $peer = User::factory()->create(['ldap_bahagian' => 'Bahagian A']);
+
+        Livewire::actingAs($user)
+            ->test(ReportForm::class)
+            ->set('is_bp', true)
+            ->set('bp_username', $peer->username)
+            ->call('lookupBpUser')
+            ->assertSet('bpLookupError', null)
+            ->assertSet('bp_user_id', $peer->id);
+    }
+
     public function test_draft_does_not_set_submitted_at()
     {
         $user = User::factory()->create();

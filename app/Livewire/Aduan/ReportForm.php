@@ -86,6 +86,15 @@ class ReportForm extends Component
      * Look up a "bagi pihak" user by AD username (replaces the create-view
      * bp_username AJAX to api.get-user). Checks local users first, then AD.
      */
+    /**
+     * Helpdesk officers may represent a user from ANY bahagian; a normal user
+     * may only represent someone from their OWN bahagian.
+     */
+    public function canRepresentAnyBahagian(): bool
+    {
+        return Auth::user()->can('aduan.adminTask');
+    }
+
     public function lookupBpUser(): void
     {
         $this->bpLookupError = null;
@@ -98,6 +107,10 @@ class ReportForm extends Component
 
         $user = User::firstWhere('username', $this->bp_username);
         if ($user) {
+            if (! $this->bahagianAllowed((string) $user->ldap_bahagian)) {
+                $this->bpLookupError = 'Anda hanya boleh mewakili pengguna dari bahagian anda sahaja.';
+                return;
+            }
             $this->bp_name = (string) $user->name;
             $this->bp_bahagian = (string) $user->ldap_bahagian;
             $this->bp_email = (string) $user->email;
@@ -115,12 +128,28 @@ class ReportForm extends Component
         }
 
         if ($ldapUser) {
+            $bahagian = (string) $ldapUser->getFirstAttribute('physicaldeliveryofficename');
+            if (! $this->bahagianAllowed($bahagian)) {
+                $this->bpLookupError = 'Anda hanya boleh mewakili pengguna dari bahagian anda sahaja.';
+                return;
+            }
             $this->bp_name = (string) $ldapUser->getFirstAttribute('cn');
-            $this->bp_bahagian = (string) $ldapUser->getFirstAttribute('physicaldeliveryofficename');
+            $this->bp_bahagian = $bahagian;
             $this->bp_email = (string) $ldapUser->getFirstAttribute('userprincipalname');
         } else {
             $this->bpLookupError = 'Pengguna tidak dijumpai.';
         }
+    }
+
+    /** Whether the current user is allowed to represent someone in $bahagian. */
+    protected function bahagianAllowed(string $bahagian): bool
+    {
+        if ($this->canRepresentAnyBahagian()) {
+            return true;
+        }
+
+        // Normal user: represented person must share the user's own bahagian.
+        return $bahagian !== '' && $bahagian === (string) Auth::user()->ldap_bahagian;
     }
 
     public function removeAttachment(int $index): void
@@ -141,6 +170,15 @@ class ReportForm extends Component
     public function save(int $status, SaveReport $saveReport)
     {
         $this->validate();
+
+        // Re-enforce the bahagian rule server-side (defence in depth): a normal
+        // user may only represent someone from their own bahagian; helpdesk may
+        // represent any bahagian. The aduan is recorded under the represented
+        // person, so this must be validated even if the UI was bypassed.
+        if ($this->is_bp && ! $this->bahagianAllowed($this->bp_bahagian)) {
+            $this->addError('bp_bahagian', 'Anda hanya boleh mewakili pengguna dari bahagian anda sahaja.');
+            return;
+        }
 
         $report = $this->report ?: new Report();
 

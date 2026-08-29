@@ -11,8 +11,13 @@ class ReportObserver
 {
     public function creating(Report $report)
     {
-        //
-        $report->report_by_id = Auth::user()->id;
+        // Default the owner to the logged-in user, but DO NOT override an
+        // explicitly-set owner. For "bagi pihak" aduan, SaveReport sets
+        // report_by_id to the represented person so the aduan is recorded
+        // under them, not the acting wakil.
+        if (blank($report->report_by_id)) {
+            $report->report_by_id = Auth::user()->id;
+        }
     }
 
     public function saving(Report $report)
