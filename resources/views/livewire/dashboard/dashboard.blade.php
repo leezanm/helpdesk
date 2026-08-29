@@ -29,28 +29,40 @@
 
     {{-- ===== Stat cards ===== --}}
     <div class="row g-3 mb-3">
-        <div class="col-6 col-xl-3">
+        <div class="col-6 col-xl-2">
             <div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                 <div class="stat-icon stat-icon--primary me-3"><i class="bi bi-clipboard-data"></i></div>
                 <div><p class="text-muted mb-1 small">Jumlah Aduan</p><h3 class="mb-0 fw-bold">{{ $total }}</h3></div>
             </div></div>
         </div>
-        <div class="col-6 col-xl-3">
+        <div class="col-6 col-xl-2">
             <div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                 <div class="stat-icon stat-icon--warning me-3"><i class="bi bi-hourglass-split"></i></div>
                 <div><p class="text-muted mb-1 small">Dalam Tindakan</p><h3 class="mb-0 fw-bold">{{ $inProgress }}</h3></div>
             </div></div>
         </div>
-        <div class="col-6 col-xl-3">
+        <div class="col-6 col-xl-2">
             <div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                 <div class="stat-icon stat-icon--success me-3"><i class="bi bi-check2-circle"></i></div>
                 <div><p class="text-muted mb-1 small">Selesai</p><h3 class="mb-0 fw-bold">{{ $resolved }}</h3></div>
             </div></div>
         </div>
-        <div class="col-6 col-xl-3">
+        <div class="col-6 col-xl-2">
             <div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
                 <div class="stat-icon stat-icon--danger me-3"><i class="bi bi-pause-circle"></i></div>
                 <div><p class="text-muted mb-1 small">KIV</p><h3 class="mb-0 fw-bold">{{ $kiv }}</h3></div>
+            </div></div>
+        </div>
+        <div class="col-6 col-xl-2">
+            <div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="stat-icon stat-icon--primary me-3"><i class="bi bi-stopwatch"></i></div>
+                <div><p class="text-muted mb-1 small">Purata Tempoh Selesai</p><h3 class="mb-0 fw-bold">{{ $avgResolutionDays }} <small class="fs-6 fw-normal text-muted">hari</small></h3></div>
+            </div></div>
+        </div>
+        <div class="col-6 col-xl-2">
+            <div class="card stat-card h-100"><div class="card-body d-flex align-items-center">
+                <div class="stat-icon stat-icon--warning me-3"><i class="bi bi-star-fill"></i></div>
+                <div><p class="text-muted mb-1 small">Purata Rating</p><h3 class="mb-0 fw-bold">{{ $ratingBreakdown['average'] }} <small class="fs-6 fw-normal text-muted">/ 5</small></h3></div>
             </div></div>
         </div>
     </div>
@@ -90,6 +102,35 @@
             <div class="card h-100">
                 <div class="card-header"><h6 class="mb-0">Pecahan Mengikut Kategori</h6></div>
                 <div class="card-body"><div id="category-bar" style="height: 300px;"></div></div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ===== Monthly trend: submitted vs resolved ===== --}}
+    <div class="row g-3 mb-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header"><h6 class="mb-0">Trend Bulanan — Aduan Diterima vs Selesai</h6></div>
+                <div class="card-body"><div id="trend-line" style="height: 300px;"></div></div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ===== Bahagian breakdown + satisfaction ===== --}}
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-xl-7">
+            <div class="card h-100">
+                <div class="card-header"><h6 class="mb-0">Aduan Mengikut Bahagian (10 Teratas)</h6></div>
+                <div class="card-body"><div id="bahagian-bar" style="height: 320px;"></div></div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-5">
+            <div class="card h-100">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h6 class="mb-0">Kepuasan Pengguna (Rating)</h6>
+                    <span class="text-muted small">{{ $ratingBreakdown['total'] }} maklum balas</span>
+                </div>
+                <div class="card-body"><div id="rating-bar" style="height: 320px;"></div></div>
             </div>
         </div>
     </div>
@@ -146,5 +187,8 @@
          data-status='@json($statusBreakdown)'
          data-category='@json($categoryBreakdown)'
          data-officers='@json($officerWorkloadChart)'
+         data-trend='@json($monthlyTrend)'
+         data-rating='@json($ratingBreakdown)'
+         data-bahagian='@json($bahagianBreakdown)'
          hidden></div>
 </div>

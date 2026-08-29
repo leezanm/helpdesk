@@ -56,20 +56,80 @@
             xAxis: { type: 'value', minInterval: 1 },
             yAxis: { type: 'category', inverse: true, data: officers.names },
             series: [
+                { name: 'Belum Diproses', type: 'bar', stack: 'beban', color: '#94a3b8',
+                  barMaxWidth: 24, itemStyle: { borderRadius: [6, 0, 0, 6] }, data: officers.belumProses },
                 { name: 'Dalam Tindakan', type: 'bar', stack: 'beban', color: '#f59e0b',
-                  barMaxWidth: 22, itemStyle: { borderRadius: [6, 0, 0, 6] }, data: officers.dalamTindakan },
-                { name: 'Selesai', type: 'bar', stack: 'beban', color: (palette().list[1] || '#10b981'),
-                  barMaxWidth: 22, itemStyle: { borderRadius: [0, 6, 6, 0] }, data: officers.selesai }
+                  barMaxWidth: 24, data: officers.dalamTindakan },
+                { name: 'Selesai', type: 'bar', stack: 'beban', color: (p.list[1] || '#10b981'),
+                  barMaxWidth: 24, itemStyle: { borderRadius: [0, 6, 6, 0] }, data: officers.selesai }
             ]
         }, true);
         chart.resize();
     }
 
-    function renderCharts(statusData, categoryData, officersData) {
+    function renderTrendLine(trend) {
+        var el = document.getElementById('trend-line');
+        if (!el || !trend || !trend.labels) return;
+        var p = palette();
+        var chart = echarts.getInstanceByDom(el) || echarts.init(el);
+        chart.setOption({
+            color: [p.primary, (p.list[1] || '#10b981')],
+            tooltip: { trigger: 'axis' },
+            legend: { bottom: 0, icon: 'circle' },
+            grid: { left: 8, right: 16, top: 20, bottom: 36, containLabel: true },
+            xAxis: { type: 'category', boundaryGap: false, data: trend.labels },
+            yAxis: { type: 'value', minInterval: 1 },
+            series: [
+                { name: 'Diterima', type: 'line', smooth: true, symbolSize: 6, areaStyle: { opacity: 0.08 }, data: trend.submitted },
+                { name: 'Selesai', type: 'line', smooth: true, symbolSize: 6, areaStyle: { opacity: 0.08 }, data: trend.resolved }
+            ]
+        }, true);
+        chart.resize();
+    }
+
+    function renderBahagianBar(rows) {
+        var el = document.getElementById('bahagian-bar');
+        if (!el || !rows) return;
+        var p = palette();
+        var chart = echarts.getInstanceByDom(el) || echarts.init(el);
+        chart.setOption({
+            color: [p.primary], tooltip: { trigger: 'axis' },
+            grid: { left: 8, right: 16, top: 12, bottom: 8, containLabel: true },
+            xAxis: { type: 'value', minInterval: 1 },
+            yAxis: { type: 'category', inverse: true, data: (rows || []).map(function (r) { return r.label; }) },
+            series: [{ type: 'bar', barMaxWidth: 20, itemStyle: { borderRadius: [0, 6, 6, 0] },
+                data: (rows || []).map(function (r) { return r.value; }) }]
+        }, true);
+        chart.resize();
+    }
+
+    function renderRatingBar(rating) {
+        var el = document.getElementById('rating-bar');
+        if (!el || !rating || !rating.counts) return;
+        var chart = echarts.getInstanceByDom(el) || echarts.init(el);
+        var labels = ['1★', '2★', '3★', '4★', '5★'];
+        var colors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#10b981'];
+        var data = [1,2,3,4,5].map(function (i) {
+            return { value: rating.counts[i] || 0, itemStyle: { color: colors[i-1] } };
+        });
+        chart.setOption({
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+            grid: { left: 8, right: 16, top: 16, bottom: 8, containLabel: true },
+            xAxis: { type: 'category', data: labels },
+            yAxis: { type: 'value', minInterval: 1 },
+            series: [{ type: 'bar', barMaxWidth: 44, itemStyle: { borderRadius: [6, 6, 0, 0] }, data: data }]
+        }, true);
+        chart.resize();
+    }
+
+    function renderCharts(statusData, categoryData, officersData, trendData, ratingData, bahagianData) {
         if (typeof echarts === 'undefined') return;
         var p = palette();
 
         if (officersData) renderOfficerBar(officersData);
+        if (trendData) renderTrendLine(trendData);
+        if (bahagianData) renderBahagianBar(bahagianData);
+        if (ratingData) renderRatingBar(ratingData);
 
         var donutEl = document.getElementById('status-donut');
         if (donutEl) {
@@ -105,7 +165,10 @@
             renderCharts(
                 JSON.parse(el.dataset.status || '[]'),
                 JSON.parse(el.dataset.category || '[]'),
-                JSON.parse(el.dataset.officers || 'null')
+                JSON.parse(el.dataset.officers || 'null'),
+                JSON.parse(el.dataset.trend || 'null'),
+                JSON.parse(el.dataset.rating || 'null'),
+                JSON.parse(el.dataset.bahagian || 'null')
             );
         } catch (e) { /* ignore malformed */ }
     }
@@ -119,12 +182,12 @@
     document.addEventListener('livewire:init', function () {
         Livewire.on('dashboard-charts', function (e) {
             var d = Array.isArray(e) ? e[0] : e;
-            renderCharts(d.status, d.category, d.officers);
+            renderCharts(d.status, d.category, d.officers, d.trend, d.rating, d.bahagian);
         });
     });
 
     window.addEventListener('resize', function () {
-        ['status-donut', 'category-bar', 'officer-workload-bar'].forEach(function (id) {
+        ['status-donut', 'category-bar', 'officer-workload-bar', 'trend-line', 'bahagian-bar', 'rating-bar'].forEach(function (id) {
             var el = document.getElementById(id);
             if (el && typeof echarts !== 'undefined' && echarts.getInstanceByDom(el)) {
                 echarts.getInstanceByDom(el).resize();
