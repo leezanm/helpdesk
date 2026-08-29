@@ -104,8 +104,55 @@ class DashboardDummySeeder extends Seeder
             }
         }
 
+        // --- Lesson Learn: resolved-action records (status 7 + trail 9) ---
+        // Realistic punca masalah + langkah penyelesaian across categories, so
+        // the knowledge base has meaningful, searchable content.
+        $lessons = [
+            ['Komputer tidak boleh hidup', 'Bekalan kuasa (PSU) rosak', 'Ganti unit PSU dan uji but semula', 'Simptom: tiada lampu kuasa langsung.'],
+            ['Internet perlahan di aras 3', 'Kabel rangkaian longgar di port switch', 'Kabel dipasang semula dan port diuji', 'Guna kabel Cat6 baharu.'],
+            ['Pencetak tersekat kertas', 'Roller pencetak kotor dan aus', 'Bersih roller dan ganti bahagian aus', 'Servis berkala setiap 6 bulan.'],
+            ['Emel rasmi tidak dapat dihantar', 'Peti emel penuh melebihi kuota', 'Arkib emel lama dan naik taraf kuota', 'Pengguna dilatih arkib sendiri.'],
+            ['Skrin monitor berkelip', 'Kabel HDMI longgar / rosak', 'Ganti kabel HDMI dan kemas sambungan', null],
+            ['Perisian Office perlu dipasang semula', 'Fail pemasangan Office korup', 'Nyahpasang bersih dan pasang semula dari sumber rasmi', 'Guna Office Deployment Tool.'],
+            ['Talian VPN terputus', 'Sijil VPN tamat tempoh', 'Perbaharui sijil dan konfigurasi semula klien', 'Set peringatan sebelum tamat tempoh.'],
+            ['Kata laluan AD terkunci', 'Percubaan log masuk gagal berulang', 'Buka kunci akaun dan reset kata laluan', 'Nasihat pengguna guna pengurus kata laluan.'],
+            ['Cakera keras hampir penuh', 'Fail sementara & log menimbun', 'Bersih fail sementara dan naik taraf ke SSD', null],
+            ['Capaian folder kongsi ditolak', 'Kebenaran NTFS tidak betul', 'Betulkan keahlian kumpulan dan kebenaran folder', 'Rujuk matriks capaian bahagian.'],
+        ];
+
+        $lessonMade = 0;
+        foreach ($lessons as $i => $lesson) {
+            [$subject, $punca, $langkah, $catatan] = $lesson;
+
+            Auth::login($admin);
+            $report = new Report();
+            $report->subject = '[DEMO] '.$subject;
+            $report->remark = 'Data demo lesson learn.';
+            $report->report_category_id = $categories[array_rand($categories)];
+            $report->report_status_id = 2;
+            $report->submitted_at = now()->subDays(random_int(1, 20));
+            $report->save();
+
+            $report->report_status_id = 7; // Selesai Tindakan
+            $report->save();
+
+            $officerId = ! empty($officers) ? $officers[array_rand($officers)] : $admin->id;
+
+            $trail = new ReportTrail();
+            $trail->report_id = $report->id;
+            $trail->message = 'Pegawai bertanggungjawab telah menyelesaikan tindakan.';
+            $trail->updated_by_id = $officerId;
+            $trail->status_id = 9; // Selesai Tindakan
+            $trail->punca_masalah = $punca;
+            $trail->langkah_tindakan = $langkah;
+            $trail->catatan_teknikal = $catatan;
+            $trail->save();
+
+            $lessonMade++;
+        }
+
         Auth::logout();
 
-        $this->command->info("DashboardDummySeeder: created {$made} demo reports.");
+        $this->command->info("DashboardDummySeeder: created {$made} demo reports + {$lessonMade} lesson-learn records.");
     }
 }
