@@ -54,20 +54,30 @@ class UserFormTest extends FeatureTestCase
             ->assertHasErrors(['username' => 'unique']);
     }
 
-    public function test_edits_user_and_syncs_roles()
+    public function test_edits_user_updates_only_phone_address_and_roles()
     {
-        $user = User::factory()->create(['name' => 'Lama']);
+        // On edit, AD-owned fields (name/email/etc.) must NOT change even if
+        // tampered; only phone, address and access (roles) are updatable.
+        $user = User::factory()->create([
+            'name' => 'Lama',
+            'tel_no' => '0311112222',
+            'address' => 'Alamat Lama',
+        ]);
 
         Livewire::test(UserForm::class)
             ->call('openEdit', $user->id)
             ->assertSet('name', 'Lama')
-            ->set('name', 'Baru')
+            ->set('name', 'Baru')                    // attempt to change AD field
+            ->set('tel_no', '0388889999')
+            ->set('address', 'Alamat Baru')
             ->set('roles', ['pengguna', 'helpdesk.admin'])
             ->call('save')
             ->assertHasNoErrors();
 
         $user->refresh();
-        $this->assertEquals('Baru', $user->name);
+        $this->assertEquals('Lama', $user->name);     // unchanged (from AD)
+        $this->assertEquals('0388889999', $user->tel_no);
+        $this->assertEquals('Alamat Baru', $user->address);
         $this->assertTrue($user->hasRole('helpdesk.admin'));
     }
 }

@@ -97,11 +97,26 @@ class UserForm extends Component
     {
         $data = $this->validate();
 
-        $user = $this->userId ? User::findOrFail($this->userId) : new User();
+        $editing = (bool) $this->userId;
+        $user = $editing ? User::findOrFail($this->userId) : new User();
 
-        $saveUser->handle(
-            user: $user,
-            attributes: [
+        if ($editing) {
+            // Editing an existing user: name/username/email/designation/ic_no
+            // are owned by AD and must NOT be overwritten here. Only phone,
+            // address and access (roles) are updatable. Keep the existing
+            // AD-sourced values on the record.
+            $attributes = [
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'designation' => $user->designation,
+                'ic_no' => $user->ic_no,
+                'tel_no' => $data['tel_no'] ?? null,
+                'address' => $data['address'] ?? null,
+            ];
+        } else {
+            // New user (not yet in AD): all fields are entered here.
+            $attributes = [
                 'name' => $data['name'],
                 'username' => $data['username'],
                 'email' => $data['email'],
@@ -109,10 +124,15 @@ class UserForm extends Component
                 'tel_no' => $data['tel_no'] ?? null,
                 'ic_no' => $data['ic_no'] ?? null,
                 'address' => $data['address'] ?? null,
-            ],
+            ];
+        }
+
+        $saveUser->handle(
+            user: $user,
+            attributes: $attributes,
             roles: $data['roles'],
-            profilePicture: $this->userId ? null : $this->profile_path,
-            defaultPassword: $this->userId ? null : 'pass1234',
+            profilePicture: $editing ? null : $this->profile_path,
+            defaultPassword: $editing ? null : 'pass1234',
         );
 
         $this->showModal = false;

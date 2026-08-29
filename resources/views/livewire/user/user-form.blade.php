@@ -11,6 +11,13 @@
                             <button type="button" class="btn-close" wire:click="closeModal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            @if ($userId)
+                                <div class="alert alert-light border small d-flex align-items-center gap-2 mb-4">
+                                    <i class="bi bi-info-circle text-primary"></i>
+                                    <span>Hanya <strong>No. Telefon</strong>, <strong>Alamat</strong> dan <strong>Akses (Peranan)</strong> boleh dikemaskini. Maklumat lain diselaraskan daripada Active Directory (AD).</span>
+                                </div>
+                            @endif
+
                             @unless ($userId)
                                 <div class="row mb-3">
                                     <div class="col-md-12">
@@ -23,26 +30,26 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label class="col-form-label">Nama <span class="text-danger">*</span></label>
-                                    <input type="text" wire:model="name" class="form-control @error('name') is-invalid @enderror">
+                                    <label class="col-form-label">Nama <span class="text-danger">*</span> @if($userId)<span class="badge bg-light text-muted ms-1">AD</span>@endif</label>
+                                    <input type="text" wire:model="name" class="form-control @error('name') is-invalid @enderror" @if($userId) readonly disabled @endif>
                                     @error('name') <p class="text-danger">{{ $message }}</p> @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="col-form-label">Nama Pengguna (AD) <span class="text-danger">*</span></label>
-                                    <input type="text" wire:model="username" class="form-control @error('username') is-invalid @enderror" @if($userId) disabled @endif>
+                                    <label class="col-form-label">Nama Pengguna @if($userId)<span class="badge bg-light text-muted ms-1">AD</span>@else<span class="text-danger">*</span>@endif</label>
+                                    <input type="text" wire:model="username" class="form-control @error('username') is-invalid @enderror" @if($userId) readonly disabled @endif>
                                     @error('username') <p class="text-danger">{{ $message }}</p> @enderror
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label class="col-form-label">Emel <span class="text-danger">*</span></label>
-                                    <input type="email" wire:model="email" class="form-control @error('email') is-invalid @enderror" @if($userId) readonly @endif>
+                                    <label class="col-form-label">Emel @if($userId)<span class="badge bg-light text-muted ms-1">AD</span>@else<span class="text-danger">*</span>@endif</label>
+                                    <input type="email" wire:model="email" class="form-control @error('email') is-invalid @enderror" @if($userId) readonly disabled @endif>
                                     @error('email') <p class="text-danger">{{ $message }}</p> @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="col-form-label">Jawatan</label>
-                                    <input type="text" wire:model="designation" class="form-control @error('designation') is-invalid @enderror">
+                                    <label class="col-form-label">Jawatan @if($userId)<span class="badge bg-light text-muted ms-1">AD</span>@endif</label>
+                                    <input type="text" wire:model="designation" class="form-control @error('designation') is-invalid @enderror" @if($userId) readonly disabled @endif>
                                     @error('designation') <p class="text-danger">{{ $message }}</p> @enderror
                                 </div>
                             </div>
@@ -50,12 +57,12 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="col-form-label">No. Telefon</label>
-                                    <input type="text" wire:model="tel_no" class="form-control @error('tel_no') is-invalid @enderror">
+                                    <input type="text" wire:model="tel_no" class="form-control @error('tel_no') is-invalid @enderror" placeholder="Cth: 0388000000">
                                     @error('tel_no') <p class="text-danger">{{ $message }}</p> @enderror
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="col-form-label">No. KP</label>
-                                    <input type="text" wire:model="ic_no" class="form-control @error('ic_no') is-invalid @enderror">
+                                    <label class="col-form-label">No. KP @if($userId)<span class="badge bg-light text-muted ms-1">AD</span>@endif</label>
+                                    <input type="text" wire:model="ic_no" class="form-control @error('ic_no') is-invalid @enderror" @if($userId) readonly disabled @endif>
                                     @error('ic_no') <p class="text-danger">{{ $message }}</p> @enderror
                                 </div>
                             </div>
@@ -63,15 +70,15 @@
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <label class="col-form-label">Alamat</label>
-                                    <textarea wire:model="address" class="form-control @error('address') is-invalid @enderror" rows="2"></textarea>
+                                    <textarea wire:model="address" class="form-control @error('address') is-invalid @enderror" rows="2" placeholder="Alamat pejabat / surat-menyurat"></textarea>
                                     @error('address') <p class="text-danger">{{ $message }}</p> @enderror
                                 </div>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label class="col-form-label">Peranan <span class="text-danger">*</span></label>
-                                    <div>
+                                    <label class="col-form-label">Akses / Peranan <span class="text-danger">*</span></label>
+                                    <div class="border rounded p-2" style="border-color:var(--c-border)!important">
                                         @foreach ($allRoles as $role)
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="checkbox"
