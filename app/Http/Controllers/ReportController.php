@@ -55,6 +55,18 @@ class ReportController extends Controller
     }
 
     /**
+     * Public, read-only aduan preview reached from the email link (signed URL,
+     * no login). Shows the aduan details only; the signed middleware on the
+     * route already guarantees the link is authentic and unexpired.
+     */
+    public function publicView(Report $report)
+    {
+        $report->load(['category', 'status', 'reportBy:id,name,email,tel_no,ldap_bahagian', 'attachments']);
+
+        return view('aduan.public-view', compact('report'));
+    }
+
+    /**
      * Lesson-learn knowledge base (mounts the Livewire component).
      */
     public function lessonLearn()

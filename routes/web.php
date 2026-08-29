@@ -18,6 +18,13 @@ Route::get('/', function () {
 });
 Route::view('/forgot-password-out', 'auth.forgot_password_out');
 
+// Public, read-only aduan preview reachable from the email link WITHOUT login.
+// Protected by a signed URL (HMAC) so the link cannot be tampered/guessed, and
+// it expires. It shows the aduan details only — taking action still needs login.
+Route::get('/aduan/pratonton/{report}', [App\Http\Controllers\ReportController::class, 'publicView'])
+    ->name('aduan.public-view')
+    ->middleware('signed');
+
 Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
 
     Route::prefix('notification')->as('notification.')->group(function () {

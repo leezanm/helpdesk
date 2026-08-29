@@ -41,14 +41,31 @@ class ReportAssignedNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $report = $this->report;
+        $report = $this->report->loadMissing(['category', 'reportBy']);
+
+        // Signed, expiring (7-day), read-only preview link — openable from the
+        // email without logging in. Taking action still requires login.
+        $previewUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'aduan.public-view',
+            now()->addDays(7),
+            ['report' => $report]
+        );
+
+        $remark = \Illuminate\Support\Str::limit(strip_tags((string) $report->remark), 300);
+
         return (new MailMessage)
-        ->subject('Sistem Meja Bantuan KKDW - Tugasan Baru')
-        ->greeting('Salam Sejahtera,')
-        ->line('Aduan baru telah ditugaskan kepada anda')
-        ->line('Maklumat Aduan')
-        ->line('No Tiket : '. $report->ticket_no)
-        ->action('Lihat', route('aduan.show', $report));
+            ->subject('Sistem Meja Bantuan KKDW - Tugasan Baru: '.$report->ticket_no)
+            ->greeting('Salam Sejahtera,')
+            ->line('Satu aduan baru telah ditugaskan kepada anda untuk tindakan. Berikut adalah maklumat ringkas aduan:')
+            ->line('**No. Tiket:** '.$report->ticket_no)
+            ->line('**Subjek:** '.$report->subject)
+            ->line('**Kategori:** '.($report->category->desc ?? '-'))
+            ->line('**Bahagian:** '.($report->bahagian_pengadu ?: '-'))
+            ->line('**Pengadu:** '.($report->reportBy->name ?? '-')
+                .($report->reportBy?->email ? ' ('.$report->reportBy->email.')' : ''))
+            ->line('**Ringkasan:** '.($remark !== '' ? $remark : '-'))
+            ->action('Lihat Butiran Aduan', $previewUrl)
+            ->line('Pautan di atas membuka pratonton aduan (rujukan sahaja). Untuk mengambil tindakan atau mengemaskini status, sila log masuk ke sistem.');
     }
 
     /**
