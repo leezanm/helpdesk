@@ -1,25 +1,26 @@
 <div>
-    <div class="card">
+    <div class="card data-card">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover">
+                <table class="table table-hover align-middle mb-0">
                     <thead>
-                        <th width="5">Bil</th>
-                        <th>Keterangan</th>
-                        <th>Nama Kegunaan Sistem</th>
-                        <th>Badge Colour</th>
-                        <th class="text-center" width="10%">Tindakan</th>
+                        <tr>
+                            <th style="width:48px">#</th>
+                            <th>Keterangan</th>
+                            <th>Nama Kegunaan Sistem</th>
+                            <th>Paparan Badge</th>
+                            <th class="text-end">Tindakan</th>
+                        </tr>
                     </thead>
-                    <tbody class="align-middle">
+                    <tbody>
                         @foreach ($report_statuses as $report_status)
                             <tr wire:key="status-{{ $report_status->id }}">
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="text-muted">{{ $loop->iteration }}</td>
                                 <td>{{ $report_status->reference }}</td>
-                                <td>{{ $report_status->desc }}</td>
-                                <td><span class="{{ $report_status->class }} font-size-11">{{ $report_status->desc }}</span></td>
-                                <td class="text-center">
-                                    <a href="#" class="btn btn-sm btn-rounded rounded-circle btn-outline-primary"
-                                       wire:click.prevent="edit({{ $report_status->id }})"> <i class="bx bxs-pen"></i></a>
+                                <td class="fw-medium">{{ $report_status->desc }}</td>
+                                <td><span class="{{ $report_status->class }}">{{ $report_status->desc }}</span></td>
+                                <td class="text-end">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary btn-icon" title="Kemaskini" wire:click.prevent="edit({{ $report_status->id }})"><i class="bi bi-pencil"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -39,21 +40,17 @@
                             <button type="button" class="btn-close" wire:click="closeModal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label class="col-form-label">Nama untuk kegunaan Sistem</label>
-                                    <input type="text" wire:model="reference" class="form-control" disabled>
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nama untuk kegunaan Sistem</label>
+                                <input type="text" wire:model="reference" class="form-control" disabled>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label class="col-form-label">Nama untuk kegunaan umum <span class="text-danger">*</span></label>
-                                    <input type="text" wire:model="desc" class="form-control @error('desc') is-invalid @enderror">
-                                    @error('desc') <p class="text-danger">{{ $message }}</p> @enderror
-                                </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nama untuk kegunaan umum <span class="text-danger">*</span></label>
+                                <input type="text" wire:model="desc" class="form-control @error('desc') is-invalid @enderror">
+                                @error('desc') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
                             </div>
                         </div>
-                        <div class="modal-footer text-end">
+                        <div class="modal-footer">
                             <button class="btn btn-secondary" type="button" wire:click="closeModal">Batal</button>
                             <button class="btn btn-success" type="submit" wire:loading.attr="disabled">Simpan</button>
                         </div>
