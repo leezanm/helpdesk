@@ -26,6 +26,9 @@ class Dashboard extends Component
     #[Url]
     public string $dateTo = '';
 
+    #[Url]
+    public string $bahagian = '';
+
     public function mount(): void
     {
         // Default range: this month to today (only if not provided via URL).
@@ -41,6 +44,18 @@ class Dashboard extends Component
     {
         $this->dateFrom = now()->startOfMonth()->format('Y-m-d');
         $this->dateTo = now()->format('Y-m-d');
+        $this->bahagian = '';
+    }
+
+    /** Distinct bahagian present on reports, for the filter dropdown. */
+    protected function bahagianOptions()
+    {
+        return Report::query()
+            ->whereNotNull('bahagian_pengadu')
+            ->where('bahagian_pengadu', '<>', '')
+            ->distinct()
+            ->orderBy('bahagian_pengadu')
+            ->pluck('bahagian_pengadu');
     }
 
     protected function fromDate(): Carbon
@@ -58,6 +73,7 @@ class Dashboard extends Component
     {
         return DB::table('reports')
             ->whereBetween('submitted_at', [$this->fromDate(), $this->toDate()])
+            ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
             ->when(
                 ! Auth::user()->hasRole('helpdesk.admin'),
                 fn ($q) => $q->where('report_by_id', Auth::id())
@@ -131,6 +147,7 @@ class Dashboard extends Component
             ->join('reports as r', 'r.id', '=', 't.report_id')
             ->whereNotNull('t.assigned_to_id')
             ->whereBetween('t.created_at', [$this->fromDate(), $this->toDate()])
+            ->when($this->bahagian !== '', fn ($q) => $q->where('r.bahagian_pengadu', $this->bahagian))
             ->select(
                 'users.name',
                 'users.ldap_bahagian',
@@ -176,6 +193,7 @@ class Dashboard extends Component
             'statusBreakdown' => $statusBreakdown,
             'categoryBreakdown' => $categoryBreakdown,
             'officerWorkload' => $this->officerWorkload(),
+            'bahagianOptions' => $this->bahagianOptions(),
             'reports' => $this->reportsForRole()->limit(10)->get(),
             'listTitle' => $listTitle,
             'canGraph' => $user->can('dashboard.viewGraph'),

@@ -9,6 +9,15 @@
             <input type="date" wire:model.live="dateTo" class="form-control">
         </x-filter-field>
 
+        <x-filter-field label="Bahagian" col="col-12 col-md-4">
+            <select wire:model.live="bahagian" class="form-select">
+                <option value="">Semua Bahagian</option>
+                @foreach ($bahagianOptions as $b)
+                    <option value="{{ $b }}">{{ $b }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
         <x-filter-field col="col-12 col-md text-md-end">
             <span class="text-muted small">
                 <i class="bi bi-calendar-range me-1"></i>
