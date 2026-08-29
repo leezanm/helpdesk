@@ -349,7 +349,11 @@ a:hover { color: var(--c-primary-700); }
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background: linear-gradient(150deg, #0ea5a4 0%, #0d9488 45%, #0369a1 100%);
+    /* Original KL skyline photo under a teal gradient overlay so the white
+       text stays readable while the background image shows through. */
+    background:
+        linear-gradient(150deg, rgba(14,165,164,0.86) 0%, rgba(13,148,136,0.82) 45%, rgba(3,105,161,0.86) 100%),
+        url('/images/backgrrund.jpg') center/cover no-repeat;
     overflow: hidden;
 }
 .auth-brand::before {
