@@ -17,7 +17,9 @@ class ViewLaporanTest extends FeatureTestCase
 {
     public function test_laporan_landing_page_renders()
     {
+        // Laporan is org-wide — requires a management role (access-main-dashboard).
         $user = User::factory()->create();
+        $user->syncRoles(['helpdesk.admin']);
 
         $response = $this->actingAs($user)->get('/laporan');
 
@@ -27,6 +29,7 @@ class ViewLaporanTest extends FeatureTestCase
     public function test_laporan_by_status_renders()
     {
         $user = User::factory()->create();
+        $user->syncRoles(['helpdesk.admin']);
 
         $response = $this->actingAs($user)->get('/laporan/mengikut-status-tindakan');
 

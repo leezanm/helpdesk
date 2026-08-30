@@ -25,7 +25,7 @@
                     <div class="info-row"><div class="info-row__label">Subjek</div><div class="info-row__value fw-medium">{{ $report->subject }}</div></div>
                     <div class="info-row"><div class="info-row__label">Kategori</div><div class="info-row__value">{{ $report->category->desc ?? '-' }}</div></div>
                     <div class="info-row"><div class="info-row__label">Dihantar Pada</div><div class="info-row__value">{{ convertDateFormat($report->submitted_at, 'LL') }}</div></div>
-                    <div class="info-row"><div class="info-row__label">Aduan</div><div class="info-row__value">{!! $report->remark !!}</div></div>
+                    <div class="info-row"><div class="info-row__label">Aduan</div><div class="info-row__value">{!! nl2br(e($report->remark)) !!}</div></div>
                 </div>
             </div>
 

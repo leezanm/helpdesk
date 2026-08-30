@@ -57,6 +57,7 @@ class CategoryForm extends Component
 
     public function save(SaveCategory $saveCategory): void
     {
+        $this->authorize('manage.category');
         $this->validate();
 
         $category = $this->categoryId

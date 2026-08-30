@@ -52,11 +52,18 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        // Self-service profile only — a user may only view/edit their OWN
+        // account here. (Admins manage other users via the Livewire UserForm.)
+        abort_unless($user->is(Auth::user()), 403);
+
         return view('auth.profile', compact('user'));
     }
 
     public function update(Request $request, User $user)
     {
+        // Self-service only: prevent editing another user's profile (IDOR).
+        abort_unless($user->is(Auth::user()), 403);
+
         // Only phone and address are user-editable; everything else (name,
         // email, designation, bahagian) is sourced from AD. Whitelist the
         // fields server-side so a crafted request cannot change AD-owned data.
@@ -88,6 +95,11 @@ class UserController extends Controller
 
     public function passwordUpdate(Request $request, User $user)
     {
+        // Self-service only: a user may only change their OWN password. Without
+        // this an attacker could set another account's password (takeover),
+        // since old_password validates against the LOGGED-IN user, not {user}.
+        abort_unless($user->is(Auth::user()), 403);
+
         $request->validate([
             'old_password' => 'required|current_password',
             'password' => 'required|confirmed',

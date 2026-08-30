@@ -85,7 +85,7 @@
                                     <i class="bi bi-caret-{{ $sortDirection === 'asc' ? 'up' : 'down' }}-fill"></i>
                                 @endif
                             </th>
-                             @if ($showOfficer)
+                            @if($showPengadu)
                             <th>Durasi</th>
                             @endif
                             <th>Status</th>
@@ -108,7 +108,7 @@
                                 @endif
 
                                 <td class="text-nowrap">{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
-                                @if ($showOfficer)
+                                @if ($showPengadu)
                                 <td>{!! getDuration($report) !!}</td>
                                 @endif
                                 <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>

@@ -69,6 +69,11 @@ class ReportForm extends Component
     public function mount(?Report $report = null): void
     {
         if ($report && $report->exists) {
+            // Editing an existing aduan — only the owner/wakil (draft) may edit
+            // (ReportPolicy@update). Prevents tampering with another user's
+            // aduan (e.g. deleting its attachments) via a crafted request.
+            $this->authorize('update', $report);
+
             $this->report = $report;
             $this->is_bp = (bool) $report->is_bp;
             $this->bp_username = (string) $report->bp_username;

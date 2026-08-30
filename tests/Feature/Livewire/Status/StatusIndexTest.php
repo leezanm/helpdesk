@@ -9,6 +9,15 @@ use Tests\FeatureTestCase;
 
 class StatusIndexTest extends FeatureTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Status edit requires manage.category.
+        $admin = \App\Models\User::factory()->create();
+        $admin->givePermissionTo('manage.category');
+        $this->actingAs($admin);
+    }
+
     public function test_lists_statuses()
     {
         // The base test case seeds ReportStatusSeeder (new flow statuses).

@@ -48,6 +48,20 @@ class ReportIndex extends Component
     {
         $this->scope = $scope;
         $this->username = $username;
+
+        // Defence in depth: the Livewire component is directly invokable, so
+        // re-check authorization per scope (routes are also gated). Org-wide
+        // scopes must not be reachable by ordinary users.
+        $user = Auth::user();
+        abort_unless(match ($scope) {
+            'all' => $user->can('aduan.all'),
+            'dihantar' => $user->can('aduan.adminTask'),
+            'tindakan' => $user->can('aduan.updateTask'),
+            // 'user' scope: only your own list (or admins viewing a list).
+            default => $username === null
+                || $username === $user->username
+                || $user->can('aduan.adminTask'),
+        }, 403);
     }
 
     public function updatingSearch(): void

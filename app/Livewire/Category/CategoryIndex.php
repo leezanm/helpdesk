@@ -54,6 +54,7 @@ class CategoryIndex extends Component
 
     public function deactivate(int $id): void
     {
+        $this->authorize('manage.category');
         $category = ReportCategory::findOrFail($id);
         $category->is_active = false;
         $category->save();
@@ -61,6 +62,7 @@ class CategoryIndex extends Component
 
     public function restore(int $id): void
     {
+        $this->authorize('manage.category');
         $category = ReportCategory::findOrFail($id);
         $category->is_active = true;
         $category->save();

@@ -45,7 +45,7 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
         Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index')->middleware('can:aduan.all');
         Route::get('/user/{user:username}', [App\Http\Controllers\ReportController::class, 'indexUser'])->name('index-user');
         Route::get('/untuk-tindakan', [App\Http\Controllers\ReportController::class, 'indexUntukTindakan'])->name('index-untuk-tindakan')->middleware('can:aduan.updateTask');
-        Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar');
+        Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar')->middleware('can:aduan.adminTask');
         Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
         Route::get('/edit/{report}', [App\Http\Controllers\ReportController::class, 'edit'])->name('edit');
         Route::get('/show/{report}', [App\Http\Controllers\ReportController::class, 'show'])->name('show');
@@ -62,13 +62,13 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
         ->name('settings.notifications')
         ->middleware('can:manage.role');
 
-    Route::prefix('kategori')->as('category.')->group(function () {
+    Route::prefix('kategori')->as('category.')->middleware('can:manage.category')->group(function () {
         // CRUD now handled by Livewire (App\Livewire\Category\*); only the
         // page wrapper route remains.
         Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
     });
 
-    Route::prefix('status')->as('status.')->group(function () {
+    Route::prefix('status')->as('status.')->middleware('can:manage.category')->group(function () {
         // Edit now handled by Livewire (App\Livewire\Status\StatusIndex);
         // only the page wrapper route remains.
         Route::get('/', [App\Http\Controllers\ReportStatusController::class, 'index'])->name('index');
@@ -91,7 +91,9 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
     });
 
 
-    Route::prefix('laporan')->as('laporan.')->group(function () {
+    // Laporan exposes org-wide report data — management roles only, same gate
+    // as the org-wide dashboard.
+    Route::prefix('laporan')->as('laporan.')->middleware('can:access-main-dashboard')->group(function () {
         Route::get('/', [App\Http\Controllers\LaporanController::class,'index']);
         Route::get('/mengikut-status-tindakan', [App\Http\Controllers\LaporanController::class, 'viewByStatus'])->name('view-by-status');
         Route::get('/mengikut-kategori', [App\Http\Controllers\LaporanController::class, 'viewByCategory'])->name('view-by-category');

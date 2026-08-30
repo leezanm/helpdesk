@@ -57,7 +57,9 @@ class NotificationController extends Controller
 
     public function readAll(Request $request)
     {
-        $user = User::findOrFail($request->user_id);
+        // Always operate on the authenticated user — never a client-supplied id
+        // (that would let one user mark another's notifications read).
+        $user = Auth::user();
         $user->unreadNotifications()->where('type', 'App\\Notifications\\AppNotification')->update(['read_at' => now()]);
         $datas = [
             'success' => true

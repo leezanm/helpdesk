@@ -77,7 +77,7 @@
                         </div>
                         <div class="col-12">
                             <div class="profile-info__label">Alamat</div>
-                            <div class="profile-info__value">{!! $user->address ?: '-' !!}</div>
+                            <div class="profile-info__value">{{ $user->address ?: '-' }}</div>
                         </div>
                     </div>
                 </div>

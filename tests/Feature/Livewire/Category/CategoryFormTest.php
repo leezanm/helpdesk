@@ -11,6 +11,15 @@ use Tests\FeatureTestCase;
 
 class CategoryFormTest extends FeatureTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Category CRUD requires manage.category.
+        $admin = \App\Models\User::factory()->create();
+        $admin->givePermissionTo('manage.category');
+        $this->actingAs($admin);
+    }
+
     public function test_create_requires_desc()
     {
         Livewire::test(CategoryForm::class)

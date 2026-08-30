@@ -10,6 +10,15 @@ use Tests\FeatureTestCase;
 
 class UserFormTest extends FeatureTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // User management requires manage.user.
+        $admin = User::factory()->create();
+        $admin->givePermissionTo('manage.user');
+        $this->actingAs($admin);
+    }
+
     public function test_create_validates_required_fields()
     {
         Livewire::test(UserForm::class)

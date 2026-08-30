@@ -28,6 +28,7 @@ class StatusIndex extends Component
 
     public function edit(int $id): void
     {
+        $this->authorize('manage.category');
         $status = ReportStatus::findOrFail($id);
         $this->editId = $status->id;
         $this->desc = $status->desc;
@@ -38,6 +39,7 @@ class StatusIndex extends Component
 
     public function save(): void
     {
+        $this->authorize('manage.category');
         $this->validate();
 
         $status = ReportStatus::findOrFail($this->editId);

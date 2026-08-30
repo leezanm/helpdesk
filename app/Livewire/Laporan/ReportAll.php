@@ -39,6 +39,10 @@ class ReportAll extends Component
 
     public function mount(): void
     {
+        // Org-wide report — management roles only (defence in depth; the route
+        // is also gated with can:access-main-dashboard).
+        $this->authorize('access-main-dashboard');
+
         if ($this->dateFrom === '') {
             $this->dateFrom = now()->startOfMonth()->format('Y-m-d');
         }

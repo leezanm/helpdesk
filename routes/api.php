@@ -18,7 +18,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::as('api.')->group(function () {
+// These endpoints are called by the logged-in web frontend (AJAX with the
+// session cookie), and several expose user/report/org-wide data or MUTATE a
+// report (update-feedback). Require an authenticated session (web guard) —
+// previously this whole group was PUBLIC.
+Route::middleware('auth')->as('api.')->group(function () {
     Route::post('get-users-by-role', [App\Http\Controllers\Api\ListController::class, 'getUsersByRole'])->name('get-users-by-role');
     Route::post('get-user', [App\Http\Controllers\Api\UserController::class, 'show'])->name('get-user');
     Route::post('get-user-profile', [App\Http\Controllers\Api\UserController::class, 'getUserProfile'])->name('get-user-profile');

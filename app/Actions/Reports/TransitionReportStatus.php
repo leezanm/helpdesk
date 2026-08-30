@@ -48,7 +48,7 @@ class TransitionReportStatus
                 $trail->assigned_to_role_id = $role?->id;
                 $message = 'Aduan telah ditugaskan semula kepada <a class="userProfile" data-userId="'.$user->id.'" role="button">'.$user->name.' ('.$role->desc.')</a> untuk disemak
                             <br> <b>Sebab Penugasan</b> <br>
-                            '.($data['reassignment_remark'] ?? '');
+                            '.e($data['reassignment_remark'] ?? '');
                 break;
             case 3:
                 $report->report_status_id = 6;

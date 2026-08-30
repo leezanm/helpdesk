@@ -95,7 +95,16 @@ class UserForm extends Component
 
     public function save(SaveUser $saveUser): void
     {
+        // Only user managers may create/edit users.
+        $this->authorize('manage.user');
+
         $data = $this->validate();
+
+        // Privilege-escalation guard: a non-superadmin cannot grant the
+        // 'superadmin' role (the UI hides it, but the request is client-side).
+        if (in_array('superadmin', $data['roles'] ?? [], true) && ! auth()->user()->hasRole('superadmin')) {
+            abort(403, 'Anda tidak dibenarkan menetapkan peranan superadmin.');
+        }
 
         $editing = (bool) $this->userId;
         $user = $editing ? User::findOrFail($this->userId) : new User();
