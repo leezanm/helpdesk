@@ -8,20 +8,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ReportAssignedNotification extends Notification
+class ReportAssignedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
     use BuildsReportMail;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
+    public $report;
+
     public function __construct($report)
     {
-        //
-        $this->report =$report;
+        $this->report = $report;
     }
 
     /**
