@@ -5,39 +5,33 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 
 /**
- * Dashboard — role-aware. Each user is shown the dashboard appropriate to their
- * role (all Livewire components mounted by their wrapper view):
+ * Dashboards.
  *
- *   - Management (aduan.adminTask OR dashboard.viewGraph OR view.report):
- *     the full "Dashboard Utama" — org-wide stats. This is helpdesk admin,
- *     penyelia, pengurusan and superadmin.
- *   - Officer (aduan.updateTask, e.g. jtk/pptm/ptm): "Dashboard Pegawai" —
- *     only the aduan assigned to them.
- *   - Everyone else: "Dashboard Pengguna" — only their own aduan.
+ * After login everyone lands on their PERSONAL dashboard (/dashboard):
+ *   - Officer (aduan.updateTask, e.g. jtk/ptm/pptm) -> Dashboard Pegawai
+ *     (only aduan assigned to them).
+ *   - Everyone else -> Dashboard Pengguna (only their own aduan).
+ *
+ * The org-wide "Dashboard Utama" is a SEPARATE page (/dashboard/utama),
+ * reachable only by management roles (superadmin, helpdesk.admin, penyelia,
+ * pengurusan) via the `access-main-dashboard` gate. Management still land on
+ * their personal dashboard first and open the main one from the menu.
  */
 class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
-
-        if ($this->canSeeMainDashboard($user)) {
-            return view('dashboard');
-        }
-
-        if ($user->can('aduan.updateTask')) {
+        if (Auth::user()->can('aduan.updateTask')) {
             return view('dashboard-officer');
         }
 
         return view('dashboard-user');
     }
 
-    /**
-     * Main (org-wide) dashboard is limited to management roles: pengurusan,
-     * helpdesk admin, penyelia and superadmin.
-     */
-    private function canSeeMainDashboard($user): bool
+    public function main()
     {
-        return $user->canAny(['aduan.adminTask', 'dashboard.viewGraph', 'view.report']);
+        $this->authorize('access-main-dashboard');
+
+        return view('dashboard');
     }
 }

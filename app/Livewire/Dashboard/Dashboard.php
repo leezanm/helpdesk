@@ -78,6 +78,17 @@ class Dashboard extends Component
             : "DATEDIFF({$end}, {$start})";
     }
 
+    /**
+     * Whether the current user sees ORG-WIDE data on this (main) dashboard.
+     * The main dashboard is only reachable by management roles, so anyone here
+     * sees org-wide figures. Uses the same gate as the route.
+     */
+    protected function seesOrgWide(): bool
+    {
+        return \Illuminate\Support\Facades\Gate::allows('access-main-dashboard')
+            || Auth::user()->can('aduan.adminTask');
+    }
+
     protected function fromDate(): Carbon
     {
         return Carbon::parse($this->dateFrom)->startOfDay();
@@ -95,10 +106,9 @@ class Dashboard extends Component
             ->whereBetween('submitted_at', [$this->fromDate(), $this->toDate()])
             ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
             ->when(
-                // Admins / helpdesk see all reports; everyone else only their own.
-                // Use the permission (aduan.adminTask) the rest of the app uses,
-                // not a single role name, so superadmin is covered too.
-                ! Auth::user()->can('aduan.adminTask'),
+                // Management (superadmin/helpdesk.admin/penyelia/pengurusan)
+                // see org-wide figures; anyone else only their own.
+                ! $this->seesOrgWide(),
                 fn ($q) => $q->where('report_by_id', Auth::id())
             );
     }
@@ -204,7 +214,7 @@ class Dashboard extends Component
             ->whereBetween('completed_at', [$this->fromDate(), $this->toDate()])
             ->where('report_status_id', 5)
             ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
-            ->when(! Auth::user()->can('aduan.adminTask'), fn ($q) => $q->where('report_by_id', Auth::id()))
+            ->when(! $this->seesOrgWide(), fn ($q) => $q->where('report_by_id', Auth::id()))
             ->select(DB::raw("{$completedExpr} as ym"), DB::raw('count(*) as total'))
             ->groupBy('ym')->pluck('total', 'ym');
 
@@ -235,7 +245,7 @@ class Dashboard extends Component
             ->where('report_status_id', 5)
             ->whereNotNull('completed_at')
             ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
-            ->when(! Auth::user()->can('aduan.adminTask'), fn ($q) => $q->where('report_by_id', Auth::id()))
+            ->when(! $this->seesOrgWide(), fn ($q) => $q->where('report_by_id', Auth::id()))
             ->avg(DB::raw($this->dayDiffExpr('completed_at', 'submitted_at')));
 
         return round((float) ($avg ?? 0), 1);

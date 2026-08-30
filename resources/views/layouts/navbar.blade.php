@@ -3,8 +3,13 @@
 
     <div class="app-sidebar__title">Laman Utama</div>
     <a class="app-nav-link {{ $path === 'dashboard' ? 'active' : '' }}" href="{{ url('/dashboard') }}">
-        <i class="bx bx-home-circle"></i><span>Utama</span>
+        <i class="bx bx-home-circle"></i><span>Dashboard Saya</span>
     </a>
+    @can('access-main-dashboard')
+        <a class="app-nav-link {{ str_starts_with($path, 'dashboard/utama') ? 'active' : '' }}" href="{{ route('dashboard.main') }}">
+            <i class="bx bx-bar-chart-square"></i><span>Dashboard Pengurusan</span>
+        </a>
+    @endcan
 
     {{-- Aduan --}}
     <div x-data="{ o: {{ str_starts_with($path, 'aduan') ? 'true' : 'false' }} }">

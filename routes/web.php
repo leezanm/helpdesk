@@ -34,6 +34,10 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
     });
 
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
+    // Org-wide dashboard — management roles only (see access-main-dashboard gate).
+    Route::get('/dashboard/utama', [\App\Http\Controllers\DashboardController::class, 'main'])
+        ->name('dashboard.main')
+        ->middleware('can:access-main-dashboard');
 
     Route::prefix('aduan')->as('aduan.')->group(function () {
         // Interactive CRUD/flow handled by Livewire (App\Livewire\Aduan\*).

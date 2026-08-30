@@ -29,5 +29,11 @@ class AuthServiceProvider extends ServiceProvider
         Gate::before(function ($user, $ability) {
             return $user->hasRole('superadmin') ? true : null;
         });
+
+        // Who may access the org-wide "Dashboard Utama": management roles only
+        // (superadmin is already covered by the Gate::before hook above).
+        Gate::define('access-main-dashboard', function ($user) {
+            return $user->hasAnyRole(['helpdesk.admin', 'penyelia', 'pengurusan']);
+        });
     }
 }
