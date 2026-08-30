@@ -33,6 +33,12 @@ class NotificationBell extends Component
         return $url ? redirect($url) : redirect()->back();
     }
 
+    /** Mark all of the user's unread notifications as read. */
+    public function markAllRead(): void
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+    }
+
     protected function humanTime($createdAt): string
     {
         // Preserve the Bahasa Malaysia relative-time wording from the old code.

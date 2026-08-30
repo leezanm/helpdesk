@@ -50,6 +50,19 @@ class NotificationBellTest extends FeatureTestCase
             ->assertSee('Tiada notifikasi baharu.');
     }
 
+    public function test_mark_all_read_clears_unread()
+    {
+        $user = User::factory()->create();
+        $this->addNotification($user, ['title' => 'A', 'message' => 'a', 'url' => null]);
+        $this->addNotification($user, ['title' => 'B', 'message' => 'b', 'url' => null]);
+
+        Livewire::actingAs($user)
+            ->test(NotificationBell::class)
+            ->call('markAllRead');
+
+        $this->assertCount(0, $user->fresh()->unreadNotifications);
+    }
+
     public function test_open_marks_read_and_redirects()
     {
         $user = User::factory()->create();
