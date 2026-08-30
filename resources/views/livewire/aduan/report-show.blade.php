@@ -223,7 +223,7 @@
             @endif
 
             {{-- ===== Tutup Aduan (Selesai Tindakan = 7) — helpdesk atau pengguna ===== --}}
-            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'helpdesk.admin'])) && $report->report_status_id == 7)
+            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'helpdesk.admin', 'penyelia'])) && $report->report_status_id == 7)
                 <div class="card mb-3" style="border:1px solid var(--c-success)">
                     <div class="card-body">
                         <p class="section-title" style="color:var(--c-success)">Tutup Aduan (Selesai)</p>

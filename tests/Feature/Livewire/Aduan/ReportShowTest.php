@@ -7,6 +7,8 @@ use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\ReportTrail;
 use App\Models\User;
+use App\Notifications\ReportAssignedNotification;
+use App\Notifications\ReportDoneAdminNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
@@ -122,6 +124,41 @@ class ReportShowTest extends FeatureTestCase
             ->assertHasNoErrors();
 
         $this->assertEquals(4, $report->fresh()->report_status_id); // Dalam Tindakan
+    }
+
+    public function test_penyelia_is_notified_on_assignment_and_can_close()
+    {
+        Notification::fake();
+        $report = $this->makeReport(User::factory()->create(), 3);
+        $admin = User::factory()->create();
+        $admin->syncRoles(['helpdesk.admin']);
+        $officer = User::factory()->create();
+        $officer->syncRoles(['jtk']);
+        $penyelia = User::factory()->create();
+        $penyelia->syncRoles(['penyelia']);
+
+        // Assign -> penyelia (supervisor) is notified alongside the officer.
+        Livewire::actingAs($admin)
+            ->test(ReportShow::class, ['report' => $report])
+            ->set('tindakan', '1')
+            ->set('peranan', 'jtk')
+            ->set('assigned_to_id', $officer->id)
+            ->call('saveAdminTask')
+            ->assertHasNoErrors();
+
+        Notification::assertSentTo($penyelia, ReportAssignedNotification::class);
+        Notification::assertSentTo($officer, ReportAssignedNotification::class);
+
+        // Penyelia can view any report and close from Selesai Tindakan (7).
+        $report7 = $this->makeReport(User::factory()->create(), 7);
+        Livewire::actingAs($penyelia)
+            ->test(ReportShow::class, ['report' => $report7])
+            ->assertOk()
+            ->set('rating', 5)
+            ->call('closeReport')
+            ->assertHasNoErrors();
+
+        $this->assertEquals(5, $report7->fresh()->report_status_id); // Selesai
     }
 
     public function test_officer_completes_action_with_lesson_learn()

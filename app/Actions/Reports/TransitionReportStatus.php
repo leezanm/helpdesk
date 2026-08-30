@@ -75,6 +75,15 @@ class TransitionReportStatus
 
         if ($user) {
             $this->notifySingle($user, new ReportAssignedNotification($report));
+
+            // On assignment / reassignment (tindakan 1 & 2), also notify the
+            // penyelia (supervisors) so they can monitor the resolution work.
+            if (in_array($tindakan, [1, 2], true)) {
+                $this->notifyGroup(
+                    User::role('penyelia')->get(),
+                    new ReportAssignedNotification($report)
+                );
+            }
         }
 
         return $report;

@@ -172,9 +172,10 @@ class ReportShow extends Component
 
     public function closeReport(SubmitFeedback $submitFeedback): void
     {
-        // From "Selesai Tindakan" (7): reporter or helpdesk closes with rating.
+        // From "Selesai Tindakan" (7): reporter, helpdesk or penyelia closes
+        // with rating.
         abort_unless(
-            ($this->report->reportBy?->is(Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'helpdesk.admin']))
+            ($this->report->reportBy?->is(Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'helpdesk.admin', 'penyelia']))
                 && $this->report->report_status_id == 7,
             403
         );

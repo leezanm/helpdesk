@@ -31,6 +31,11 @@ class RoleSeeder extends Seeder
         $role = Role::firstOrCreate(['name' => 'helpdesk.admin'], ['desc' => 'Admin Sistem']);
         $role->syncPermissions(['manage.category', 'manage.user', 'aduan.all', 'aduan.create', 'aduan.adminTask', 'view.report', 'dashboard.viewGraph']);
 
+        // Penyelia — memantau & menyelia semua aduan dan kerja penyelesaian.
+        // Sama keupayaan seperti helpdesk.admin.
+        $role = Role::firstOrCreate(['name' => 'penyelia'], ['desc' => 'Penyelia']);
+        $role->syncPermissions(['manage.category', 'manage.user', 'aduan.all', 'aduan.create', 'aduan.adminTask', 'view.report', 'dashboard.viewGraph']);
+
         $role = Role::firstOrCreate(['name' => 'superadmin'], ['desc' => 'Superadmin']);
         $role->syncPermissions(Permission::pluck('name'));
 
