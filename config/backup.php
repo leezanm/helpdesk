@@ -20,7 +20,11 @@ return [
                  * The list of directories and files that will be included in the backup.
                  */
                 'include' => [
-                    base_path(),
+                    // Back up user-uploaded files (aduan attachments, profile
+                    // pictures) only — NOT the whole codebase (code lives in git,
+                    // and base_path() also contains gigabytes of legacy backup
+                    // snapshots under storage/app which made full backups hang).
+                    storage_path('app/public'),
                 ],
 
                 /*
@@ -31,6 +35,16 @@ return [
                 'exclude' => [
                     base_path('vendor'),
                     base_path('node_modules'),
+                    // Don't back up the backups (avoids recursive bloat) or the
+                    // large legacy system snapshots kept under storage/app.
+                    storage_path('app/backup-temp'),
+                    storage_path('app/'.\Illuminate\Support\Str::slug(config('app.name'))),
+                    storage_path('app/sistem-meja-bantuan-kkdw'),
+                    storage_path('app/sistem-meja-bantuan-kplb'),
+                    storage_path('app/Kplb-Helpdesk'),
+                    storage_path('framework'),
+                    storage_path('logs'),
+                    base_path('.git'),
                 ],
 
                 /*
@@ -152,14 +166,14 @@ return [
      */
     'notifications' => [
 
-        'notifications' => [
-            \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class => ['mail'],
-            \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class => ['mail'],
-        ],
+        /*
+         * Built-in backup email notifications are disabled: with the installed
+         * spatie/laravel-backup version they raised "no notification class that
+         * can handle event ..." and crashed the command on failure. The app has
+         * its own notification config; enable specific events here only if the
+         * matching Spatie notification classes exist in the installed version.
+         */
+        'notifications' => [],
 
         /*
          * Here you can specify the notifiable to which the notifications should be sent. The default

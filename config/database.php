@@ -61,6 +61,14 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+            // Used by spatie/laravel-backup's mysqldump. Skip SSL for the dump
+            // to avoid "self-signed certificate in certificate chain" errors
+            // on servers with SSL enabled but a self-signed cert. Toggle via
+            // DB_DUMP_SKIP_SSL (default true).
+            'dump' => [
+                'skip_ssl' => env('DB_DUMP_SKIP_SSL', true),
+                'use_single_transaction' => true,
+            ],
         ],
 
         'pgsql' => [
