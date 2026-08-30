@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Models\Report;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
@@ -68,11 +69,27 @@ class UserDashboard extends Component
             ->orderByDesc('submitted_at')
             ->limit(10)->get();
 
+        // Resolve the currently-assigned officer (latest trail assigned_to_id)
+        // for each listed report, in one query to avoid N+1.
+        $reportIds = $recent->pluck('id');
+        $officers = collect();
+        if ($reportIds->isNotEmpty()) {
+            $latest = DB::table('report_trails as t')
+                ->join('users', 'users.id', '=', 't.assigned_to_id')
+                ->whereIn('t.report_id', $reportIds)
+                ->whereNotNull('t.assigned_to_id')
+                ->whereRaw('t.id = (select max(t2.id) from report_trails t2 where t2.report_id = t.report_id and t2.assigned_to_id is not null)')
+                ->select('t.report_id', 'users.name')
+                ->get();
+            $officers = $latest->pluck('name', 'report_id');
+        }
+
         return view('livewire.dashboard.user-dashboard', [
             'total' => $total,
             'dalamProses' => $dalamProses,
             'selesai' => $selesai,
             'recent' => $recent,
+            'officers' => $officers,
         ]);
     }
 }
