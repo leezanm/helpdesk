@@ -139,17 +139,44 @@ class ReportIndex extends Component
 
         $canAdmin = Auth::user()?->can('aduan.adminTask') ?? false;
 
+        // Show the "Pegawai Bertanggungjawab" column on the user's own list
+        // ("Aduan Saya") so they can see who is handling each aduan.
+        $showOfficer = $this->scope === 'user';
+        $assignedOfficers = $showOfficer
+            ? $this->assignedOfficersFor($reports->pluck('id'))
+            : collect();
+
         return view('livewire.aduan.report-index', [
             'reports' => $reports,
             'canAdmin' => $canAdmin,
             // Show the pengadu (complainant) column — with hover contact — for
             // admins and for officers viewing their "dalam tindakan" list.
             'showPengadu' => $canAdmin || $this->scope === 'tindakan',
+            'showOfficer' => $showOfficer,
+            'assignedOfficers' => $assignedOfficers,
             'bahagianOptions' => $this->bahagianOptions(),
             'categoryOptions' => ReportCategory::orderBy('desc')->get(['id', 'desc']),
             'statusOptions' => ReportStatus::whereIn('id', $this->scopeStatusIds())->orderBy('id')->get(['id', 'desc']),
             'officerOptions' => $this->officerOptions(),
         ]);
+    }
+
+    /**
+     * Map of report_id => currently-assigned officer name (latest trail with
+     * assigned_to_id) for the given reports, resolved in one query (no N+1).
+     */
+    protected function assignedOfficersFor($reportIds)
+    {
+        if ($reportIds->isEmpty()) {
+            return collect();
+        }
+
+        return DB::table('report_trails as t')
+            ->join('users', 'users.id', '=', 't.assigned_to_id')
+            ->whereIn('t.report_id', $reportIds)
+            ->whereNotNull('t.assigned_to_id')
+            ->whereRaw('t.id = (select max(t2.id) from report_trails t2 where t2.report_id = t.report_id and t2.assigned_to_id is not null)')
+            ->pluck('users.name', 't.report_id');
     }
 
     /**

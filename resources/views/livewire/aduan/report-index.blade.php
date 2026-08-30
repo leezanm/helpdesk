@@ -76,6 +76,9 @@
                             @if ($showPengadu)
                                 <th>Pengadu</th>
                             @endif
+                            @if ($showOfficer)
+                                <th>Pegawai Bertanggungjawab</th>
+                            @endif
                             <th class="sortable" wire:click="sortBy('submitted_at')">
                                 Tarikh
                                 @if ($sortField === 'submitted_at')
@@ -98,6 +101,9 @@
                                 @if ($showPengadu)
                                     <td><x-pengadu-cell :report="$report" /></td>
                                 @endif
+                                @if ($showOfficer)
+                                    <td>{{ $assignedOfficers[$report->id] ?? '—' }}</td>
+                                @endif
                                 <td class="text-nowrap">{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
                                 <td>{!! getDuration($report) !!}</td>
                                 <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>
@@ -114,7 +120,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ $showPengadu ? 9 : 8 }}">
+                                <td colspan="{{ 8 + ($showPengadu ? 1 : 0) + ($showOfficer ? 1 : 0) }}">
                                     <div class="empty-state">
                                         <i class="bi bi-inbox"></i>
                                         Tiada aduan dijumpai.
