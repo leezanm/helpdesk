@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Concerns\BuildsReportMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,6 +11,7 @@ use Illuminate\Notifications\Notification;
 class ReportAssignedNotification extends Notification
 {
     use Queueable;
+    use BuildsReportMail;
 
     /**
      * Create a new notification instance.
@@ -41,31 +43,11 @@ class ReportAssignedNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $report = $this->report->loadMissing(['category', 'reportBy']);
-
-        // Signed, expiring (7-day), read-only preview link — openable from the
-        // email without logging in. Taking action still requires login.
-        $previewUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
-            'aduan.public-view',
-            now()->addDays(7),
-            ['report' => $report]
+        return $this->buildReportMail(
+            $this->report,
+            'Sistem Meja Bantuan KKDW - Tugasan Baru: '.$this->report->ticket_no,
+            'Satu aduan telah ditugaskan untuk tindakan. Berikut adalah maklumat aduan:'
         );
-
-        $remark = \Illuminate\Support\Str::limit(strip_tags((string) $report->remark), 300);
-
-        return (new MailMessage)
-            ->subject('Sistem Meja Bantuan KKDW - Tugasan Baru: '.$report->ticket_no)
-            ->greeting('Salam Sejahtera,')
-            ->line('Satu aduan baru telah ditugaskan kepada anda untuk tindakan. Berikut adalah maklumat ringkas aduan:')
-            ->line('**No. Tiket:** '.$report->ticket_no)
-            ->line('**Subjek:** '.$report->subject)
-            ->line('**Kategori:** '.($report->category->desc ?? '-'))
-            ->line('**Bahagian:** '.($report->bahagian_pengadu ?: '-'))
-            ->line('**Pengadu:** '.($report->reportBy->name ?? '-')
-                .($report->reportBy?->email ? ' ('.$report->reportBy->email.')' : ''))
-            ->line('**Ringkasan:** '.($remark !== '' ? $remark : '-'))
-            ->action('Lihat Butiran Aduan', $previewUrl)
-            ->line('Pautan di atas membuka pratonton aduan (rujukan sahaja). Untuk mengambil tindakan atau mengemaskini status, sila log masuk ke sistem.');
     }
 
     /**

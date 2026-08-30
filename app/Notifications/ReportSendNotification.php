@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Concerns\BuildsReportMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -10,6 +11,7 @@ use Illuminate\Notifications\Notification;
 class ReportSendNotification extends Notification
 {
     use Queueable;
+    use BuildsReportMail;
 
     /**
      * Create a new notification instance.
@@ -41,14 +43,11 @@ class ReportSendNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $report =$this->report;
-        return (new MailMessage)
-                    ->subject('Sistem Meja Bantuan KKDW - Aduan Berjaya Dihantar')
-                    ->greeting('Salam Sejahtera,')
-                    ->line('Aduan anda berjaya dihantar')
-                    ->line('Maklumat Aduan')
-                    ->line('No Tiket : '. $report->ticket_no)
-                    ->action('Lihat', route('aduan.show', $report));
+        return $this->buildReportMail(
+            $this->report,
+            'Sistem Meja Bantuan KKDW - Aduan Berjaya Dihantar',
+            'Aduan anda berjaya dihantar. Berikut adalah maklumat aduan:'
+        );
     }
 
     /**
