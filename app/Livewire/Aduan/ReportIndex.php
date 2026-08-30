@@ -125,13 +125,16 @@ class ReportIndex extends Component
             ->when($this->categoryId !== '', fn ($q) => $q->where('report_category_id', $this->categoryId))
             ->when($this->statusId !== '', fn ($q) => $q->where('report_status_id', $this->statusId))
             ->when($this->officerId !== '', function ($q) {
-                // Reports whose latest trail is assigned to the chosen officer.
+                // Reports whose latest ASSIGNMENT trail belongs to the chosen
+                // officer. Compare against the latest trail that actually
+                // carries an assigned_to_id (later status-only trails have
+                // assigned_to_id = null and must be ignored).
                 $q->whereExists(function ($sub) {
                     $sub->select(DB::raw(1))
                         ->from('report_trails')
                         ->whereColumn('report_trails.report_id', 'reports.id')
                         ->where('report_trails.assigned_to_id', $this->officerId)
-                        ->where('report_trails.id', DB::raw('(select id from report_trails t2 where t2.report_id = reports.id order by t2.id desc limit 1)'));
+                        ->where('report_trails.id', DB::raw('(select max(t2.id) from report_trails t2 where t2.report_id = reports.id and t2.assigned_to_id is not null)'));
                 });
             })
             ->orderBy($this->sortField, $this->sortDirection)
