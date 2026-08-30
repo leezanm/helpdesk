@@ -132,7 +132,8 @@ class Dashboard extends Component
                 ->whereNull('completed_at');
         }
 
-        return $query->with(['status', 'category'])->orderBy('submitted_at', 'desc');
+        return $query->with(['status', 'category', 'reportBy:id,name,email,tel_no,ldap_bahagian'])
+            ->orderBy('submitted_at', 'desc');
     }
 
     /** Status breakdown for the donut: [{label, value}]. */

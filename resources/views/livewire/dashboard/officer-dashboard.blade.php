@@ -66,22 +66,20 @@
         <div class="card-body pt-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead><tr><th>Tiket</th><th>Subjek</th><th>Pengadu</th><th>Tarikh</th><th>Status</th><th class="text-end"></th></tr></thead>
+                    <thead><tr><th>Tiket</th><th>Subjek</th><th>Pengadu</th><th>Kategori</th><th>Tarikh</th><th>Status</th><th class="text-end"></th></tr></thead>
                     <tbody>
                         @forelse ($recent as $report)
                             <tr wire:key="off-{{ $report->id }}">
                                 <td class="fw-semibold">{{ $report->ticket_no }}</td>
                                 <td>{{ Str::limit($report->subject, 40) }}</td>
-                                <td>
-                                    <div class="fw-medium">{{ $report->reportBy->name ?? '-' }}</div>
-                                    <small class="text-muted">{{ $report->reportBy->ldap_bahagian ?? '' }}</small>
-                                </td>
+                                <td><x-pengadu-cell :report="$report" /></td>
+                                <td>{{ $report->category->desc ?? '-' }}</td>
                                 <td class="text-nowrap">{{ convertDateFormat($report->submitted_at, 'LL') }}</td>
                                 <td><span class="{{ $report->status->class }}">{{ $report->status->desc }}</span></td>
                                 <td class="text-end"><a href="{{ route('aduan.show', $report) }}" class="btn btn-sm btn-outline-primary btn-icon"><i class="bi bi-eye"></i></a></td>
                             </tr>
                         @empty
-                            <tr><td colspan="6"><div class="empty-state"><i class="bi bi-inbox"></i> Tiada tugasan memerlukan tindakan dalam tempoh ini.</div></td></tr>
+                            <tr><td colspan="7"><div class="empty-state"><i class="bi bi-inbox"></i> Tiada tugasan memerlukan tindakan dalam tempoh ini.</div></td></tr>
                         @endforelse
                     </tbody>
                 </table>
