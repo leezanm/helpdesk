@@ -48,7 +48,22 @@ class FortifyServiceProvider extends ServiceProvider
                 ? LoginCaptcha::generate($request)
                 : null;
 
-            return view('auth.login', compact('captchaQuestion'));
+            // Live headline stats for the hero panel (cached 10 min so the login
+            // page stays fast and the DB isn't hit on every visit).
+            $stats = \Illuminate\Support\Facades\Cache::remember('login_stats', 600, function () {
+                $total = (int) \App\Models\Report::where('report_status_id', '<>', 1)->count();
+                $resolved = (int) \App\Models\Report::where('report_status_id', 5)->count();
+
+                return [
+                    'total' => $total,
+                    'resolved' => $resolved,
+                    'rate' => $total > 0 ? (int) round($resolved / $total * 100) : 0,
+                    'bahagian' => (int) \App\Models\Report::whereNotNull('bahagian_pengadu')
+                        ->where('bahagian_pengadu', '<>', '')->distinct()->count('bahagian_pengadu'),
+                ];
+            });
+
+            return view('auth.login', compact('captchaQuestion', 'stats'));
         });
 
         // Custom login pipeline: require a CAPTCHA (after N failed attempts)

@@ -1,11 +1,12 @@
 <div>
     <x-filter-bar title="Carian Pengguna" icon="bi-search"
                   :show-reset="$search !== '' || $bahagian !== ''" reset-action="resetFilters">
-        <x-slot:action>
+        {{-- <x-slot:action>
             <a class="btn btn-sm btn-primary" wire:click="create" role="button">
                 <i class="bi bi-plus-lg me-1"></i> Pengguna Baru
             </a>
-        </x-slot:action>
+        </x-slot:action> --}}
+
 
         <x-filter-field label="Carian" col="col-12 col-md-6">
             <div class="filter-search">
@@ -22,6 +23,7 @@
                 @endforeach
             </select>
         </x-filter-field>
+
     </x-filter-bar>
 
     <div class="card data-card">

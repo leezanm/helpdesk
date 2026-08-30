@@ -3,20 +3,54 @@
 @section('content')
 <div class="auth-split">
 
-    {{-- Brand panel --}}
+    {{-- Brand / hero panel --}}
     <div class="auth-brand">
-        <div>
+        <div class="auth-brand__top">
             <img src="{{ asset('images/logo.png') }}" alt="KKDW" class="auth-brand__logo">
+            <span class="auth-brand__badge"><i class="bi bi-shield-check me-1"></i>Sistem Rasmi KKDW</span>
         </div>
-        <div>
-            <h1 class="auth-brand__title mb-3">Sistem Meja Bantuan KKDW</h1>
-            <p class="auth-brand__sub mb-0">
-                Urus dan jejaki aduan anda dengan mudah — satu platform untuk pengguna,
-                pegawai teknikal dan pentadbir.
+
+        <div class="auth-brand__mid">
+            <p class="auth-brand__eyebrow"><i class="bi bi-grid-1x2-fill me-2"></i>Sistem Meja Bantuan</p>
+            <h1 class="auth-brand__title mb-3">
+                Satu platform digital<br>untuk setiap aduan warga kementerian.
+            </h1>
+            <p class="auth-brand__sub mb-4">
+                Kami mendigitalkan dan menyusun aduan dari hujung ke hujung — dari
+                pelaporan, penugasan, sehingga penyelesaian — supaya kerja seluruh
+                warga KKDW menjadi lebih pantas, telus dan teratur.
             </p>
+
+            <ul class="auth-features">
+                <li><span class="auth-features__ic"><i class="bi bi-send-check"></i></span>
+                    <div><strong>Hantar aduan dalam beberapa klik</strong><small>Borang ringkas, lampiran &amp; bagi pihak</small></div></li>
+                <li><span class="auth-features__ic"><i class="bi bi-diagram-3"></i></span>
+                    <div><strong>Jejak status masa nyata</strong><small>Baru → Dalam Tindakan → Selesai</small></div></li>
+                {{-- <li><span class="auth-features__ic"><i class="bi bi-lightbulb"></i></span>
+                    <div><strong>Lesson Learn</strong><small>Punca &amp; penyelesaian dikongsi pegawai</small></div></li> --}}
+                <li><span class="auth-features__ic"><i class="bi bi-bar-chart-line"></i></span>
+                    <div><strong>Dashboard pengurusan</strong><small>Analitik &amp; laporan untuk keputusan</small></div></li>
+            </ul>
         </div>
-        <div class="auth-brand__foot">
-            © <script>document.write(new Date().getFullYear())</script> Kementerian Kemajuan Desa dan Wilayah
+
+        <div class="auth-brand__bottom">
+            <div class="auth-stats">
+                <div class="auth-stat">
+                    <div class="auth-stat__num">{{ number_format($stats['total'] ?? 0) }}</div>
+                    <div class="auth-stat__lbl">Aduan diuruskan</div>
+                </div>
+                <div class="auth-stat">
+                    <div class="auth-stat__num">{{ $stats['rate'] ?? 0 }}%</div>
+                    <div class="auth-stat__lbl">Kadar penyelesaian</div>
+                </div>
+                <div class="auth-stat">
+                    <div class="auth-stat__num">{{ $stats['bahagian'] ?? 0 }}</div>
+                    <div class="auth-stat__lbl">Bahagian dilayani</div>
+                </div>
+            </div>
+            <div class="auth-brand__foot">
+                © <script>document.write(new Date().getFullYear())</script> Kementerian Kemajuan Desa dan Wilayah
+            </div>
         </div>
     </div>
 
@@ -66,10 +100,7 @@
                     </div>
                 @endif
 
-                <div class="form-check mb-4">
-                    <input class="form-check-input" type="checkbox" id="remember-check" name="remember">
-                    <label class="form-check-label" for="remember-check">Kekal sesi log masuk</label>
-                </div>
+
 
                 <div class="d-grid">
                     <button class="btn btn-primary auth-input-lg" type="submit">Log Masuk</button>
