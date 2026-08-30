@@ -96,12 +96,16 @@ class ReportController extends Controller
         $report->trails()->save($trail);
 
 
-        $report_sent_notification = new ReportDoneReporterNotification($report);
-        $this->notifySingle($user, $report_sent_notification);
-
-        $report_received_admin_notification = new ReportDoneAdminNotification($report);
-        $users = User::permission('aduan.adminTask')->get();
-        $this->notifyGroup($users, $report_received_admin_notification);
+        // Recipients configurable per event (superadmin), same as the Livewire
+        // close flow (SubmitFeedback).
+        $this->notifyGroup(
+            \App\Support\NotificationRecipients::for(\App\Support\NotificationEvents::ADUAN_SELESAI_PENGADU, $report),
+            new ReportDoneReporterNotification($report)
+        );
+        $this->notifyGroup(
+            \App\Support\NotificationRecipients::for(\App\Support\NotificationEvents::ADUAN_SELESAI_ADMIN, $report),
+            new ReportDoneAdminNotification($report)
+        );
 
         $datas = [
             'success' =>true

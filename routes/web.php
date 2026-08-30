@@ -53,6 +53,11 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
     Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index'])->middleware('can:manage.audit-trail');
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
 
+    // Notification recipient settings — superadmin only (manage.role permission).
+    Route::view('/tetapan/notifikasi', 'settings.notifications')
+        ->name('settings.notifications')
+        ->middleware('can:manage.role');
+
     Route::prefix('kategori')->as('category.')->group(function () {
         // CRUD now handled by Livewire (App\Livewire\Category\*); only the
         // page wrapper route remains.

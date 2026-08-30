@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             ReportStatusSeeder::class,
             ReportCategorySeeder::class,
             ReportTrailStatusSeeder::class,
+            NotificationSettingSeeder::class,
         ]);
     }
 }

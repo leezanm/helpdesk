@@ -93,8 +93,13 @@
     @endcan
 
     {{-- Tetapan --}}
-    @canany(['manage.audit-trail', 'manage.backup'])
+    @canany(['manage.audit-trail', 'manage.backup', 'manage.role'])
         <div class="app-sidebar__title">Tetapan</div>
+        @can('manage.role')
+            <a class="app-nav-link {{ str_contains($path, 'tetapan/notifikasi') ? 'active' : '' }}" href="{{ route('settings.notifications') }}">
+                <i class="bx bx-bell"></i><span>Tetapan Notifikasi</span>
+            </a>
+        @endcan
         @can('manage.audit-trail')
             <a class="app-nav-link {{ str_starts_with($path, 'audit-trail') ? 'active' : '' }}" href="{{ url('/audit-trail') }}">
                 <i class="bx bx-code-alt"></i><span>Log Sistem</span>

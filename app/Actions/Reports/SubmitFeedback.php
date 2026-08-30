@@ -7,6 +7,8 @@ use App\Models\ReportTrail;
 use App\Models\User;
 use App\Notifications\ReportDoneAdminNotification;
 use App\Notifications\ReportDoneReporterNotification;
+use App\Support\NotificationEvents;
+use App\Support\NotificationRecipients;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -32,9 +34,17 @@ class SubmitFeedback
         $report->save();
         $report->trails()->save($trail);
 
-        $this->notifySingle(Auth::user(), new ReportDoneReporterNotification($report));
-        $admins = User::permission('aduan.adminTask')->get();
-        $this->notifyGroup($admins, new ReportDoneAdminNotification($report));
+        // Recipients configurable per event (superadmin). Defaults mirror the
+        // previous behaviour: reporter gets the reporter notice, helpdesk +
+        // penyelia get the admin notice.
+        $this->notifyGroup(
+            NotificationRecipients::for(NotificationEvents::ADUAN_SELESAI_PENGADU, $report),
+            new ReportDoneReporterNotification($report)
+        );
+        $this->notifyGroup(
+            NotificationRecipients::for(NotificationEvents::ADUAN_SELESAI_ADMIN, $report),
+            new ReportDoneAdminNotification($report)
+        );
 
         return $report;
     }

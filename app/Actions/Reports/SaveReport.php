@@ -7,6 +7,8 @@ use App\Models\ReportAttachment;
 use App\Models\User;
 use App\Notifications\ReportReceivedAdminNotification;
 use App\Notifications\ReportSendNotification;
+use App\Support\NotificationEvents;
+use App\Support\NotificationRecipients;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -85,9 +87,16 @@ class SaveReport
         $this->storeAttachments($report, $attachments);
 
         if ($statusId === 2) {
-            $this->notifySingle(Auth::user(), new ReportSendNotification($report));
-            $admins = User::permission('aduan.adminTask')->get();
-            $this->notifyGroup($admins, new ReportReceivedAdminNotification($report));
+            // Recipients are configurable per event (superadmin). Defaults
+            // mirror the previous behaviour: reporter + helpdesk/penyelia.
+            $this->notifyGroup(
+                NotificationRecipients::for(NotificationEvents::ADUAN_DIHANTAR_PENGADU, $report),
+                new ReportSendNotification($report)
+            );
+            $this->notifyGroup(
+                NotificationRecipients::for(NotificationEvents::ADUAN_DITERIMA_ADMIN, $report),
+                new ReportReceivedAdminNotification($report)
+            );
         }
 
         return $report;
