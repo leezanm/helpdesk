@@ -1,5 +1,5 @@
 <div>
-    <x-filter-bar title="Carian & Penapis Lesson Learn"
+    <x-filter-bar title="Carian & Penapis Knowledge Base"
                   :show-reset="$search !== '' || $category !== ''">
         <x-filter-field label="Carian" col="col-12 col-md-7">
             <div class="filter-search">
@@ -76,7 +76,7 @@
             <div class="card-body">
                 <div class="empty-state">
                     <i class="bi bi-lightbulb"></i>
-                    Tiada rekod lesson learn dijumpai.
+                    Tiada rekod Knowledge Base dijumpai.
                     <div class="small mt-1">Rekod akan muncul apabila pegawai menyelesaikan tindakan dengan punca &amp; penyelesaian.</div>
                 </div>
             </div>

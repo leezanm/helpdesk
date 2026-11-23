@@ -109,6 +109,13 @@ class UserForm extends Component
         $editing = (bool) $this->userId;
         $user = $editing ? User::findOrFail($this->userId) : new User();
 
+        // A non-superadmin (e.g. penyelia) must not alter an Admin Sistem
+        // account: the roles dropdown hides 'superadmin', so saving would
+        // silently strip it.
+        if ($editing && $user->hasRole('superadmin') && ! auth()->user()->hasRole('superadmin')) {
+            abort(403, 'Anda tidak dibenarkan mengemaskini akaun Admin Sistem.');
+        }
+
         if ($editing) {
             // Editing an existing user: name/username/email/designation/ic_no
             // are owned by AD and must NOT be overwritten here. Only phone,

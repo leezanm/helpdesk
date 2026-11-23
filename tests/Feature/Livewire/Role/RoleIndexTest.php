@@ -37,7 +37,7 @@ class RoleIndexTest extends FeatureTestCase
         $admin = User::factory()->create();
         $admin->syncRoles(['helpdesk.admin']);
 
-        $this->assertTrue($admin->can('manage.user'));
+        $this->assertFalse($admin->can('manage.user')); // hanya penyelia & admin sistem
         $this->assertTrue($admin->can('manage.category'));
         $this->assertFalse($admin->can('manage.backup')); // not granted to helpdesk.admin
 

@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Report;
+use App\Support\ReportStatuses;
 use App\Models\Ref\ReportStatus;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -31,9 +32,11 @@ class Dashboard extends Component
 
     public function mount(): void
     {
-        // Default range: this month to today (only if not provided via URL).
+        // Default range: 1 January of the current year to today (only if not
+        // provided via URL), so the org-wide dashboard opens on the
+        // year-to-date picture rather than the current month alone.
         if ($this->dateFrom === '') {
-            $this->dateFrom = now()->startOfMonth()->format('Y-m-d');
+            $this->dateFrom = now()->startOfYear()->format('Y-m-d');
         }
         if ($this->dateTo === '') {
             $this->dateTo = now()->format('Y-m-d');
@@ -42,7 +45,7 @@ class Dashboard extends Component
 
     public function resetFilter(): void
     {
-        $this->dateFrom = now()->startOfMonth()->format('Y-m-d');
+        $this->dateFrom = now()->startOfYear()->format('Y-m-d');
         $this->dateTo = now()->format('Y-m-d');
         $this->bahagian = '';
     }
@@ -106,7 +109,7 @@ class Dashboard extends Component
             ->whereBetween('submitted_at', [$this->fromDate(), $this->toDate()])
             ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
             ->when(
-                // Management (superadmin/helpdesk.admin/penyelia/pengurusan)
+                // Management (superadmin/helpdesk.admin/pengurusan)
                 // see org-wide figures; anyone else only their own.
                 ! $this->seesOrgWide(),
                 fn ($q) => $q->where('report_by_id', Auth::id())
@@ -140,12 +143,12 @@ class Dashboard extends Component
     protected function statusBreakdown(): array
     {
         $counts = (clone $this->reportCountQuery())
-            ->whereIn('report_status_id', [2, 3, 4, 5, 6])
+            ->whereIn('report_status_id', ReportStatuses::COUNTED)
             ->select('report_status_id', DB::raw('count(*) as total'))
             ->groupBy('report_status_id')
             ->pluck('total', 'report_status_id');
 
-        return ReportStatus::whereIn('id', [2, 3, 4, 5, 6])->get()
+        return ReportStatus::whereIn('id', ReportStatuses::COUNTED)->get()
             ->map(fn ($s) => ['label' => $s->desc, 'value' => (int) ($counts[$s->id] ?? 0)])
             ->values()->all();
     }
@@ -155,7 +158,7 @@ class Dashboard extends Component
     {
         $rows = (clone $this->reportCountQuery())
             ->join('report_categories', 'reports.report_category_id', '=', 'report_categories.id')
-            ->whereIn('report_status_id', [2, 3, 4, 5, 6])
+            ->whereIn('report_status_id', ReportStatuses::COUNTED)
             ->select('report_categories.desc as label', DB::raw('count(*) as total'))
             ->groupBy('report_categories.desc')
             ->having('total', '>', 0)
@@ -187,7 +190,7 @@ class Dashboard extends Component
                 'users.ldap_bahagian',
                 DB::raw('count(distinct t.report_id) as diterima'),
                 DB::raw('count(distinct case when r.report_status_id = 5 then r.id end) as selesai'),
-                DB::raw('count(distinct case when r.report_status_id in (4,6) then r.id end) as dalam_tindakan')
+                DB::raw('count(distinct case when r.report_status_id in (2,3,4,6,7,8) then r.id end) as dalam_tindakan')
             )
             ->groupBy('users.id', 'users.name', 'users.ldap_bahagian')
             ->having('diterima', '>', 0)
@@ -206,7 +209,7 @@ class Dashboard extends Component
         $completedExpr = $this->yearMonthExpr('completed_at');
 
         $submitted = (clone $this->reportCountQuery())
-            ->whereIn('report_status_id', [2, 3, 4, 5, 6])
+            ->whereIn('report_status_id', ReportStatuses::COUNTED)
             ->select(DB::raw("{$submittedExpr} as ym"), DB::raw('count(*) as total'))
             ->groupBy('ym')->pluck('total', 'ym');
 
@@ -286,7 +289,7 @@ class Dashboard extends Component
     protected function bahagianBreakdown(): array
     {
         $rows = (clone $this->reportCountQuery())
-            ->whereIn('report_status_id', [2, 3, 4, 5, 6])
+            ->whereIn('report_status_id', ReportStatuses::COUNTED)
             ->whereNotNull('bahagian_pengadu')
             ->where('bahagian_pengadu', '<>', '')
             ->select('bahagian_pengadu as label', DB::raw('count(*) as total'))
@@ -348,10 +351,12 @@ class Dashboard extends Component
             bahagian: $bahagianBreakdown,
         );
 
-        $total = (clone $this->reportCountQuery())->whereIn('report_status_id', [2, 3, 4, 5, 6])->count();
-        $resolved = (clone $this->reportCountQuery())->where('report_status_id', 5)->count();
-        $inProgress = (clone $this->reportCountQuery())->whereIn('report_status_id', [6, 4, 2, 3])->count();
-        $kiv = (clone $this->reportCountQuery())->where('report_status_id', 6)->count();
+        $total = (clone $this->reportCountQuery())->whereIn('report_status_id', ReportStatuses::COUNTED)->count();
+        $resolved = (clone $this->reportCountQuery())->whereIn('report_status_id', ReportStatuses::DONE)->count();
+        // 7 (Selesai Tindakan) and 8 (Tindakan Lanjut) are still open aduan:
+        // the officer has reported back but the helpdesk has not closed them.
+        $inProgress = (clone $this->reportCountQuery())->whereIn('report_status_id', ReportStatuses::IN_PROGRESS)->count();
+        $kiv = (clone $this->reportCountQuery())->where('report_status_id', ReportStatuses::KIV)->count();
         $resolutionRate = $total > 0 ? round($resolved / $total * 100) : 0;
 
         return view('livewire.dashboard.dashboard', [

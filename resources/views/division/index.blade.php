@@ -160,8 +160,8 @@
             title:"Anda pasti?",
             icon:"warning",
             showCancelButton:!0,
-            confirmButtonColor:"#34c38f",
-            cancelButtonColor:"#f46a6a",
+            confirmButtonColor:"#5a68cf",
+            cancelButtonColor:"#d4636f",
             confirmButtonText:"Teruskan",
             cancelButtonText:"Batal",
         }).then(function(t){

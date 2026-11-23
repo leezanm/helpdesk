@@ -24,7 +24,7 @@ extracted into **Actions** (`app/Actions/**`) and view helpers in `app/Support`.
 thin: they render page wrappers that mount the relevant Livewire component. Reference and analytics
 screens (dashboard / laporan) remain server-rendered Blade fed by JSON API endpoints for charts.
 
-Converted to Livewire: Kategori, Status, Pengguna (users + assets), Peranan (roles, read-only),
+Converted to Livewire: Kategori, Status, Tahap Risiko, Pengguna (users + assets), Peranan (roles, read-only),
 the full Aduan (report) flow (index / create / edit / show + trail + admin tasks + feedback),
 and the header notification bell. Dashboard / laporan charts intentionally remain on the existing
 ApexCharts/ECharts + API approach.

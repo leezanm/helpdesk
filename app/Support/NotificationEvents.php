@@ -8,8 +8,8 @@ namespace App\Support;
  * hardcoded behaviour, so seeding introduces no behavioural change).
  *
  * Each default: [label, enabled, roles[], include_reporter, include_assigned_officer, extra_emails[]]
- * "aduan.adminTask holders" was previously helpdesk.admin (+ penyelia + superadmin).
- * We express that via roles so superadmin can edit it later.
+ * "aduan.adminTask holders" is expressed via roles so a superadmin can edit
+ * the recipients later from /tetapan/notifikasi.
  */
 class NotificationEvents
 {
@@ -45,7 +45,9 @@ class NotificationEvents
             self::ADUAN_DITUGASKAN => [
                 'label' => 'Aduan Ditugaskan kepada Pegawai',
                 'enabled' => true,
-                'roles' => ['penyelia'],
+                // Assigned officer only. Add helpdesk.admin from
+                // /tetapan/notifikasi if a supervisor copy is wanted.
+                'roles' => [],
                 'include_reporter' => false,
                 'include_assigned_officer' => true,
                 'extra_emails' => [],

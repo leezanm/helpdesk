@@ -35,6 +35,20 @@ class ReportController extends Controller
         return view('aduan.index', ['scope' => 'tindakan', 'username' => null]);
     }
 
+    /**
+     * Officer's own work history: aduan they resolved. Same listing component,
+     * same search/filters — only the scope differs.
+     */
+    public function indexSelesai()
+    {
+        return view('aduan.index', [
+            'scope' => 'selesai',
+            'username' => null,
+            'title' => 'Senarai Aduan',
+            'crumb' => 'Senarai Aduan',
+        ]);
+    }
+
     public function create()
     {
         return view('aduan.create');

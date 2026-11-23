@@ -44,7 +44,7 @@ class DashboardRoutingTest extends FeatureTestCase
 
     public function test_management_roles_can_open_main_dashboard()
     {
-        foreach (['helpdesk.admin', 'penyelia', 'pengurusan', 'superadmin'] as $role) {
+        foreach (['helpdesk.admin', 'pengurusan', 'superadmin'] as $role) {
             $res = $this->actingAs($this->user([$role]))->get('/dashboard/utama');
             $res->assertOk();
             $res->assertSee('Beban Tugas Pegawai');

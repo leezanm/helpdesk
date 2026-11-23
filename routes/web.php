@@ -45,6 +45,8 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
         Route::get('/', [App\Http\Controllers\ReportController::class, 'index'])->name('index')->middleware('can:aduan.all');
         Route::get('/user/{user:username}', [App\Http\Controllers\ReportController::class, 'indexUser'])->name('index-user');
         Route::get('/untuk-tindakan', [App\Http\Controllers\ReportController::class, 'indexUntukTindakan'])->name('index-untuk-tindakan')->middleware('can:aduan.updateTask');
+        // Sejarah kerja pegawai teknikal: aduan yang dia pernah selesaikan.
+        Route::get('/selesai-saya', [App\Http\Controllers\ReportController::class, 'indexSelesai'])->name('index-selesai')->middleware('can:aduan.updateTask');
         Route::get('/dihantar', [App\Http\Controllers\ReportController::class, 'indexDihantar'])->name('index-dihantar')->middleware('can:aduan.adminTask');
         Route::get('/create', [App\Http\Controllers\ReportController::class, 'create'])->name('create');
         Route::get('/edit/{report}', [App\Http\Controllers\ReportController::class, 'edit'])->name('edit');
@@ -53,6 +55,31 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
     });
 
 
+
+    // Pergerakan pegawai — jadual pemantauan unit (ganti Google Sheet).
+    // Laluan lain (jadual bulanan, senarai, cetak/eksport, jenis) ditambah
+    // bersama skrinnya dalam task berikutnya.
+    Route::prefix('pergerakan')->as('pergerakan.')->group(function () {
+        Route::get('/', [App\Http\Controllers\MovementController::class, 'calendar'])
+            ->name('calendar')
+            ->middleware('can:pergerakan.view');
+        Route::get('/senarai', [App\Http\Controllers\MovementController::class, 'index'])
+            ->name('index')
+            ->middleware('can:pergerakan.view');
+        Route::get('/cetak', [App\Http\Controllers\MovementController::class, 'print'])
+            ->name('print')
+            ->middleware('can:pergerakan.view');
+
+        Route::get('/saya', [App\Http\Controllers\MovementController::class, 'my'])
+            ->name('my')
+            ->middleware('can:pergerakan.create');
+        Route::get('/pegawai-dipantau', [App\Http\Controllers\MovementController::class, 'roster'])
+            ->name('roster')
+            ->middleware('can:pergerakan.manageRoster');
+        Route::get('/jenis', [App\Http\Controllers\MovementController::class, 'types'])
+            ->name('types')
+            ->middleware('can:pergerakan.manageRoster');
+    });
 
     Route::get('/audit-trail', [App\Http\Controllers\AuditTrailController::class, 'index'])->middleware('can:manage.audit-trail');
     Route::get('/selenggara', [App\Http\Controllers\MaintenanceController::class, 'index']);
@@ -66,6 +93,12 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
         // CRUD now handled by Livewire (App\Livewire\Category\*); only the
         // page wrapper route remains.
         Route::get('/', [App\Http\Controllers\ReportCategoryController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('aras-risiko')->as('risk-level.')->middleware('can:manage.category')->group(function () {
+        // Edit / activate handled by Livewire (App\Livewire\RiskLevel\RiskLevelIndex);
+        // only the page wrapper route lives here.
+        Route::get('/', [App\Http\Controllers\RiskLevelController::class, 'index'])->name('index');
     });
 
     Route::prefix('status')->as('status.')->middleware('can:manage.category')->group(function () {
@@ -97,6 +130,7 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
         Route::get('/', [App\Http\Controllers\LaporanController::class,'index']);
         Route::get('/mengikut-status-tindakan', [App\Http\Controllers\LaporanController::class, 'viewByStatus'])->name('view-by-status');
         Route::get('/mengikut-kategori', [App\Http\Controllers\LaporanController::class, 'viewByCategory'])->name('view-by-category');
+        Route::get('/mengikut-tahap-risiko', [App\Http\Controllers\LaporanController::class, 'viewByRisk'])->name('view-by-risk');
         Route::get('/soal-selidik', [App\Http\Controllers\LaporanController::class, 'viewByRating'])->name('view-by-rating');
         // Route::get('/mengikut-user', [App\Http\Controllers\LaporanController::class, 'viewByUser'])->name('view-by-user');
         Route::get('/mengikut-bahagian', [App\Http\Controllers\LaporanController::class, 'viewByDepartment'])->name('view-by-department');
@@ -105,7 +139,7 @@ Route::middleware(['auth', 'audit-trail', 'ensure-phone'])->group(function () {
 
     });
 
-    Route::prefix('peranan')->as('role.')->group(function () {
+    Route::prefix('peranan')->as('role.')->middleware('can:manage.role')->group(function () {
         // Listing handled by Livewire (App\Livewire\Role\RoleIndex).
         // The store/update endpoints were non-functional stubs and are removed.
         Route::get('/', [App\Http\Controllers\RoleManagementController::class, 'index'])->name('index');

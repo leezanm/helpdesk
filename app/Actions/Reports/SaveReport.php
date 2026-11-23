@@ -54,6 +54,18 @@ class SaveReport
                 ?? ($data['bp_bahagian'] ?? Auth::user()->ldap_bahagian);
 
             if ($represented) {
+                // The wakil supplies the represented person's phone number on
+                // the form, so an aduan filed on someone's behalf always has a
+                // reachable contact. Write it to their profile: every screen and
+                // email reads the phone from the pengadu's user record
+                // (reportBy->tel_no), and it also clears the forced
+                // phone-completion prompt on their next login.
+                $telNo = trim((string) ($data['bp_tel_no'] ?? ''));
+                if ($telNo !== '' && $telNo !== (string) $represented->tel_no) {
+                    $represented->tel_no = $telNo;
+                    $represented->save();
+                }
+
                 // Represented person exists as a local user: they become the
                 // owner (report_by_id). The acting wakil is kept in bp_* so the
                 // "Aduan Saya" scope (report_by_id OR bp_user_id) still shows the
@@ -64,6 +76,7 @@ class SaveReport
                 $report->bp_name = Auth::user()->name;
                 $report->bp_bahagian = Auth::user()->ldap_bahagian;
                 $report->bp_email = Auth::user()->email;
+                $report->bp_tel_no = Auth::user()->tel_no;
             } else {
                 // Represented person is AD-only (no local user record). We cannot
                 // point report_by_id at a non-existent user, so the acting user
@@ -75,6 +88,9 @@ class SaveReport
                 $report->bp_name = $data['bp_name'] ?? null;
                 $report->bp_bahagian = $data['bp_bahagian'] ?? null;
                 $report->bp_email = $data['bp_email'] ?? null;
+                // No local record to write the phone to, so it is kept on the
+                // aduan itself (same convention as the other bp_* fields here).
+                $report->bp_tel_no = $data['bp_tel_no'] ?? null;
             }
         } else {
             // Direct aduan: the logged-in user is the pengadu.
@@ -88,7 +104,7 @@ class SaveReport
 
         if ($statusId === 2) {
             // Recipients are configurable per event (superadmin). Defaults
-            // mirror the previous behaviour: reporter + helpdesk/penyelia.
+            // mirror the previous behaviour: reporter + helpdesk.
             $this->notifyGroup(
                 NotificationRecipients::for(NotificationEvents::ADUAN_DIHANTAR_PENGADU, $report),
                 new ReportSendNotification($report)

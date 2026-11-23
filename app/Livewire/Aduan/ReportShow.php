@@ -4,11 +4,13 @@ namespace App\Livewire\Aduan;
 
 use App\Actions\Reports\SubmitFeedback;
 use App\Actions\Reports\TransitionReportStatus;
+use App\Models\Ref\RiskLevel;
 use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\ReportTrail;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
@@ -50,6 +52,13 @@ class ReportShow extends Component
     // Category change
     public ?int $report_category_id = null;
 
+    // Risk level (tahap risiko) — set by helpdesk, mandatory before the aduan
+    // can be forwarded to a technical officer.
+    public ?int $risk_level_id = null;
+
+    /** Trail status logged when the risk level is set/changed. */
+    private const TRAIL_STATUS_RISK_SET = 11;
+
     public function mount(Report $report): void
     {
         // Access control: only legitimate viewers (owner, wakil, assigned
@@ -72,6 +81,16 @@ class ReportShow extends Component
 
         $this->report = $report;
         $this->report_category_id = $report->report_category_id;
+        $this->risk_level_id = $report->risk_level_id;
+    }
+
+    /**
+     * An aduan may only be forwarded / reassigned to a technical officer once
+     * the helpdesk has classified its risk level.
+     */
+    public function getNeedsRiskLevelProperty(): bool
+    {
+        return $this->report->risk_level_id === null;
     }
 
     // ---- Helpers to decide which panels show ----
@@ -110,6 +129,16 @@ class ReportShow extends Component
             'kiv_start_at.required_if' => 'Ruangan tarikh mula KIV diperlukan.',
             'kiv_end_at.required_if' => 'Ruangan tarikh tamat KIV diperlukan.',
         ]);
+
+        // Risk level is mandatory before the aduan goes to a technical officer
+        // (tindakan 1 = majukan, 2 = penugasan semula). Checked against the
+        // SAVED value, so picking one in the dropdown without saving is not
+        // enough.
+        if (in_array((int) $this->tindakan, [1, 2], true) && $this->needsRiskLevel) {
+            $this->addError('tindakan', 'Sila tetapkan Tahap Risiko aduan sebelum memajukan kepada pegawai.');
+
+            return;
+        }
 
         $transition->handle($this->report, [
             'tindakan' => (int) $this->tindakan,
@@ -172,10 +201,10 @@ class ReportShow extends Component
 
     public function closeReport(SubmitFeedback $submitFeedback): void
     {
-        // From "Selesai Tindakan" (7): reporter, helpdesk or penyelia closes
-        // with rating.
+        // From "Selesai Tindakan" (7): the reporter, helpdesk or superadmin
+        // closes with a rating.
         abort_unless(
-            ($this->report->reportBy?->is(Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'helpdesk.admin', 'penyelia']))
+            ($this->report->reportBy?->is(Auth::user()) || Auth::user()->hasAnyRole(['superadmin', 'penyelia', 'helpdesk.admin']))
                 && $this->report->report_status_id == 7,
             403
         );
@@ -203,6 +232,52 @@ class ReportShow extends Component
         session()->flash('report-message', 'Kategori berjaya dikemaskini.');
     }
 
+    // ================= Risk level (tahap risiko) =================
+
+    /**
+     * Helpdesk classifies the aduan's risk (levels 1..5, maintained in
+     * _risk_levels). Only active levels are accepted, and every change is
+     * written to the aduan trail for audit.
+     */
+    public function setRiskLevel(): void
+    {
+        $this->authorize('aduan.adminTask');
+
+        $this->validate([
+            'risk_level_id' => [
+                'required',
+                Rule::exists('_risk_levels', 'id')->where('is_active', true),
+            ],
+        ], [
+            'risk_level_id.required' => 'Sila pilih tahap risiko.',
+            'risk_level_id.exists' => 'Tahap risiko tidak sah atau tidak aktif.',
+        ]);
+
+        $previous = $this->report->riskLevel;
+
+        if ($previous && $previous->id === (int) $this->risk_level_id) {
+            session()->flash('report-message', 'Tahap risiko tidak berubah.');
+
+            return;
+        }
+
+        $this->report->risk_level_id = (int) $this->risk_level_id;
+        $this->report->save();
+
+        $new = RiskLevel::findOrFail($this->risk_level_id);
+
+        $trail = new ReportTrail();
+        $trail->updated_by_id = Auth::id();
+        $trail->status_id = self::TRAIL_STATUS_RISK_SET;
+        $trail->message = $previous
+            ? 'Tahap risiko aduan ditukar daripada <b>'.e($previous->label).'</b> kepada <b>'.e($new->label).'</b> oleh peg. helpdesk.'
+            : 'Tahap risiko aduan ditetapkan sebagai <b>'.e($new->label).'</b> oleh peg. helpdesk.';
+        $this->report->trails()->save($trail);
+
+        $this->report->refresh();
+        session()->flash('report-message', 'Tahap risiko berjaya dikemaskini.');
+    }
+
     public function render()
     {
         $roles = Role::whereHas('permissions', fn ($q) => $q->where('name', 'aduan.updateTask'))
@@ -217,6 +292,9 @@ class ReportShow extends Component
             'roles' => $roles,
             'officers' => $officers,
             'categories' => ReportCategory::active()->orderBy('desc')->get(),
+            // Only active levels are offered; a level already saved on this
+            // aduan stays visible via $report->riskLevel even if deactivated.
+            'riskLevels' => RiskLevel::active()->orderBy('level')->get(),
             'trails' => $this->report->trails()->with('status')->get(),
             'attachments' => $this->report->attachments()->get(),
             'canAdmin' => Auth::user()->can('aduan.adminTask'),

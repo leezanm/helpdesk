@@ -9,7 +9,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 
 /**
- * Lesson Learn — pangkalan pengetahuan.
+ * Knowledge Base — pangkalan pengetahuan.
  *
  * Senarai boleh cari bagi rekod tindakan yang telah selesai (trail status 9
  * "Selesai Tindakan") yang mengandungi punca masalah + langkah penyelesaian.

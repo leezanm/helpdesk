@@ -51,6 +51,13 @@
                                 <input wire:model="bp_bahagian" type="text" class="form-control" readonly>
                                 @error('bp_bahagian') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
                             </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">No. Telefon <span class="text-danger">*</span></label>
+                                <input wire:model="bp_tel_no" type="text" maxlength="30" placeholder="Cth: 03-8000 0000"
+                                       class="form-control @error('bp_tel_no') is-invalid @enderror">
+                                <div class="form-text">Nombor ini akan dikemas kini dalam profil pengguna yang diwakilkan.</div>
+                                @error('bp_tel_no') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
                         </div>
                     </div>
                 @endif

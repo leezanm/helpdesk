@@ -104,7 +104,7 @@ class DashboardDummySeeder extends Seeder
             }
         }
 
-        // --- Lesson Learn: resolved-action records (status 7 + trail 9) ---
+        // --- Knowledge Base: resolved-action records (status 7 + trail 9) ---
         // Realistic punca masalah + langkah penyelesaian across categories, so
         // the knowledge base has meaningful, searchable content.
         $lessons = [

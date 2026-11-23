@@ -128,4 +128,19 @@ class DashboardTest extends FeatureTestCase
             })
             ->assertSee('Beban Tugas Pegawai');
     }
+
+    public function test_main_dashboard_date_filter_defaults_to_start_of_year()
+    {
+        $user = User::factory()->create();
+        $user->syncRoles(['helpdesk.admin']);
+
+        Livewire::actingAs($user)
+            ->test(Dashboard::class)
+            ->assertSet('dateFrom', now()->startOfYear()->format('Y-m-d'))
+            ->assertSet('dateTo', now()->format('Y-m-d'))
+            // "Set Semula" returns to the same year-to-date range.
+            ->set('dateFrom', now()->subYears(2)->format('Y-m-d'))
+            ->call('resetFilter')
+            ->assertSet('dateFrom', now()->startOfYear()->format('Y-m-d'));
+    }
 }

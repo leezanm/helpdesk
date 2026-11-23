@@ -1,0 +1,603 @@
+/*
+ * KKDW Helpdesk — rebranding mockups, pusingan 2: PASTEL (tiada asas hijau).
+ *
+ * Semua arah mewarisi struktur lapang yang dipilih dari "Pudina Segar":
+ * sidebar cerah, kad KPI berasingan, banyak ruang putih, bayang lembut.
+ * Yang berubah: keluarga warna pastel, pasangan fon, dan aksen susun atur.
+ *
+ * Teknik pastel yang boleh digunakan (bukan sekadar warna cair):
+ *   --primary        nada dalam  -> teks, butang, ikon (kontras cukup)
+ *   --primary-mid    nada pastel -> carta, gradien
+ *   --primary-050    tint sangat cair -> latar jubin ikon, baris hover
+ * Tanpa nada dalam itu, UI pastel jadi kabur dan gagal kontras WCAG.
+ *
+ *   E  Lavender Mist     — lavender + blush          · Manrope
+ *   F  Sky & Peach       — biru langit + pic         · DM Sans + Space Grotesk
+ *   G  Blush & Cream     — plum berdebu + aprikot    · Instrument Sans + Fraunces
+ *   H  Periwinkle Butter — periwinkle + mentega      · Figtree + Sora
+ */
+
+/* ============================================================
+   Shared defaults
+   ============================================================ */
+:root {
+    --gap: 1.25rem;
+    --side-w: 266px;
+    --content-pad: 1.6rem 1.75rem 2.5rem;
+    --brand-pad: 1.2rem 1.1rem;
+    --brand-radius: 12px;
+    --brand-tracking: -0.015em;
+    --nav-pad: 0.64rem 0.85rem;
+    --nav-pad-x: 0.75rem;
+    --nav-radius: 12px;
+    --rail-inset: 50% auto auto 0;
+    --rail-w: 0;
+    --avatar-radius: 50%;
+    --iconbtn-radius: 11px;
+    --btn-radius: 11px;
+    --input-radius: 11px;
+    --badge-radius: 999px;
+    --label-case: none;
+
+    --hero-pad: 1.7rem;
+    --hero-title-size: 1.65rem;
+    --hero-title-weight: 700;
+    --hero-title-tracking: -0.025em;
+
+    --kpi-gap: 0.9rem;
+    --kpi-pad: 1.15rem 1.2rem;
+    --kpi-top-gap: 0.75rem;
+    --kpi-ic-size: 34px;
+    --kpi-ic-radius: 11px;
+    --kpi-ic-font: 1rem;
+    --kpi-value-size: 1.85rem;
+    --kpi-value-weight: 700;
+    --kpi-radius: 15px;
+    --kpi-wrap-bg: transparent;
+    --kpi-wrap-border: 0;
+    --kpi-wrap-shadow: none;
+    --kpi-divider: 1px solid var(--border);
+
+    --meter-pad: 0.95rem 1.2rem;
+    --meter-h: 9px;
+    --panel-head-pad: 1.05rem 1.3rem 0.95rem;
+    --panel-body-pad: 1.15rem 1.25rem;
+
+    --chart-bar-radius: 6;
+    --chart-line-w: 2.5;
+    --chart-grid-dash: dashed;
+}
+
+/* ============================================================
+   E — LAVENDER MIST   lavender + blush   · Manrope
+   Pastel paling neutral: ungu lembut sejuk, mudah diterima,
+   masih nampak rasmi. Blush hanya untuk aksen kecil.
+   ============================================================ */
+[data-theme="e"] {
+    --font-body: 'Manrope', system-ui, sans-serif;
+    --font-display: 'Manrope', system-ui, sans-serif;
+
+    --primary: #6354c8;
+    --primary-600: #52449f;
+    --primary-mid: #a79aea;
+    --primary-050: #ece9fb;
+    --accent: #e0749f;
+    --accent-600: #c35680;
+    --accent-050: #fceaf1;
+
+    --bg: #f8f7fe;
+    --bg-image:
+        radial-gradient(900px 340px at 100% -10%, rgba(167,154,234,0.22), transparent 62%),
+        radial-gradient(760px 300px at -6% 0%, rgba(224,116,159,0.12), transparent 58%);
+    --surface: #ffffff;
+    --surface-2: #f5f3fc;
+    --border: #e8e4f6;
+    --text: #221f33;
+    --muted: #6f6a87;
+
+    --success: #3f9c84; --success-050: #e6f5f1;
+    --warning: #c08a2e; --warning-050: #fbf2e1;
+    --danger:  #d2607c; --danger-050:  #fbeaef;
+
+    --radius: 17px;
+    --shadow-sm: 0 1px 3px rgba(99,84,200,0.06);
+    --shadow: 0 10px 30px rgba(99,84,200,0.10);
+
+    --side-bg: #ffffff;
+    --side-border: 1px solid var(--border);
+    --side-sep: 1px solid var(--border);
+    --side-scroll: #ded8f1;
+    --side-fg: #6d6785;
+    --side-fg-strong: var(--text);
+    --side-fg-dim: #a19ab8;
+    --side-ic: #a9a1c6;
+    --nav-hover-bg: var(--surface-2);
+    --nav-on-bg: var(--primary-050);
+    --nav-on-fg: var(--primary-600);
+    --nav-on-ic: var(--primary);
+    --brand-fg: var(--text);
+    --brand-mark-bg: linear-gradient(135deg, #7b6ad8, #b49ef0 70%, #f0a9c6);
+    --brand-mark-fg: #fff;
+    --brand-mark-shadow: 0 8px 18px rgba(123,106,216,0.32);
+
+    --top-bg: rgba(255,255,255,0.88);
+    --top-border: 1px solid var(--border);
+    --iconbtn-bg: var(--surface-2);
+    --iconbtn-border: 0;
+
+    --hero-bg: linear-gradient(120deg, #ffffff 0%, #f1edfd 55%, #fdeef4 100%);
+    --hero-border: 1px solid #e6dffa;
+    --hero-shadow: var(--shadow-sm);
+    --hero-fg: var(--text);
+    --hero-sub: var(--muted);
+    --hero-eyebrow: var(--primary);
+    --hero-deco: radial-gradient(circle, rgba(224,116,159,0.18), transparent 70%);
+    --hero-deco-inset: -140px -100px auto auto;
+    --hero-deco-w: 380px; --hero-deco-h: 380px; --hero-deco-radius: 50%;
+    --chip-bg: #fff; --chip-border: 1px solid var(--border); --chip-fg: var(--text);
+
+    --btn-primary-bg: linear-gradient(135deg, #6c5cd0, #9a86e8);
+    --btn-primary-fg: #fff; --btn-primary-bd: transparent;
+    --btn-primary-shadow: 0 8px 18px rgba(108,92,208,0.28);
+    --btn-ghost-bg: #fff; --btn-ghost-fg: var(--primary-600); --btn-ghost-bd: #dcd4f3;
+
+    --input-bg: #fff; --input-bd: var(--border);
+
+    --kpi-bg: var(--surface); --kpi-border: 1px solid var(--border);
+    --kpi-shadow: var(--shadow-sm);
+    --kpi-hero-bg: linear-gradient(180deg, #f0ecfd, #ffffff 78%);
+    --kpi-hero-value: var(--primary-600);
+    --kpi-hero-rail-w: 3px; --kpi-hero-rail-inset: 0 auto 0 0;
+
+    --meter-bg: var(--surface); --meter-border: 1px solid var(--border);
+    --meter-track: #ece8f8; --meter-fill: linear-gradient(90deg, #7b6ad8, #b49ef0 55%, #f0a9c6);
+
+    --panel-eyebrow: var(--primary);
+    --thead-bg: var(--surface-2);
+    --row-hover: var(--primary-050);
+
+    --chart-1: #7b6ad8; --chart-2: #e8a0bf; --chart-3: #9fc4ef; --chart-4: #efc98a;
+    --chart-5: #b7acdf; --chart-6: #88cfc2;
+    --chart-grid: #ece8f8; --chart-ink: #221f33; --chart-muted: #6f6a87;
+    --chart-tooltip-bg: rgba(34,31,51,0.94);
+    --chart-bar-radius: 7;
+}
+
+/* ============================================================
+   F — SKY & PEACH   biru langit + pic   · DM Sans + Space Grotesk
+   Pastel paling "segar". Biru kekal selamat untuk sektor awam,
+   pic memberi kehangatan supaya tak sejuk macam tema korporat biasa.
+   ============================================================ */
+[data-theme="f"] {
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-display: 'Space Grotesk', system-ui, sans-serif;
+
+    --primary: #3f85cf;
+    --primary-600: #2f6ca9;
+    --primary-mid: #8cc0ec;
+    --primary-050: #e5f1fc;
+    --accent: #ef8f66;
+    --accent-600: #d06f45;
+    --accent-050: #fdeee6;
+
+    --bg: #f5faff;
+    --bg-image:
+        radial-gradient(900px 340px at 100% -10%, rgba(140,192,236,0.26), transparent 62%),
+        radial-gradient(720px 300px at -5% 0%, rgba(239,143,102,0.12), transparent 58%);
+    --surface: #ffffff;
+    --surface-2: #f1f7fd;
+    --border: #e0ebf6;
+    --text: #15293b;
+    --muted: #637a8d;
+
+    --success: #2f9a85; --success-050: #e4f5f1;
+    --warning: #c28a33; --warning-050: #fbf2e3;
+    --danger:  #d9655f; --danger-050:  #fcebe9;
+
+    --radius: 16px;
+    --shadow-sm: 0 1px 3px rgba(21,41,59,0.05);
+    --shadow: 0 10px 28px rgba(21,41,59,0.08);
+
+    /* Sidebar bertint biru sangat cair — lebih segar daripada putih kosong */
+    --side-bg: linear-gradient(180deg, #f3f9ff 0%, #eef6fd 100%);
+    --side-border: 1px solid var(--border);
+    --side-sep: 1px solid #e3eef8;
+    --side-scroll: #cfe2f2;
+    --side-fg: #5d7489;
+    --side-fg-strong: var(--text);
+    --side-fg-dim: #94a9bb;
+    --side-ic: #9ab4ca;
+    --nav-hover-bg: #e8f2fb;
+    --nav-on-bg: #ffffff;
+    --nav-on-fg: var(--primary-600);
+    --nav-on-ic: var(--primary);
+    --rail-w: 3px; --rail-inset: 22% auto 22% 0; --rail-bg: var(--accent);
+    --brand-fg: var(--text);
+    --brand-mark-bg: linear-gradient(135deg, #5aa0e0, #9ed0f2 65%, #f7b48f);
+    --brand-mark-fg: #fff;
+    --brand-mark-shadow: 0 8px 18px rgba(90,160,224,0.30);
+
+    --top-bg: rgba(255,255,255,0.9);
+    --top-border: 1px solid var(--border);
+    --iconbtn-bg: var(--surface-2);
+    --iconbtn-border: 0;
+
+    --hero-bg: linear-gradient(118deg, #ffffff 0%, #eaf4fd 58%, #fdf0e9 100%);
+    --hero-border: 1px solid #dceaf7;
+    --hero-shadow: var(--shadow-sm);
+    --hero-fg: var(--text);
+    --hero-sub: var(--muted);
+    --hero-eyebrow: var(--accent-600);
+    --hero-deco: radial-gradient(circle, rgba(140,192,236,0.3), transparent 70%);
+    --hero-deco-inset: -150px -110px auto auto;
+    --hero-deco-w: 400px; --hero-deco-h: 400px; --hero-deco-radius: 50%;
+    --chip-bg: #fff; --chip-border: 1px solid var(--border); --chip-fg: var(--text);
+
+    --btn-primary-bg: linear-gradient(135deg, #4a90d8, #7fb8ea);
+    --btn-primary-fg: #fff; --btn-primary-bd: transparent;
+    --btn-primary-shadow: 0 8px 18px rgba(74,144,216,0.28);
+    --btn-ghost-bg: #fff; --btn-ghost-fg: var(--primary-600); --btn-ghost-bd: #cfe2f3;
+
+    --input-bg: #fff; --input-bd: var(--border);
+
+    /* Kad KPI dengan garis aksen halus di atas */
+    --kpi-bg: var(--surface); --kpi-border: 1px solid var(--border);
+    --kpi-shadow: var(--shadow-sm);
+    --kpi-radius: 14px;
+    --kpi-hero-bg: linear-gradient(180deg, #e9f3fd, #ffffff 78%);
+    --kpi-hero-value: var(--primary-600);
+    --kpi-hero-rail-w: auto; --kpi-hero-rail-h: 3px; --kpi-hero-rail-inset: 0 0 auto 0;
+    --kpi-hero-rail-bg: linear-gradient(90deg, var(--primary), var(--accent));
+
+    --meter-bg: var(--surface); --meter-border: 1px solid var(--border);
+    --meter-track: #e7f0f9; --meter-fill: linear-gradient(90deg, #5aa0e0, #9ed0f2 55%, #f7b48f);
+
+    --panel-eyebrow: var(--primary);
+    --thead-bg: var(--surface-2);
+    --row-hover: var(--primary-050);
+
+    --chart-1: #5aa0e0; --chart-2: #f09a72; --chart-3: #9ed0f2; --chart-4: #f3cd8c;
+    --chart-5: #a8b8d8; --chart-6: #7fc9bd;
+    --chart-grid: #e7f0f9; --chart-ink: #15293b; --chart-muted: #637a8d;
+    --chart-tooltip-bg: rgba(21,41,59,0.94);
+    --chart-bar-radius: 6;
+}
+
+/* Tema F: nombor besar guna Space Grotesk (angka tajam dan kemas) */
+[data-theme="f"] .kpi__vl,
+[data-theme="f"] .hero h1,
+[data-theme="f"] .meterrow__vl { font-family: var(--font-display); letter-spacing: -0.03em; }
+
+/* ============================================================
+   F2 — SKY MONO   biru langit sahaja (tiada peach)
+   Skema monokrom: satu hue, banyak nada. Aksen = azure yang lebih
+   terang, bukan warna panas. Carta guna tangga biru + slate neutral.
+   Warna status (hijau/amber/merah) DIKEKALKAN kerana ia makna, bukan
+   jenama — kalau semua jadi biru, "Selesai" dan "KIV" tak dapat
+   dibezakan sekilas pandang. Nadanya diredamkan supaya duduk dalam
+   keluarga pastel yang sama.
+   ============================================================ */
+[data-theme="f2"] {
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-display: 'Space Grotesk', system-ui, sans-serif;
+
+    --primary: #3f85cf;
+    --primary-600: #2f6ca9;
+    --primary-mid: #8cc0ec;
+    --primary-050: #e5f1fc;
+    /* Aksen: azure lebih terang dalam hue yang sama */
+    --accent: #1e9bd7;
+    --accent-600: #1680b5;
+    --accent-050: #e2f4fc;
+
+    --bg: #f5faff;
+    --bg-image:
+        radial-gradient(900px 340px at 100% -10%, rgba(140,192,236,0.28), transparent 62%),
+        radial-gradient(720px 300px at -5% 0%, rgba(63,133,207,0.10), transparent 58%);
+    --surface: #ffffff;
+    --surface-2: #f1f7fd;
+    --border: #e0ebf6;
+    --text: #15293b;
+    --muted: #637a8d;
+
+    /* Status: makna, bukan jenama — diredamkan agar selaras pastel */
+    --success: #2f9a85; --success-050: #e4f5f1;
+    --warning: #c28a33; --warning-050: #fbf2e3;
+    --danger:  #d9655f; --danger-050:  #fcebe9;
+
+    --radius: 16px;
+    --shadow-sm: 0 1px 3px rgba(21,41,59,0.05);
+    --shadow: 0 10px 28px rgba(21,41,59,0.08);
+
+    --side-bg: linear-gradient(180deg, #f3f9ff 0%, #eef6fd 100%);
+    --side-border: 1px solid var(--border);
+    --side-sep: 1px solid #e3eef8;
+    --side-scroll: #cfe2f2;
+    --side-fg: #5d7489;
+    --side-fg-strong: var(--text);
+    --side-fg-dim: #94a9bb;
+    --side-ic: #9ab4ca;
+    --nav-hover-bg: #e8f2fb;
+    --nav-on-bg: #ffffff;
+    --nav-on-fg: var(--primary-600);
+    --nav-on-ic: var(--primary);
+    --rail-w: 3px; --rail-inset: 22% auto 22% 0; --rail-bg: var(--accent);
+    --brand-fg: var(--text);
+    --brand-mark-bg: linear-gradient(135deg, #2f6ca9, #5aa0e0 60%, #9ed0f2);
+    --brand-mark-fg: #fff;
+    --brand-mark-shadow: 0 8px 18px rgba(63,133,207,0.30);
+
+    --top-bg: rgba(255,255,255,0.9);
+    --top-border: 1px solid var(--border);
+    --iconbtn-bg: var(--surface-2);
+    --iconbtn-border: 0;
+
+    --hero-bg: linear-gradient(118deg, #ffffff 0%, #eaf4fd 55%, #dfeefb 100%);
+    --hero-border: 1px solid #dceaf7;
+    --hero-shadow: var(--shadow-sm);
+    --hero-fg: var(--text);
+    --hero-sub: var(--muted);
+    --hero-eyebrow: var(--accent-600);
+    --hero-deco: radial-gradient(circle, rgba(140,192,236,0.34), transparent 70%);
+    --hero-deco-inset: -150px -110px auto auto;
+    --hero-deco-w: 400px; --hero-deco-h: 400px; --hero-deco-radius: 50%;
+    --chip-bg: #fff; --chip-border: 1px solid var(--border); --chip-fg: var(--text);
+
+    --btn-primary-bg: linear-gradient(135deg, #3f85cf, #6fb0e6);
+    --btn-primary-fg: #fff; --btn-primary-bd: transparent;
+    --btn-primary-shadow: 0 8px 18px rgba(63,133,207,0.28);
+    --btn-ghost-bg: #fff; --btn-ghost-fg: var(--primary-600); --btn-ghost-bd: #cfe2f3;
+
+    --input-bg: #fff; --input-bd: var(--border);
+
+    --kpi-bg: var(--surface); --kpi-border: 1px solid var(--border);
+    --kpi-shadow: var(--shadow-sm);
+    --kpi-radius: 14px;
+    --kpi-hero-bg: linear-gradient(180deg, #e9f3fd, #ffffff 78%);
+    --kpi-hero-value: var(--primary-600);
+    --kpi-hero-rail-w: auto; --kpi-hero-rail-h: 3px; --kpi-hero-rail-inset: 0 0 auto 0;
+    --kpi-hero-rail-bg: linear-gradient(90deg, var(--primary-600), var(--primary-mid));
+
+    --meter-bg: var(--surface); --meter-border: 1px solid var(--border);
+    --meter-track: #e7f0f9; --meter-fill: linear-gradient(90deg, #2f6ca9, #5aa0e0 55%, #9ed0f2);
+
+    --panel-eyebrow: var(--accent-600);
+    --thead-bg: var(--surface-2);
+    --row-hover: var(--primary-050);
+
+    /* Tangga biru + slate neutral: 6 siri masih boleh dibezakan */
+    --chart-1: #2f6ca9; --chart-2: #5aa0e0; --chart-3: #9ed0f2;
+    --chart-4: #8da4b8; --chart-5: #1e9bd7; --chart-6: #c3d9e9;
+    --chart-grid: #e7f0f9; --chart-ink: #15293b; --chart-muted: #637a8d;
+    --chart-tooltip-bg: rgba(21,41,59,0.94);
+    --chart-bar-radius: 6;
+}
+
+[data-theme="f2"] .kpi__vl,
+[data-theme="f2"] .hero h1,
+[data-theme="f2"] .meterrow__vl { font-family: var(--font-display); letter-spacing: -0.03em; }
+
+/* ============================================================
+   G — BLUSH & CREAM   plum berdebu + aprikot   · Instrument Sans + Fraunces
+   Pastel hangat di atas kertas krim. Paling beridentiti — tak nampak
+   macam template admin. Tajuk serif Fraunces beri rasa kemas dan mahal.
+   ============================================================ */
+[data-theme="g"] {
+    --font-body: 'Instrument Sans', system-ui, sans-serif;
+    --font-display: 'Fraunces', Georgia, serif;
+
+    --primary: #8c5a8e;
+    --primary-600: #744874;
+    --primary-mid: #c49ac6;
+    --primary-050: #f6ebf6;
+    --accent: #d98963;
+    --accent-600: #b96a45;
+    --accent-050: #fbeee6;
+
+    --bg: #fdf8f6;
+    --bg-image:
+        radial-gradient(880px 330px at 100% -8%, rgba(196,154,198,0.20), transparent 60%),
+        radial-gradient(700px 290px at -4% 0%, rgba(217,137,99,0.12), transparent 58%);
+    --surface: #fffdfc;
+    --surface-2: #f8f1ef;
+    --border: #eee1de;
+    --text: #2b2126;
+    --muted: #7d6e74;
+
+    --success: #4f9183; --success-050: #e9f3f0;
+    --warning: #bb8a36; --warning-050: #faf1e2;
+    --danger:  #c9655e; --danger-050:  #faeae7;
+
+    --radius: 16px;
+    --shadow-sm: 0 1px 3px rgba(43,33,38,0.04);
+    --shadow: 0 10px 28px rgba(43,33,38,0.07);
+    --gap: 1.3rem;
+
+    --side-bg: #fbf4f2;
+    --side-border: 1px solid var(--border);
+    --side-sep: 1px solid var(--border);
+    --side-scroll: #e4d2ce;
+    --side-fg: #6f6165;
+    --side-fg-strong: var(--text);
+    --side-fg-dim: #a3938f;
+    --side-ic: #b29ca2;
+    --nav-hover-bg: #f5eae7;
+    --nav-on-bg: var(--surface);
+    --nav-on-fg: var(--primary-600);
+    --nav-on-ic: var(--accent);
+    --nav-radius: 11px;
+    --rail-w: 3px; --rail-inset: 22% auto 22% 0; --rail-bg: var(--accent);
+    --brand-fg: var(--text);
+    --brand-mark-bg: linear-gradient(135deg, #a06ba2, #d2a7d4 65%, #efb495);
+    --brand-mark-fg: #fff;
+    --brand-mark-shadow: 0 8px 18px rgba(160,107,162,0.26);
+
+    --top-bg: rgba(253,248,246,0.9);
+    --top-border: 1px solid var(--border);
+    --iconbtn-bg: var(--surface-2);
+    --iconbtn-border: 1px solid var(--border);
+
+    --hero-pad: 1.8rem 1.75rem;
+    --hero-bg: linear-gradient(118deg, var(--surface) 0%, #f9eef6 60%, #fdefe6 100%);
+    --hero-border: 1px solid #eddfe3;
+    --hero-shadow: var(--shadow-sm);
+    --hero-fg: var(--text);
+    --hero-sub: var(--muted);
+    --hero-eyebrow: var(--accent-600);
+    --hero-title-size: 1.95rem;
+    --hero-title-weight: 600;
+    --hero-title-tracking: -0.01em;
+    --hero-deco: linear-gradient(90deg, var(--accent), rgba(217,137,99,0) 72%);
+    --hero-deco-inset: auto 0 0 0; --hero-deco-h: 3px;
+    --chip-bg: var(--surface); --chip-border: 1px solid var(--border); --chip-fg: var(--text);
+
+    --btn-primary-bg: linear-gradient(135deg, #96628f, #bf86b4);
+    --btn-primary-fg: #fff; --btn-primary-bd: transparent;
+    --btn-primary-shadow: 0 8px 18px rgba(150,98,143,0.24);
+    --btn-ghost-bg: var(--surface); --btn-ghost-fg: var(--primary-600); --btn-ghost-bd: #e3cfdb;
+
+    --input-bg: var(--surface); --input-bd: #e6d8d4;
+    --badge-radius: 8px;
+
+    /* KPI: grid hairline 1px — kemas, tenang, tanpa bayang */
+    --kpi-gap: 1px;
+    --kpi-wrap-bg: var(--border);
+    --kpi-wrap-border: 1px solid var(--border);
+    --kpi-bg: var(--surface); --kpi-border: 0;
+    --kpi-divider: 0; --kpi-radius: 0; --kpi-shadow: none;
+    --kpi-hero-bg: #f8edf5;
+    --kpi-hero-value: var(--primary-600);
+    --kpi-value-weight: 600;
+    --kpi-value-size: 1.95rem;
+
+    --meter-bg: var(--surface); --meter-border: 1px solid var(--border);
+    --meter-track: #f0e4e1; --meter-fill: linear-gradient(90deg, #a06ba2, #d2a7d4 55%, #efb495);
+
+    --panel-eyebrow: var(--accent-600);
+    --thead-bg: var(--surface-2);
+    --row-hover: var(--surface-2);
+
+    --chart-1: #a06ba2; --chart-2: #e09a74; --chart-3: #c9a7d4; --chart-4: #e8c88e;
+    --chart-5: #b49ba0; --chart-6: #80b3ab;
+    --chart-grid: #efe3e0; --chart-ink: #2b2126; --chart-muted: #7d6e74;
+    --chart-tooltip-bg: rgba(43,33,38,0.94);
+    --chart-bar-radius: 5;
+}
+
+[data-theme="g"] .panel__t,
+[data-theme="g"] .filters__head,
+[data-theme="g"] .kpi__vl { font-family: var(--font-display); font-weight: 600; }
+
+/* ============================================================
+   H — PERIWINKLE BUTTER   periwinkle + mentega   · Figtree + Sora
+   Pastel sejuk-panas: biru-ungu lembut dengan kuning mentega.
+   Paling ceria tanpa jadi kebudak-budakan; hero sedikit lebih berwarna.
+   ============================================================ */
+[data-theme="h"] {
+    --font-body: 'Figtree', system-ui, sans-serif;
+    --font-display: 'Sora', system-ui, sans-serif;
+
+    --primary: #5a68cf;
+    --primary-600: #4854a8;
+    --primary-mid: #9ba7ec;
+    --primary-050: #eaedfc;
+    --accent: #e0ad46;
+    --accent-600: #b78a2b;
+    --accent-050: #fdf4e2;
+
+    --bg: #f7f8fe;
+    --bg-image:
+        radial-gradient(900px 340px at 100% -10%, rgba(155,167,236,0.24), transparent 62%),
+        radial-gradient(720px 300px at -5% 0%, rgba(224,173,70,0.12), transparent 58%);
+    --surface: #ffffff;
+    --surface-2: #f3f5fd;
+    --border: #e4e8f6;
+    --text: #1c2138;
+    --muted: #6a7089;
+
+    --success: #3b9b86; --success-050: #e5f5f1;
+    --warning: #c08f2b; --warning-050: #fbf3e0;
+    --danger:  #d4636f; --danger-050:  #fbebed;
+
+    --radius: 18px;
+    --shadow-sm: 0 1px 3px rgba(28,33,56,0.05);
+    --shadow: 0 12px 30px rgba(90,104,207,0.12);
+
+    --side-bg: #ffffff;
+    --side-border: 1px solid var(--border);
+    --side-sep: 1px solid var(--border);
+    --side-scroll: #d9dff5;
+    --side-fg: #686e88;
+    --side-fg-strong: var(--text);
+    --side-fg-dim: #9ba1ba;
+    --side-ic: #a3a9c6;
+    --nav-hover-bg: var(--surface-2);
+    --nav-on-bg: var(--primary-050);
+    --nav-on-fg: var(--primary-600);
+    --nav-on-ic: var(--primary);
+    --rail-w: 3px; --rail-inset: 24% auto 24% 0; --rail-bg: var(--accent);
+    --brand-fg: var(--text);
+    --brand-mark-bg: linear-gradient(135deg, #6b78dc, #9ba7ec 60%, #f2cd7e);
+    --brand-mark-fg: #fff;
+    --brand-mark-shadow: 0 8px 18px rgba(107,120,220,0.30);
+
+    --top-bg: rgba(255,255,255,0.88);
+    --top-border: 1px solid var(--border);
+    --iconbtn-bg: var(--surface-2);
+    --iconbtn-border: 0;
+
+    /* Hero sedikit lebih berwarna: jalur pastel penuh, teks gelap */
+    --hero-pad: 1.8rem;
+    --hero-bg: linear-gradient(118deg, #e7ebfc 0%, #dde3fa 46%, #fbefd5 100%);
+    --hero-border: 1px solid #dde2f6;
+    --hero-shadow: var(--shadow-sm);
+    --hero-fg: #1c2138;
+    --hero-sub: #5f668a;
+    --hero-eyebrow: var(--primary-600);
+    --hero-title-size: 1.75rem;
+    --hero-title-weight: 600;
+    --hero-deco: radial-gradient(circle, rgba(255,255,255,0.75), transparent 70%);
+    --hero-deco-inset: -160px -120px auto auto;
+    --hero-deco-w: 420px; --hero-deco-h: 420px; --hero-deco-radius: 50%;
+    --chip-bg: rgba(255,255,255,0.75); --chip-border: 1px solid #fff; --chip-fg: var(--text);
+
+    --btn-primary-bg: linear-gradient(135deg, #5a68cf, #8b97e8);
+    --btn-primary-fg: #fff; --btn-primary-bd: transparent;
+    --btn-primary-shadow: 0 8px 18px rgba(90,104,207,0.30);
+    --btn-ghost-bg: rgba(255,255,255,0.8); --btn-ghost-fg: var(--primary-600); --btn-ghost-bd: #fff;
+
+    --input-bg: #fff; --input-bd: var(--border);
+
+    --kpi-bg: var(--surface); --kpi-border: 1px solid var(--border);
+    --kpi-shadow: var(--shadow-sm);
+    --kpi-radius: 16px;
+    --kpi-ic-size: 36px; --kpi-ic-radius: 12px;
+    --kpi-hero-bg: linear-gradient(180deg, #edf0fd, #ffffff 78%);
+    --kpi-hero-value: var(--primary-600);
+    --kpi-hero-rail-w: 3px; --kpi-hero-rail-inset: 0 auto 0 0;
+    --kpi-value-size: 1.9rem; --kpi-value-weight: 600;
+
+    --meter-bg: var(--surface); --meter-border: 1px solid var(--border);
+    --meter-track: #e9ecf9; --meter-fill: linear-gradient(90deg, #6b78dc, #9ba7ec 55%, #f2cd7e);
+
+    --panel-eyebrow: var(--primary);
+    --thead-bg: var(--surface-2);
+    --row-hover: var(--primary-050);
+
+    --chart-1: #6b78dc; --chart-2: #f0c86f; --chart-3: #9ba7ec; --chart-4: #8ed0c6;
+    --chart-5: #c3a7e6; --chart-6: #ef9f9f;
+    --chart-grid: #e9ecf9; --chart-ink: #1c2138; --chart-muted: #6a7089;
+    --chart-tooltip-bg: rgba(28,33,56,0.94);
+    --chart-bar-radius: 8;
+}
+
+[data-theme="h"] .kpi__vl,
+[data-theme="h"] .hero h1,
+[data-theme="h"] .panel__t { font-family: var(--font-display); letter-spacing: -0.03em; }
+
+/* ============================================================
+   Responsif (semua tema)
+   ============================================================ */
+@media (max-width: 1500px) { .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 880px)  { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 1100px) { .side { display: none; } }

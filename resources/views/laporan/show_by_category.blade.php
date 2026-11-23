@@ -125,10 +125,10 @@
                                     <span class="{{$report->status->class}} font-size-11">{{$report->status->desc}}</span>
                                     @if ($report->report_status_id == 3)
                                         <br>
-                                        <a href="#" class="userProfile" data-userId="{{$report->currentTrail->updated_by_id}}">{{$report->currentTrail->updatedBy->name}}</a>
+                                        <a href="#" class="userProfile" data-userId="{{$report->currentTrail?->updated_by_id}}">{{$report->currentTrail?->updatedBy?->name ?? '-'}}</a>
                                     @elseif($report->report_status_id == 4)
                                         <br>
-                                        <a href="#" class="userProfile" data-userId="{{$report->currentTrail->assigned_to_id}}">{{$report->currentTrail->assignedTo->name}}</a>
+                                        <a href="#" class="userProfile" data-userId="{{$report->currentTrail?->assigned_to_id}}">{{$report->currentTrail?->assignedTo?->name ?? '-'}}</a>
                                     @endif
                                 </td>
                                 <td class="text-center">

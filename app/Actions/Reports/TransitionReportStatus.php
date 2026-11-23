@@ -76,7 +76,7 @@ class TransitionReportStatus
         $report->trails()->save($trail);
 
         // Recipients are configurable per event (superadmin). The default for
-        // "aduan_ditugaskan" includes the assigned officer + penyelia.
+        // "aduan_ditugaskan" is the assigned officer.
         if (in_array($tindakan, [1, 2], true)) {
             $this->notifyGroup(
                 NotificationRecipients::for(NotificationEvents::ADUAN_DITUGASKAN, $report),
@@ -121,7 +121,7 @@ class TransitionReportStatus
         $report->trails()->save($trail);
 
         // Officer outcome — notify per the configurable "selesai tindakan"
-        // event (default: helpdesk + penyelia).
+        // event (default: helpdesk).
         $this->notifyGroup(
             NotificationRecipients::for(NotificationEvents::ADUAN_SELESAI_TINDAKAN, $report),
             new ReportAssignedNotification($report)

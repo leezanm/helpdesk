@@ -6,7 +6,9 @@ use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\ReportTrail;
 use App\Models\Ref\ReportStatus;
+use App\Models\Ref\RiskLevel;
 use App\Models\User;
+use App\Support\ReportStatuses;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
@@ -21,6 +23,8 @@ use Livewire\WithPagination;
  *   'user'     -> indexUser (own / bagi-pihak reports)
  *   'dihantar' -> indexDihantar (status 2,3)
  *   'tindakan' -> indexUntukTindakan (assigned to me, status 4,6)
+ *   'selesai'  -> indexSelesai (assigned to me, status 5,7 — sejarah kerja
+ *                 pegawai teknikal: aduan yang dia pernah selesaikan)
  */
 class ReportIndex extends Component
 {
@@ -44,6 +48,9 @@ class ReportIndex extends Component
     #[Url]
     public string $statusId = '';
 
+    #[Url]
+    public string $riskLevelId = '';
+
     public function mount(string $scope = 'user', ?string $username = null): void
     {
         $this->scope = $scope;
@@ -57,6 +64,7 @@ class ReportIndex extends Component
             'all' => $user->can('aduan.all'),
             'dihantar' => $user->can('aduan.adminTask'),
             'tindakan' => $user->can('aduan.updateTask'),
+            'selesai' => $user->can('aduan.updateTask'),
             // 'user' scope: only your own list (or admins viewing a list).
             default => $username === null
                 || $username === $user->username
@@ -89,9 +97,14 @@ class ReportIndex extends Component
         $this->resetPage();
     }
 
+    public function updatingRiskLevelId(): void
+    {
+        $this->resetPage();
+    }
+
     public function resetFilters(): void
     {
-        $this->reset(['search', 'bahagian', 'categoryId', 'officerId', 'statusId']);
+        $this->reset(['search', 'bahagian', 'categoryId', 'officerId', 'statusId', 'riskLevelId']);
         $this->resetPage();
     }
 
@@ -110,13 +123,29 @@ class ReportIndex extends Component
         $userId = Auth::id();
 
         return match ($this->scope) {
-            'all' => Report::whereIn('report_status_id', [2, 3, 4, 5, 6]),
+            'all' => Report::whereIn('report_status_id', ReportStatuses::COUNTED),
             'dihantar' => Report::whereIn('report_status_id', [2, 3]),
             'tindakan' => Report::whereIn('report_status_id', [4, 6])
                 ->join('report_trails', 'reports.id', '=', 'report_trails.report_id')
                 ->select('reports.*', 'report_trails.id as trail_id', 'assigned_to_id')
                 ->where('report_trails.id', DB::raw('(select id from report_trails where report_id = reports.id order by id desc limit 1)'))
                 ->where('assigned_to_id', $userId),
+            // Sejarah kerja pegawai: aduan yang SUDAH selesai dan pegawai
+            // bertanggungjawab terakhirnya ialah pengguna ini. Padanan dibuat
+            // pada trail penugasan TERAKHIR (trail status-sahaja yang kemudian
+            // membawa assigned_to_id = null diabaikan), sama seperti penapis
+            // 'officerId'. Jadi aduan yang telah ditugaskan semula kepada
+            // pegawai lain tidak lagi muncul di sini.
+            'selesai' => Report::whereIn('report_status_id', [
+                ReportStatuses::SELESAI,
+                ReportStatuses::SELESAI_TINDAKAN,
+            ])->whereExists(function ($sub) use ($userId) {
+                $sub->select(DB::raw(1))
+                    ->from('report_trails')
+                    ->whereColumn('report_trails.report_id', 'reports.id')
+                    ->where('report_trails.assigned_to_id', $userId)
+                    ->where('report_trails.id', DB::raw('(select max(t2.id) from report_trails t2 where t2.report_id = reports.id and t2.assigned_to_id is not null)'));
+            }),
             default => Report::where(function ($q) use ($userId) {
                 $q->where('report_by_id', $userId)->orWhere('bp_user_id', $userId);
             }),
@@ -128,7 +157,7 @@ class ReportIndex extends Component
         $reports = $this->baseQuery()
             // Load pengadu contact fields so the list can show email/phone on
             // hover for officers to reach the complainant quickly.
-            ->with(['category', 'status', 'reportBy:id,name,email,tel_no,ldap_bahagian'])
+            ->with(['category', 'status', 'riskLevel', 'reportBy:id,name,email,tel_no,ldap_bahagian'])
             ->when($this->search !== '', function ($q) {
                 $q->where(function ($sub) {
                     $sub->where('subject', 'like', '%'.$this->search.'%')
@@ -138,6 +167,7 @@ class ReportIndex extends Component
             ->when($this->bahagian !== '', fn ($q) => $q->where('bahagian_pengadu', $this->bahagian))
             ->when($this->categoryId !== '', fn ($q) => $q->where('report_category_id', $this->categoryId))
             ->when($this->statusId !== '', fn ($q) => $q->where('report_status_id', $this->statusId))
+            ->when($this->riskLevelId !== '', fn ($q) => $q->where('risk_level_id', $this->riskLevelId))
             ->when($this->officerId !== '', function ($q) {
                 // Reports whose latest ASSIGNMENT trail belongs to the chosen
                 // officer. Compare against the latest trail that actually
@@ -168,12 +198,18 @@ class ReportIndex extends Component
             'canAdmin' => $canAdmin,
             // Show the pengadu (complainant) column — with hover contact — for
             // admins and for officers viewing their "dalam tindakan" list.
-            'showPengadu' => $canAdmin || $this->scope === 'tindakan',
+            'showPengadu' => $canAdmin || in_array($this->scope, ['tindakan', 'selesai'], true),
+            // Pada skop 'selesai' pegawainya sentiasa pengguna sendiri, jadi
+            // dropdown pegawai hanya menambah kekusutan.
+            'showOfficerFilter' => $this->scope !== 'selesai',
             'showOfficer' => $showOfficer,
             'assignedOfficers' => $assignedOfficers,
             'bahagianOptions' => $this->bahagianOptions(),
             'categoryOptions' => ReportCategory::orderBy('desc')->get(['id', 'desc']),
             'statusOptions' => ReportStatus::whereIn('id', $this->scopeStatusIds())->orderBy('id')->get(['id', 'desc']),
+            // All levels (incl. deactivated ones) so historic aduan remain
+            // filterable.
+            'riskLevelOptions' => RiskLevel::orderBy('level')->get(),
             'officerOptions' => $this->officerOptions(),
         ]);
     }
@@ -230,9 +266,10 @@ class ReportIndex extends Component
     protected function scopeStatusIds(): array
     {
         return match ($this->scope) {
-            'all' => [2, 3, 4, 5, 6],
+            'all' => ReportStatuses::COUNTED,
             'dihantar' => [2, 3],
             'tindakan' => [4, 6],
+            'selesai' => [ReportStatuses::SELESAI, ReportStatuses::SELESAI_TINDAKAN],
             default => [1, 2, 3, 4, 5, 6, 7, 8],
         };
     }

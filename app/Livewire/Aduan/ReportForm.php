@@ -33,6 +33,13 @@ class ReportForm extends Component
     public string $bp_email = '';
     public string $bp_bahagian = '';
 
+    /**
+     * Phone number of the represented person. Editable by the wakil so an
+     * aduan filed on someone's behalf always carries a contact number, and
+     * the represented person's profile gets updated at the same time.
+     */
+    public string $bp_tel_no = '';
+
     public ?int $report_category_id = null;
     public string $subject = '';
     public string $remark = '';
@@ -52,6 +59,7 @@ class ReportForm extends Component
             'bp_name' => 'required_if:is_bp,true',
             'bp_email' => 'required_if:is_bp,true',
             'bp_bahagian' => 'required_if:is_bp,true',
+            'bp_tel_no' => 'required_if:is_bp,true|string|max:30',
             'attachments.*' => 'file|max:2048|mimes:pdf,jpeg,jpg,png',
         ];
     }
@@ -64,6 +72,8 @@ class ReportForm extends Component
         'bp_name.required_if' => 'Nama penuh diperlukan.',
         'bp_email.required_if' => 'Emel diperlukan.',
         'bp_bahagian.required_if' => 'Bahagian diperlukan.',
+        'bp_tel_no.required_if' => 'No. Telefon diperlukan.',
+        'bp_tel_no.max' => 'No. Telefon tidak boleh melebihi 30 aksara.',
     ];
 
     public function mount(?Report $report = null): void
@@ -76,15 +86,49 @@ class ReportForm extends Component
 
             $this->report = $report;
             $this->is_bp = (bool) $report->is_bp;
-            $this->bp_username = (string) $report->bp_username;
-            $this->bp_user_id = $report->bp_user_id;
-            $this->bp_name = (string) $report->bp_name;
-            $this->bp_email = (string) $report->bp_email;
-            $this->bp_bahagian = (string) $report->bp_bahagian;
             $this->report_category_id = $report->report_category_id;
             $this->subject = (string) $report->subject;
             $this->remark = (string) $report->remark;
+
+            if ($this->is_bp) {
+                $this->fillRepresentedFromReport($report);
+            }
         }
+    }
+
+    /**
+     * Load the represented person into the bp_* form fields.
+     *
+     * Note the asymmetry with the stored columns: once saved, the bp_* columns
+     * hold the ACTING WAKIL whenever the represented person has a local user
+     * record, because SaveReport makes that person the aduan owner
+     * (report_by_id). The form always edits the represented person, so read
+     * them from the owner in that case and fall back to the bp_* columns for an
+     * AD-only represented person (no local record to own the aduan).
+     */
+    protected function fillRepresentedFromReport(Report $report): void
+    {
+        $represented = $report->bp_user_id && $report->bp_user_id !== $report->report_by_id
+            ? $report->reportBy
+            : null;
+
+        if ($represented) {
+            $this->bp_username = (string) $represented->username;
+            $this->bp_user_id = $represented->id;
+            $this->bp_name = (string) $represented->name;
+            $this->bp_email = (string) $represented->email;
+            $this->bp_bahagian = (string) $represented->ldap_bahagian;
+            $this->bp_tel_no = (string) $represented->tel_no;
+
+            return;
+        }
+
+        $this->bp_username = (string) $report->bp_username;
+        $this->bp_user_id = $report->bp_user_id;
+        $this->bp_name = (string) $report->bp_name;
+        $this->bp_email = (string) $report->bp_email;
+        $this->bp_bahagian = (string) $report->bp_bahagian;
+        $this->bp_tel_no = (string) $report->bp_tel_no;
     }
 
     /**
@@ -92,18 +136,21 @@ class ReportForm extends Component
      * bp_username AJAX to api.get-user). Checks local users first, then AD.
      */
     /**
-     * Helpdesk officers may represent a user from ANY bahagian; a normal user
-     * may only represent someone from their OWN bahagian.
+     * IT support staff — juruteknik (jtk), Pegawai Teknologi Maklumat (ptm),
+     * Penolong Pegawai Teknologi Maklumat (pptm) and helpdesk officers — serve
+     * the whole ministry, so they may represent a user from ANY bahagian. They
+     * carry the aduan.representAny permission. Everyone else may only represent
+     * someone from their OWN bahagian.
      */
     public function canRepresentAnyBahagian(): bool
     {
-        return Auth::user()->can('aduan.adminTask');
+        return Auth::user()->can('aduan.representAny');
     }
 
     public function lookupBpUser(): void
     {
         $this->bpLookupError = null;
-        $this->reset(['bp_name', 'bp_email', 'bp_bahagian', 'bp_user_id']);
+        $this->reset(['bp_name', 'bp_email', 'bp_bahagian', 'bp_tel_no', 'bp_user_id']);
 
         if ($this->bp_username === Auth::user()->username) {
             $this->bpLookupError = 'Username mestilah dari pengguna lain.';
@@ -119,13 +166,16 @@ class ReportForm extends Component
             $this->bp_name = (string) $user->name;
             $this->bp_bahagian = (string) $user->ldap_bahagian;
             $this->bp_email = (string) $user->email;
+            // Prefill their current number (often empty) — the wakil may fill
+            // or correct it, and SaveReport writes it back to their profile.
+            $this->bp_tel_no = (string) $user->tel_no;
             $this->bp_user_id = $user->id;
             return;
         }
 
         try {
             $ldapUser = LdapUser::query()
-                ->select(['cn', 'physicaldeliveryofficename', 'userprincipalname'])
+                ->select(['cn', 'physicaldeliveryofficename', 'userprincipalname', 'telephonenumber', 'mobile'])
                 ->findBy('samaccountname', $this->bp_username);
         } catch (\Throwable $e) {
             $this->bpLookupError = 'Tidak dapat connect ke AD. Sila hubungi admin.';
@@ -141,6 +191,8 @@ class ReportForm extends Component
             $this->bp_name = (string) $ldapUser->getFirstAttribute('cn');
             $this->bp_bahagian = $bahagian;
             $this->bp_email = (string) $ldapUser->getFirstAttribute('userprincipalname');
+            $this->bp_tel_no = (string) ($ldapUser->getFirstAttribute('telephonenumber')
+                ?: $ldapUser->getFirstAttribute('mobile'));
         } else {
             $this->bpLookupError = 'Pengguna tidak dijumpai.';
         }
@@ -193,6 +245,7 @@ class ReportForm extends Component
             'bp_name' => $this->bp_name,
             'bp_email' => $this->bp_email,
             'bp_bahagian' => $this->bp_bahagian,
+            'bp_tel_no' => $this->bp_tel_no,
             'bp_user_id' => $this->bp_user_id,
             'report_category_id' => $this->report_category_id,
             'subject' => $this->subject,

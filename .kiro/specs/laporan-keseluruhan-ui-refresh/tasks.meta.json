@@ -1,0 +1,748 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Tambah kelas komponen halaman sebagai blok baharu di penghujung fail": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563233
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695581863
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794696674564
+      }
+    ],
+    "1.2 Tambah blok CSS hierarki sidebar dan tukar warna tajuk bahagian": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563266
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794696682943
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697174421
+      }
+    ],
+    "2.1 Betulkan markup rosak dan syarat buka kumpulan Laporan dalam `resources/views/layouts/navbar.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563296
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695583719
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794696675919
+      }
+    ],
+    "2.2 Tambah kelas `active` pada Item_Submenu yang tiada penanda aktif": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563338
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794696684327
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697175802
+      }
+    ],
+    "3.1 Tambah pengadang tarikh yang membetulkan ralat 500 parameter URL": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563375
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695584825
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794696677542
+      }
+    ],
+    "3.2 Alihkan `baseQuery()` kepada pengadang tarikh dan tambah `listQuery()`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563403
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794696685310
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697177349
+      }
+    ],
+    "4.1 Laksanakan `statusCounts()` beserta peta ikon status": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563430
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697185560
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697927749
+      }
+    ],
+    "4.2 Laksanakan `statusDonutData()`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563462
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697941712
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794699688009
+      }
+    ],
+    "4.3 Laksanakan pengumpulan Carta_Tren beserta ungkapan SQL per-pemacu": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563492
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794699695342
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794700464941
+      }
+    ],
+    "4.4 Sambungkan `render()` kepada pembina data baharu": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563535
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794700472174
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794702352633
+      }
+    ],
+    "4.6 Tulis ujian unit `dateBucketExpr()` bagi kedua-dua pemacu dalam `tests/Unit/Support/DateBucketExprTest.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563562
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794702360027
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794703048107
+      }
+    ],
+    "5. Checkpoint — lapisan data siap": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563591
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794718625867
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794721462264
+      }
+    ],
+    "6.1 Tulis kepala halaman statik dalam `resources/views/laporan/show_by_all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563621
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794699696180
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794700464739
+      }
+    ],
+    "6.2 Tulis ringkasan tempoh reaktif dalam `resources/views/livewire/laporan/report-all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563648
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794700473338
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794702353650
+      }
+    ],
+    "7.1 Cipta `resources/views/components/laporan/stat-tile.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563677
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697186471
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697928480
+      }
+    ],
+    "7.2 Cipta `resources/views/components/laporan/chart-box.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563706
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697941762
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794699687325
+      }
+    ],
+    "8.1 Tambah prop `resetBusyTarget` pada `resources/views/components/filter-bar.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563755
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697941817
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794699686272
+      }
+    ],
+    "8.2 Tulis bahagian penapis dalam `resources/views/livewire/laporan/report-all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563787
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794702361109
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794703049326
+      }
+    ],
+    "9.1 Tulis grid Kad_Statistik dalam `resources/views/livewire/laporan/report-all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563815
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794703061716
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794707637760
+      }
+    ],
+    "9.2 Tulis baris carta dan pemegang data JSON dalam `resources/views/livewire/laporan/report-all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563847
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794707645603
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794708716613
+      }
+    ],
+    "9.3 Tulis skrip carta dalam `@section('script')` `resources/views/laporan/show_by_all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563879
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794708724361
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794710031524
+      }
+    ],
+    "9.4 Kemas Jadual_Aduan dalam `resources/views/livewire/laporan/report-all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563909
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794710044731
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794712654680
+      }
+    ],
+    "10. Checkpoint — paparan siap": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563933
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794721468026
+      }
+    ],
+    "11.1 Cipta `app/Support/LaporanCsvExporter.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563963
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794703062802
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794707638628
+      }
+    ],
+    "11.2 Tambah tindakan `exportCsv()` dan sifat `$exportNotice` pada `app/Livewire/Laporan/ReportAll.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695563992
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794707646758
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794708715696
+      }
+    ],
+    "12.1 Tambah tindanan memuat dalam `resources/views/livewire/laporan/report-all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695564021
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794708725269
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794710031263
+      }
+    ],
+    "12.2 Lengkapkan keadaan kosong merentas bahagian dalam `resources/views/livewire/laporan/report-all.blade.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695564053
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794712660922
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794713689815
+      }
+    ],
+    "13.1 Tulis ujian regresi kelakuan dan kekangan repositori dalam `tests/Feature/Laporan/LaporanRegressionTest.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695564078
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794713697511
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794716547456
+      }
+    ],
+    "13.2 Tulis ujian render halaman yang berkongsi sidebar, `x-filter-bar` dan CSS yang disentuh dalam `tests/Feature/Laporan/SharedLayoutSmokeTest.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695564129
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794716556168
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794718620232
+      }
+    ],
+    "14. Checkpoint akhir": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794695564162
+      },
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794721473839
+      }
+    ],
+    "1. Asas CSS dalam `resources/css/app.css`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697174495
+      }
+    ],
+    "2. Markup hierarki dan pembetulan pepijat Sidebar_Sistem": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697175865
+      }
+    ],
+    "3. Pengadang parameter URL dan pertanyaan yang dikongsi dalam `app/Livewire/Laporan/ReportAll.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794697177390
+      }
+    ],
+    "7. Komponen Blade baharu khusus halaman ini": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794699687419
+      }
+    ],
+    "6. Kepala_Halaman dan ringkasan tempoh": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794702353689
+      }
+    ],
+    "4. Pembina data Kad_Statistik dan carta dalam `app/Livewire/Laporan/ReportAll.php`": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794703048156
+      }
+    ],
+    "8. Kad Penapis_Laporan dan butang Eksport CSV": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794703049371
+      }
+    ],
+    "11. Eksport_CSV": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794708715810
+      }
+    ],
+    "9. Kad_Statistik, bekas carta, skrip carta dan Jadual_Aduan": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794712654731
+      }
+    ],
+    "12. Keadaan memuat dan keadaan kosong": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794713689880
+      }
+    ],
+    "13. Pas regresi": [
+      {
+        "executionId": "d947f114-84de-44ae-af61-37bdf8064683",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794718620292
+      }
+    ],
+    "15.1 Tukar Kad_Statistik kepada Nada_Pastel dalam `resources/css/app.css` dan `resources/views/components/laporan/stat-tile.blade.php`": [
+      {
+        "executionId": "98307d3d-130d-4ec1-93b5-f2760328a104",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794754616309
+      },
+      {
+        "executionId": "98307d3d-130d-4ec1-93b5-f2760328a104",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794787673707
+      }
+    ],
+    "18.1 Tulis semula pertanyaan agregat bahagian dalam `app/Http/Controllers/LaporanController.php`": [
+      {
+        "executionId": "98307d3d-130d-4ec1-93b5-f2760328a104",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794754617192
+      },
+      {
+        "executionId": "98307d3d-130d-4ec1-93b5-f2760328a104",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794787675090
+      }
+    ],
+    "15.2 Kemaskan Label_Paksi_Tarikh dan Legenda_Carta_Status dalam `resources/views/laporan/show_by_all.blade.php`": [
+      {
+        "executionId": "98307d3d-130d-4ec1-93b5-f2760328a104",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794787683294
+      },
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794789458639
+      },
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794791589637
+      }
+    ],
+    "18.2 Tulis ujian ciri bahagian dalam `tests/Feature/Laporan/LaporanByDepartmentTest.php`": [
+      {
+        "executionId": "98307d3d-130d-4ec1-93b5-f2760328a104",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794787684188
+      },
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794789451162
+      }
+    ],
+    "15. Pembetulan kecacatan visual selepas semakan mockup": [
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794791589704
+      },
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795045595317
+      }
+    ],
+    "18.3 Buang kes khas MySQL dalam `tests/Feature/Laporan/SharedLayoutSmokeTest.php`": [
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794791602593
+      },
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794799098179
+      }
+    ],
+    "16.1 Tulis ujian properti paparan dalam `tests/Feature/Livewire/Laporan/ReportAllTablePropertiesTest.php`": [
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794791604418
+      },
+      {
+        "executionId": "18efc65d-a15a-4bfa-a472-0ace7788d5c0",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794822949272
+      },
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795045610236
+      },
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795045686480
+      },
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795045693774
+      },
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795046495844
+      }
+    ],
+    "16.2 Tulis ujian keadaan memuat dan kosong dalam `tests/Feature/Laporan/LaporanLoadingStateTest.php`": [
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794791605435
+      },
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794799097136
+      }
+    ],
+    "18. Pertanyaan `viewByDepartment` yang mudah alih": [
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794799098217
+      }
+    ],
+    "15.3 Selaraskan Legenda_Carta_Status dan nilai tengah donat dengan mockup": [
+      {
+        "executionId": "aec3cfa6-0644-4c0c-ac3e-fea56864b03a",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794801552417
+      },
+      {
+        "executionId": "18efc65d-a15a-4bfa-a472-0ace7788d5c0",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1794822949406
+      },
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795045595267
+      }
+    ],
+    "16. Ujian tertunda yang kini diwajibkan (jalankan selepas tugasan 15 mendarat)": [
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795046495903
+      }
+    ],
+    "17. Checkpoint — pembetulan visual dan ujian tertunda siap": [
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795046501772
+      }
+    ],
+    "19. Checkpoint — pembetulan di luar skop siap": [
+      {
+        "executionId": "c9a1eba9-0aba-416c-95f5-8c43f5d81bdc",
+        "chatSessionId": "sess_117dc6a9-3245-4fbe-b069-649f17a35db1",
+        "timestamp": 1795046510193
+      }
+    ]
+  }
+}

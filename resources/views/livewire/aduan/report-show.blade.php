@@ -24,6 +24,16 @@
                     <p class="section-title">Maklumat Aduan</p>
                     <div class="info-row"><div class="info-row__label">Subjek</div><div class="info-row__value fw-medium">{{ $report->subject }}</div></div>
                     <div class="info-row"><div class="info-row__label">Kategori</div><div class="info-row__value">{{ $report->category->desc ?? '-' }}</div></div>
+                    <div class="info-row">
+                        <div class="info-row__label">Tahap Risiko</div>
+                        <div class="info-row__value">
+                            @if ($report->riskLevel)
+                                <span class="{{ $report->riskLevel->class }}">{{ $report->riskLevel->label }}</span>
+                            @else
+                                <span class="badge bg-light text-dark">Belum Ditetapkan</span>
+                            @endif
+                        </div>
+                    </div>
                     <div class="info-row"><div class="info-row__label">Dihantar Pada</div><div class="info-row__value">{{ convertDateFormat($report->submitted_at, 'LL') }}</div></div>
                     <div class="info-row"><div class="info-row__label">Aduan</div><div class="info-row__value">{!! nl2br(e($report->remark)) !!}</div></div>
                 </div>
@@ -37,8 +47,9 @@
                     <div class="info-row"><div class="info-row__label">Jabatan</div><div class="info-row__value">{{ $report->reportBy->ldap_bahagian ?? '-' }}</div></div>
                     <div class="info-row"><div class="info-row__label">Username</div><div class="info-row__value">{{ $report->reportBy->username ?? '-' }}</div></div>
                     <div class="info-row"><div class="info-row__label">Emel</div><div class="info-row__value">{{ $report->reportBy->email ?? '-' }}</div></div>
+                    <div class="info-row"><div class="info-row__label">No. Telefon</div><div class="info-row__value">{{ $report->reportBy?->tel_no ?: '-' }}</div></div>
                     @if ($report->is_bp)
-                        <div class="info-row"><div class="info-row__label">Direkod Oleh (Wakil)</div><div class="info-row__value">{{ $report->bp_name }} <small class="text-muted">({{ $report->bp_username }})</small></div></div>
+                        <div class="info-row"><div class="info-row__label">Direkod Oleh (Wakil)</div><div class="info-row__value">{{ $report->bp_name }} <small class="text-muted">({{ $report->bp_username }})</small>@if ($report->bp_tel_no) <small class="text-muted">&middot; {{ $report->bp_tel_no }}</small>@endif</div></div>
                     @endif
                 </div>
             </div>
@@ -79,6 +90,45 @@
 
         {{-- ============ RIGHT: action panels ============ --}}
         <div class="col-12 col-lg-5">
+
+            {{-- ===== Tahap Risiko (helpdesk) ===== --}}
+            {{-- Wajib ditetapkan sebelum aduan boleh dimajukan kepada pegawai. --}}
+            @if ($canAdmin)
+                <div class="card mb-3 {{ $this->needsRiskLevel ? 'border-danger' : '' }}">
+                    <div class="card-body">
+                        <p class="section-title">Tahap Risiko Aduan</p>
+
+                        @if ($this->needsRiskLevel)
+                            <div class="alert alert-warning d-flex align-items-center gap-2 py-2">
+                                <i class="bi bi-exclamation-triangle-fill"></i>
+                                <span class="small">Tahap risiko wajib ditetapkan sebelum aduan boleh dimajukan kepada pegawai.</span>
+                            </div>
+                        @endif
+
+                        <form wire:submit.prevent="setRiskLevel">
+                            <div class="mb-2">
+                                <select wire:model.live="risk_level_id" class="form-select @error('risk_level_id') is-invalid @enderror">
+                                    <option value="">Sila Pilih Tahap Risiko</option>
+                                    @foreach ($riskLevels as $riskLevel)
+                                        <option value="{{ $riskLevel->id }}">{{ $riskLevel->label }}</option>
+                                    @endforeach
+                                </select>
+                                @error('risk_level_id') <p class="text-danger small mt-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            {{-- Kriteria tahap yang sedang dipilih, untuk rujukan pegawai --}}
+                            @php($selectedRisk = $riskLevels->firstWhere('id', (int) $risk_level_id))
+                            @if ($selectedRisk)
+                                <p class="text-muted small mb-3">{{ $selectedRisk->reference }}</p>
+                            @endif
+
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-outline-primary btn-sm" wire:loading.attr="disabled"><i class="bi bi-save me-1"></i>Simpan Tahap Risiko</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            @endif
 
             {{-- ===== Tindakan Admin / Helpdesk ===== --}}
             {{-- Aduan Disemak(3): majukan; Dalam Tindakan(4): tugas semula/KIV;
@@ -223,7 +273,7 @@
             @endif
 
             {{-- ===== Tutup Aduan (Selesai Tindakan = 7) — helpdesk atau pengguna ===== --}}
-            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'helpdesk.admin', 'penyelia'])) && $report->report_status_id == 7)
+            @if (($report->reportBy?->is(auth()->user()) || auth()->user()->hasAnyRole(['superadmin', 'penyelia', 'helpdesk.admin'])) && $report->report_status_id == 7)
                 <div class="card mb-3" style="border:1px solid var(--c-success)">
                     <div class="card-body">
                         <p class="section-title" style="color:var(--c-success)">Tutup Aduan (Selesai)</p>
@@ -235,7 +285,7 @@
                                 <div class="fs-4" x-data="{ r: @entangle('rating') }">
                                     <template x-for="i in 5" :key="i">
                                         <i class="bi" :class="i <= r ? 'bi-star-fill' : 'bi-star'"
-                                           style="color:#f59e0b;cursor:pointer" x-on:click="r = i"></i>
+                                           style="color:var(--c-butter,#e0ad46);cursor:pointer" x-on:click="r = i"></i>
                                     </template>
                                 </div>
                                 @error('rating') <p class="text-danger small mt-1">{{ $message }}</p> @enderror

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
  *   - Everyone else -> Dashboard Pengguna (only their own aduan).
  *
  * The org-wide "Dashboard Utama" is a SEPARATE page (/dashboard/utama),
- * reachable only by management roles (superadmin, helpdesk.admin, penyelia,
+ * reachable only by management roles (superadmin, helpdesk.admin,
  * pengurusan) via the `access-main-dashboard` gate. Management still land on
  * their personal dashboard first and open the main one from the menu.
  */

@@ -86,6 +86,15 @@
                     </tr>
                     <tr>
                         <td>3</td>
+                        <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-risk')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_risk">Laporan Mengikut Tahap Risiko</a></td>
+                        <td class="text-center">
+                            <a href="{{route('laporan.view-by-risk')}}" class="btn btn-primary waves-effect waves-light">
+                                <i class="bx bx-search-alt-2 label-icon font-size-16 align-middle me-2"></i> Lihat
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
                         <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-department')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_department">Laporan Aduan Mengikut Bahagian</a></td>
                         <td class="text-center">
                             <a href="{{route('laporan.view-by-department')}}" class="btn btn-primary waves-effect waves-light">
@@ -94,7 +103,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>4</td>
+                        <td>5</td>
                         <td class="text-start"><a href="#" class="laporan" data-url="{{route('api.laporan.by-role')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_by_role">Laporan Aduan Mengikut Pegawai Teknikal</a></td>
                         <td class="text-center">
                             <a href="{{route('laporan.view-by-role')}}" class="btn btn-primary waves-effect waves-light" role="button">
@@ -103,7 +112,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>5</td>
+                        <td>6</td>
                         <td class="text-start"><a href="#" id="rating" data-url="{{route('api.laporan.by-rating')}}" data-bs-toggle="modal" data-bs-target="#modal_laporan_soal_selidik">Laporan Soal Selidik</a></td>
                         <td class="text-center">
                             <a href="{{route('laporan.view-by-rating')}}" class="btn btn-primary waves-effect waves-light">
@@ -117,6 +126,7 @@
     </div>
     @include('laporan.modal.laporan_by_status')
     @include('laporan.modal.laporan_by_category')
+    @include('laporan.modal.laporan_by_risk')
     @include('laporan.modal.laporan_by_department')
     @include('laporan.modal.laporan_by_role')
     @include('laporan.modal.laporan_soal_selidik')

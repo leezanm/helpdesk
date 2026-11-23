@@ -21,9 +21,12 @@ class DatabaseSeeder extends Seeder
             // DivisionSeeder::class,
             UserSeeder::class,
             ReportStatusSeeder::class,
+            RiskLevelSeeder::class,
             ReportCategorySeeder::class,
             ReportTrailStatusSeeder::class,
             NotificationSettingSeeder::class,
+            MovementUnitSeeder::class,
+            MovementTypeSeeder::class,
         ]);
     }
 }

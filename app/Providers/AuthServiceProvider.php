@@ -14,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         \App\Models\Report::class => \App\Policies\ReportPolicy::class,
+        \App\Models\Movement::class => \App\Policies\MovementPolicy::class,
     ];
 
     /**

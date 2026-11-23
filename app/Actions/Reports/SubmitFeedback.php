@@ -36,7 +36,7 @@ class SubmitFeedback
 
         // Recipients configurable per event (superadmin). Defaults mirror the
         // previous behaviour: reporter gets the reporter notice, helpdesk +
-        // penyelia get the admin notice.
+        // helpdesk gets the admin notice.
         $this->notifyGroup(
             NotificationRecipients::for(NotificationEvents::ADUAN_SELESAI_PENGADU, $report),
             new ReportDoneReporterNotification($report)

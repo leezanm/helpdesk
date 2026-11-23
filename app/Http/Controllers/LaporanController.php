@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ref\RiskLevel;
 use App\Models\Report;
+use App\Support\ReportStatuses;
 use App\Models\ReportTrail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,6 +37,7 @@ class LaporanController extends Controller
 
         $aduans = \DB::table('reports')
                     ->selectRaw('report_status_id, count(*) as jumlah')
+                    ->whereIn('report_status_id', ReportStatuses::COUNTED)
                     ->when(filled($from), function($query) use($from){
                         $query->whereDate('submitted_at', '>=', Carbon::parse($from));
                     })
@@ -46,10 +49,12 @@ class LaporanController extends Controller
                  //  ->orderBy('report_status_id')
                   //  ->get();
 
+        // Draf excluded from both the rows and the denominator: it is not a
+        // submitted aduan, and counting it made the achievement % too low.
         $laporans = \DB::table('_report_statuses as report_status')
         ->leftJoinSub($aduans, 'aduans', function ($join) {
             $join->on('report_status.id', '=', 'aduans.report_status_id');
-        })->get();
+        })->whereIn('report_status.id', ReportStatuses::COUNTED)->get();
         // $laporans =  \DB::table('_report_statuses as report_status')
         //             ->select('id', 'desc')
         //             ->selectRaw('ifnull((select count(*) from reports where report_status_id = report_status.id and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_status_id),0) as jumlah', [filled($from), Carbon::parse($from), filled($to), Carbon::parse($to)])
@@ -117,6 +122,82 @@ class LaporanController extends Controller
                             ->orderBy('submitted_at', 'desc')->get();
 
         return view('laporan.show_by_category', compact('laporans', 'reports' , 'from', 'to', 'title', 'category'));
+    }
+
+    /**
+     * Aduan grouped by risk level (tahap risiko). Filtered by `risk` = the
+     * numeric level (1..5), which is stable, unlike the editable label.
+     * Aduan not yet classified by the helpdesk are reported as a separate
+     * "Belum Ditetapkan" row.
+     */
+    public function viewByRisk(Request $request){
+        $title = 'Mengikut Tahap Risiko';
+        $from = $request->from;
+        $to = $request->to;
+        $risk = $request->risk;
+
+        $counts = $this->riskCounts($from, $to);
+
+        $laporans = RiskLevel::orderBy('level')
+                    ->when(filled($risk), function($query) use($risk){
+                        $query->where('level', $risk);
+                    })
+                    ->get()
+                    ->map(function($level) use($counts){
+                        return (object) [
+                            'level' => $level->level,
+                            'desc' => $level->label,
+                            'class' => $level->class,
+                            'jumlah' => (int) ($counts[$level->id] ?? 0),
+                        ];
+                    });
+
+        if(blank($risk)){
+            $laporans->push((object) [
+                'level' => null,
+                'desc' => 'Belum Ditetapkan',
+                'class' => 'badge bg-light text-dark',
+                'jumlah' => (int) ($counts[''] ?? 0),
+            ]);
+        }
+
+        $reports = Report::with('riskLevel')
+                            ->when(filled($from), function($query) use($from){
+                                $query->whereDate('submitted_at', '>=', Carbon::parse($from));
+                            })
+                            ->when(filled($to), function($query) use($to){
+                                $query->whereDate('submitted_at', '<=', Carbon::parse($to));
+                            })
+                            ->when(filled($risk), function($query) use($risk){
+                                $query->whereHas('riskLevel', function($subQuery) use($risk){
+                                    $subQuery->where('level', $risk);
+                                });
+                            })
+                            ->where('report_status_id', '<>', 1)
+                            ->orderBy('submitted_at', 'desc')->get();
+
+        return view('laporan.show_by_risk', compact('laporans', 'reports' , 'from', 'to', 'title', 'risk'));
+    }
+
+    /**
+     * risk_level_id => bilangan aduan (excluding drafts), within the optional
+     * date range. Unclassified aduan are keyed under ''.
+     *
+     * @return \Illuminate\Support\Collection<array-key, int>
+     */
+    private function riskCounts($from, $to)
+    {
+        return Report::query()
+                ->selectRaw('risk_level_id, count(*) as jumlah')
+                ->where('report_status_id', '<>', 1)
+                ->when(filled($from), function($query) use($from){
+                    $query->whereDate('submitted_at', '>=', Carbon::parse($from));
+                })
+                ->when(filled($to), function($query) use($to){
+                    $query->whereDate('submitted_at', '<=', Carbon::parse($to));
+                })
+                ->groupBy('risk_level_id')
+                ->pluck('jumlah', 'risk_level_id');
     }
 
     public function viewByRating(Request $request){
@@ -245,6 +326,44 @@ class LaporanController extends Controller
         return view('laporan.show_by_user', compact('laporans', 'report_trails' , 'from', 'to', 'departments', 'username', 'department'));
     }
 
+    /**
+     * Satu baris per `users.ldap_bahagian` — termasuk bahagian NULL, seperti
+     * sebelum ini — dengan `bahagian` dan `jumlah`, disusun menaik mengikut
+     * bahagian. `jumlah` ialah bilangan aduan yang `bahagian_pengadu`-nya
+     * sama dengan bahagian itu dan bukan Draf (`report_status_id <> 1`);
+     * bahagian tanpa aduan sedemikian memberi 0.
+     *
+     * Ditulis dengan SQL standard sahaja. Versi terdahulu merujuk alias
+     * senarai select (`bahagian`) dari dalam WHERE subkueri, iaitu sambungan
+     * MySQL yang ditolak SQLite, jadi `GET /laporan/mengikut-bahagian`
+     * menghasilkan 500 di bawah sambungan ujian. Di sini ungkapan lajur
+     * `users.ldap_bahagian` diulang di dalam subkueri, dan subkueri itu
+     * berkorelasi dengan lajur GROUP BY itu sendiri, jadi ia sah pada
+     * kedua-dua pemacu dan memberi hasil yang sama.
+     *
+     * viewByDepartment() dan laporanByDepartmentApi() berkongsi pembina ini
+     * supaya kedua-dua pertanyaan tidak boleh menyimpang lagi.
+     *
+     * @param  string|null  $department  hadkan kepada satu bahagian sahaja
+     * @return \Illuminate\Database\Query\Builder
+     */
+    private function departmentCounts($department = null)
+    {
+        return \DB::table('users')
+                ->select('users.ldap_bahagian as bahagian')
+                ->selectSub(function($query){
+                    $query->from('reports')
+                            ->selectRaw('count(reports.id)')
+                            ->whereColumn('reports.bahagian_pengadu', 'users.ldap_bahagian')
+                            ->where('reports.report_status_id', '<>', 1);
+                }, 'jumlah')
+                ->when(filled($department), function($query) use($department){
+                    $query->where('users.ldap_bahagian', $department);
+                })
+                ->groupBy('users.ldap_bahagian')
+                ->orderBy('users.ldap_bahagian', 'asc');
+    }
+
     public function viewByDepartment(Request $request){
 
         $from = $request->from;
@@ -253,14 +372,7 @@ class LaporanController extends Controller
 
         $departments = \DB::table('users')->whereNotNull('ldap_bahagian')->distinct()->pluck('ldap_bahagian');
 
-        $laporans = \DB::table('users')
-                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id <> 1 ) as jumlah')
-                    ->when(filled($department), function($query) use($department){
-                        $query->where('ldap_bahagian', $department);
-                    })
-                    ->groupBy('bahagian')
-                    ->orderBy('bahagian', 'asc')
-                    ->get();
+        $laporans = $this->departmentCounts($department)->get();
 
         $reports = Report::when(filled($department), function($query) use ($department){
                                 $query->where('bahagian_pengadu', $department);
@@ -288,7 +400,7 @@ class LaporanController extends Controller
         $laporans =  \DB::table('_report_statuses as report_status')
                     ->select('id', 'desc')
                     ->selectRaw('ifnull((select count(*) from reports where report_status_id = report_status.id and if(?,submitted_at >= ?, true) and if(?,submitted_at <= ?, true) group by report_status_id),0) as jumlah', [$from_check, $from, $to_check, $to])
-                    ->whereIn('id', [2,3,4,5,6])
+                    ->whereIn('id', ReportStatuses::COUNTED)
                     ->orderBy('id')
                     ->get();
 
@@ -327,6 +439,32 @@ class LaporanController extends Controller
             'success' => true,
             'laporan' => $laporans
         ];
+        return response()->json($datas);
+    }
+
+    public function laporanByRiskApi(Request $request){
+
+        $counts = $this->riskCounts($request->from, $request->to);
+
+        $laporans = RiskLevel::orderBy('level')->get()->map(function($level) use($counts){
+            return (object) [
+                'desc' => $level->label,
+                'jumlah' => (int) ($counts[$level->id] ?? 0),
+                'url' => route('laporan.view-by-risk', ['risk' => $level->level]),
+            ];
+        });
+
+        $laporans->push((object) [
+            'desc' => 'Belum Ditetapkan',
+            'jumlah' => (int) ($counts[''] ?? 0),
+            'url' => route('laporan.view-by-risk'),
+        ]);
+
+        $datas =[
+            'success' => true,
+            'laporan' => $laporans->values()
+        ];
+
         return response()->json($datas);
     }
 
@@ -436,12 +574,9 @@ class LaporanController extends Controller
         $to = Carbon::parse($request->to);
         $to_check = filled($request->to);
 
-        // return $role_ids;
-        $laporans = \DB::table('users')
-                    ->selectRaw('distinct(ldap_bahagian) as bahagian, ( select count(id) from reports where bahagian_pengadu = bahagian and report_status_id <> 1 ) as jumlah')
-                    ->groupBy('bahagian')
-                    ->orderBy('bahagian', 'asc')
-                    ->get();
+        // Pembina yang sama seperti viewByDepartment(), tanpa penapis
+        // bahagian: modal laporan sentiasa menyenaraikan semua bahagian.
+        $laporans = $this->departmentCounts()->get();
 
         $laporans->transform(function($item,$key){
             $item->url = route('laporan.view-by-department',['department' => $item->bahagian]);

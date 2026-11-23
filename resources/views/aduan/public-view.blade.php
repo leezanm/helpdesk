@@ -8,23 +8,24 @@
     <link rel="shortcut icon" href="{{ asset('images/logo.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..800&display=swap" rel="stylesheet">
     <style>
-        :root { --c-primary:#0ea5a4; --c-primary-700:#0f766e; --c-border:#e2e8f0; }
-        body { background:#f1f5f9; font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:#0f172a; }
+        :root { --c-primary:#5a68cf; --c-primary-700:#3b4690; --c-butter:#e0ad46; --c-border:#e4e8f6; }
+        body { background:#f7f8fe; font-family:'Figtree',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:#1c2138; }
         .pv-wrap { max-width:760px; margin:0 auto; padding:1.5rem 1rem 3rem; }
-        .pv-header { background:linear-gradient(135deg,var(--c-primary) 0%,#0369a1 100%); color:#fff;
-            border-radius:16px 16px 0 0; padding:1.5rem 1.75rem; }
-        .pv-header img { width:44px;height:44px;border-radius:10px;background:#fff;padding:6px;object-fit:contain; }
-        .pv-card { background:#fff; border:1px solid var(--c-border); border-top:0; border-radius:0 0 16px 16px;
-            padding:1.75rem; box-shadow:0 8px 30px rgba(2,66,110,0.06); }
+        .pv-header { background:linear-gradient(135deg,var(--c-primary) 0%,#8b97e8 70%,#f2cd7e 140%); color:#fff;
+            border-radius:18px 18px 0 0; padding:1.5rem 1.75rem; }
+        .pv-header img { width:44px;height:44px;border-radius:12px;background:#fff;padding:6px;object-fit:contain; }
+        .pv-card { background:#fff; border:1px solid var(--c-border); border-top:0; border-radius:0 0 18px 18px;
+            padding:1.75rem; box-shadow:0 12px 30px rgba(90,104,207,0.10); }
         .pv-row { display:flex; gap:1rem; padding:0.7rem 0; border-bottom:1px solid var(--c-border); }
         .pv-row:last-child { border-bottom:0; }
-        .pv-label { flex:0 0 150px; color:#64748b; font-size:.82rem; text-transform:uppercase; letter-spacing:.4px; font-weight:600; }
+        .pv-label { flex:0 0 150px; color:#6a7089; font-size:.82rem; text-transform:uppercase; letter-spacing:.4px; font-weight:600; }
         .pv-value { flex:1; font-weight:500; word-break:break-word; }
         .pv-badge { display:inline-block; padding:.3rem .7rem; border-radius:999px; font-size:.8rem; font-weight:600; }
-        .pv-remark { background:#f8fafc; border:1px solid var(--c-border); border-radius:10px; padding:1rem; margin-top:.35rem; }
+        .pv-remark { background:#f3f5fd; border:1px solid var(--c-border); border-radius:10px; padding:1rem; margin-top:.35rem; }
         .pv-contact a { color:var(--c-primary-700); text-decoration:none; }
-        .pv-note { font-size:.82rem; color:#64748b; }
+        .pv-note { font-size:.82rem; color:#6a7089; }
     </style>
 </head>
 <body>
@@ -40,7 +41,7 @@
     <div class="pv-card">
         <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
             <h1 class="h4 fw-bold mb-0">{{ $report->ticket_no }}</h1>
-            <span class="pv-badge" style="background:{{ '#e0f2fe' }};color:{{ '#0369a1' }}">
+            <span class="pv-badge" style="background:{{ '#eaedfc' }};color:{{ '#4854a8' }}">
                 {{ $report->status->desc ?? '-' }}
             </span>
         </div>

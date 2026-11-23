@@ -7,6 +7,7 @@ use App\Models\Report;
 use App\Models\User;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Collection;
+use Spatie\Permission\Models\Role;
 
 /**
  * Resolves WHO should receive a given aduan notification event, based on the
@@ -43,8 +44,12 @@ class NotificationRecipients
         /** @var Collection<int,User> $users */
         $users = collect();
 
-        // By role.
-        $roles = $setting->roles ?: [];
+        // By role. The configured names are editable data and a role can be
+        // deleted after it was chosen, so only names that still exist are
+        // queried: User::role() throws RoleDoesNotExist on an unknown name,
+        // which would turn a stale recipient setting into a 500 on the aduan
+        // action that triggers the notification.
+        $roles = self::existingRoles($setting->roles ?: []);
         if (! empty($roles)) {
             $users = $users->merge(
                 User::role($roles)->where('is_active', '!=', false)->get()
@@ -89,5 +94,30 @@ class NotificationRecipients
         }
 
         return $recipients;
+    }
+
+    /**
+     * Keep only role names that are registered for the application guard.
+     * A name that no longer exists simply matches nobody.
+     *
+     * @param  array<int,string>  $names
+     * @return array<int,string>
+     */
+    private static function existingRoles(array $names): array
+    {
+        if (empty($names)) {
+            return [];
+        }
+
+        // A name registered only for another guard would still throw, so match
+        // the guard the User model authenticates with.
+        $guard = config('auth.defaults.guard', 'web');
+
+        $known = Role::where('guard_name', $guard)
+            ->whereIn('name', $names)
+            ->pluck('name')
+            ->all();
+
+        return array_values(array_intersect($names, $known));
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Livewire\Aduan;
 
 use App\Livewire\Aduan\ReportShow;
+use App\Models\Ref\RiskLevel;
 use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\ReportTrail;
@@ -20,6 +21,10 @@ class ReportShowTest extends FeatureTestCase
      * Create a report at the given status. Created as "Baru" (2) first so the
      * observer stamps ticket + first trail, then advanced. If $officer given,
      * an assignment trail is added so it becomes the current assigned officer.
+     *
+     * A risk level is stamped on, mirroring an aduan the helpdesk has already
+     * classified — without one it cannot be forwarded to an officer (see
+     * ReportRiskLevelTest for that rule).
      */
     private function makeReport(User $owner, int $status = 2, ?User $officer = null): Report
     {
@@ -31,6 +36,7 @@ class ReportShowTest extends FeatureTestCase
         $report->remark = 'x';
         $report->report_category_id = $category->id;
         $report->report_status_id = 2;
+        $report->risk_level_id = RiskLevel::where('level', 1)->value('id');
         $report->submitted_at = now();
         $report->save();
 
@@ -126,7 +132,7 @@ class ReportShowTest extends FeatureTestCase
         $this->assertEquals(4, $report->fresh()->report_status_id); // Dalam Tindakan
     }
 
-    public function test_penyelia_is_notified_on_assignment_and_can_close()
+    public function test_helpdesk_is_notified_on_assignment_and_can_close()
     {
         Notification::fake();
         $report = $this->makeReport(User::factory()->create(), 3);
@@ -134,10 +140,9 @@ class ReportShowTest extends FeatureTestCase
         $admin->syncRoles(['helpdesk.admin']);
         $officer = User::factory()->create();
         $officer->syncRoles(['jtk']);
-        $penyelia = User::factory()->create();
-        $penyelia->syncRoles(['penyelia']);
 
-        // Assign -> penyelia (supervisor) is notified alongside the officer.
+        // Assign -> the assigned officer is notified. The recipient list is
+        // configurable per event, so no other role is assumed here.
         Livewire::actingAs($admin)
             ->test(ReportShow::class, ['report' => $report])
             ->set('tindakan', '1')
@@ -146,12 +151,11 @@ class ReportShowTest extends FeatureTestCase
             ->call('saveAdminTask')
             ->assertHasNoErrors();
 
-        Notification::assertSentTo($penyelia, ReportAssignedNotification::class);
         Notification::assertSentTo($officer, ReportAssignedNotification::class);
 
-        // Penyelia can view any report and close from Selesai Tindakan (7).
+        // Helpdesk can view any aduan and close one from Selesai Tindakan (7).
         $report7 = $this->makeReport(User::factory()->create(), 7);
-        Livewire::actingAs($penyelia)
+        Livewire::actingAs($admin)
             ->test(ReportShow::class, ['report' => $report7])
             ->assertOk()
             ->set('rating', 5)
@@ -241,6 +245,34 @@ class ReportShowTest extends FeatureTestCase
         $this->assertEquals(5, $report->report_status_id); // Selesai
         $this->assertEquals(5, $report->rating);
         $this->assertNotNull($report->completed_at);
+    }
+
+    public function test_penyelia_can_assign_and_close_an_aduan()
+    {
+        Notification::fake();
+        $penyelia = User::factory()->create();
+        $penyelia->syncRoles(['penyelia']);
+        $officer = User::factory()->create();
+        $officer->syncRoles(['jtk']);
+
+        $report = $this->makeReport(User::factory()->create(), 3);
+        Livewire::actingAs($penyelia)
+            ->test(ReportShow::class, ['report' => $report])
+            ->set('tindakan', '1')
+            ->set('peranan', 'jtk')
+            ->set('assigned_to_id', $officer->id)
+            ->call('saveAdminTask')
+            ->assertHasNoErrors();
+        Notification::assertSentTo($officer, ReportAssignedNotification::class);
+
+        $report7 = $this->makeReport(User::factory()->create(), 7);
+        Livewire::actingAs($penyelia)
+            ->test(ReportShow::class, ['report' => $report7])
+            ->set('rating', 4)
+            ->call('closeReport')
+            ->assertHasNoErrors();
+
+        $this->assertEquals(5, $report7->fresh()->report_status_id);
     }
 
     public function test_helpdesk_can_kiv_from_needs_further_action()

@@ -1,9 +1,9 @@
 <div>
     <x-filter-bar title="Carian & Penapis Aduan"
-                  :show-reset="$search !== '' || $bahagian !== '' || $categoryId !== '' || $officerId !== '' || $statusId !== ''">
+                  :show-reset="$search !== '' || $bahagian !== '' || $categoryId !== '' || $officerId !== '' || $statusId !== '' || $riskLevelId !== ''">
         <x-slot:action>
             <a class="btn btn-sm btn-primary" href="{{ url('/aduan/create') }}">
-                <i class="bi bi-plus-lg me-1"></i> Aduan Baru
+                <i class="bi bi-plus-lg me-1"></i> Cipta Aduan
             </a>
         </x-slot:action>
 
@@ -33,20 +33,31 @@
             </select>
         </x-filter-field>
 
-        <x-filter-field label="Pegawai Bertanggungjawab" col="col-12 col-md-6">
-            <select wire:model.live="officerId" class="form-select">
-                <option value="">Semua Pegawai Bertanggungjawab</option>
-                @foreach ($officerOptions as $o)
-                    <option value="{{ $o->id }}">{{ $o->name }}</option>
-                @endforeach
-            </select>
-        </x-filter-field>
+        @if ($showOfficerFilter)
+            <x-filter-field label="Pegawai Bertanggungjawab" col="col-12 col-md-4">
+                <select wire:model.live="officerId" class="form-select">
+                    <option value="">Semua Pegawai Bertanggungjawab</option>
+                    @foreach ($officerOptions as $o)
+                        <option value="{{ $o->id }}">{{ $o->name }}</option>
+                    @endforeach
+                </select>
+            </x-filter-field>
+        @endif
 
-        <x-filter-field label="Status" col="col-12 col-md-6">
+        <x-filter-field label="Status" col="col-6 col-md-4">
             <select wire:model.live="statusId" class="form-select">
                 <option value="">Semua Status</option>
                 @foreach ($statusOptions as $s)
                     <option value="{{ $s->id }}">{{ $s->desc }}</option>
+                @endforeach
+            </select>
+        </x-filter-field>
+
+        <x-filter-field label="Tahap Risiko" col="col-6 col-md-4">
+            <select wire:model.live="riskLevelId" class="form-select">
+                <option value="">Semua Tahap Risiko</option>
+                @foreach ($riskLevelOptions as $r)
+                    <option value="{{ $r->id }}">{{ $r->label }}</option>
                 @endforeach
             </select>
         </x-filter-field>
@@ -73,6 +84,7 @@
                                 @endif
                             </th>
                             <th>Kategori</th>
+                            <th>Risiko</th>
                             @if ($showPengadu)
                                 <th>Pengadu</th>
                             @endif
@@ -100,6 +112,13 @@
                                 <td><span class="fw-semibold">{{ $report->ticket_no }}</span></td>
                                 <td>{{ $report->subject }}</td>
                                 <td>{{ $report->category->desc ?? '-' }}</td>
+                                <td>
+                                    @if ($report->riskLevel)
+                                        <span class="{{ $report->riskLevel->class }}" title="{{ $report->riskLevel->desc }}">Tahap {{ $report->riskLevel->level }}</span>
+                                    @else
+                                        <span class="badge bg-light text-dark">—</span>
+                                    @endif
+                                </td>
                                 @if ($showPengadu)
                                     <td><x-pengadu-cell :report="$report" /></td>
                                 @endif
@@ -125,7 +144,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ 8 + ($showPengadu ? 1 : 0) + ($showOfficer ? 1 : 0) }}">
+                                <td colspan="{{ 9 + ($showPengadu ? 1 : 0) + ($showOfficer ? 1 : 0) }}">
                                     <div class="empty-state">
                                         <i class="bi bi-inbox"></i>
                                         Tiada aduan dijumpai.

@@ -66,5 +66,11 @@ class ReportTrailStatusSeeder extends Seeder
         $status->desc = 'Tindakan Lanjut Diperlukan';
         $status->class = 'badge bg-danger';
         $status->save();
+
+        // 11 — peg. helpdesk menetapkan / menukar tahap risiko aduan
+        $status = new ReportTrailStatus();
+        $status->desc = 'Tahap Risiko Ditetapkan';
+        $status->class = 'badge bg-dark';
+        $status->save();
     }
 }

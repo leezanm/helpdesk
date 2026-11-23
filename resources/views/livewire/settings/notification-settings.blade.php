@@ -53,7 +53,7 @@
 
                             <label class="form-label small fw-semibold mt-3">Emel Tambahan</label>
                             <textarea class="form-control" rows="2"
-                                      placeholder="cth: unitict@rurallink.gov.my, penyelia@rurallink.gov.my"
+                                      placeholder="cth: unitict@rurallink.gov.my, ketua.unit@rurallink.gov.my"
                                       wire:model="rows.{{ $i }}.extra_emails_text"></textarea>
                             <small class="text-muted">Asingkan dengan koma. Alamat tidak sah akan diabaikan.</small>
                         </div>

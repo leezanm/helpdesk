@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<title>KKDW Helpdesk — Mockup Rebranding</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400..700&family=Figtree:wght@400..800&family=Fraunces:opsz,wght@9..144,400..700&family=Instrument+Sans:wght@400..700&family=Manrope:wght@400..800&family=Sora:wght@400..700&family=Space+Grotesk:wght@500..700&display=swap" rel="stylesheet">
+<link href="base.css" rel="stylesheet">
+<link href="themes.css" rel="stylesheet">
+</head>
+<body data-theme="f2">
+
+<!-- ===== Mockup chrome: theme switcher ===== -->
+<div class="switcher">
+    <strong>Mockup rebranding · pastel</strong>
+    <div class="switcher__btns">
+        <button data-t="e" aria-pressed="false">E · Lavender Mist</button>
+        <button data-t="f" aria-pressed="false">F · Sky &amp; Peach</button>
+        <button data-t="f2" aria-pressed="false">F2 · Sky Mono ★</button>
+        <button data-t="g" aria-pressed="false">G · Blush &amp; Cream</button>
+        <button data-t="h" aria-pressed="false">H · Periwinkle Butter</button>
+    </div>
+    <span class="switcher__desc" id="sw-desc"></span>
+</div>
+
+<div class="app">
+    <!-- ===== Sidebar ===== -->
+    <aside class="side">
+        <div class="brand">
+            <div class="brand__mark">KK</div>
+            <div class="brand__text">
+                <b>KKDW Helpdesk</b>
+                <span>Meja Bantuan ICT</span>
+            </div>
+        </div>
+
+        <div class="side__group">Laman Utama</div>
+        <nav class="nav">
+            <a href="#"><i class="bi bi-house-door"></i> Dashboard Saya</a>
+            <a href="#" class="on"><i class="bi bi-bar-chart-line"></i> Dashboard Pengurusan</a>
+        </nav>
+
+        <div class="side__group">Operasi</div>
+        <nav class="nav">
+            <a href="#"><i class="bi bi-journal-text"></i> Aduan <i class="bi bi-chevron-down chev"></i></a>
+            <a href="#"><i class="bi bi-file-earmark-bar-graph"></i> Laporan <i class="bi bi-chevron-down chev"></i></a>
+        </nav>
+
+        <div class="side__group">Pentadbiran</div>
+        <nav class="nav">
+            <a href="#"><i class="bi bi-sliders"></i> Selenggaraan <i class="bi bi-chevron-down chev"></i></a>
+            <a href="#"><i class="bi bi-people"></i> Pengurusan Pengguna <i class="bi bi-chevron-down chev"></i></a>
+            <a href="#"><i class="bi bi-shield-check"></i> Pengurusan Peranan</a>
+        </nav>
+
+        <div class="side__group">Tetapan</div>
+        <nav class="nav">
+            <a href="#"><i class="bi bi-bell"></i> Tetapan Notifikasi</a>
+            <a href="#"><i class="bi bi-clock-history"></i> Log Sistem</a>
+            <a href="#"><i class="bi bi-hdd"></i> Backup</a>
+            <a href="#"><i class="bi bi-book"></i> Manual Pengguna</a>
+        </nav>
+    </aside>
+
+    <div class="main">
+        <!-- ===== Topbar ===== -->
+        <header class="top">
+            <div class="top__hi">Selamat pagi, Ummu Latifah <span>· Pentadbir Helpdesk</span></div>
+            <div class="top__spacer"></div>
+            <button class="iconbtn" title="Notifikasi"><i class="bi bi-bell"></i><span class="dot">9</span></button>
+            <div class="who">
+                <div class="who__av">UL</div>
+                <div class="who__nm">Ummu Latifah</div>
+                <i class="bi bi-chevron-down t-mute"></i>
+            </div>
+        </header>
+
+        <main class="content">
+            <!-- ===== Hero ===== -->
+            <section class="hero">
+                <div class="hero__l">
+                    <div class="eyebrow">Dashboard Pengurusan</div>
+                    <h1>Gambaran Keseluruhan Aduan</h1>
+                    <p>Prestasi pengendalian aduan KKDW bagi tempoh dan bahagian yang dipilih.</p>
+                    <span class="chip"><i class="bi bi-calendar-range"></i> 1 Januari 2026 – 14 November 2026 · Semua Bahagian</span>
+                </div>
+                <div class="hero__r">
+                    <button class="btn btn--primary"><i class="bi bi-plus-lg"></i> Cipta Aduan</button>
+                    <button class="btn btn--ghost"><i class="bi bi-list-task"></i> Untuk Tindakan</button>
+                    <button class="btn btn--ghost"><i class="bi bi-send"></i> Aduan Dihantar</button>
+                </div>
+            </section>
+
+            <!-- ===== Filters ===== -->
+            <section class="filters">
+                <div class="filters__head">
+                    <span><i class="bi bi-funnel"></i> Penapis Tempoh</span>
+                    <button class="btn btn--quiet btn--sm"><i class="bi bi-arrow-counterclockwise"></i> Set Semula</button>
+                </div>
+                <div class="filters__body">
+                    <div class="field"><label>Dari Tarikh</label><input type="date" value="2026-01-01"></div>
+                    <div class="field"><label>Hingga Tarikh</label><input type="date" value="2026-11-14"></div>
+                    <div class="field" style="flex:2 1 260px;"><label>Bahagian</label>
+                        <select><option>Semua Bahagian</option><option>Bahagian Pengurusan Maklumat</option><option>Bahagian Khidmat Pengurusan</option></select>
+                    </div>
+                    <div class="field" style="flex:0 0 auto;"><button class="btn btn--primary btn--sm"><i class="bi bi-search"></i> Tapis</button></div>
+                </div>
+            </section>
+
+            <!-- ===== KPI ===== -->
+            <section class="kpis">
+                <div class="kpi kpi--hero">
+                    <div class="kpi__top"><span class="kpi__ic ic-accent"><i class="bi bi-clipboard-data"></i></span><span class="kpi__lb">Jumlah Aduan</span></div>
+                    <div class="kpi__vl">583</div>
+                    <div class="kpi__ft"><span class="up"><i class="bi bi-arrow-up-short"></i>12%</span> vs tempoh lalu</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi__top"><span class="kpi__ic ic-warning"><i class="bi bi-hourglass-split"></i></span><span class="kpi__lb">Dalam Tindakan</span></div>
+                    <div class="kpi__vl">27</div>
+                    <div class="kpi__ft">5% daripada jumlah</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi__top"><span class="kpi__ic ic-success"><i class="bi bi-check2-circle"></i></span><span class="kpi__lb">Selesai</span></div>
+                    <div class="kpi__vl">556</div>
+                    <div class="kpi__ft"><b>95%</b> kadar penyelesaian</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi__top"><span class="kpi__ic ic-danger"><i class="bi bi-pause-circle"></i></span><span class="kpi__lb">KIV</span></div>
+                    <div class="kpi__vl">11</div>
+                    <div class="kpi__ft">Menunggu tindakan lanjut</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi__top"><span class="kpi__ic ic-primary"><i class="bi bi-stopwatch"></i></span><span class="kpi__lb">Purata Tempoh Selesai</span></div>
+                    <div class="kpi__vl">7.4 <small>hari</small></div>
+                    <div class="kpi__ft"><span class="up"><i class="bi bi-arrow-down-short"></i>1.2</span> hari lebih pantas</div>
+                </div>
+                <div class="kpi">
+                    <div class="kpi__top"><span class="kpi__ic ic-accent"><i class="bi bi-star-fill"></i></span><span class="kpi__lb">Purata Rating</span></div>
+                    <div class="kpi__vl">4.6 <small>/ 5</small></div>
+                    <div class="kpi__ft">556 maklum balas</div>
+                </div>
+            </section>
+
+            <!-- ===== Resolution meter ===== -->
+            <section class="meterrow">
+                <span class="meterrow__lb">Kadar Penyelesaian</span>
+                <div class="meter"><i style="width:95%"></i></div>
+                <span class="meterrow__vl">95%</span>
+                <span class="meterrow__note">556 daripada 583 aduan selesai dalam tempoh dipilih</span>
+            </section>
+
+            <!-- ===== Trend ===== -->
+            <section class="panel" style="margin-bottom:var(--gap)">
+                <div class="panel__head">
+                    <div>
+                        <div class="eyebrow">Prestasi</div>
+                        <div class="panel__t">Trend Bulanan — Aduan Diterima vs Selesai</div>
+                    </div>
+                    <span class="panel__hint">12 bulan terakhir</span>
+                </div>
+                <div class="panel__body"><div class="chart" id="c-trend" style="height:300px"></div></div>
+            </section>
+
+            <!-- ===== Status + category ===== -->
+            <section class="row row--2">
+                <div class="panel">
+                    <div class="panel__head">
+                        <div><div class="eyebrow">Taburan</div><div class="panel__t">Aduan Mengikut Status</div></div>
+                    </div>
+                    <div class="panel__body"><div class="chart" id="c-donut" style="height:300px"></div></div>
+                </div>
+                <div class="panel">
+                    <div class="panel__head">
+                        <div><div class="eyebrow">Taburan</div><div class="panel__t">Pecahan Mengikut Kategori</div></div>
+                        <span class="panel__hint">7 kategori</span>
+                    </div>
+                    <div class="panel__body"><div class="chart" id="c-cat" style="height:300px"></div></div>
+                </div>
+            </section>
+
+            <!-- ===== Bahagian + rating ===== -->
+            <section class="row row--2b">
+                <div class="panel">
+                    <div class="panel__head">
+                        <div><div class="eyebrow">Organisasi</div><div class="panel__t">Aduan Mengikut Bahagian</div></div>
+                        <span class="panel__hint">10 teratas</span>
+                    </div>
+                    <div class="panel__body"><div class="chart" id="c-bhg" style="height:320px"></div></div>
+                </div>
+                <div class="panel">
+                    <div class="panel__head">
+                        <div><div class="eyebrow">Kualiti Perkhidmatan</div><div class="panel__t">Kepuasan Pengguna</div></div>
+                        <span class="panel__hint">556 maklum balas</span>
+                    </div>
+                    <div class="panel__body"><div class="chart" id="c-rate" style="height:320px"></div></div>
+                </div>
+            </section>
+
+            <!-- ===== Officer workload ===== -->
+            <section class="panel" style="margin-bottom:var(--gap)">
+                <div class="panel__head">
+                    <div><div class="eyebrow">Operasi</div><div class="panel__t">Beban Tugas Pegawai</div></div>
+                    <span class="panel__hint">6 pegawai</span>
+                </div>
+                <div class="panel__body"><div class="chart" id="c-off" style="height:300px"></div></div>
+            </section>
+
+            <!-- ===== Recent table ===== -->
+            <section class="panel">
+                <div class="panel__head">
+                    <div><div class="eyebrow">Aktiviti</div><div class="panel__t">Aduan Terkini</div></div>
+                    <button class="btn btn--quiet btn--sm">Lihat semua <i class="bi bi-arrow-right"></i></button>
+                </div>
+                <div class="panel__body panel__body--flush">
+                    <table>
+                        <thead><tr><th>Tiket</th><th>Subjek</th><th>Pengadu</th><th>Kategori</th><th>Tarikh</th><th>Status</th><th></th></tr></thead>
+                        <tbody>
+                            <tr><td class="tix">ADN-2026-0583</td><td>Tidak dapat akses portal eKKDW</td><td>Nurul Hidayah</td><td>Portal</td><td class="t-mute">12 Nov 2026</td><td><span class="badge b-new">Baru</span></td><td class="t-right"><a class="linkbtn" href="#"><i class="bi bi-eye"></i></a></td></tr>
+                            <tr><td class="tix">ADN-2026-0582</td><td>Pencetak tingkat 8 tidak berfungsi</td><td>Mohd Faiz bin Ahmad</td><td>Perkakasan</td><td class="t-mute">12 Nov 2026</td><td><span class="badge b-prog">Dalam Tindakan</span></td><td class="t-right"><a class="linkbtn" href="#"><i class="bi bi-eye"></i></a></td></tr>
+                            <tr><td class="tix">ADN-2026-0581</td><td>Permohonan capaian pemacu rangkaian</td><td>Siti Aminah</td><td>Capaian</td><td class="t-mute">11 Nov 2026</td><td><span class="badge b-done">Selesai</span></td><td class="t-right"><a class="linkbtn" href="#"><i class="bi bi-eye"></i></a></td></tr>
+                            <tr><td class="tix">ADN-2026-0580</td><td>E-mel rasmi tidak dapat dihantar</td><td>Zulkifli bin Omar</td><td>E-mel</td><td class="t-mute">10 Nov 2026</td><td><span class="badge b-kiv">KIV</span></td><td class="t-right"><a class="linkbtn" href="#"><i class="bi bi-eye"></i></a></td></tr>
+                            <tr><td class="tix">ADN-2026-0579</td><td>Pemasangan perisian Adobe Acrobat</td><td>Lim Wei Ling</td><td>Perisian</td><td class="t-mute">10 Nov 2026</td><td><span class="badge b-done">Selesai</span></td><td class="t-right"><a class="linkbtn" href="#"><i class="bi bi-eye"></i></a></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <footer class="foot">2026 © KKDW · Kementerian Kemajuan Desa dan Wilayah — <em>mockup rebranding, bukan sistem sebenar</em></footer>
+    </div>
+</div>
+
+<script src="/assets/libs/echarts/echarts.min.js"></script>
+<script src="mock.js"></script>
+</body>
+</html>

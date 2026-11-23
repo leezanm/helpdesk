@@ -52,7 +52,7 @@ class UserIndexTest extends FeatureTestCase
         $ordinary = User::factory()->create(['name' => 'Ali Biasa']);
 
         $admin = User::factory()->create(['name' => 'Admin Sistem']);
-        $admin->syncRoles(['helpdesk.admin']); // has manage.user
+        $admin->syncRoles(['penyelia']); // has manage.user
 
         Livewire::test(UserIndex::class, ['scope' => 'pentadbir'])
             ->assertSee('Admin Sistem')

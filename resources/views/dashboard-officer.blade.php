@@ -16,6 +16,10 @@
 
 @section('content')
     @livewire('dashboard.officer-dashboard')
+
+    @can('pergerakan.view')
+        @livewire('pergerakan.today-widget')
+    @endcan
 @endsection
 
 @section('script')
@@ -23,9 +27,12 @@
 (function () {
     function palette() {
         var css = getComputedStyle(document.documentElement);
-        var primary = (css.getPropertyValue('--c-primary') || '#0ea5a4').trim();
-        var success = (css.getPropertyValue('--c-success') || '#10b981').trim();
-        return { primary: primary, list: [primary, success, '#38bdf8', '#f59e0b', '#a78bfa', '#f472b6'] };
+        var primary = (css.getPropertyValue('--c-primary') || '#5a68cf').trim();
+        var butter = (css.getPropertyValue('--c-butter') || '#e0ad46').trim();
+        return {
+            primary: primary, butter: butter,
+            list: ['#6b78dc', '#f0c86f', '#9ba7ec', '#8ed0c6', '#c3a7e6', '#ef9f9f']
+        };
     }
 
     function renderCharts(statusData, trendData) {
@@ -37,7 +44,8 @@
             var donut = echarts.getInstanceByDom(donutEl) || echarts.init(donutEl);
             donut.setOption({
                 color: p.list, tooltip: { trigger: 'item' }, legend: { bottom: 0, icon: 'circle' },
-                series: [{ type: 'pie', radius: ['50%', '72%'], center: ['50%', '42%'], label: { show: false },
+                series: [{ type: 'pie', radius: ['56%', '76%'], center: ['50%', '42%'], label: { show: false },
+                    itemStyle: { borderColor: '#fff', borderWidth: 2 },
                     data: (statusData || []).map(function (s) { return { name: s.label, value: s.value }; }) }]
             }, true);
             donut.resize();
@@ -47,14 +55,14 @@
         if (lineEl && trendData && trendData.labels) {
             var line = echarts.getInstanceByDom(lineEl) || echarts.init(lineEl);
             line.setOption({
-                color: [p.primary, (p.list[1] || '#10b981')],
+                color: ['#6b78dc', p.butter],
                 tooltip: { trigger: 'axis' }, legend: { bottom: 0, icon: 'circle' },
                 grid: { left: 8, right: 16, top: 20, bottom: 36, containLabel: true },
                 xAxis: { type: 'category', boundaryGap: false, data: trendData.labels },
                 yAxis: { type: 'value', minInterval: 1 },
                 series: [
-                    { name: 'Diterima', type: 'line', smooth: true, symbolSize: 6, areaStyle: { opacity: 0.08 }, data: trendData.assigned },
-                    { name: 'Selesai', type: 'line', smooth: true, symbolSize: 6, areaStyle: { opacity: 0.08 }, data: trendData.resolved }
+                    { name: 'Diterima', type: 'line', smooth: true, symbolSize: 6, areaStyle: { opacity: 0.14 }, data: trendData.assigned },
+                    { name: 'Selesai', type: 'line', smooth: true, symbolSize: 6, areaStyle: { opacity: 0.14 }, data: trendData.resolved }
                 ]
             }, true);
             line.resize();

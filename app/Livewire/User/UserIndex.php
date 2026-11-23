@@ -91,7 +91,7 @@ class UserIndex extends Component
             'pentadbir' => User::permission('manage.user'),
             'pengurusan' => User::role('pengurusan'),
             default => User::whereDoesntHave('roles', function ($q) {
-                $q->whereIn('name', ['jtk', 'pptm', 'ptm', 'helpdesk.admin', 'superadmin', 'pengurusan']);
+                $q->whereIn('name', ['jtk', 'pptm', 'ptm', 'helpdesk.admin', 'penyelia', 'superadmin', 'pengurusan']);
             }),
         };
     }

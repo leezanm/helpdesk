@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasHashedRouteKey;
 use App\Models\Ref\ReportStatus;
+use App\Models\Ref\RiskLevel;
 use App\Observers\ReportObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ class Report extends Model
     use HasFactory;
     use HasHashedRouteKey;
 
-    protected $fillable = ['bp_username', 'bp_name', 'bp_bahagian', 'bp_email', 'bp_user_id'];
+    protected $fillable = ['bp_username', 'bp_name', 'bp_bahagian', 'bp_email', 'bp_tel_no', 'bp_user_id'];
 
     public function category(){
         return $this->belongsTo(ReportCategory::class, 'report_category_id');
@@ -22,6 +23,13 @@ class Report extends Model
 
     public function status(){
         return $this->belongsTo(ReportStatus::class, 'report_status_id');
+    }
+
+    /*
+    * tahap risiko — ditetapkan oleh peg. helpdesk
+    */
+    public function riskLevel(){
+        return $this->belongsTo(RiskLevel::class, 'risk_level_id');
     }
 
     /*

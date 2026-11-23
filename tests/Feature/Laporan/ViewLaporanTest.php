@@ -36,6 +36,32 @@ class ViewLaporanTest extends FeatureTestCase
         $response->assertOk();
     }
 
+    public function test_laporan_by_risk_level_renders()
+    {
+        $user = User::factory()->create();
+        $user->syncRoles(['helpdesk.admin']);
+
+        $response = $this->actingAs($user)->get('/laporan/mengikut-tahap-risiko');
+
+        $response->assertOk();
+        $response->assertSee('Tahap 5: Sangat Tinggi');
+        // Aduan not yet classified are reported as their own bucket.
+        $response->assertSee('Belum Ditetapkan');
+    }
+
+    public function test_laporan_by_risk_level_api_returns_every_level()
+    {
+        $user = User::factory()->create();
+        $user->syncRoles(['helpdesk.admin']);
+
+        $response = $this->actingAs($user)->postJson('/api/laporan/by-risk');
+
+        $response->assertOk()
+            ->assertJsonPath('success', true)
+            // 5 levels + the "Belum Ditetapkan" bucket
+            ->assertJsonCount(6, 'laporan');
+    }
+
     public function test_guest_cannot_view_laporan()
     {
         $response = $this->get('/laporan');

@@ -58,8 +58,11 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            // PHP 8.5 deprecated the PDO::MYSQL_* constants in favour of the
+            // Pdo\Mysql class. Resolve whichever exists so the config stays
+            // warning-free on 8.5 and still works on 8.3/8.4 servers.
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                (class_exists(\Pdo\Mysql::class) ? \Pdo\Mysql::ATTR_SSL_CA : PDO::MYSQL_ATTR_SSL_CA) => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
             // Used by spatie/laravel-backup's mysqldump. Skip SSL for the dump
             // to avoid "self-signed certificate in certificate chain" errors
